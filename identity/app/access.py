@@ -35,7 +35,7 @@ class DepartmentGrant:
 @dataclass(frozen=True)
 class Decision:
     role: RoleRef | None
-    # suspended | app_disabled | system_app | override_deny | override_grant
+    # suspended | app_disabled | system_app | admin | override_deny | override_grant
     # | department | no_access
     reason: str
     override_id: uuid.UUID | None = None
@@ -45,6 +45,7 @@ class Decision:
 def decide(
     *,
     user_status: str,
+    user_is_admin: bool,
     app_status: str,
     app_is_system: bool,
     app_roles: list[RoleRef],
@@ -60,6 +61,11 @@ def decide(
         if not app_roles:
             return Decision(None, "no_access")
         return Decision(min(app_roles, key=lambda r: r.rank), "system_app")
+    if user_is_admin:
+        # Admins get the top role in every available app; this beats exceptions and departments.
+        if not app_roles:
+            return Decision(None, "no_access")
+        return Decision(max(app_roles, key=lambda r: r.rank), "admin")
     if override is not None and (override.expires_at is None or override.expires_at > now):
         if override.effect == "deny":
             return Decision(None, "override_deny", override_id=override.id)
@@ -102,6 +108,7 @@ def resolve_access(db: Session, user: User, app: App, now: datetime | None = Non
 
     return decide(
         user_status=user.status,
+        user_is_admin=user.is_admin,
         app_status=app.status,
         app_is_system=app.is_system,
         app_roles=list(roles.values()),

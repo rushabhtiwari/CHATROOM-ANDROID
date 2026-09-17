@@ -16,6 +16,7 @@ FINANCE = uuid.uuid4()
 def _decide(**overrides):
     args = dict(
         user_status="active",
+        user_is_admin=False,
         app_status="active",
         app_is_system=False,
         app_roles=[VIEWER, EDITOR, MANAGER],
@@ -50,6 +51,54 @@ CASES = [
         {"app_status": "coming_soon", "department_grants": [DepartmentGrant(SALES, VIEWER)]},
         VIEWER,
         "department",
+    ),
+    (
+        "admin gets the highest role without any department",
+        {"user_is_admin": True},
+        MANAGER,
+        "admin",
+    ),
+    (
+        "admin access beats a block exception",
+        {"user_is_admin": True, "override": _override("deny")},
+        MANAGER,
+        "admin",
+    ),
+    (
+        "admin access beats a lower grant exception",
+        {"user_is_admin": True, "override": _override("grant", VIEWER)},
+        MANAGER,
+        "admin",
+    ),
+    (
+        "admin sees coming-soon apps with the highest role",
+        {"user_is_admin": True, "app_status": "coming_soon"},
+        MANAGER,
+        "admin",
+    ),
+    (
+        "suspended admin gets nothing",
+        {"user_is_admin": True, "user_status": "suspended"},
+        None,
+        "suspended",
+    ),
+    (
+        "disabled app stays closed to admins",
+        {"user_is_admin": True, "app_status": "disabled"},
+        None,
+        "app_disabled",
+    ),
+    (
+        "admin in the portal keeps its single role",
+        {"user_is_admin": True, "app_is_system": True},
+        VIEWER,
+        "system_app",
+    ),
+    (
+        "admin with no app roles gets nothing",
+        {"user_is_admin": True, "app_roles": []},
+        None,
+        "no_access",
     ),
     ("system app gives lowest role", {"app_is_system": True}, VIEWER, "system_app"),
     ("system app with no roles", {"app_is_system": True, "app_roles": []}, None, "no_access"),

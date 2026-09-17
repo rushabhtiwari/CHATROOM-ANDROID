@@ -17,6 +17,8 @@ export function describeAccess(entry: EffectiveAccess, departmentNames: Record<s
       return "App is disabled";
     case "system_app":
       return "Available to everyone";
+    case "admin":
+      return "Admin: full access";
     case "no_access":
       return "No department gives access";
   }

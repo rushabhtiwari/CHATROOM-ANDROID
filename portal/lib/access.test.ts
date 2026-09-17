@@ -18,6 +18,7 @@ describe("describeAccess", () => {
     [{ reason: "department", role: "manager", department_slug: "sales" }, "From the Sales department"],
     [{ reason: "override_grant", role: "viewer" }, "Granted by an exception"],
     [{ reason: "override_deny" }, "Blocked by an exception"],
+    [{ reason: "admin", role: "manager" }, "Admin: full access"],
     [{ reason: "suspended" }, "Account suspended"],
     [{ reason: "app_disabled" }, "App is disabled"],
     [{ reason: "no_access" }, "No department gives access"],

@@ -58,7 +58,14 @@ export type AppDetail = AppSummary & {
 export type ClientSecret = { client_id: string; client_secret: string };
 
 export type AccessReason =
-  "suspended" | "app_disabled" | "system_app" | "override_deny" | "override_grant" | "department" | "no_access";
+  | "suspended"
+  | "app_disabled"
+  | "system_app"
+  | "admin"
+  | "override_deny"
+  | "override_grant"
+  | "department"
+  | "no_access";
 
 export type EffectiveAccess = {
   app_id: string;
