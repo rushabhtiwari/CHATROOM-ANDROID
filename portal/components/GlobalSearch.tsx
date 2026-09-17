@@ -15,6 +15,15 @@ export function GlobalSearch() {
   const params = useSearchParams();
   const [value, setValue] = useState(params.get("q") ?? "");
   const input = useRef<HTMLInputElement>(null);
+  // On narrow screens the field collapses to an icon button; this tracks whether it is expanded.
+  const [open, setOpen] = useState(Boolean(params.get("q")));
+
+  function expand() {
+    setOpen(true);
+    input.current?.focus();
+    // On narrow screens the field only shows once the update renders, so try again on the next frame.
+    requestAnimationFrame(() => input.current?.focus());
+  }
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -22,7 +31,7 @@ export function GlobalSearch() {
       const shortcut = event.key.toLowerCase() === "k" && (event.metaKey || event.ctrlKey);
       if (shortcut || (event.key === "/" && !typing)) {
         event.preventDefault();
-        input.current?.focus();
+        expand();
       }
     }
     function onSet(event: Event) {
@@ -46,26 +55,45 @@ export function GlobalSearch() {
   }
 
   return (
-    <form
-      role="search"
-      className="global-search"
-      onSubmit={(event) => {
-        event.preventDefault();
-        if (pathname === "/") window.dispatchEvent(new Event(SEARCH_SUBMIT_EVENT));
-        else router.push(value.trim() ? `/?q=${encodeURIComponent(value.trim())}` : "/");
-      }}
-    >
-      <MagnifyingGlass size={17} aria-hidden="true" />
-      <input
-        ref={input}
-        type="search"
-        aria-label="Search apps"
-        placeholder="Search apps, departments and tools"
-        autoComplete="off"
-        value={value}
-        onChange={(event) => update(event.target.value)}
-      />
-      <kbd aria-hidden="true">⌘ K</kbd>
-    </form>
+    <>
+      <button
+        type="button"
+        className="button icon-button search-toggle"
+        aria-label="Open search"
+        aria-expanded={open}
+        hidden={open}
+        onClick={expand}
+      >
+        <MagnifyingGlass size={18} aria-hidden="true" />
+      </button>
+      <form
+        role="search"
+        className="global-search"
+        data-open={open}
+        onSubmit={(event) => {
+          event.preventDefault();
+          if (pathname === "/") window.dispatchEvent(new Event(SEARCH_SUBMIT_EVENT));
+          else router.push(value.trim() ? `/?q=${encodeURIComponent(value.trim())}` : "/");
+        }}
+      >
+        <MagnifyingGlass size={17} aria-hidden="true" />
+        <input
+          ref={input}
+          type="search"
+          aria-label="Search apps"
+          placeholder="Search apps, departments and tools"
+          autoComplete="off"
+          value={value}
+          onChange={(event) => update(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === "Escape" && !value) event.currentTarget.blur();
+          }}
+          onBlur={() => {
+            if (!value.trim()) setOpen(false);
+          }}
+        />
+        <kbd aria-hidden="true">⌘ K</kbd>
+      </form>
+    </>
   );
 }

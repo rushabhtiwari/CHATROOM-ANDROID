@@ -64,4 +64,16 @@ describe("GlobalSearch", () => {
     fireEvent.keyDown(document.body, { key: "/" });
     expect(box).toHaveFocus();
   });
+
+  it("expands from the search button and collapses again when left empty", () => {
+    render(<GlobalSearch />);
+    const toggle = screen.getByRole("button", { name: "Open search" });
+    expect(toggle).toHaveAttribute("aria-expanded", "false");
+
+    fireEvent.click(toggle);
+    expect(screen.getByRole("search")).toHaveAttribute("data-open", "true");
+
+    fireEvent.blur(screen.getByRole("searchbox", { name: "Search apps" }));
+    expect(screen.getByRole("search")).toHaveAttribute("data-open", "false");
+  });
 });

@@ -1,10 +1,14 @@
 # Portal
 
 The company app launcher and admin console. People sign in once through the identity service,
-see a tile for every app they can open, and open each already signed in. Admins manage people,
+see a card for every app they can open, and open each already signed in. Admins manage people,
 departments, apps and exceptions, and can read the activity log.
 
-Design: `docs/superpowers/specs/2026-09-16-central-platform-sso-design.md` (§7).
+Designs:
+
+- `docs/superpowers/specs/2026-09-16-central-platform-sso-design.md` (§7): sign-in and admin console
+- `docs/superpowers/specs/2026-09-17-app-catalog-and-launcher-design.md`: app catalog, statuses, logos
+- `docs/superpowers/specs/2026-09-17-workspace-redesign-design.md`: visual system and page layouts
 
 ## Run it locally
 
@@ -32,6 +36,23 @@ npm run test:e2e         # builds the portal and drives it against the running i
 
 The end-to-end tests need `docker compose up -d` first. They create departments and apps with
 unique names in the development database.
+
+## Where things are
+
+| Path                                  | What it holds                                                                                          |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `app/page.tsx`, `components/Home.tsx` | Home page: summary cards, filters and app cards (logic in `lib/home.ts`)                               |
+| `app/admin/*`                         | Admin pages: People, Departments, Apps, Activity log, each with its server actions                     |
+| `app/globals.css`                     | The whole design system: tokens on `:root`, then one section per area                                  |
+| `components/ui/*`                     | Shared building blocks: `PageHeader`, `Card`, `Badge`, `StatCard`, `Segmented`, `Switch`, `Disclosure` |
+| `components/TopBar.tsx`               | Top navigation, global search (`/` or Ctrl/⌘+K) and account menu                                       |
+| `components/AppMark.tsx`              | App icon tile: uploaded logo, or a Phosphor duotone icon on a gradient (`lib/tones.ts`)                |
+| `lib/icons.tsx`                       | Maps the stored icon names to Phosphor icons                                                           |
+
+Icons come from [Phosphor](https://phosphoricons.com). Import components from
+`@phosphor-icons/react/ssr` so they render in server components; the `Icon` type comes from
+`@phosphor-icons/react`. To offer a new app icon, add its stored name and Phosphor component to
+`lib/icons.tsx`; the identity service accepts any lowercase name, so no migration is needed.
 
 ## Configuration
 
