@@ -1,0 +1,38 @@
+[project]
+name = "identity"
+version = "0.1.0"
+description = "Central identity service: OIDC provider, access rules and admin API"
+requires-python = ">=3.12"
+dependencies = [
+  "alembic>=1.20,<2",
+  "argon2-cffi>=25.1",
+  "authlib>=1.8,<1.9",
+  "cryptography>=46",
+  "fastapi>=0.141,<1",
+  "httpx2>=2.13",
+  "itsdangerous>=2.2",
+  "jinja2>=3.1",
+  "joserfc>=1.7,<2",
+  "psycopg[binary]>=3.3",
+  "pydantic-settings>=2.15",
+  "python-multipart>=0.0.32",
+  "sqlalchemy>=2.0.54,<2.1",
+  "uvicorn[standard]>=0.53",
+]
+
+[dependency-groups]
+dev = ["httpx>=0.28", "pytest>=9.1", "ruff>=0.16"]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q -p no:warnings"
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+ignore = ["B008"]  # FastAPI Depends()/Query() defaults
