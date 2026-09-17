@@ -15,5 +15,27 @@ services:
       interval: 2s
       retries: 30
 
+  identity:
+    build: ./identity
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ENVIRONMENT: development
+      DATABASE_URL: postgresql+psycopg://central:central@postgres:5432/identity
+      COMPANY_DOMAIN: yourco.com
+      ISSUER_URL: http://localhost:8000
+      KEY_ENCRYPTION_KEY: uB0yq0lqV3m7vJx9I6kzvJ6o4wqkJ7mYwR2fT5bq8nE=
+      SESSION_SECRET: dev-session-secret
+      INITIAL_ADMIN_EMAILS: admin@yourco.com
+      PORTAL_URL: http://localhost:3000
+      PORTAL_CLIENT_SECRET: dev-portal-secret
+      DEV_LOGIN_ENABLED: "true"
+    command: >
+      sh -c "alembic upgrade head && python -m app.seed &&
+             uvicorn app.main:create_app --factory --host 0.0.0.0 --port 8000"
+    ports:
+      - "8000:8000"
+
 volumes:
   pgdata:
