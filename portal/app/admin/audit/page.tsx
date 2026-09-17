@@ -1,5 +1,8 @@
+import { CaretRight } from "@phosphor-icons/react/ssr";
 import Link from "next/link";
 
+import { AppMark } from "@/components/AppMark";
+import { PageHeader } from "@/components/ui/PageHeader";
 import { requireAdmin } from "@/lib/admin";
 import { identity } from "@/lib/identity";
 
@@ -28,73 +31,85 @@ export default async function ActivityPage({ searchParams }: PageProps<"/admin/a
     identity.listApps(),
   ]);
   const person = Object.fromEntries(users.map((u) => [u.id, u.email]));
-  const appName = Object.fromEntries(apps.map((a) => [a.id, a.name]));
+  const appById = Object.fromEntries(apps.map((a) => [a.id, a]));
   const who = (id: string | null) => (id ? (person[id] ?? id.slice(0, 8)) : "");
   const older = entries.length === PAGE_SIZE ? entries[entries.length - 1].id : null;
 
   return (
     <>
-      <h1>Activity log</h1>
-      <p className="hint">Sign-ins, refusals and every change made by admins, newest first.</p>
-
-      <form className="form-row" role="search" style={{ marginTop: "1.5rem" }}>
-        <label>
-          Event
-          <input name="event" defaultValue={event} placeholder="access_denied" />
-        </label>
-        <label>
-          From
-          <input type="date" name="from" defaultValue={from} />
-        </label>
-        <label>
-          Before
-          <input type="date" name="to" defaultValue={to} />
-        </label>
-        <button type="submit" className="button button-quiet">
-          Filter
-        </button>
-      </form>
-
-      <section className="table-wrap">
-        {entries.length === 0 ? (
-          <p>No activity matches these filters.</p>
-        ) : (
+      <PageHeader
+        title="Activity log"
+        description="Sign-ins, refusals and every change made by admins, newest first."
+      />
+      <div className="card table-card">
+        <form className="table-toolbar" role="search" aria-label="Filter activity">
+          <label className="field field-inline">
+            Event
+            <input name="event" defaultValue={event} placeholder="access_denied" />
+          </label>
+          <label className="field field-inline">
+            From
+            <input type="date" name="from" defaultValue={from} />
+          </label>
+          <label className="field field-inline">
+            Before
+            <input type="date" name="to" defaultValue={to} />
+          </label>
+          <button type="submit" className="button button-small">
+            Filter
+          </button>
+        </form>
+        <div className="table-scroll">
           <table>
             <thead>
               <tr>
-                <th>When</th>
-                <th>Event</th>
-                <th>By</th>
-                <th>Person</th>
-                <th>App</th>
-                <th>Details</th>
+                <th scope="col">When</th>
+                <th scope="col">Event</th>
+                <th scope="col">By</th>
+                <th scope="col">Person</th>
+                <th scope="col">App</th>
+                <th scope="col">Details</th>
               </tr>
             </thead>
             <tbody>
-              {entries.map((entry) => (
-                <tr key={entry.id}>
-                  <td>{new Date(entry.at).toLocaleString("en-GB")}</td>
-                  <td>
-                    <code>{entry.event}</code>
-                  </td>
-                  <td>{who(entry.actor_user_id)}</td>
-                  <td>{who(entry.subject_user_id)}</td>
-                  <td>{entry.app_id ? (appName[entry.app_id] ?? "") : ""}</td>
-                  <td className="hint">{summarise(entry.detail)}</td>
-                </tr>
-              ))}
+              {entries.map((entry) => {
+                const app = entry.app_id ? appById[entry.app_id] : undefined;
+                return (
+                  <tr key={entry.id}>
+                    <td className="muted nowrap">{new Date(entry.at).toLocaleString("en-GB")}</td>
+                    <td>
+                      <code className="event-chip">{entry.event}</code>
+                    </td>
+                    <td>{who(entry.actor_user_id)}</td>
+                    <td>{who(entry.subject_user_id)}</td>
+                    <td>
+                      {app && (
+                        <div className="cell-app">
+                          <AppMark slug={app.slug} icon={app.icon} logoVersion={app.logo_version} size="sm" />
+                          <span>{app.name}</span>
+                        </div>
+                      )}
+                    </td>
+                    <td className="muted details-cell">{summarise(entry.detail)}</td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
+          {entries.length === 0 && <p className="table-empty">No activity matches these filters.</p>}
+        </div>
+        {older && (
+          <nav className="table-footer" aria-label="Pages">
+            <Link
+              href={`/admin/audit?${new URLSearchParams({ event, from, to, before_id: String(older) })}`}
+              className="button button-small"
+            >
+              Older activity
+              <CaretRight size={14} aria-hidden="true" />
+            </Link>
+          </nav>
         )}
-      </section>
-
-      {older && (
-        <nav className="pager" aria-label="Pages">
-          <Link href={`/admin/audit?${new URLSearchParams({ event, from, to, before_id: String(older) })}`}>
-            Older activity
-          </Link>
-        </nav>
-      )}
+      </div>
     </>
   );
 }

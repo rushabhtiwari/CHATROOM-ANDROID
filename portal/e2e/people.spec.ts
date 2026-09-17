@@ -17,7 +17,7 @@ test("admins find a person and see why they have access", async ({ page }) => {
 
   await expect(page.getByRole("heading", { name: USERS.sales })).toBeVisible();
   const row = page.getByRole("row", { name: /Example App/ });
-  await expect(row).toContainText("manager");
+  await expect(row).toContainText("Manager");
   await expect(row).toContainText("From the Sales department");
 });
 
@@ -32,7 +32,7 @@ test("admins grant and remove an exception", async ({ page }) => {
   await page.getByLabel("Reason").fill("Covering month-end close");
   await page.getByRole("button", { name: "Add exception" }).click();
   await expect(page.getByText("Exception added.")).toBeVisible();
-  await expect(page.getByRole("row", { name: /Example App viewer/ })).toContainText("Granted by an exception");
+  await expect(page.getByRole("row", { name: /Example App Viewer/ })).toContainText("Granted by an exception");
 
   await page
     .getByRole("row", { name: /Covering month-end close/ })

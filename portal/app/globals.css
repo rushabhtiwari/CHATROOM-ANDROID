@@ -1478,3 +1478,136 @@ tbody tr:last-child td {
 .kv-line {
   display: block;
 }
+
+/* ---------------- admin: people, departments, activity ---------------- */
+.avatar-lg {
+  width: 64px;
+  height: 64px;
+  font-size: 20px;
+  border-radius: 18px;
+}
+
+.badge-row {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  vertical-align: middle;
+}
+
+.page-header-description .badge {
+  margin-left: 0.5rem;
+}
+
+.table-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--line);
+  background: var(--surface-2);
+}
+
+.field-inline {
+  font-size: 12.5px;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.details-cell {
+  font-size: 12.5px;
+  min-width: 16rem;
+  max-width: 28rem;
+  overflow-wrap: anywhere;
+}
+
+.table-toolbar:has(.field-inline) {
+  align-items: flex-end;
+}
+
+.event-chip {
+  display: inline-block;
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  border: 0;
+  margin: 0;
+}
+
+.account-actions {
+  display: grid;
+  gap: 1.1rem;
+}
+
+.account-actions .hint {
+  margin: 0.4rem 0 0;
+}
+
+.account-actions .button {
+  width: 100%;
+  justify-content: center;
+}
+
+.disclosure {
+  position: relative;
+}
+
+.icon-button {
+  width: 34px;
+  padding: 0;
+  justify-content: center;
+}
+
+.menu-panel,
+.add-department-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 20;
+}
+
+.menu-panel {
+  width: 260px;
+  padding: 0.75rem;
+  display: grid;
+  gap: 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.12);
+}
+
+.add-department-panel {
+  width: min(520px, calc(100vw - 32px));
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.12);
+  border-radius: 14px;
+}
+
+.menu-form {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.menu-form + .menu-form {
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line);
+}
+
+.menu-form .button {
+  justify-content: center;
+}
+
+.menu-panel[hidden],
+.add-department-panel[hidden] {
+  display: none;
+}

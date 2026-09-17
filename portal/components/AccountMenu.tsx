@@ -3,10 +3,7 @@
 import { CaretDown } from "@phosphor-icons/react/ssr";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 
-export function initials(name: string): string {
-  const words = name.trim().split(/\s+/).filter(Boolean);
-  return ((words[0]?.[0] ?? "") + (words[1]?.[0] ?? "")).toUpperCase() || "?";
-}
+import { initials } from "@/lib/people";
 
 type Props = { name: string; email: string; roleLine: string; children: ReactNode };
 
