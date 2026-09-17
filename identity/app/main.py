@@ -5,6 +5,7 @@ from starlette.middleware.sessions import SessionMiddleware
 
 from app.admin import apps as admin_apps
 from app.admin import departments as admin_departments
+from app.admin import system as admin_system
 from app.admin import users as admin_users
 from app.bootstrap import bootstrap
 from app.config import get_settings
@@ -50,6 +51,7 @@ def create_app(run_bootstrap: bool = True) -> FastAPI:
     app.include_router(admin_apps.router, prefix="/admin", tags=["admin"])
     app.include_router(admin_departments.router, prefix="/admin", tags=["admin"])
     app.include_router(admin_users.router, prefix="/admin", tags=["admin"])
+    app.include_router(admin_system.router, prefix="/admin", tags=["admin"])
     if settings.dev_login_enabled:
         app.include_router(login.dev_router)
     return app
