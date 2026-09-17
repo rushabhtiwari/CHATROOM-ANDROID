@@ -22,7 +22,9 @@ def conflict(message: str) -> HTTPException:
 
 def logo_version(app) -> int | None:
     """Cache-busting version for an app's logo: last change as epoch seconds, or None."""
-    return int(app.logo_updated_at.timestamp()) if app.logo_updated_at else None
+    if app.logo_content_type is None or app.logo_updated_at is None:
+        return None
+    return int(app.logo_updated_at.timestamp())
 
 
 def validate_uris(uris: list[str], settings: Settings, field: str) -> list[str]:

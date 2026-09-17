@@ -11,7 +11,7 @@ from app.bootstrap import bootstrap
 from app.config import get_settings
 from app.db import get_sessionmaker
 from app.observability import configure_logging, request_context_middleware
-from app.routes import health, login, logout, me, oidc, userinfo
+from app.routes import health, login, logos, logout, me, oidc, userinfo
 
 
 def create_app(run_bootstrap: bool = True) -> FastAPI:
@@ -48,6 +48,7 @@ def create_app(run_bootstrap: bool = True) -> FastAPI:
     app.include_router(logout.router)
     app.include_router(login.router)
     app.include_router(me.router)
+    app.include_router(logos.router)
     app.include_router(admin_apps.router, prefix="/admin", tags=["admin"])
     app.include_router(admin_departments.router, prefix="/admin", tags=["admin"])
     app.include_router(admin_users.router, prefix="/admin", tags=["admin"])

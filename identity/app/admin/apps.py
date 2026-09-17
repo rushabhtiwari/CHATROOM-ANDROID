@@ -1,6 +1,6 @@
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, File, HTTPException, Request, UploadFile
 from sqlalchemy import exists, select
 from sqlalchemy.orm import Session
 
@@ -21,8 +21,9 @@ from app.admin.schemas import (
 from app.config import Settings, get_settings
 from app.db import get_db
 from app.deps import require_admin
+from app.logos import LOGO_ERROR, MAX_LOGO_BYTES, detect_image_type
 from app.models import App, AppRole, Department, DepartmentAppAccess, User, UserAppOverride
-from app.security import hash_secret, new_token
+from app.security import hash_secret, new_token, utcnow
 
 router = APIRouter()
 
@@ -177,6 +178,49 @@ def rotate_secret(
     audit.record(db, "app_secret_rotated", request=request, actor_user_id=admin.id, app_id=app.id)
     db.commit()
     return ClientSecretOut(client_id=app.client_id, client_secret=secret)
+
+
+@router.put("/apps/{app_id}/logo", response_model=AppOut)
+async def upload_logo(
+    app_id: uuid.UUID,
+    request: Request,
+    file: UploadFile = File(...),
+    db: Session = Depends(get_db),
+    admin: User = Depends(require_admin),
+) -> dict:
+    data = await file.read(MAX_LOGO_BYTES + 1)
+    content_type = detect_image_type(data)
+    if content_type is None or len(data) > MAX_LOGO_BYTES:
+        raise HTTPException(422, LOGO_ERROR)
+    app = get_or_404(db, App, app_id)
+    app.logo = data
+    app.logo_content_type = content_type
+    app.logo_updated_at = utcnow()
+    audit.record(
+        db,
+        "app_logo_updated",
+        request=request,
+        actor_user_id=admin.id,
+        app_id=app.id,
+        detail={"content_type": content_type, "bytes": len(data)},
+    )
+    db.commit()
+    return _out(db, app)
+
+
+@router.delete("/apps/{app_id}/logo", status_code=204)
+def remove_logo(
+    app_id: uuid.UUID,
+    request: Request,
+    db: Session = Depends(get_db),
+    admin: User = Depends(require_admin),
+) -> None:
+    app = get_or_404(db, App, app_id)
+    app.logo = None
+    app.logo_content_type = None
+    app.logo_updated_at = utcnow()
+    audit.record(db, "app_logo_removed", request=request, actor_user_id=admin.id, app_id=app.id)
+    db.commit()
 
 
 @router.get("/apps/{app_id}/roles", response_model=list[RoleOut])
