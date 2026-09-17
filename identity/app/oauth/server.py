@@ -35,6 +35,9 @@ ID_TOKEN_TTL = 900
 CODE_TTL = timedelta(seconds=60)
 REFRESH_IDLE_TTL = timedelta(hours=12)
 REFRESH_ABSOLUTE_TTL = timedelta(hours=24)
+# A used refresh token presented again within this window is treated as a concurrent request
+# from the same client (e.g. parallel page loads), not as theft.
+REFRESH_REUSE_GRACE = timedelta(seconds=30)
 SUPPORTED_SCOPES = ["openid", "email", "profile"]
 
 
@@ -242,7 +245,7 @@ class RotatingRefreshGrant(grants.RefreshTokenGrant):
         )
         if row is None or row.revoked_at is not None:
             return None
-        if row.used_at is not None:
+        if row.used_at is not None and utcnow() - row.used_at > REFRESH_REUSE_GRACE:
             revoke_family(db, row.family_id)
             audit.record(
                 db,
@@ -272,7 +275,8 @@ class RotatingRefreshGrant(grants.RefreshTokenGrant):
         return user
 
     def revoke_old_credential(self, refresh_token: RefreshToken) -> None:
-        refresh_token.used_at = utcnow()
+        if refresh_token.used_at is None:
+            refresh_token.used_at = utcnow()
 
 
 def _user_claims(user: User, ctx: IssueContext) -> dict:

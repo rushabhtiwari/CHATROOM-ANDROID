@@ -1,8 +1,11 @@
+from datetime import timedelta
+
 from joserfc import jwt
 from joserfc.jwk import KeySet
 from sqlalchemy import select
 
-from app.models import AuditLog, User
+from app.models import AuditLog, RefreshToken, User
+from app.oauth.server import REFRESH_REUSE_GRACE
 from tests.factories import (
     add_override,
     add_to_department,
@@ -135,11 +138,28 @@ def test_refresh_fails_after_suspension(client, db):
     assert refresh(client, app, tokens["refresh_token"]).json()["error"] == "invalid_grant"
 
 
-def test_refresh_reuse_revokes_family(client, db):
+def test_refresh_reuse_within_grace_window_is_allowed(client, db):
+    """Concurrent requests from one browser may present the same refresh token twice."""
+    user, app, _ = _app_with_member(db)
+    sign_in(client, db, user)
+    tokens = full_login(client, app)
+
+    first = refresh(client, app, tokens["refresh_token"])
+    second = refresh(client, app, tokens["refresh_token"])
+
+    assert first.status_code == 200 and second.status_code == 200, second.text
+    assert refresh(client, app, first.json()["refresh_token"]).status_code == 200
+    assert refresh(client, app, second.json()["refresh_token"]).status_code == 200
+
+
+def test_refresh_reuse_after_grace_window_revokes_family(client, db):
     user, app, _ = _app_with_member(db)
     sign_in(client, db, user)
     tokens = full_login(client, app)
     rotated = refresh(client, app, tokens["refresh_token"]).json()
+    original = db.scalar(select(RefreshToken).where(RefreshToken.used_at.is_not(None)))
+    original.used_at = original.used_at - REFRESH_REUSE_GRACE - timedelta(seconds=1)
+    db.commit()
 
     reuse = refresh(client, app, tokens["refresh_token"])
 
