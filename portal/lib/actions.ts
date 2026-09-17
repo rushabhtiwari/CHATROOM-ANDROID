@@ -3,7 +3,12 @@ import { FormError } from "@/lib/forms";
 
 export type ActionResult =
   | { status: "idle" }
-  | { status: "ok"; message: string; secret?: { clientId: string; clientSecret: string } }
+  | {
+      status: "ok";
+      message: string;
+      secret?: { clientId: string; clientSecret: string };
+      link?: { href: string; label: string };
+    }
   | { status: "error"; message: string };
 
 export const idle: ActionResult = { status: "idle" };

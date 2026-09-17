@@ -5,17 +5,21 @@ export function IconPicker({ defaultValue }: { defaultValue: string }) {
     ? defaultValue
     : DEFAULT_ICON;
   return (
-    <fieldset className="icon-picker">
-      <legend>Icon</legend>
-      <div className="icon-options">
+    <div className="field field-wide">
+      <span className="field-label" id="icon-picker-label">
+        Icon
+      </span>
+      <div role="radiogroup" aria-labelledby="icon-picker-label" className="icon-grid">
         {APP_ICON_NAMES.map((name) => (
-          <label key={name} className="icon-option">
+          <label key={name} className="icon-choice" title={name}>
             <input type="radio" name="icon" value={name} defaultChecked={name === selected} />
-            <AppIcon name={name} size={22} />
-            {name}
+            <span className="icon-choice-tile">
+              <AppIcon name={name} size={22} />
+              <span className="visually-hidden">{name}</span>
+            </span>
           </label>
         ))}
       </div>
-    </fieldset>
+    </div>
   );
 }

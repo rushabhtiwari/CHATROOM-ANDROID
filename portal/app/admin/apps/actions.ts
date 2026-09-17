@@ -33,11 +33,17 @@ export async function registerApp(_: ActionResult, form: FormData): Promise<Acti
       status: "ok",
       message: `${created.name} registered. Give these credentials to the app's developers.`,
       secret: { clientId: created.client_id, clientSecret: created.client_secret },
+      link: { href: `/admin/apps/${created.id}`, label: `Open ${created.name}` },
     };
   });
 }
 
-export async function updateApp(id: string, isSystem: boolean, _: ActionResult, form: FormData): Promise<ActionResult> {
+export async function updateAppSettings(
+  id: string,
+  isSystem: boolean,
+  _: ActionResult,
+  form: FormData,
+): Promise<ActionResult> {
   return runAction(async () => {
     const common = { name: requiredText(form, "name", "Name"), description: text(form, "description") };
     await identity.updateApp(
@@ -49,13 +55,22 @@ export async function updateApp(id: string, isSystem: boolean, _: ActionResult, 
             category: parseCategory(text(form, "category")),
             icon: text(form, "icon"),
             status: parseStatus(text(form, "status")),
-            launch_url: text(form, "launch_url"),
-            redirect_uris: lines(text(form, "redirect_uris")),
-            post_logout_redirect_uris: lines(text(form, "post_logout_redirect_uris")),
           },
     );
     refreshApp(id);
     return { status: "ok", message: "Changes saved." };
+  });
+}
+
+export async function updateAppConnection(id: string, _: ActionResult, form: FormData): Promise<ActionResult> {
+  return runAction(async () => {
+    await identity.updateApp(id, {
+      launch_url: text(form, "launch_url"),
+      redirect_uris: lines(text(form, "redirect_uris")),
+      post_logout_redirect_uris: lines(text(form, "post_logout_redirect_uris")),
+    });
+    refreshApp(id);
+    return { status: "ok", message: "Connection saved." };
   });
 }
 
