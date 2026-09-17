@@ -1,6 +1,6 @@
 "use client";
 
-import { Search } from "lucide-react";
+import { MagnifyingGlass as Search } from "@phosphor-icons/react/ssr";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 
 import { AppTile } from "@/components/AppTile";

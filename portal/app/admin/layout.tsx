@@ -1,4 +1,4 @@
-import { AdminNav } from "@/components/AdminNav";
+import { AdminTabs } from "@/components/AdminTabs";
 import { TopBar } from "@/components/TopBar";
 import { requireAdmin } from "@/lib/admin";
 
@@ -7,10 +7,8 @@ export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
   return (
     <>
       <TopBar me={me} />
-      <div className="admin">
-        <AdminNav />
-        <main className="admin-main">{children}</main>
-      </div>
+      <AdminTabs />
+      <main className="page admin-page">{children}</main>
     </>
   );
 }

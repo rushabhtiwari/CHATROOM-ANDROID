@@ -5,7 +5,7 @@ import { AccountMenu } from "@/components/AccountMenu";
 
 function renderMenu() {
   return render(
-    <AccountMenu name="Ada Admin" email="admin@yourco.com">
+    <AccountMenu name="Ada Admin" email="admin@yourco.com" roleLine="Administrator">
       <button type="button">Sign out</button>
     </AccountMenu>,
   );
@@ -16,6 +16,8 @@ describe("AccountMenu", () => {
     renderMenu();
     const trigger = screen.getByRole("button", { name: "Account menu for Ada Admin" });
     expect(trigger).toHaveTextContent("AA");
+    expect(trigger).toHaveTextContent("Ada Admin");
+    expect(trigger).toHaveTextContent("Administrator");
     expect(trigger).toHaveAttribute("aria-expanded", "false");
     expect(screen.queryByText("admin@yourco.com")).toBeNull();
 

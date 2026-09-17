@@ -1,77 +1,80 @@
 import {
   AppWindow,
-  BadgeCheck,
-  BookOpen,
+  Bank,
+  BookOpenText,
   Briefcase,
-  Building2,
+  Buildings,
   Calculator,
-  Calendar,
-  ChartColumn,
-  ClipboardCheck,
+  CalendarBlank,
+  ChartBar,
+  ChatCircleDots,
+  ClipboardText,
   Factory,
   FileText,
   Folder,
+  GearSix,
   Headset,
   Kanban,
-  Landmark,
-  type LucideIcon,
+  Lightning,
   Megaphone,
-  MessageCircle,
   Package,
   Receipt,
-  Settings,
+  SealCheck,
   ShieldCheck,
   ShoppingCart,
-  Store,
-  TrendingUp,
+  Storefront,
+  TrendUp,
   Truck,
-  Users,
+  UsersThree,
   Wallet,
   Warehouse,
   Wrench,
-  Zap,
-} from "lucide-react";
+} from "@phosphor-icons/react/ssr";
+import type { Icon } from "@phosphor-icons/react";
 
-/** The icons admins can choose for an app (catalog spec §4.5). Keys are stored on the app. */
+/**
+ * Stored icon names (catalog spec §4.5) drawn with Phosphor duotone icons (workspace spec §2).
+ * The names stay the same so existing apps need no data change.
+ */
 const ICONS = {
-  "trending-up": TrendingUp,
+  "trending-up": TrendUp,
   truck: Truck,
-  "book-open": BookOpen,
-  landmark: Landmark,
+  "book-open": BookOpenText,
+  landmark: Bank,
   megaphone: Megaphone,
   "shopping-cart": ShoppingCart,
-  users: Users,
+  users: UsersThree,
   factory: Factory,
-  "badge-check": BadgeCheck,
-  "clipboard-check": ClipboardCheck,
+  "badge-check": SealCheck,
+  "clipboard-check": ClipboardText,
   kanban: Kanban,
-  zap: Zap,
-  "message-circle": MessageCircle,
+  zap: Lightning,
+  "message-circle": ChatCircleDots,
   "app-window": AppWindow,
   briefcase: Briefcase,
-  "building-2": Building2,
+  "building-2": Buildings,
   calculator: Calculator,
-  calendar: Calendar,
-  "chart-column": ChartColumn,
+  calendar: CalendarBlank,
+  "chart-column": ChartBar,
   "file-text": FileText,
   folder: Folder,
   headset: Headset,
   package: Package,
   receipt: Receipt,
-  settings: Settings,
+  settings: GearSix,
   "shield-check": ShieldCheck,
-  store: Store,
+  store: Storefront,
   wallet: Wallet,
   warehouse: Warehouse,
   wrench: Wrench,
-} satisfies Record<string, LucideIcon>;
+} satisfies Record<string, Icon>;
 
 export type AppIconName = keyof typeof ICONS;
 
 export const DEFAULT_ICON: AppIconName = "app-window";
 export const APP_ICON_NAMES = Object.keys(ICONS) as AppIconName[];
 
-export function AppIcon({ name, size = 28 }: { name: string; size?: number }) {
-  const Icon = ICONS[name as AppIconName] ?? ICONS[DEFAULT_ICON];
-  return <Icon size={size} strokeWidth={1.75} aria-hidden="true" />;
+export function AppIcon({ name, size = 26 }: { name: string; size?: number }) {
+  const Glyph = ICONS[name as AppIconName] ?? ICONS[DEFAULT_ICON];
+  return <Glyph size={size} weight="duotone" aria-hidden="true" />;
 }
