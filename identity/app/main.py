@@ -7,7 +7,7 @@ from app.bootstrap import bootstrap
 from app.config import get_settings
 from app.db import get_sessionmaker
 from app.observability import configure_logging, request_context_middleware
-from app.routes import health
+from app.routes import health, oidc
 
 
 def create_app(run_bootstrap: bool = True) -> FastAPI:
@@ -39,4 +39,5 @@ def create_app(run_bootstrap: bool = True) -> FastAPI:
         https_only=settings.secure_cookies,
     )
     app.include_router(health.router)
+    app.include_router(oidc.router)
     return app
