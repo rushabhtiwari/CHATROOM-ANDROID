@@ -3,8 +3,10 @@ from tests.factories import add_to_department, make_app, make_department, make_u
 
 def test_department_lifecycle_and_access(api, db, audited):
     app, roles = make_app(db, slug="crm")
-    _, other_roles = make_app(db, slug="sales")
-    dept = api.post("/admin/departments", json={"slug": "sales", "name": "Sales"}).json()
+    _, other_roles = make_app(db, slug="sales-crm")
+    dept = api.post(
+        "/admin/departments", json={"slug": "field-sales", "name": "Field sales"}
+    ).json()
     access_url = f"/admin/departments/{dept['id']}/access"
 
     ok = api.put(access_url, json=[{"app_id": str(app.id), "app_role_id": str(roles["editor"].id)}])
@@ -24,7 +26,10 @@ def test_department_lifecycle_and_access(api, db, audited):
     ]
     assert wrong_role.status_code == 422
     assert renamed.json()["name"] == "Sales Team"
-    assert api.post("/admin/departments", json={"slug": "sales", "name": "Dup"}).status_code == 409
+    assert (
+        api.post("/admin/departments", json={"slug": "field-sales", "name": "Dup"}).status_code
+        == 409
+    )
     assert audited("department_access_replaced")
 
 

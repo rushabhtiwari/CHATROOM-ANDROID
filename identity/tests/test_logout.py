@@ -17,7 +17,7 @@ def _logged_in(client, db):
     dept = make_department(db)
     add_to_department(db, user, dept)
     crm, crm_roles = make_app(db, slug="crm")
-    sales, sales_roles = make_app(db, slug="sales")
+    sales, sales_roles = make_app(db, slug="sales-crm")
     grant_department(db, dept, crm, crm_roles["viewer"])
     grant_department(db, dept, sales, sales_roles["viewer"])
     sign_in(client, db, user)

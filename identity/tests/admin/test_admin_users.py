@@ -16,7 +16,7 @@ from tests.oidc_helpers import sign_in
 
 def test_user_detail_explains_effective_access(api, db):
     user = make_user(db)
-    sales = make_department(db, "sales")
+    sales = make_department(db, "field-sales")
     add_to_department(db, user, sales)
     crm, crm_roles = make_app(db, slug="crm")
     inv, inv_roles = make_app(db, slug="invoicing")
@@ -37,7 +37,7 @@ def test_user_detail_explains_effective_access(api, db):
     assert created.status_code == 201, created.text
     access = {a["app_slug"]: a for a in detail["access"]}
     assert (access["crm"]["role"], access["crm"]["reason"]) == ("manager", "department")
-    assert access["crm"]["department_slug"] == "sales"
+    assert access["crm"]["department_slug"] == "field-sales"
     assert (access["invoicing"]["role"], access["invoicing"]["reason"]) == (
         "viewer",
         "override_grant",
@@ -81,14 +81,14 @@ def test_suspend_revokes_sessions_and_blocks_self_suspend(api, db, admin, audite
 
 def test_replace_departments_and_list_filter(api, db):
     user = make_user(db, email="zed@yourco.com")
-    sales = make_department(db, "sales")
+    sales = make_department(db, "field-sales")
 
     response = api.put(
         f"/admin/users/{user.id}/departments", json={"department_ids": [str(sales.id)]}
     )
 
-    assert response.json()["department_slugs"] == ["sales"]
-    listed = api.get("/admin/users", params={"department": "sales"}).json()
+    assert response.json()["department_slugs"] == ["field-sales"]
+    listed = api.get("/admin/users", params={"department": "field-sales"}).json()
     assert [u["email"] for u in listed] == ["zed@yourco.com"]
     assert api.get("/admin/users", params={"query": "ZED"}).json()[0]["id"] == str(user.id)
 

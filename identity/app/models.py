@@ -8,6 +8,7 @@ from sqlalchemy import (
     ForeignKey,
     ForeignKeyConstraint,
     Integer,
+    LargeBinary,
     String,
     Text,
     UniqueConstraint,
@@ -66,7 +67,11 @@ class UserDepartment(Base):
 
 class App(Base):
     __tablename__ = "apps"
-    __table_args__ = (CheckConstraint("status IN ('active', 'disabled')", name="ck_apps_status"),)
+    __table_args__ = (
+        CheckConstraint("status IN ('active', 'coming_soon', 'disabled')", name="ck_apps_status"),
+        CheckConstraint("category IN ('department', 'company')", name="ck_apps_category"),
+        CheckConstraint("(logo IS NULL) = (logo_content_type IS NULL)", name="ck_apps_logo_type"),
+    )
 
     id: Mapped[uuid.UUID] = _uuid_pk()
     slug: Mapped[str] = mapped_column(String(64), unique=True)
@@ -80,6 +85,12 @@ class App(Base):
     post_logout_redirect_uris: Mapped[list[str]] = mapped_column(ARRAY(Text), default=list)
     status: Mapped[str] = mapped_column(String(16), default="active")
     is_system: Mapped[bool] = mapped_column(Boolean, default=False)
+    category: Mapped[str] = mapped_column(
+        String(16), default="department", server_default="department"
+    )
+    logo: Mapped[bytes | None] = mapped_column(LargeBinary, deferred=True)
+    logo_content_type: Mapped[str | None] = mapped_column(String(32))
+    logo_updated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     created_at: Mapped[datetime] = _created_at()
 
 

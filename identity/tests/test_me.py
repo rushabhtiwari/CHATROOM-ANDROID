@@ -15,11 +15,11 @@ def _auth(token):
 
 def test_me_and_my_apps(client, db, settings):
     user = make_user(db, name="Priya")
-    sales = make_department(db, "sales")
+    sales = make_department(db, "field-sales")
     add_to_department(db, user, sales)
     crm, crm_roles = make_app(db, slug="crm", name="CRM")
     invoicing, inv_roles = make_app(db, slug="invoicing", name="Invoicing")
-    make_app(db, slug="finance")
+    make_app(db, slug="treasury")
     grant_department(db, sales, crm, crm_roles["manager"])
     add_override(db, user, invoicing, "grant", inv_roles["viewer"])
     token = portal_token(client, db, user, settings)
@@ -28,7 +28,7 @@ def test_me_and_my_apps(client, db, settings):
     apps = client.get("/me/apps", headers=_auth(token)).json()
 
     assert me["email"] == user.email and me["is_admin"] is False
-    assert [d["slug"] for d in me["departments"]] == ["sales"]
+    assert [d["slug"] for d in me["departments"]] == ["field-sales"]
     assert [(a["slug"], a["role"]) for a in apps] == [("crm", "manager"), ("invoicing", "viewer")]
 
 
