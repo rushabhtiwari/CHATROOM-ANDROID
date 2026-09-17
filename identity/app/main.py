@@ -7,7 +7,7 @@ from app.bootstrap import bootstrap
 from app.config import get_settings
 from app.db import get_sessionmaker
 from app.observability import configure_logging, request_context_middleware
-from app.routes import health, oidc
+from app.routes import health, logout, oidc, userinfo
 
 
 def create_app(run_bootstrap: bool = True) -> FastAPI:
@@ -40,4 +40,6 @@ def create_app(run_bootstrap: bool = True) -> FastAPI:
     )
     app.include_router(health.router)
     app.include_router(oidc.router)
+    app.include_router(userinfo.router)
+    app.include_router(logout.router)
     return app
