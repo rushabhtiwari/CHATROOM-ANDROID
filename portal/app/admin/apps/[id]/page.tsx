@@ -1,10 +1,12 @@
 import Link from "next/link";
 
 import { ActionForm, SubmitButton } from "@/components/ActionForm";
+import { AppMark } from "@/components/AppMark";
+import { IconPicker } from "@/components/IconPicker";
 import { requireAdmin } from "@/lib/admin";
 import { identity } from "@/lib/identity";
 
-import { addRole, deleteRole, rotateSecret, updateApp } from "../actions";
+import { addRole, deleteRole, removeLogo, rotateSecret, updateApp, uploadLogo } from "../actions";
 
 export default async function AppPage({ params }: PageProps<"/admin/apps/[id]">) {
   await requireAdmin();
@@ -31,8 +33,9 @@ export default async function AppPage({ params }: PageProps<"/admin/apps/[id]">)
             <label>
               Status
               <select name="status" defaultValue={app.status}>
-                <option value="active">Active</option>
-                <option value="disabled">Disabled (nobody can sign in)</option>
+                <option value="coming_soon">Coming soon</option>
+                <option value="active">Live</option>
+                <option value="disabled">Disabled</option>
               </select>
             </label>
           )}
@@ -40,13 +43,36 @@ export default async function AppPage({ params }: PageProps<"/admin/apps/[id]">)
             Description
             <input name="description" defaultValue={app.description} />
           </label>
+          {!locked && (
+            <>
+              <fieldset className="radio-row wide">
+                <legend>Group</legend>
+                <label>
+                  <input
+                    type="radio"
+                    name="category"
+                    value="department"
+                    defaultChecked={app.category === "department"}
+                  />
+                  Departments
+                </label>
+                <label>
+                  <input type="radio" name="category" value="company" defaultChecked={app.category === "company"} />
+                  Company tools
+                </label>
+              </fieldset>
+              <div className="wide">
+                <IconPicker defaultValue={app.icon} />
+              </div>
+            </>
+          )}
           <label className="wide">
             App address
-            <input name="launch_url" type="url" defaultValue={app.launch_url} disabled={locked} required />
+            <input name="launch_url" type="url" defaultValue={app.launch_url} disabled={locked} />
           </label>
           <label className="wide">
             Sign-in callback URLs, one per line
-            <textarea name="redirect_uris" defaultValue={app.redirect_uris.join("\n")} disabled={locked} required />
+            <textarea name="redirect_uris" defaultValue={app.redirect_uris.join("\n")} disabled={locked} />
           </label>
           <label className="wide">
             Sign-out return URLs, one per line
@@ -61,6 +87,28 @@ export default async function AppPage({ params }: PageProps<"/admin/apps/[id]">)
           </div>
         </ActionForm>
       </section>
+
+      {!locked && (
+        <section aria-labelledby="logo-heading">
+          <h2 id="logo-heading">Logo</h2>
+          <p className="hint">A PNG, JPEG or WebP image up to 256 KB. It replaces the icon everywhere.</p>
+          <div className="logo-field" style={{ marginTop: "0.75rem" }}>
+            <AppMark slug={app.slug} icon={app.icon} logoVersion={app.logo_version} />
+            <ActionForm action={uploadLogo.bind(null, app.id)} className="form-row">
+              <label>
+                Logo image
+                <input type="file" name="logo" accept="image/png,image/jpeg,image/webp" required />
+              </label>
+              <SubmitButton tone="quiet">{app.logo_version === null ? "Upload logo" : "Replace logo"}</SubmitButton>
+            </ActionForm>
+            {app.logo_version !== null && (
+              <ActionForm action={removeLogo.bind(null, app.id)}>
+                <SubmitButton tone="danger">Remove logo</SubmitButton>
+              </ActionForm>
+            )}
+          </div>
+        </section>
+      )}
 
       <section aria-labelledby="roles-heading">
         <h2 id="roles-heading">Roles</h2>

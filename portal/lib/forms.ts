@@ -1,3 +1,5 @@
+import type { AppCategory, AppStatus } from "@/lib/types";
+
 /** Parsing helpers for admin form submissions. Throws FormError with a user-facing message. */
 
 export class FormError extends Error {
@@ -62,4 +64,17 @@ export function expiryFromDate(value: string): string | null {
   if (!value) return null;
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) throw new FormError("Expiry must be a date.");
   return `${value}T23:59:59Z`;
+}
+
+const STATUSES: AppStatus[] = ["active", "coming_soon", "disabled"];
+const CATEGORIES: AppCategory[] = ["department", "company"];
+
+export function parseStatus(value: string): AppStatus {
+  if (!STATUSES.includes(value as AppStatus)) throw new FormError("Choose a status.");
+  return value as AppStatus;
+}
+
+export function parseCategory(value: string): AppCategory {
+  if (!CATEGORIES.includes(value as AppCategory)) throw new FormError("Choose a group.");
+  return value as AppCategory;
 }

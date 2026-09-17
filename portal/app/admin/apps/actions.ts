@@ -3,8 +3,16 @@
 import { revalidatePath } from "next/cache";
 
 import { type ActionResult, runAction } from "@/lib/actions";
-import { lines, parseRoles, requiredText, text } from "@/lib/forms";
+import { FormError, lines, parseCategory, parseRoles, parseStatus, requiredText, text } from "@/lib/forms";
 import { identity } from "@/lib/identity";
+
+const MAX_LOGO_BYTES = 256 * 1024;
+
+function refreshApp(id: string) {
+  revalidatePath(`/admin/apps/${id}`);
+  revalidatePath("/admin/apps");
+  revalidatePath("/");
+}
 
 export async function registerApp(_: ActionResult, form: FormData): Promise<ActionResult> {
   return runAction(async () => {
@@ -12,8 +20,10 @@ export async function registerApp(_: ActionResult, form: FormData): Promise<Acti
       slug: requiredText(form, "slug", "Short name"),
       name: requiredText(form, "name", "Name"),
       description: text(form, "description"),
-      status: "active",
-      launch_url: requiredText(form, "launch_url", "App address"),
+      category: parseCategory(text(form, "category")),
+      icon: text(form, "icon"),
+      status: parseStatus(text(form, "status")),
+      launch_url: text(form, "launch_url"),
       redirect_uris: lines(text(form, "redirect_uris")),
       post_logout_redirect_uris: lines(text(form, "post_logout_redirect_uris")),
       roles: parseRoles(text(form, "roles")),
@@ -36,15 +46,35 @@ export async function updateApp(id: string, isSystem: boolean, _: ActionResult, 
         ? common
         : {
             ...common,
-            launch_url: requiredText(form, "launch_url", "App address"),
+            category: parseCategory(text(form, "category")),
+            icon: text(form, "icon"),
+            status: parseStatus(text(form, "status")),
+            launch_url: text(form, "launch_url"),
             redirect_uris: lines(text(form, "redirect_uris")),
             post_logout_redirect_uris: lines(text(form, "post_logout_redirect_uris")),
-            status: text(form, "status") === "disabled" ? "disabled" : "active",
           },
     );
-    revalidatePath(`/admin/apps/${id}`);
-    revalidatePath("/admin/apps");
+    refreshApp(id);
     return { status: "ok", message: "Changes saved." };
+  });
+}
+
+export async function uploadLogo(id: string, _: ActionResult, form: FormData): Promise<ActionResult> {
+  return runAction(async () => {
+    const file = form.get("logo");
+    if (!(file instanceof File) || file.size === 0) throw new FormError("Choose an image to upload.");
+    if (file.size > MAX_LOGO_BYTES) throw new FormError("Logo must be a PNG, JPEG or WebP image up to 256 KB");
+    await identity.uploadLogo(id, file);
+    refreshApp(id);
+    return { status: "ok", message: "Logo saved." };
+  });
+}
+
+export async function removeLogo(id: string): Promise<ActionResult> {
+  return runAction(async () => {
+    await identity.removeLogo(id);
+    refreshApp(id);
+    return { status: "ok", message: "Logo removed." };
   });
 }
 

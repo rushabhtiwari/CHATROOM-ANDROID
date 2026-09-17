@@ -1,6 +1,15 @@
 import { describe, expect, it } from "vitest";
 
-import { expiryFromDate, FormError, lines, parseExceptionChoice, parseRoles, requiredText } from "@/lib/forms";
+import {
+  expiryFromDate,
+  FormError,
+  lines,
+  parseCategory,
+  parseExceptionChoice,
+  parseRoles,
+  parseStatus,
+  requiredText,
+} from "@/lib/forms";
 
 describe("form parsing", () => {
   it("reads required text", () => {
@@ -33,5 +42,13 @@ describe("form parsing", () => {
     expect(expiryFromDate("")).toBeNull();
     expect(expiryFromDate("2026-11-30")).toBe("2026-11-30T23:59:59Z");
     expect(() => expiryFromDate("30/11/2026")).toThrow("Expiry must be a date.");
+  });
+
+  it("parses app status and group", () => {
+    expect(parseStatus("coming_soon")).toBe("coming_soon");
+    expect(parseStatus("active")).toBe("active");
+    expect(() => parseStatus("launched")).toThrow("Choose a status.");
+    expect(parseCategory("company")).toBe("company");
+    expect(() => parseCategory("")).toThrow("Choose a group.");
   });
 });
