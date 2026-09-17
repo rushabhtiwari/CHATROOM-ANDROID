@@ -16,9 +16,49 @@ os.environ.update(
     DEV_LOGIN_ENABLED="false",
 )
 
+from collections.abc import Iterator  # noqa: E402
+from pathlib import Path  # noqa: E402
+
 import pytest  # noqa: E402
+from alembic import command  # noqa: E402
+from alembic.config import Config  # noqa: E402
+from sqlalchemy import create_engine, text  # noqa: E402
+from sqlalchemy.orm import Session  # noqa: E402
 
 from app.config import Settings, get_settings  # noqa: E402
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+@pytest.fixture(scope="session")
+def engine():
+    url = os.environ["TEST_DATABASE_URL"]
+    engine = create_engine(url)
+    with engine.begin() as conn:
+        conn.execute(text("DROP SCHEMA public CASCADE"))
+        conn.execute(text("CREATE SCHEMA public"))
+    config = Config(str(ROOT / "alembic.ini"))
+    config.set_main_option("script_location", str(ROOT / "migrations"))
+    config.attributes["database_url"] = url
+    command.upgrade(config, "head")
+    yield engine
+    engine.dispose()
+
+
+@pytest.fixture
+def db(engine) -> Iterator[Session]:
+    """A session whose commits are rolled back after each test."""
+    connection = engine.connect()
+    transaction = connection.begin()
+    session = Session(
+        bind=connection, join_transaction_mode="create_savepoint", expire_on_commit=False
+    )
+    try:
+        yield session
+    finally:
+        session.close()
+        transaction.rollback()
+        connection.close()
 
 
 @pytest.fixture
