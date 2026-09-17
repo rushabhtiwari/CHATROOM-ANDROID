@@ -171,7 +171,7 @@ Minimal and quiet. Colour appears only in the app icons.
 - **Search:** filters tiles by name and description as you type, case-insensitive. Empty groups hide. With no matches: "No apps match "{query}"." Pressing Enter opens the first live match. `/` focuses the search box.
 - **Tiles:** a 64 px soft icon (or the logo, contained in the same square), with the app name below.
   - Live tiles are links opening `launch_url` in a new tab (`rel="noopener noreferrer"`).
-  - Coming-soon tiles are not links. They show at 55% opacity, desaturated, with a "Soon" pill, and have `aria-disabled="true"`.
+  - Coming-soon tiles are not links. They show at 70% opacity, partly desaturated, with a "Soon" pill, and have `aria-disabled="true"`.
   - The description shows as a tooltip on hover and keyboard focus.
 - **Groups:** "Departments" first, then "Company tools". Tiles are sorted by name within a group, and a group with no tiles isn't rendered.
 - **Empty state:** "You don't have any apps yet. Ask an admin to add you to your department."
