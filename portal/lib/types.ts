@@ -43,10 +43,11 @@ export type AppSummary = {
   category: AppCategory;
   logo_version: number | null;
   roles: Role[];
+  departments: { slug: string; name: string }[];
 };
 
 export type AppDetail = AppSummary & {
-  departments: {
+  grants: {
     department_id: string;
     department_slug: string;
     department_name: string;

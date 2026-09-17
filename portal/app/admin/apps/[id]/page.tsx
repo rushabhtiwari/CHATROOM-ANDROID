@@ -163,13 +163,13 @@ export default async function AppPage({ params }: PageProps<"/admin/apps/[id]">)
 
       <section aria-labelledby="departments-heading">
         <h2 id="departments-heading">Departments with access</h2>
-        {app.departments.length === 0 ? (
+        {app.grants.length === 0 ? (
           <p>
             No department has access yet. Grant it on the <Link href="/admin/departments">Departments</Link> page.
           </p>
         ) : (
           <ul>
-            {app.departments.map((grant) => (
+            {app.grants.map((grant) => (
               <li key={grant.department_id}>
                 {grant.department_name}: {app.roles.find((r) => r.id === grant.app_role_id)?.label ?? grant.role_key}
               </li>

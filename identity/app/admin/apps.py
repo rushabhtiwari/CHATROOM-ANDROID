@@ -35,7 +35,31 @@ def _roles(db: Session, app: App) -> list[RoleOut]:
     return [RoleOut(id=r.id, key=r.key, label=r.label, rank=r.rank) for r in rows]
 
 
+def _out_many(db: Session, apps: list[App]) -> list[dict]:
+    """Serialise apps with their roles and departments in a fixed number of queries."""
+    ids = [app.id for app in apps]
+    roles: dict[uuid.UUID, list[RoleOut]] = {app_id: [] for app_id in ids}
+    for r in db.scalars(select(AppRole).where(AppRole.app_id.in_(ids)).order_by(AppRole.rank)):
+        roles[r.app_id].append(RoleOut(id=r.id, key=r.key, label=r.label, rank=r.rank))
+    departments: dict[uuid.UUID, list[dict]] = {app_id: [] for app_id in ids}
+    rows = db.execute(
+        select(DepartmentAppAccess.app_id, Department.slug, Department.name)
+        .join(Department, Department.id == DepartmentAppAccess.department_id)
+        .where(DepartmentAppAccess.app_id.in_(ids))
+        .order_by(Department.name)
+    ).all()
+    for app_id, slug, name in rows:
+        departments[app_id].append({"slug": slug, "name": name})
+    return [
+        _base(app) | {"roles": roles[app.id], "departments": departments[app.id]} for app in apps
+    ]
+
+
 def _out(db: Session, app: App) -> dict:
+    return _out_many(db, [app])[0]
+
+
+def _base(app: App) -> dict:
     return dict(
         id=app.id,
         slug=app.slug,
@@ -50,7 +74,6 @@ def _out(db: Session, app: App) -> dict:
         is_system=app.is_system,
         category=app.category,
         logo_version=logo_version(app),
-        roles=_roles(db, app),
     )
 
 
@@ -61,7 +84,7 @@ def _ensure_not_system(db: Session, app_id: uuid.UUID) -> None:
 
 @router.get("/apps", response_model=list[AppOut])
 def list_apps(db: Session = Depends(get_db), _: User = Depends(require_admin)) -> list[dict]:
-    return [_out(db, a) for a in db.scalars(select(App).order_by(App.name))]
+    return _out_many(db, list(db.scalars(select(App).order_by(App.name))))
 
 
 @router.post("/apps", response_model=AppCreatedOut, status_code=201)
@@ -114,17 +137,18 @@ def get_app(
         .where(DepartmentAppAccess.app_id == app.id)
         .order_by(Department.name)
     ).all()
-    departments = [
-        dict(
-            department_id=d_id,
-            department_slug=slug,
-            department_name=name,
-            app_role_id=role_id,
-            role_key=key,
-        )
-        for d_id, slug, name, role_id, key in grants
-    ]
-    return _out(db, app) | {"departments": departments}
+    return _out(db, app) | {
+        "grants": [
+            dict(
+                department_id=d_id,
+                department_slug=slug,
+                department_name=name,
+                app_role_id=role_id,
+                role_key=key,
+            )
+            for d_id, slug, name, role_id, key in grants
+        ]
+    }
 
 
 @router.patch("/apps/{app_id}", response_model=AppOut)

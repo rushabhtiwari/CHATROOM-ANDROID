@@ -96,6 +96,11 @@ class AppUpdate(BaseModel):
     status: AppStatus | None = None
 
 
+class DepartmentRef(BaseModel):
+    slug: str
+    name: str
+
+
 class AppOut(BaseModel):
     id: uuid.UUID
     slug: str
@@ -111,6 +116,7 @@ class AppOut(BaseModel):
     category: str
     logo_version: int | None
     roles: list[RoleOut]
+    departments: list[DepartmentRef]
 
 
 class AppDepartmentGrantOut(BaseModel):
@@ -122,7 +128,7 @@ class AppDepartmentGrantOut(BaseModel):
 
 
 class AppDetailOut(AppOut):
-    departments: list[AppDepartmentGrantOut]
+    grants: list[AppDepartmentGrantOut]
 
 
 class AppCreatedOut(AppOut):
