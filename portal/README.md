@@ -1,0 +1,64 @@
+# Portal
+
+The company app launcher and admin console. People sign in once through the identity service,
+see a tile for every app they can open, and open each already signed in. Admins manage people,
+departments, apps and exceptions, and can read the activity log.
+
+Design: `docs/superpowers/specs/2026-09-16-central-platform-sso-design.md` (§7).
+
+## Run it locally
+
+Requires Node.js 24 and the identity service from the repository root:
+
+```bash
+docker compose up -d            # identity service on http://localhost:8000, dev login enabled
+cd portal
+cp .env.example .env.local
+npm install
+npm run dev                     # http://localhost:3000
+```
+
+Sign in with any seeded user on the development login page. `admin@yourco.com` is an admin.
+
+## Checks
+
+```bash
+npm test                 # unit and component tests (Vitest)
+npm run lint
+npm run typecheck
+npm run format:check
+npm run test:e2e         # builds the portal and drives it against the running identity service
+```
+
+The end-to-end tests need `docker compose up -d` first. They create departments and apps with
+unique names in the development database.
+
+## Configuration
+
+| Variable             | Purpose                                                                     |
+| -------------------- | --------------------------------------------------------------------------- |
+| `AUTH_SECRET`        | Encrypts the session cookie. Generate with `npx auth secret`.               |
+| `AUTH_URL`           | Public URL of the portal, e.g. `https://portal.yourco.com`                  |
+| `AUTH_ISSUER`        | Identity service URL as browsers see it; must equal its `ISSUER_URL`        |
+| `AUTH_CLIENT_SECRET` | Must equal the identity service's `PORTAL_CLIENT_SECRET`                    |
+| `IDENTITY_API_URL`   | Identity service URL as this server reaches it (can be an internal address) |
+
+## How sign-in works here
+
+- `proxy.ts` runs Auth.js on every page request. Signed-out visitors go to `/signin`, which starts
+  the OpenID Connect flow with the identity service.
+- Tokens live only in the encrypted, HttpOnly session cookie. Server code reads the access token
+  with `getAccessToken()` (`lib/session.ts`) and calls the identity API through `lib/identity.ts`.
+- Access tokens last 15 minutes. The proxy renews them a minute before expiry and saves the new
+  cookie. If renewal fails, the person is sent to sign in again.
+- Sign out ends the portal session and the identity session, which signs the person out of every
+  app within 15 minutes.
+
+## Deploying
+
+```bash
+docker build -t portal .
+docker run -p 3000:3000 --env-file portal.env portal
+```
+
+The image runs Next.js's standalone server as the unprivileged `node` user.
