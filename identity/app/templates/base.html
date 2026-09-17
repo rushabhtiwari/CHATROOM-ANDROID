@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Sign in{% endblock %}</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background: #f6f7f9; color: #1d2330; margin: 0; }
+    main { max-width: 28rem; margin: 12vh auto; padding: 2rem; background: #fff;
+           border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+    h1 { font-size: 1.25rem; margin: 0 0 .75rem; }
+    p { line-height: 1.5; }
+    a.button, button { display: inline-block; padding: .6rem 1rem; border-radius: 8px; border: 0;
+           background: #2f5bea; color: #fff; text-decoration: none; font: inherit; cursor: pointer; }
+    .muted { color: #6b7280; font-size: .8rem; margin-top: 1.5rem; }
+    ul { list-style: none; padding: 0; } li { margin: .5rem 0; }
+  </style>
+</head>
+<body><main>{% block content %}{% endblock %}</main></body>
+</html>

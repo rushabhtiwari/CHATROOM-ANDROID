@@ -22,10 +22,14 @@ from pathlib import Path  # noqa: E402
 import pytest  # noqa: E402
 from alembic import command  # noqa: E402
 from alembic.config import Config  # noqa: E402
+from fastapi.testclient import TestClient  # noqa: E402
 from sqlalchemy import create_engine, text  # noqa: E402
 from sqlalchemy.orm import Session  # noqa: E402
 
+from app.bootstrap import bootstrap  # noqa: E402
 from app.config import Settings, get_settings  # noqa: E402
+from app.db import get_db  # noqa: E402
+from app.main import create_app  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -64,3 +68,34 @@ def db(engine) -> Iterator[Session]:
 @pytest.fixture
 def settings() -> Settings:
     return get_settings()
+
+
+@pytest.fixture
+def make_client(db, settings):
+    """Build a TestClient bound to the per-test session; kwargs override settings (env names)."""
+
+    def factory(**setting_overrides: str) -> TestClient:
+        previous = {key.upper(): os.environ.get(key.upper()) for key in setting_overrides}
+        os.environ.update({key.upper(): value for key, value in setting_overrides.items()})
+        get_settings.cache_clear()
+        try:
+            app = create_app(run_bootstrap=False)
+            app_settings = get_settings()
+        finally:
+            for key, value in previous.items():
+                if value is None:
+                    os.environ.pop(key, None)
+                else:
+                    os.environ[key] = value
+            get_settings.cache_clear()
+        app.dependency_overrides[get_db] = lambda: db
+        app.dependency_overrides[get_settings] = lambda: app_settings
+        return TestClient(app, base_url=settings.issuer_url, follow_redirects=False)
+
+    bootstrap(db, settings)
+    return factory
+
+
+@pytest.fixture
+def client(make_client) -> TestClient:
+    return make_client()
