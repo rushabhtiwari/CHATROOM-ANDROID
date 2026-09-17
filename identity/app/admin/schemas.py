@@ -54,13 +54,23 @@ class DepartmentOut(BaseModel):
     access: list[DepartmentGrantOut]
 
 
+AppStatus = Literal["active", "coming_soon", "disabled"]
+AppCategory = Literal["department", "company"]
+ICON_PATTERN = r"^[a-z0-9-]{0,40}$"
+GO_LIVE_MESSAGE = (
+    "An app needs its address and at least one sign-in callback URL before it can go live"
+)
+
+
 class AppIn(BaseModel):
     slug: str = Field(pattern=SLUG_PATTERN)
     name: str = Field(min_length=1, max_length=255)
     description: str = ""
-    icon: str = ""
-    launch_url: str
-    redirect_uris: list[str] = Field(min_length=1)
+    category: AppCategory = "department"
+    icon: str = Field(default="", pattern=ICON_PATTERN)
+    status: AppStatus = "coming_soon"
+    launch_url: str = ""
+    redirect_uris: list[str] = []
     post_logout_redirect_uris: list[str] = []
     roles: list[RoleIn] = Field(min_length=1)
 
@@ -70,17 +80,20 @@ class AppIn(BaseModel):
             raise ValueError("role keys must be unique")
         if len({r.rank for r in self.roles}) != len(self.roles):
             raise ValueError("role ranks must be unique")
+        if self.status == "active" and not (self.launch_url and self.redirect_uris):
+            raise ValueError(GO_LIVE_MESSAGE)
         return self
 
 
 class AppUpdate(BaseModel):
     name: str | None = Field(default=None, min_length=1, max_length=255)
     description: str | None = None
-    icon: str | None = None
+    category: AppCategory | None = None
+    icon: str | None = Field(default=None, pattern=ICON_PATTERN)
     launch_url: str | None = None
-    redirect_uris: list[str] | None = Field(default=None, min_length=1)
+    redirect_uris: list[str] | None = None
     post_logout_redirect_uris: list[str] | None = None
-    status: Literal["active", "disabled"] | None = None
+    status: AppStatus | None = None
 
 
 class AppOut(BaseModel):
@@ -95,6 +108,8 @@ class AppOut(BaseModel):
     post_logout_redirect_uris: list[str]
     status: str
     is_system: bool
+    category: str
+    logo_version: int | None
     roles: list[RoleOut]
 
 

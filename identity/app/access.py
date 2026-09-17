@@ -54,7 +54,7 @@ def decide(
 ) -> Decision:
     if user_status != "active":
         return Decision(None, "suspended")
-    if app_status != "active":
+    if app_status == "disabled":
         return Decision(None, "app_disabled")
     if app_is_system:
         if not app_roles:

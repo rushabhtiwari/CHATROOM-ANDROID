@@ -1,12 +1,13 @@
 import uuid
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy import exists, select
 from sqlalchemy.orm import Session
 
 from app import audit
-from app.admin.common import conflict, get_or_404, validate_uris
+from app.admin.common import conflict, get_or_404, logo_version, validate_uris
 from app.admin.schemas import (
+    GO_LIVE_MESSAGE,
     AppCreatedOut,
     AppDetailOut,
     AppIn,
@@ -46,6 +47,8 @@ def _out(db: Session, app: App) -> dict:
         post_logout_redirect_uris=app.post_logout_redirect_uris,
         status=app.status,
         is_system=app.is_system,
+        category=app.category,
+        logo_version=logo_version(app),
         roles=_roles(db, app),
     )
 
@@ -68,7 +71,8 @@ def create_app_client(
     settings: Settings = Depends(get_settings),
     admin: User = Depends(require_admin),
 ) -> dict:
-    validate_uris([body.launch_url], settings, "launch_url")
+    if body.launch_url:
+        validate_uris([body.launch_url], settings, "launch_url")
     validate_uris(body.redirect_uris, settings, "redirect_uris")
     validate_uris(body.post_logout_redirect_uris, settings, "post_logout_redirect_uris")
     if db.scalar(select(App).where((App.slug == body.slug) | (App.client_id == body.slug))):
@@ -80,11 +84,12 @@ def create_app_client(
         description=body.description,
         icon=body.icon,
         launch_url=body.launch_url,
+        category=body.category,
         client_id=body.slug,
         client_secret_hash=hash_secret(secret),
         redirect_uris=body.redirect_uris,
         post_logout_redirect_uris=body.post_logout_redirect_uris,
-        status="active",
+        status=body.status,
         is_system=False,
     )
     db.add(app)
@@ -134,7 +139,7 @@ def update_app(
     changes = body.model_dump(exclude_unset=True)
     if app.is_system and changes.keys() & SYSTEM_MANAGED_FIELDS:
         raise conflict("The portal's status and URLs are managed by configuration")
-    if "launch_url" in changes:
+    if changes.get("launch_url"):
         validate_uris([changes["launch_url"]], settings, "launch_url")
     if "redirect_uris" in changes:
         validate_uris(changes["redirect_uris"], settings, "redirect_uris")
@@ -142,6 +147,9 @@ def update_app(
         validate_uris(changes["post_logout_redirect_uris"], settings, "post_logout_redirect_uris")
     for field, value in changes.items():
         setattr(app, field, value)
+    if app.status == "active" and not (app.launch_url and app.redirect_uris):
+        db.rollback()
+        raise HTTPException(422, GO_LIVE_MESSAGE)
     audit.record(
         db,
         "app_updated",

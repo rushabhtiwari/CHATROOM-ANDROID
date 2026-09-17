@@ -20,6 +20,11 @@ def conflict(message: str) -> HTTPException:
     return HTTPException(409, message)
 
 
+def logo_version(app) -> int | None:
+    """Cache-busting version for an app's logo: last change as epoch seconds, or None."""
+    return int(app.logo_updated_at.timestamp()) if app.logo_updated_at else None
+
+
 def validate_uris(uris: list[str], settings: Settings, field: str) -> list[str]:
     """Absolute URLs; https required except localhost outside staging/production."""
     for uri in uris:

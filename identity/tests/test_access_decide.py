@@ -45,6 +45,12 @@ CASES = [
         None,
         "app_disabled",
     ),
+    (
+        "coming-soon app still resolves so access is ready at launch",
+        {"app_status": "coming_soon", "department_grants": [DepartmentGrant(SALES, VIEWER)]},
+        VIEWER,
+        "department",
+    ),
     ("system app gives lowest role", {"app_is_system": True}, VIEWER, "system_app"),
     ("system app with no roles", {"app_is_system": True, "app_roles": []}, None, "no_access"),
     (

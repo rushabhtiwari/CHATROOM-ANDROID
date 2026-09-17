@@ -82,3 +82,59 @@ def test_role_crud_and_delete_blocked_while_referenced(api, db):
     assert renamed.json()["label"] == "Audit"
     assert api.delete(f"/admin/app-roles/{roles['viewer'].id}").status_code == 409
     assert api.delete(f"/admin/app-roles/{roles['manager'].id}").status_code == 204
+
+
+COMING_SOON_BODY = {
+    "slug": "stores",
+    "name": "Stores",
+    "category": "department",
+    "icon": "warehouse",
+    "roles": [{"key": "member", "label": "Member", "rank": 10}],
+}
+
+
+def test_register_coming_soon_app_without_addresses(api):
+    created = api.post("/admin/apps", json=COMING_SOON_BODY)
+
+    assert created.status_code == 201, created.text
+    body = created.json()
+    assert (body["status"], body["category"], body["icon"]) == (
+        "coming_soon",
+        "department",
+        "warehouse",
+    )
+    assert (body["launch_url"], body["redirect_uris"], body["logo_version"]) == ("", [], None)
+
+
+def test_live_apps_need_an_address_and_callback(api, db):
+    live_without_urls = api.post("/admin/apps", json=COMING_SOON_BODY | {"status": "active"})
+    assert live_without_urls.status_code == 422
+    assert "before it can go live" in live_without_urls.text
+
+    app_id = api.post("/admin/apps", json=COMING_SOON_BODY).json()["id"]
+    refused = api.patch(f"/admin/apps/{app_id}", json={"status": "active"})
+    launched = api.patch(
+        f"/admin/apps/{app_id}",
+        json={
+            "status": "active",
+            "launch_url": "https://stores.yourco.com",
+            "redirect_uris": ["https://stores.yourco.com/api/auth/callback/identity"],
+        },
+    )
+
+    assert refused.status_code == 422
+    assert "before it can go live" in refused.json()["detail"]
+    assert launched.status_code == 200 and launched.json()["status"] == "active"
+
+
+def test_category_and_icon_are_validated(api):
+    assert api.post("/admin/apps", json=COMING_SOON_BODY | {"category": "team"}).status_code == 422
+    assert (
+        api.post("/admin/apps", json=COMING_SOON_BODY | {"icon": "Not An Icon"}).status_code == 422
+    )
+
+
+def test_apps_can_change_group_and_icon(api, db):
+    app, _ = make_app(db, slug="crm")
+    response = api.patch(f"/admin/apps/{app.id}", json={"category": "company", "icon": "headset"})
+    assert (response.json()["category"], response.json()["icon"]) == ("company", "headset")

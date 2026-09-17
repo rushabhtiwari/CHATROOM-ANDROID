@@ -6,6 +6,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.access import resolve_role
+from app.admin.common import logo_version
 from app.db import get_db
 from app.deps import current_user
 from app.models import App, Department, User, UserDepartment
@@ -32,7 +33,10 @@ class MyAppOut(BaseModel):
     slug: str
     name: str
     description: str
+    category: str
+    status: str
     icon: str
+    logo_version: int | None
     launch_url: str
     role: str
 
@@ -58,7 +62,9 @@ def me(user: User = Depends(current_user), db: Session = Depends(get_db)) -> MeO
 @router.get("/me/apps", response_model=list[MyAppOut])
 def my_apps(user: User = Depends(current_user), db: Session = Depends(get_db)) -> list[MyAppOut]:
     apps = db.scalars(
-        select(App).where(App.status == "active", App.is_system.is_(False)).order_by(App.name)
+        select(App)
+        .where(App.status.in_(("active", "coming_soon")), App.is_system.is_(False))
+        .order_by(App.name)
     ).all()
     result = []
     for app in apps:
@@ -69,7 +75,10 @@ def my_apps(user: User = Depends(current_user), db: Session = Depends(get_db)) -
                     slug=app.slug,
                     name=app.name,
                     description=app.description,
+                    category=app.category,
+                    status=app.status,
                     icon=app.icon,
+                    logo_version=logo_version(app),
                     launch_url=app.launch_url,
                     role=role.key,
                 )
