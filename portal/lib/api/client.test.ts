@@ -65,3 +65,32 @@ describe("errorMessage", () => {
     expect(errorMessage(500, null)).toBe("The identity service returned an error (500).");
   });
 });
+
+describe("file uploads and raw responses", () => {
+  it("uploads multipart form data without a JSON content type", async () => {
+    const { api, fetch } = client(Response.json({ id: "a1" }));
+    const form = new FormData();
+    form.set("file", new Blob(["png"], { type: "image/png" }), "logo.png");
+
+    await api.upload("/admin/apps/a1/logo", form);
+
+    const [url, init] = fetch.mock.calls[0] as unknown as [URL, RequestInit];
+    expect(String(url)).toBe("http://idp/admin/apps/a1/logo");
+    expect(init.method).toBe("PUT");
+    expect(init.headers).toEqual({ Authorization: "Bearer tok" });
+    expect(init.body).toBe(form);
+  });
+
+  it("returns raw responses so callers can stream bytes", async () => {
+    const { api } = client(new Response("bytes", { status: 404 }));
+    const response = await api.raw("/apps/crm/logo");
+    expect(response.status).toBe(404);
+    expect(await response.text()).toBe("bytes");
+  });
+
+  it("still sends people to sign in when a raw request is unauthorised", async () => {
+    const { api, onUnauthorized } = client(new Response(null, { status: 401 }));
+    await expect(api.raw("/apps/crm/logo")).rejects.toThrow("redirected to sign-in");
+    expect(onUnauthorized).toHaveBeenCalled();
+  });
+});

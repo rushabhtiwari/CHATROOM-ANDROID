@@ -60,7 +60,33 @@ export function createApiClient(options: ApiClientOptions) {
     return payload as T;
   }
 
+  /** PUT multipart form data; the browser-style boundary header is set by fetch. */
+  async function upload<T>(path: string, form: FormData): Promise<T> {
+    const response = await doFetch(new URL(path, options.baseUrl), {
+      method: "PUT",
+      headers: { Authorization: `Bearer ${await options.getAccessToken()}` },
+      body: form,
+      cache: "no-store",
+    });
+    if (response.status === 401) options.onUnauthorized();
+    const payload: unknown = await response.json().catch(() => null);
+    if (!response.ok) throw new ApiError(response.status, errorMessage(response.status, payload));
+    return payload as T;
+  }
+
+  /** GET without parsing, for passing bytes through (e.g. logos). Only 401 is handled here. */
+  async function raw(path: string): Promise<Response> {
+    const response = await doFetch(new URL(path, options.baseUrl), {
+      headers: { Authorization: `Bearer ${await options.getAccessToken()}` },
+      cache: "no-store",
+    });
+    if (response.status === 401) options.onUnauthorized();
+    return response;
+  }
+
   return {
+    upload,
+    raw,
     get: <T>(path: string, query?: Query) => request<T>("GET", path, undefined, query),
     post: <T>(path: string, body?: unknown) => request<T>("POST", path, body ?? {}),
     put: <T>(path: string, body: unknown) => request<T>("PUT", path, body),

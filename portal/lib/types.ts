@@ -11,11 +11,17 @@ export type Me = {
   departments: Department[];
 };
 
+export type AppStatus = "active" | "coming_soon" | "disabled";
+export type AppCategory = "department" | "company";
+
 export type MyApp = {
   slug: string;
   name: string;
   description: string;
+  category: AppCategory;
+  status: Exclude<AppStatus, "disabled">;
   icon: string;
+  logo_version: number | null;
   launch_url: string;
   role: string;
 };
@@ -32,8 +38,10 @@ export type AppSummary = {
   client_id: string;
   redirect_uris: string[];
   post_logout_redirect_uris: string[];
-  status: "active" | "disabled";
+  status: AppStatus;
   is_system: boolean;
+  category: AppCategory;
+  logo_version: number | null;
   roles: Role[];
 };
 

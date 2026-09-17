@@ -14,6 +14,9 @@ describe("AppGrid", () => {
             description: "Leads and deals",
             icon: "",
             launch_url: "https://crm.yourco.com",
+            category: "department",
+            status: "active",
+            logo_version: null,
             role: "manager",
           },
         ]}

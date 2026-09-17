@@ -12,6 +12,7 @@ export async function registerApp(_: ActionResult, form: FormData): Promise<Acti
       slug: requiredText(form, "slug", "Short name"),
       name: requiredText(form, "name", "Name"),
       description: text(form, "description"),
+      status: "active",
       launch_url: requiredText(form, "launch_url", "App address"),
       redirect_uris: lines(text(form, "redirect_uris")),
       post_logout_redirect_uris: lines(text(form, "post_logout_redirect_uris")),

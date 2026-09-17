@@ -7,7 +7,9 @@ import { env } from "@/lib/env";
 import type { RoleInput } from "@/lib/forms";
 import { getAccessToken } from "@/lib/session";
 import type {
+  AppCategory,
   AppDetail,
+  AppStatus,
   AppSummary,
   AuditEntry,
   ClientSecret,
@@ -66,6 +68,9 @@ export const identity = {
     slug: string;
     name: string;
     description: string;
+    category?: AppCategory;
+    icon?: string;
+    status?: AppStatus;
     launch_url: string;
     redirect_uris: string[];
     post_logout_redirect_uris: string[];
@@ -74,10 +79,27 @@ export const identity = {
   updateApp: (
     id: string,
     body: Partial<
-      Pick<AppSummary, "name" | "description" | "launch_url" | "redirect_uris" | "post_logout_redirect_uris" | "status">
+      Pick<
+        AppSummary,
+        | "name"
+        | "description"
+        | "category"
+        | "icon"
+        | "launch_url"
+        | "redirect_uris"
+        | "post_logout_redirect_uris"
+        | "status"
+      >
     >,
   ) => api().patch<AppSummary>(`/admin/apps/${id}`, body),
   rotateSecret: (id: string) => api().post<ClientSecret>(`/admin/apps/${id}/rotate-secret`),
+  uploadLogo: (id: string, file: File) => {
+    const form = new FormData();
+    form.set("file", file);
+    return api().upload<AppSummary>(`/admin/apps/${id}/logo`, form);
+  },
+  removeLogo: (id: string) => api().delete(`/admin/apps/${id}/logo`),
+  logo: (slug: string) => api().raw(`/apps/${encodeURIComponent(slug)}/logo`),
   createRole: (appId: string, body: RoleInput) => api().post<Role>(`/admin/apps/${appId}/roles`, body),
   deleteRole: (id: string) => api().delete(`/admin/app-roles/${id}`),
 
