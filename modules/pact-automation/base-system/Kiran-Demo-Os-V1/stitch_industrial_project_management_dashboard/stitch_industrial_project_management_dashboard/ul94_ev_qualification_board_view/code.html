@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-secondary-fixed":"#001d31","on-secondary-container":"#00476e","surface-container-low":"#eff4ff","surface-container-highest":"#d3e4fe","background":"#f8f9ff","surface":"#f8f9ff","secondary-container":"#5bb8fe","surface-container-lowest":"#ffffff","on-error":"#ffffff","tertiary-container":"#005136","tertiary-fixed":"#6ffbbe","tertiary-fixed-dim":"#4edea3","on-surface-variant":"#424750","inverse-primary":"#a3c9ff","primary-container":"#06477f","primary":"#00305b","surface-variant":"#d3e4fe","on-primary-fixed":"#001c39","tertiary":"#003824","on-background":"#0b1c30","surface-dim":"#cbdbf5","surface-bright":"#f8f9ff","outline":"#727781","on-secondary":"#ffffff","inverse-surface":"#213145","error-container":"#ffdad6","error":"#ba1a1a","surface-container":"#e5eeff","secondary":"#006398","on-tertiary-container":"#35cc92","secondary-fixed-dim":"#93ccff","on-primary":"#ffffff","primary-fixed-dim":"#a3c9ff","on-tertiary-fixed-variant":"#005236","on-error-container":"#93000a","secondary-fixed":"#cce5ff","surface-container-high":"#dce9ff","primary-fixed":"#d3e3ff","on-primary-container":"#88b6f5","on-tertiary-fixed":"#002113","on-surface":"#0b1c30","outline-variant":"#c2c6d1","on-primary-fixed-variant":"#084880","surface-tint":"#2d6099","on-tertiary":"#ffffff","on-secondary-fixed-variant":"#004b73","inverse-on-surface":"#eaf1ff"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"row-height":"36px","pad-lg":"16px","pad-md":"12px","inspector-width":"320px","pad-sm":"8px","sidebar-width":"240px","gap-inline":"6px","pad-xs":"4px","row-height-compact":"28px"},"fontFamily":{"header-section":["Inter"],"title-page":["Inter"],"caption-meta-medium":["Inter"],"shortcut-key":["Inter"],"body-medium":["Inter"],"body-default":["Inter"],"caption-meta":["Inter"],"code-badge":["JetBrains Mono"]},"fontSize":{"header-section":["14px",{"lineHeight":"18px","letterSpacing":"-0.005em","fontWeight":"600"}],"title-page":["16px",{"lineHeight":"20px","letterSpacing":"-0.01em","fontWeight":"600"}],"caption-meta-medium":["12px",{"lineHeight":"16px","fontWeight":"500"}],"shortcut-key":["10px",{"lineHeight":"12px","letterSpacing":"0.02em","fontWeight":"600"}],"body-medium":["13px",{"lineHeight":"18px","fontWeight":"500"}],"body-default":["13px",{"lineHeight":"18px","fontWeight":"400"}],"caption-meta":["12px",{"lineHeight":"16px","fontWeight":"400"}],"code-badge":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"500"}]}}}}</script></head><body class="bg-surface font-body-default text-body-default text-on-surface selection:bg-surface-variant"><aside class="fixed left-0 top-0 h-full w-sidebar-width bg-surface-container-lowest z-50 flex flex-col justify-between border-r border-outline-variant/30 select-none"><div class="flex flex-col flex-1 min-h-0"><div class="h-14 px-pad-md flex items-center justify-between border-b border-outline-variant/30"><div class="flex items-center gap-gap-inline min-w-0"><div class="w-7 h-7 rounded-lg bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">precision_manufacturing</span></div><div class="flex flex-col min-w-0"><span class="font-title-page text-header-section text-on-surface truncate leading-tight">Vectra Cables</span><span class="font-caption-meta text-caption-meta text-on-surface-variant truncate">Engineering Ops</span></div></div><button class="w-6 h-6 flex items-center justify-center rounded-lg hover:bg-surface-container-high hover:text-on-surface text-on-surface-variant" type="button"><span class="material-symbols-outlined text-[18px]">unfold_more</span></button></div><div class="px-pad-md py-pad-sm"><div class="relative flex items-center"><span class="material-symbols-outlined absolute left-2 text-[16px] text-outline">search</span><input class="w-full h-[30px] pl-7 pr-7 bg-surface-container-low rounded-lg font-caption-meta text-caption-meta text-on-surface border border-outline-variant/40 focus:outline-none focus:border-primary placeholder:text-outline" placeholder="Jump to issue..." type="text"/><kbd class="absolute right-2 font-shortcut-key text-shortcut-key bg-surface-container-lowest border border-outline-variant/60 rounded px-1 text-on-surface-variant">/</kbd></div></div><nav class="flex-1 overflow-y-auto px-pad-sm py-pad-xs flex flex-col gap-0.5" data-active-classes="bg-surface-container-high text-primary font-semibold border-l-2 border-primary rounded-r-lg"><div class="pt-pad-xs pb-1"><div class="flex items-center justify-between px-2 py-1 text-on-surface-variant"><div class="flex items-center gap-gap-inline cursor-pointer"><span class="material-symbols-outlined text-[14px]">expand_more</span><span class="font-caption-meta-medium text-caption-meta-medium uppercase tracking-wider text-outline">Projects</span></div><span class="font-code-badge text-code-badge text-outline">3</span></div><div class="flex flex-col gap-0.5 mt-0.5"><a class="flex items-center h-row-height-compact px-pad-sm pl-6 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-body-default text-body-default" data-path="sap-s4hana-migration" href="#"><span class="truncate">SAP S/4HANA Migration</span></a><a aria-current="page" class="flex items-center h-row-height-compact px-pad-sm pl-6 transition-colors bg-surface-container-high text-primary font-semibold border-l-2 border-primary rounded-r-lg" data-path="ul94-ev-qualification" href="#"><span class="truncate">UL94 EV Qualification</span></a><a class="flex items-center h-row-height-compact px-pad-sm pl-6 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-body-default text-body-default" data-path="line-4-capacity-expansion" href="#"><span class="truncate">Line 4 Capacity Expansion</span></a></div></div><div class="my-pad-xs border-t border-outline-variant/30"></div><a class="flex items-center gap-gap-inline h-row-height px-pad-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-body-medium text-body-medium" data-path="cycles" href="#"><span class="material-symbols-outlined text-[18px]">sync_alt</span><span>Cycles</span></a><a class="flex items-center gap-gap-inline h-row-height px-pad-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-body-medium text-body-medium" data-path="modules" href="#"><span class="material-symbols-outlined text-[18px]">view_in_ar</span><span>Modules</span></a><a class="flex items-center gap-gap-inline h-row-height px-pad-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-body-medium text-body-medium" data-path="reports" href="#"><span class="material-symbols-outlined text-[18px]">insert_chart</span><span>Reports</span></a></nav></div><div class="p-pad-sm border-t border-outline-variant/30 flex flex-col gap-pad-xs bg-surface-container-lowest"><div class="flex items-center justify-between px-2 py-1"><div class="flex items-center gap-1.5 min-w-0"><span class="w-2 h-2 rounded-full bg-tertiary-container shrink-0"></span><span class="font-code-badge text-code-badge text-on-surface-variant truncate">Plant 2 • Pune / BLR</span></div><div class="flex items-center gap-0.5"><button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container-high hover:text-on-surface text-outline" type="button"><span class="material-symbols-outlined text-[16px]">help</span></button><button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container-high hover:text-on-surface text-outline" type="button"><span class="material-symbols-outlined text-[16px]">settings</span></button></div></div><div class="flex items-center gap-gap-inline p-1.5 rounded-lg hover:bg-surface-container-low cursor-pointer transition-colors"><div class="relative"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><span class="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-tertiary-container border border-surface-container-lowest"></span></div><div class="flex flex-col min-w-0 flex-1"><span class="font-body-medium text-body-medium text-on-surface truncate leading-tight">K. Ranganathan</span><span class="font-caption-meta text-caption-meta text-outline truncate">Lead Cable Eng</span></div><span class="material-symbols-outlined text-outline text-[16px]">more_vert</span></div></div></aside><div class="pl-sidebar-width"><header class="fixed top-0 left-sidebar-width right-0 h-14 bg-surface-container-lowest border-b border-outline-variant/30 z-40 flex items-center justify-between px-pad-lg"><div class="flex items-center gap-2 min-w-0"><span class="material-symbols-outlined text-[18px] text-outline">cable</span><span class="font-caption-meta text-caption-meta text-on-surface-variant">Projects</span><span class="text-outline-variant font-caption-meta text-caption-meta">/</span><span class="font-header-section text-header-section text-on-surface truncate">Engineering Systems Console</span></div><div class="flex items-center gap-pad-md"><div class="flex items-center gap-1.5"><button class="h-7 px-2.5 rounded-lg border border-outline-variant/40 hover:bg-surface-container-high text-on-surface font-body-medium text-body-medium flex items-center gap-1" type="button"><span class="material-symbols-outlined text-[16px]">tune</span><span>Filter</span></button><button class="h-7 px-2.5 rounded-lg bg-primary-container text-on-primary font-body-medium text-body-medium hover:bg-primary flex items-center gap-1 shadow-sm" type="button"><span class="material-symbols-outlined text-[16px]">add</span><span>New Task</span><kbd class="font-shortcut-key text-shortcut-key bg-on-primary/20 rounded px-1 ml-1 text-on-primary">C</kbd></button></div><div class="h-4 w-px bg-outline-variant/40"></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="relative pt-14 w-full bg-background min-h-screen"><div class="flex flex-col w-full min-h-[calc(100vh-56px)] bg-surface text-on-surface">
+<div class="sticky top-14 z-30 flex flex-col bg-surface-container-lowest/95 backdrop-blur shadow-sm">
+<div class="flex items-center justify-between px-pad-lg py-2">
+<div class="flex items-center gap-3 min-w-0">
+<div class="flex items-center gap-1.5 min-w-0">
+<span class="font-body-medium text-body-medium text-on-surface-variant truncate">UL94 EV Qualification</span>
+<span class="material-symbols-outlined text-outline text-[16px]">chevron_right</span>
+<span class="font-header-section text-header-section text-on-surface flex items-center gap-1.5">
+            Work Items
+            <span class="font-code-badge text-code-badge px-1.5 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-medium">28</span>
+</span>
+</div>
+<div class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-caption-meta-medium text-caption-meta-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-container animate-pulse"></span>
+<span>Sprint 4 • Active</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-2 text-[15px] text-outline">search</span>
+<input class="w-48 h-7 pl-7 pr-8 bg-surface-container-low rounded font-caption-meta text-caption-meta text-on-surface placeholder:text-outline focus:outline-none focus:bg-surface-container-lowest focus:ring-1 focus:ring-primary" placeholder="Search issues..." type="text"/>
+<kbd class="absolute right-1.5 font-shortcut-key text-shortcut-key bg-surface-container-lowest rounded px-1 text-outline shadow-sm">&amp;#8984;K</kbd>
+</div>
+<button class="h-7 px-2.5 rounded bg-primary-container hover:bg-primary text-on-primary font-body-medium text-body-medium flex items-center gap-1 shadow-sm transition-colors" type="button">
+<span class="material-symbols-outlined text-[15px]">add</span>
+<span>New Issue</span>
+<kbd class="font-shortcut-key text-shortcut-key bg-on-primary/20 rounded px-1 ml-0.5 text-on-primary">C</kbd>
+</button>
+</div>
+</div>
+<div class="flex items-center justify-between px-pad-lg py-1.5 bg-surface-container-low/60">
+<div class="flex items-center gap-3">
+<div class="flex items-center p-0.5 rounded bg-surface-container-highest/60 font-caption-meta-medium text-caption-meta-medium">
+<button class="flex items-center gap-1 px-2 py-1 rounded bg-surface-container-lowest text-primary shadow-sm" type="button">
+<span class="material-symbols-outlined text-[15px]">view_kanban</span>
+<span>Board</span>
+</button>
+<button class="flex items-center gap-1 px-2 py-1 rounded text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[15px]">format_list_bulleted</span>
+<span>List</span>
+</button>
+<button class="flex items-center gap-1 px-2 py-1 rounded text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[15px]">table_chart</span>
+<span>Table</span>
+</button>
+<button class="flex items-center gap-1 px-2 py-1 rounded text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[15px]">calendar_today</span>
+<span>Calendar</span>
+</button>
+<button class="flex items-center gap-1 px-2 py-1 rounded text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[15px]">timeline</span>
+<span>Timeline</span>
+</button>
+</div>
+<div class="h-4 w-px bg-surface-container-highest"></div>
+<div class="flex items-center gap-1.5">
+<button class="h-7 px-2 rounded bg-surface-container-lowest hover:bg-surface-container text-on-surface font-caption-meta-medium text-caption-meta-medium flex items-center gap-1.5 shadow-sm transition-colors" type="button">
+<span class="text-outline">Assignee:</span>
+<span class="font-semibold text-primary">All</span>
+<span class="material-symbols-outlined text-[14px] text-outline">expand_more</span>
+</button>
+<button class="h-7 px-2 rounded bg-surface-container-lowest hover:bg-surface-container text-on-surface font-caption-meta-medium text-caption-meta-medium flex items-center gap-1.5 shadow-sm transition-colors" type="button">
+<span class="text-outline">Priority:</span>
+<span class="font-semibold text-primary">Any</span>
+<span class="material-symbols-outlined text-[14px] text-outline">expand_more</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-1.5">
+<button class="h-7 px-2 rounded bg-surface-container-lowest hover:bg-surface-container text-on-surface font-caption-meta-medium text-caption-meta-medium flex items-center gap-1.5 shadow-sm transition-colors" type="button">
+<span class="material-symbols-outlined text-[15px] text-outline">tune</span>
+<span>Filters</span>
+<span class="font-code-badge text-code-badge px-1 rounded bg-secondary-fixed text-on-secondary-fixed font-bold">2</span>
+</button>
+<button class="h-7 px-2 rounded bg-surface-container-lowest hover:bg-surface-container text-on-surface font-caption-meta-medium text-caption-meta-medium flex items-center gap-1 shadow-sm transition-colors" type="button">
+<span class="material-symbols-outlined text-[15px] text-outline">splitscreen</span>
+<span>Group: Status</span>
+<span class="material-symbols-outlined text-[14px] text-outline">expand_more</span>
+</button>
+<button class="h-7 px-2 rounded bg-surface-container-lowest hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-caption-meta-medium text-caption-meta-medium flex items-center gap-1 shadow-sm transition-colors" type="button">
+<span class="material-symbols-outlined text-[15px] text-outline">trending_down</span>
+<span>Burndown</span>
+</button>
+</div>
+</div>
+</div>
+<div class="flex-1 overflow-x-auto p-pad-lg">
+<div class="flex items-start gap-3 min-w-max pb-12">
+<div class="w-[304px] flex flex-col shrink-0 rounded-xl bg-surface-container-low/70 p-2 shadow-sm">
+<div class="flex items-center justify-between px-2 py-1.5 rounded-lg bg-surface-container-lowest/80 shadow-xs mb-2">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-outline"></span>
+<span class="font-header-section text-header-section text-on-surface">Backlog</span>
+<span class="font-code-badge text-code-badge px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface-variant font-medium">4</span>
+</div>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container text-outline hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+<div class="flex flex-col gap-2">
+<div class="p-2.5 rounded-lg bg-surface-container-lowest hover:bg-surface-bright shadow-sm hover:shadow transition-all cursor-pointer group">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-code-badge text-code-badge text-outline font-semibold">UL-28</span>
+<div class="flex items-center gap-1 opacity-60 group-hover:opacity-100">
+<span class="material-symbols-outlined text-[15px] text-outline">drag_indicator</span>
+</div>
+</div>
+<p class="font-body-medium text-body-medium text-on-surface mb-2.5 line-clamp-2">Raw polymer compound viscosity check against ASTM D1238</p>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="material-symbols-outlined text-[15px] text-outline" title="Low Priority">low_priority</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-badge text-code-badge">Raw Material</span>
+<span class="font-caption-meta text-caption-meta text-outline">Oct 28</span>
+</div>
+<div class="w-5 h-5 rounded-full bg-primary-fixed text-on-primary-fixed font-code-badge text-[10px] font-bold flex items-center justify-center shrink-0">RK</div>
+</div>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-lowest hover:bg-surface-bright shadow-sm hover:shadow transition-all cursor-pointer group">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-code-badge text-code-badge text-outline font-semibold">UL-26</span>
+<span class="material-symbols-outlined text-[15px] text-outline opacity-60 group-hover:opacity-100">drag_indicator</span>
+</div>
+<p class="font-body-medium text-body-medium text-on-surface mb-2.5 line-clamp-2">Update BOM routing for KU-SLV-0625</p>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="material-symbols-outlined text-[15px] text-outline" title="Low Priority">horizontal_rule</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-badge text-code-badge">Process Eng</span>
+<span class="font-caption-meta text-caption-meta text-outline">Nov 04</span>
+</div>
+<div class="w-5 h-5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-code-badge text-[10px] font-bold flex items-center justify-center shrink-0">AM</div>
+</div>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-lowest hover:bg-surface-bright shadow-sm hover:shadow transition-all cursor-pointer group">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-code-badge text-code-badge text-outline font-semibold">UL-25</span>
+<span class="material-symbols-outlined text-[15px] text-outline opacity-60 group-hover:opacity-100">drag_indicator</span>
+</div>
+<p class="font-body-medium text-body-medium text-on-surface mb-2.5 line-clamp-2">Cross-link density testing protocol revision for XLPE jackets</p>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="material-symbols-outlined text-[15px] text-secondary" title="Medium Priority">equalizer</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-badge text-code-badge">Testing</span>
+<span class="font-caption-meta text-caption-meta text-outline">Nov 12</span>
+</div>
+<div class="w-5 h-5 rounded-full bg-surface-container-high text-on-surface font-code-badge text-[10px] font-bold flex items-center justify-center shrink-0">JS</div>
+</div>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-lowest hover:bg-surface-bright shadow-sm hover:shadow transition-all cursor-pointer group">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-code-badge text-code-badge text-outline font-semibold">UL-24</span>
+<span class="material-symbols-outlined text-[15px] text-outline opacity-60 group-hover:opacity-100">drag_indicator</span>
+</div>
+<p class="font-body-medium text-body-medium text-on-surface mb-2.5 line-clamp-2">Tooling wear inspection report for extrusion die #4</p>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="material-symbols-outlined text-[15px] text-outline" title="Low Priority">low_priority</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-badge text-code-badge">Maintenance</span>
+<span class="font-caption-meta text-caption-meta text-outline">Nov 15</span>
+</div>
+<div class="w-5 h-5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-code-badge text-[10px] font-bold flex items-center justify-center shrink-0">DP</div>
+</div>
+</div>
+</div>
+<button class="mt-2.5 py-1.5 px-2 rounded flex items-center gap-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest text-caption-meta-medium font-caption-meta-medium transition-colors" type="button">
+<span class="material-symbols-outlined text-[15px]">add</span>
+<span>New issue...</span>
+</button>
+</div>
+<div class="w-[304px] flex flex-col shrink-0 rounded-xl bg-surface-container-low/70 p-2 shadow-sm">
+<div class="flex items-center justify-between px-2 py-1.5 rounded-lg bg-surface-container-lowest/80 shadow-xs mb-2">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+<span class="font-header-section text-header-section text-on-surface">Todo</span>
+<span class="font-code-badge text-code-badge px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface-variant font-medium">7</span>
+</div>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container text-outline hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+<div class="flex flex-col gap-2">
+<div class="p-2.5 rounded-lg bg-surface-container-lowest hover:bg-surface-bright shadow-sm hover:shadow transition-all cursor-pointer group">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-code-badge text-code-badge text-primary font-bold">UL-22</span>
+<span class="material-symbols-outlined text-[15px] text-error font-semibold" title="Urgent Priority">priority_high</span>
+</div>
+<p class="font-body-medium text-body-medium text-on-surface mb-2.5 line-clamp-2">Third-party flame retardancy testing at CPRI Bangalore</p>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-1.5 py-0.5 rounded bg-error-container text-on-error-container font-code-badge text-code-badge font-semibold">Urgent</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-badge text-code-badge">Compliance</span>
+<span class="font-caption-meta text-caption-meta text-error font-medium">Oct 18</span>
+</div>
+<div class="w-5 h-5 rounded-full bg-primary text-on-primary font-code-badge text-[10px] font-bold flex items-center justify-center shrink-0">SK</div>
+</div>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-lowest hover:bg-surface-bright shadow-sm hover:shadow transition-all cursor-pointer group">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-code-badge text-code-badge text-outline font-semibold">UL-21</span>
+<span class="material-symbols-outlined text-[15px] text-outline opacity-60 group-hover:opacity-100">drag_indicator</span>
+</div>
+<p class="font-body-medium text-body-medium text-on-surface mb-2.5 line-clamp-2">Tensile elongation compliance for irradiated polyolefin sheath</p>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="material-symbols-outlined text-[15px] text-secondary" title="Medium Priority">equalizer</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-badge text-code-badge">QA / Lab</span>
+<span class="font-caption-meta text-caption-meta text-outline">Oct 20</span>
+</div>
+<div class="w-5 h-5 rounded-full bg-secondary text-on-secondary font-code-badge text-[10px] font-bold flex items-center justify-center shrink-0">VN</div>
+</div>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-lowest hover:bg-surface-bright shadow-sm hover:shadow transition-all cursor-pointer group">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-code-badge text-code-badge text-outline font-semibold">UL-19</span>
+<span class="material-symbols-outlined text-[15px] text-outline opacity-60 group-hover:opacity-100">drag_indicator</span>
+</div>
+<p class="font-body-medium text-body-medium text-on-surface mb-2.5 line-clamp-2">Dielectric breakdown voltage test on 1500V DC solar cable core</p>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="material-symbols-outlined text-[15px] text-secondary" title="Medium Priority">equalizer</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-badge text-code-badge">High Voltage</span>
+<span class="font-caption-meta text-caption-meta text-outline">Oct 22</span>
+</div>
+<div class="w-5 h-5 rounded-full bg-primary-fixed text-on-primary-fixed font-code-badge text-[10px] font-bold flex items-center justify-center shrink-0">AL</div>
+</div>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-lowest hover:bg-surface-bright shadow-sm hover:shadow transition-all cursor-pointer group">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-code-badge text-code-badge text-outline font-semibold">UL-18</span>
+<span class="material-symbols-outlined text-[15px] text-outline opacity-60 group-hover:opacity-100">drag_indicator</span>
+</div>
+<p class="font-body-medium text-body-medium text-on-surface mb-2.5 line-clamp-2">Halogen acid gas evolution test data consolidation (IEC 60754)</p>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="material-symbols-outlined text-[15px] text-outline" title="Low Priority">horizontal_rule</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-badge text-code-badge">Compliance</span>
+<span class="font-caption-meta text-caption-meta text-outline">Oct 25</span>
+</div>
+<div class="w-5 h-5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-code-badge text-[10px] font-bold flex items-center justify-center shrink-0">MN</div>
+</div>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-lowest hover:bg-surface-bright shadow-sm hover:shadow transition-all cursor-pointer group">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-code-badge text-code-badge text-outline font-semibold">UL-17</span>
+<span class="material-symbols-outlined text-[15px] text-outline opacity-60 group-hover:opacity-100">drag_indicator</span>
+</div>
+<p class="font-body-medium text-body-medium text-on-surface mb-2.5 line-clamp-2">Calibrate optical diameter gauge on continuous vulcanization line</p>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="material-symbols-outlined text-[15px] text-outline" title="Low Priority">low_priority</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-badge text-code-badge">Calibration</span>
+<span class="font-caption-meta text-caption-meta text-outline">Oct 29</span>
+</div>
+<div class="w-5 h-5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-code-badge text-[10px] font-bold flex items-center justify-center shrink-0">PR</div>
+</div>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-lowest hover:bg-surface-bright shadow-sm hover:shadow transition-all cursor-pointer group">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-code-badge text-code-badge text-outline font-semibold">UL-16</span>
+<span class="material-symbols-outlined text-[15px] text-outline opacity-60 group-hover:opacity-100">drag_indicator</span>
+</div>
+<p class="font-body-medium text-body-medium text-on-surface mb-2.5 line-clamp-2">Supplier RoHS3 certificate validation for antimony trioxide</p>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="material-symbols-outlined text-[15px] text-outline" title="Low Priority">low_priority</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-badge text-code-badge">Procurement</span>
+<span class="font-caption-meta text-caption-meta text-outline">Nov 02</span>
+</div>
+<div class="w-5 h-5 rounded-full bg-surface-container-high text-on-surface font-code-badge text-[10px] font-bold flex items-center justify-center shrink-0">TC</div>
+</div>
+</div>
+</div>
+<button class="mt-2.5 py-1.5 px-2 rounded flex items-center gap-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest text-caption-meta-medium font-caption-meta-medium transition-colors" type="button">
+<span class="material-symbols-outlined text-[15px]">add</span>
+<span>New issue...</span>
+</button>
+</div>
+<div class="w-[304px] flex flex-col shrink-0 rounded-xl bg-surface-container-low/70 p-2 shadow-sm">
+<div class="flex items-center justify-between px-2 py-1.5 rounded-lg bg-surface-container-lowest/80 shadow-xs mb-2">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary-container"></span>
+<span class="font-header-section text-header-section text-on-surface">In Progress</span>
+<span class="font-code-badge text-code-badge px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface-variant font-medium">6</span>
+</div>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container text-outline hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+<div class="flex flex-col gap-2">
+<div class="p-2.5 rounded-lg bg-surface-container-lowest hover:bg-surface-bright shadow-sm hover:shadow transition-all cursor-pointer group">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-code-badge text-code-badge text-primary font-bold">UL-14</span>
+<span class="material-symbols-outlined text-[15px] text-primary-container font-semibold" title="High Priority">keyboard_double_arrow_up</span>
+</div>
+<p class="font-body-medium text-body-medium text-on-surface mb-2.5 line-clamp-2">Batch test reports for Motherson audit</p>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-1.5 py-0.5 rounded bg-primary-fixed text-on-primary-fixed-variant font-code-badge text-code-badge font-semibold">Audit / OEM</span>
+<span class="font-caption-meta-medium text-caption-meta-medium text-primary font-medium">Tomorrow</span>
+</div>
+<div class="w-5 h-5 rounded-full bg-primary text-on-primary font-code-badge text-[10px] font-bold flex items-center justify-center shrink-0">SK</div>
+</div>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-lowest hover:bg-surface-bright shadow-sm hover:shadow transition-all cursor-pointer group">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-code-badge text-code-badge text-primary font-semibold">UL-12</span>
+<span class="material-symbols-outlined text-[15px] text-outline opacity-60 group-hover:opacity-100">drag_indicator</span>
+</div>
+<p class="font-body-medium text-body-medium text-on-surface mb-2.5 line-clamp-2">Thermal aging cycle 3 results (168 hrs @ 135°C in air oven)</p>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="material-symbols-outlined text-[15px] text-secondary" title="Medium Priority">equalizer</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-badge text-code-badge">Testing</span>
+<span class="font-caption-meta text-caption-meta text-outline">Oct 19</span>
+</div>
+<div class="w-5 h-5 rounded-full bg-secondary text-on-secondary font-code-badge text-[10px] font-bold flex items-center justify-center shrink-0">VN</div>
+</div>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-lowest hover:bg-surface-bright shadow-sm hover:shadow transition-all cursor-pointer group">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-code-badge text-code-badge text-primary font-semibold">UL-10</span>
+<span class="material-symbols-outlined text-[15px] text-outline opacity-60 group-hover:opacity-100">drag_indicator</span>
+</div>
+<p class="font-body-medium text-body-medium text-on-surface mb-2.5 line-clamp-2">Vertical flame chamber sensor recalibration (VW-1 / FT1)</p>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="material-symbols-outlined text-[15px] text-outline" title="Low Priority">horizontal_rule</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-badge text-code-badge">Safety Lab</span>
+<span class="font-caption-meta text-caption-meta text-outline">Oct 21</span>
+</div>
+<div class="w-5 h-5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-code-badge text-[10px] font-bold flex items-center justify-center shrink-0">DP</div>
+</div>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-lowest hover:bg-surface-bright shadow-sm hover:shadow transition-all cursor-pointer group">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-code-badge text-code-badge text-outline font-semibold">UL-09</span>
+<span class="material-symbols-outlined text-[15px] text-outline opacity-60 group-hover:opacity-100">drag_indicator</span>
+</div>
+<p class="font-body-medium text-body-medium text-on-surface mb-2.5 line-clamp-2">Copper conductor strand compaction tolerance audit (Class 5)</p>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="material-symbols-outlined text-[15px] text-secondary" title="Medium Priority">equalizer</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-badge text-code-badge">Quality</span>
+<span class="font-caption-meta text-caption-meta text-outline">Oct 24</span>
+</div>
+<div class="w-5 h-5 rounded-full bg-surface-container-high text-on-surface font-code-badge text-[10px] font-bold flex items-center justify-center shrink-0">JS</div>
+</div>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-lowest hover:bg-surface-bright shadow-sm hover:shadow transition-all cursor-pointer group">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-code-badge text-code-badge text-outline font-semibold">UL-08</span>
+<span class="material-symbols-outlined text-[15px] text-outline opacity-60 group-hover:opacity-100">drag_indicator</span>
+</div>
+<p class="font-body-medium text-body-medium text-on-surface mb-2.5 line-clamp-2">Smoke density chamber photometric calibration (ASTM E662)</p>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="material-symbols-outlined text-[15px] text-outline" title="Low Priority">horizontal_rule</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-badge text-code-badge">Testing</span>
+<span class="font-caption-meta text-caption-meta text-outline">Oct 26</span>
+</div>
+<div class="w-5 h-5 rounded-full bg-primary-fixed text-on-primary-fixed font-code-badge text-[10px] font-bold flex items-center justify-center shrink-0">AL</div>
+</div>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-lowest hover:bg-surface-bright shadow-sm hover:shadow transition-all cursor-pointer group">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-code-badge text-code-badge text-outline font-semibold">UL-07</span>
+<span class="material-symbols-outlined text-[15px] text-outline opacity-60 group-hover:opacity-100">drag_indicator</span>
+</div>
+<p class="font-body-medium text-body-medium text-on-surface mb-2.5 line-clamp-2">Dual-wall heat shrink sleeve compatibility assessment</p>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="material-symbols-outlined text-[15px] text-outline" title="Low Priority">low_priority</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-badge text-code-badge">Application</span>
+<span class="font-caption-meta text-caption-meta text-outline">Oct 30</span>
+</div>
+<div class="w-5 h-5 rounded-full bg-surface-container-high text-on-surface font-code-badge text-[10px] font-bold flex items-center justify-center shrink-0">TC</div>
+</div>
+</div>
+</div>
+<button class="mt-2.5 py-1.5 px-2 rounded flex items-center gap-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest text-caption-meta-medium font-caption-meta-medium transition-colors" type="button">
+<span class="material-symbols-outlined text-[15px]">add</span>
+<span>New issue...</span>
+</button>
+</div>
+<div class="w-[304px] flex flex-col shrink-0 rounded-xl bg-surface-container-low/70 p-2 shadow-sm">
+<div class="flex items-center justify-between px-2 py-1.5 rounded-lg bg-surface-container-lowest/80 shadow-xs mb-2">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary-container"></span>
+<span class="font-header-section text-header-section text-on-surface">Done</span>
+<span class="font-code-badge text-code-badge px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface-variant font-medium">11</span>
+</div>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container text-outline hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+<div class="flex flex-col gap-2">
+<div class="p-2.5 rounded-lg bg-surface-container-lowest hover:bg-surface-bright shadow-sm hover:shadow transition-all cursor-pointer group opacity-90 hover:opacity-100">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-code-badge text-code-badge text-outline font-semibold line-through">UL-06</span>
+<span class="material-symbols-outlined text-[16px] text-tertiary-container">check_circle</span>
+</div>
+<p class="font-body-medium text-body-medium text-on-surface mb-2.5 line-clamp-2">Pre-audit sample submission to UL International Demko</p>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-badge text-code-badge">Certification</span>
+<span class="font-caption-meta text-caption-meta text-outline">Oct 12</span>
+</div>
+<div class="w-5 h-5 rounded-full bg-primary text-on-primary font-code-badge text-[10px] font-bold flex items-center justify-center shrink-0">SK</div>
+</div>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-lowest hover:bg-surface-bright shadow-sm hover:shadow transition-all cursor-pointer group opacity-90 hover:opacity-100">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-code-badge text-code-badge text-outline font-semibold line-through">UL-05</span>
+<span class="material-symbols-outlined text-[16px] text-tertiary-container">check_circle</span>
+</div>
+<p class="font-body-medium text-body-medium text-on-surface mb-2.5 line-clamp-2">Accelerated water immersion test on EPR insulation (90°C)</p>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-badge text-code-badge">QA / Lab</span>
+<span class="font-caption-meta text-caption-meta text-outline">Oct 10</span>
+</div>
+<div class="w-5 h-5 rounded-full bg-secondary text-on-secondary font-code-badge text-[10px] font-bold flex items-center justify-center shrink-0">VN</div>
+</div>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-lowest hover:bg-surface-bright shadow-sm hover:shadow transition-all cursor-pointer group opacity-90 hover:opacity-100">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-code-badge text-code-badge text-outline font-semibold line-through">UL-04</span>
+<span class="material-symbols-outlined text-[16px] text-tertiary-container">check_circle</span>
+</div>
+<p class="font-body-medium text-body-medium text-on-surface mb-2.5 line-clamp-2">Tin coating thickness measurement on annealed copper wire</p>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-badge text-code-badge">Raw Material</span>
+<span class="font-caption-meta text-caption-meta text-outline">Oct 08</span>
+</div>
+<div class="w-5 h-5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-code-badge text-[10px] font-bold flex items-center justify-center shrink-0">MN</div>
+</div>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-lowest hover:bg-surface-bright shadow-sm hover:shadow transition-all cursor-pointer group opacity-90 hover:opacity-100">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-code-badge text-code-badge text-outline font-semibold line-through">UL-02</span>
+<span class="material-symbols-outlined text-[16px] text-tertiary-container">check_circle</span>
+</div>
+<p class="font-body-medium text-body-medium text-on-surface mb-2.5 line-clamp-2">Vendor qualification for silane crosslinkable base resin</p>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-badge text-code-badge">Procurement</span>
+<span class="font-caption-meta text-caption-meta text-outline">Oct 04</span>
+</div>
+<div class="w-5 h-5 rounded-full bg-primary-fixed text-on-primary-fixed font-code-badge text-[10px] font-bold flex items-center justify-center shrink-0">RK</div>
+</div>
+</div>
+</div>
+<button class="mt-2.5 py-1.5 px-2 rounded flex items-center gap-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest text-caption-meta-medium font-caption-meta-medium transition-colors" type="button">
+<span class="material-symbols-outlined text-[15px]">add</span>
+<span>New issue...</span>
+</button>
+</div>
+<div class="w-[304px] flex flex-col shrink-0 rounded-xl bg-surface-container-low/70 p-2 shadow-sm">
+<div class="flex items-center justify-between px-2 py-1.5 rounded-lg bg-surface-container-lowest/80 shadow-xs mb-2">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-error"></span>
+<span class="font-header-section text-header-section text-on-surface">Cancelled</span>
+<span class="font-code-badge text-code-badge px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface-variant font-medium">2</span>
+</div>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container text-outline hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+<div class="flex flex-col gap-2">
+<div class="p-2.5 rounded-lg bg-surface-container-lowest/80 hover:bg-surface-bright shadow-sm hover:shadow transition-all cursor-pointer group opacity-75 hover:opacity-100">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-code-badge text-code-badge text-outline font-semibold line-through">UL-03</span>
+<span class="material-symbols-outlined text-[16px] text-outline">cancel</span>
+</div>
+<p class="font-body-medium text-body-medium text-on-surface-variant mb-2.5 line-clamp-2 line-through">Alternate flame retardant filler trial from secondary European supplier</p>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-badge text-code-badge">Raw Material</span>
+<span class="font-caption-meta text-caption-meta text-outline">Deprecated</span>
+</div>
+<div class="w-5 h-5 rounded-full bg-primary-fixed text-on-primary-fixed font-code-badge text-[10px] font-bold flex items-center justify-center shrink-0">RK</div>
+</div>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-lowest/80 hover:bg-surface-bright shadow-sm hover:shadow transition-all cursor-pointer group opacity-75 hover:opacity-100">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-code-badge text-code-badge text-outline font-semibold line-through">UL-11</span>
+<span class="material-symbols-outlined text-[16px] text-outline">cancel</span>
+</div>
+<p class="font-body-medium text-body-medium text-on-surface-variant mb-2.5 line-clamp-2 line-through">Optical smoke chamber PM schedule override</p>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-code-badge text-code-badge">Maintenance</span>
+<span class="font-caption-meta text-caption-meta text-outline">Closed</span>
+</div>
+<div class="w-5 h-5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-code-badge text-[10px] font-bold flex items-center justify-center shrink-0">DP</div>
+</div>
+</div>
+</div>
+<button class="mt-2.5 py-1.5 px-2 rounded flex items-center gap-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-lowest text-caption-meta-medium font-caption-meta-medium transition-colors" type="button">
+<span class="material-symbols-outlined text-[15px]">add</span>
+<span>New issue...</span>
+</button>
+</div>
+</div>
+</div>
+<footer class="fixed bottom-0 left-sidebar-width right-0 h-8 bg-surface-container-lowest/95 backdrop-blur z-30 px-pad-lg flex items-center justify-between text-caption-meta text-caption-meta text-on-surface-variant select-none shadow-md">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary-container animate-pulse"></span>
+<span class="font-body-default text-body-default text-on-surface">All 4 test benches synced</span>
+<span class="text-outline-variant">•</span>
+<span class="font-code-badge text-code-badge text-outline">Last sync: 1m ago via SAP RFC</span>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-1">
+<kbd class="font-shortcut-key text-shortcut-key bg-surface-container-high px-1 py-0.5 rounded text-on-surface font-semibold">J</kbd>
+<kbd class="font-shortcut-key text-shortcut-key bg-surface-container-high px-1 py-0.5 rounded text-on-surface font-semibold">K</kbd>
+<span class="text-outline ml-0.5">Navigate</span>
+</div>
+<div class="flex items-center gap-1">
+<kbd class="font-shortcut-key text-shortcut-key bg-surface-container-high px-1 py-0.5 rounded text-on-surface font-semibold">X</kbd>
+<span class="text-outline ml-0.5">Select</span>
+</div>
+<div class="flex items-center gap-1">
+<kbd class="font-shortcut-key text-shortcut-key bg-surface-container-high px-1 py-0.5 rounded text-on-surface font-semibold">Space</kbd>
+<span class="text-outline ml-0.5">Preview</span>
+</div>
+<span class="text-outline-variant">•</span>
+<span class="text-outline">Drag to reorder</span>
+</div>
+</footer>
+</div>
+<script>
+  (function() {
+    const cards = document.querySelectorAll('.group.cursor-pointer');
+    cards.forEach(card => {
+      card.addEventListener('mouseenter', () => {
+        card.classList.add('scale-[1.01]');
+      });
+      card.addEventListener('mouseleave', () => {
+        card.classList.remove('scale-[1.01]');
+      });
+    });
+  })();
+</script></main></div></body></html>

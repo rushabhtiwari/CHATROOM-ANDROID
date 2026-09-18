@@ -1,0 +1,31 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "kiranos-console",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "master-frontend/varun",
+        "run",
+        "dev"
+      ],
+      "port": 5173
+    },
+    {
+      "name": "kiranos-console-alt",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "master-frontend/varun",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "5199",
+        "--strictPort"
+      ],
+      "port": 5199
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+# Secrets and local overrides
+.env
+.env.*
+!.env.example
+*.local
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Node
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Runtime artifacts
+logs/*.log
+base-system/**/backend/data/*.json
+server/queue.db
+discovery/*.json
+verifier/screenshots/
+
+# Superseded standalone apps vendored under base-system/. Each has its own
+# repository; only the source that KPAC builds on is kept here.
+#   base-system/Kiran-Demo-Os-V1/master-frontend/varun/frontend  -> Creaitify/Kiran-Payment
+#   base-system/Kiran-Demo-Os-V1/chatroom/CHATROOM-FINAL         -> Creaitify/CHATROOM-FINAL
+base-system/**/frontend/
+base-system/**/chatroom/
+
+# Plane UI reference screenshots - copyrighted build reference, never committed
+base-system/**/docs/plane-reference/
+
+# Editor and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

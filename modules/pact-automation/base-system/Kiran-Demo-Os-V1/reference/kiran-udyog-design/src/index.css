@@ -1,0 +1,259 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* design.md §3.4 — CSS custom properties */
+:root {
+  --ku-rich-black: #011627;
+  --ku-navy: #02223c;
+  --ku-orange: #e99741;
+  --ku-orange-soft: rgba(233, 151, 65, 0.55);
+  --ku-red: #e71d36;
+  --ku-off-white: #ebebeb;
+  --ku-ink: #333333;
+  --ku-meta: #5c6975;
+  --ku-surface: #ffffff;
+  --ku-hairline: #d2d9df;
+  /* accessible pairings — §3.3 fix */
+  --ku-on-orange: #011627; /* not white */
+  --ku-link-on-light: #b26516;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    @apply bg-canvas font-sans text-body text-light-black antialiased;
+  }
+  /*
+    Headings are the same grotesque as body, set wider. Archivo carries a real width
+    axis, so the display voice is a setting rather than a second typeface — which is
+    how the Kiran wordmark (a light extended sans) already behaves.
+  */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display text-rich-black;
+    font-variation-settings: 'wdth' 112;
+  }
+  /* §10 finding #6 — a visible focus ring everywhere (2px orange, offset) */
+  :focus-visible {
+    outline: 2px solid var(--ku-orange);
+    outline-offset: 2px;
+  }
+  ::selection {
+    background: var(--ku-orange);
+    color: var(--ku-rich-black);
+  }
+}
+
+@layer components {
+  /* ---------------------------------------------------------------- */
+  /* Width axis — the display register                                 */
+  /* ---------------------------------------------------------------- */
+  .ku-wide {
+    font-variation-settings: 'wdth' 112;
+  }
+  .ku-xwide {
+    font-variation-settings: 'wdth' 125;
+  }
+  /* Condensed is reserved for dense table headers, where width is scarce. */
+  .ku-narrow {
+    font-variation-settings: 'wdth' 88;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* The instrument voice — every figure in the system                 */
+  /* ---------------------------------------------------------------- */
+  /*
+    Money, UTRs, IFSCs, docket numbers, dates and counts are all set in IBM Plex
+    Mono with tabular figures, so columns of numbers align to the pixel and an
+    amount always looks like a reading off an instrument, never like prose.
+  */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum' 1;
+  }
+  .ku-fig {
+    @apply font-mono tabular-nums;
+    font-feature-settings: 'tnum' 1, 'zero' 1;
+  }
+  /* A ledger total: the anchor figure on a page. */
+  .ku-total {
+    @apply ku-fig font-semibold text-rich-black;
+    letter-spacing: -0.04em;
+  }
+
+  /* The docket number that identifies a claim, everywhere it appears. */
+  .ku-docket {
+    @apply font-mono text-caption font-medium uppercase text-meta;
+    letter-spacing: 0.06em;
+  }
+
+  /* The small stamped label above a block — mono, spaced, never a sentence. */
+  .ku-eyebrow {
+    @apply font-mono text-micro font-semibold uppercase text-meta;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Surfaces — depth from contrast, never shadow (§5)                 */
+  /* ---------------------------------------------------------------- */
+  .ku-card {
+    @apply border border-hairline bg-white;
+  }
+  /* The sheet a claim is printed on: a heavier top rule reads as a docket head. */
+  .ku-sheet {
+    @apply border border-hairline border-t-3 border-t-darkey-bluey bg-white;
+  }
+  .ku-rule-accent {
+    @apply border-l-6 border-orangy pl-4;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* The ledger band — replaces the floating stat-card grid            */
+  /* ---------------------------------------------------------------- */
+  /*
+    Four numbers that belong to one account are one ruled band, divided by
+    hairlines, not four separate boxes floating on the canvas. This is the
+    single biggest structural departure from a stock dashboard.
+  */
+  .ku-ledger {
+    @apply grid border border-hairline bg-white;
+  }
+  .ku-ledger > * + * {
+    @apply border-hairline;
+  }
+  @media (min-width: 768px) {
+    .ku-ledger > * + * {
+      border-left-width: 1px;
+    }
+  }
+  @media (max-width: 767px) {
+    .ku-ledger > * + * {
+      border-top-width: 1px;
+    }
+  }
+
+  /* Ruled rows: the ledger line under every entry. */
+  .ku-ruled > * + * {
+    @apply border-t border-hairline;
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* The stamp — status as an office stamp, not a pastel pill          */
+  /* ---------------------------------------------------------------- */
+  /*
+    A claim in this system is approved or rejected by a person who, on paper,
+    would reach for a stamp. So a status reads as one: a hard 2px outline,
+    uppercase mono, widely tracked, ink on paper with no fill wash.
+  */
+  .ku-stamp {
+    @apply inline-flex items-center gap-1.5 whitespace-nowrap border-2 bg-transparent px-2 py-0.5;
+    @apply font-mono text-micro font-semibold uppercase;
+    letter-spacing: 0.12em;
+  }
+  .ku-stamp-lg {
+    @apply gap-2 border-3 px-3 py-1.5 text-caption;
+    letter-spacing: 0.14em;
+  }
+  /* The struck stamp on a settled artifact — angled, oversized, unmistakable. */
+  .ku-stamp-struck {
+    @apply inline-flex items-center justify-center border-3 px-5 py-2;
+    @apply font-mono text-lead font-bold uppercase;
+    letter-spacing: 0.18em;
+    transform: rotate(-3deg);
+  }
+
+  /* ---------------------------------------------------------------- */
+  /* Signature devices carried over from the brand (§6.4, §7)          */
+  /* ---------------------------------------------------------------- */
+  /* The notched (die-cut) corner. Used once per page, on the page's own artifact. */
+  .ku-notch {
+    clip-path: polygon(0 0, calc(100% - 52px) 0, 100% 52px, 100% 100%, 0 100%);
+  }
+  .ku-notch-sm {
+    clip-path: polygon(0 0, calc(100% - 28px) 0, 100% 28px, 100% 100%, 0 100%);
+  }
+  .ku-dots {
+    background-image: radial-gradient(currentColor 1.5px, transparent 1.6px);
+    background-size: 24px 24px;
+  }
+  /*
+    Diagonal hatch — the drawing-office mark for "void". Reserved for rejected and
+    failed artifacts, where it does real work: the record is legible but struck out.
+  */
+  .ku-hatch {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      currentColor 0,
+      currentColor 1px,
+      transparent 1px,
+      transparent 7px
+    );
+  }
+
+  .ku-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #a7b3be transparent;
+  }
+  .ku-scrollbar::-webkit-scrollbar {
+    height: 10px;
+    width: 10px;
+  }
+  .ku-scrollbar::-webkit-scrollbar-thumb {
+    background: #a7b3be;
+  }
+  .ku-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  /* Staggered entrance for lists and grids — index set inline via --i. */
+  .ku-stagger > * {
+    animation: page-in 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(var(--stagger-step, 40ms) * var(--i, 0));
+  }
+}
+
+/* The receipt prints as a document, not a screenshot of the app. */
+@media print {
+  @page {
+    margin: 14mm;
+  }
+  body {
+    background: #fff;
+  }
+  .print-hide {
+    display: none !important;
+  }
+  .print-plain {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+  }
+  .print-band {
+    height: 6mm !important;
+    background: #02223c !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  section {
+    break-inside: avoid;
+  }
+}
+
+/* §8 — honour prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* The stamp still needs to sit at its angle when motion is off. */
+  .ku-stamp-struck {
+    transform: rotate(-3deg) !important;
+  }
+}

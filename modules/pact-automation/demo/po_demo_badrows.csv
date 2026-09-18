@@ -1,0 +1,6 @@
+doc_date,vendor_name,narration,mode_of_transport,transporter,delivery_terms,payment_terms,supplier_validity,po_validity,party_ref_no,party_ref_date,packing_instruction,shipping_instructions,line_items
+04/09/2026,Acrofil Industries Private Limited,GOOD ROW - should save,BY ROAD,LOCAL TRANSPORT,EX WORKS,30 DAYS,30/09/2026,30/09/2026,KPAC-BAD-001,04/09/2026,WOODEN CRATES,DELIVER TO GATE 2,46893|1|265
+04/09/2026,,PRE-FLIGHT - vendor name is empty,BY ROAD,LOCAL TRANSPORT,EX WORKS,30 DAYS,30/09/2026,30/09/2026,KPAC-BAD-002,04/09/2026,WOODEN CRATES,DELIVER TO GATE 2,46893|1|265
+04/09/2026,Ad Enterprises,PRE-FLIGHT - quantity is not a number,BY ROAD,LOCAL TRANSPORT,EX WORKS,30 DAYS,30/09/2026,30/09/2026,KPAC-BAD-003,04/09/2026,WOODEN CRATES,DELIVER TO GATE 2,46893|ten|265
+04/09/2026,ZZ Nonexistent Vendor Pvt Ltd,FILL TIME - vendor not in the vendor master,BY ROAD,LOCAL TRANSPORT,EX WORKS,30 DAYS,30/09/2026,30/09/2026,KPAC-BAD-004,04/09/2026,WOODEN CRATES,DELIVER TO GATE 2,46893|1|265
+04/09/2026,Adarsh Patil,FILL TIME - product code not in the product master,BY ROAD,LOCAL TRANSPORT,EX WORKS,30 DAYS,30/09/2026,30/09/2026,KPAC-BAD-005,04/09/2026,WOODEN CRATES,DELIVER TO GATE 2,99999999|1|265

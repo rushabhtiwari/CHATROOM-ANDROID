@@ -1,0 +1,129 @@
+"""Batch reports: one CSV for spreadsheets, one self-contained HTML page for printing."""
+import csv, html, io, time
+
+from . import db
+from .preflight import format_line_items
+
+BASE_COLS = ["row", "status", "document_no", "seconds", "problem", "mismatches", "price_notes"]
+
+
+def _record_columns(entries) -> list[str]:
+    cols = []
+    for e in entries:
+        for k in e["record"]:
+            if k not in cols:
+                cols.append(k)
+    return cols
+
+
+def _cell(v):
+    if isinstance(v, list):
+        return format_line_items(v) if v and isinstance(v[0], dict) else "; ".join(map(str, v))
+    if isinstance(v, bool):
+        return "true" if v else "false"
+    return "" if v is None else str(v)
+
+
+def _mismatches(e) -> str:
+    verd = (e.get("result") or {}).get("verifier") or {}
+    return " | ".join(f"{m.get('field')}: expected {m.get('expected')!r}, saw {m.get('seen')!r}"
+                      f" ({m.get('source')})" for m in verd.get("mismatches", []))
+
+
+def _doc_no(e) -> str:
+    return ((e.get("result") or {}).get("confirmation") or {}).get("record_id") or ""
+
+
+def rows_for(bid: int):
+    entries = db.list_for_batch(bid)
+    rec_cols = _record_columns(entries)
+    header = BASE_COLS + rec_cols
+    out = []
+    for e in entries:
+        out.append([
+            e.get("row_no") or "",
+            e["status"],
+            _doc_no(e),
+            round(e["duration"], 1) if e.get("duration") else "",
+            e.get("error") or "",
+            _mismatches(e),
+            " | ".join((e.get("result") or {}).get("price_notes", [])),
+            *[_cell(e["record"].get(c, "")) for c in rec_cols],
+        ])
+    return header, out, entries
+
+
+def summary(bid: int) -> dict:
+    b = db.get_batch(bid) or {}
+    counts = db.batch_counts(bid)
+    totals = b.get("totals") or {}
+    elapsed = totals.get("elapsed_seconds")
+    if elapsed is None and b.get("started_at"):
+        elapsed = round((b.get("finished_at") or time.time()) - b["started_at"])
+    avg = totals.get("avg_seconds") or (round(db.avg_seconds(bid), 1) if db.avg_seconds(bid) else None)
+    return {"batch": b, "counts": counts, "elapsed_seconds": elapsed, "avg_seconds": avg}
+
+
+def csv_bytes(bid: int) -> bytes:
+    header, rows, _ = rows_for(bid)
+    buf = io.StringIO(newline="")
+    w = csv.writer(buf)
+    w.writerow(header)
+    w.writerows(rows)
+    return buf.getvalue().encode("utf-8-sig")
+
+
+def _fmt_secs(s):
+    if not s:
+        return "-"
+    s = int(s)
+    return f"{s//60}m {s%60}s" if s >= 60 else f"{s}s"
+
+
+def html_page(bid: int) -> str:
+    header, rows, entries = rows_for(bid)
+    s = summary(bid)
+    b, c = s["batch"], s["counts"]
+    e = html.escape
+    when = time.strftime("%d %b %Y %H:%M", time.localtime(b.get("started_at") or b.get("created_at") or time.time()))
+    body = "\n".join(
+        "<tr class='%s'>%s</tr>" % (e(r[1]), "".join(f"<td>{e(str(x))}</td>" for x in r))
+        for r in rows)
+    head = "".join(f"<th>{e(h)}</th>" for h in header)
+    return f"""<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<title>KPAC batch report #{bid} — {e(b.get('name',''))}</title>
+<style>
+  body {{ font:13px/1.5 system-ui,Segoe UI,Roboto,sans-serif; color:#1b2430; margin:32px; }}
+  h1 {{ font-size:20px; margin:0 0 2px }}
+  .sub {{ color:#66707a; margin-bottom:20px }}
+  .tiles {{ display:flex; gap:12px; flex-wrap:wrap; margin-bottom:22px }}
+  .tile {{ border:1px solid #e3e7ec; border-radius:10px; padding:12px 18px; min-width:120px }}
+  .tile b {{ display:block; font-size:22px; margin-bottom:2px }}
+  .tile span {{ color:#66707a; font-size:12px; text-transform:uppercase; letter-spacing:.04em }}
+  table {{ border-collapse:collapse; width:100%; font-size:12px }}
+  th,td {{ border-bottom:1px solid #e3e7ec; padding:6px 8px; text-align:left; vertical-align:top }}
+  th {{ background:#f5f7fa; font-weight:600 }}
+  tr.saved td:nth-child(2) {{ color:#2e7d32; font-weight:600 }}
+  tr.failed td:nth-child(2) {{ color:#c62828; font-weight:600 }}
+  tr.skipped td:nth-child(2) {{ color:#8d6e00; font-weight:600 }}
+  footer {{ margin-top:24px; color:#66707a; font-size:11px }}
+  @media print {{ body {{ margin:0 }} .noprint {{ display:none }} }}
+</style></head><body>
+<h1>KPAC — batch report #{bid}</h1>
+<div class="sub">{e(b.get('name',''))} · source {e(b.get('source') or 'n/a')} · profile
+  {e(b.get('profile') or '')} · mode <b>{e(b.get('mode') or '')}</b> · run {e(when)}</div>
+<div class="tiles">
+  <div class="tile"><b>{c['saved']}</b><span>Saved</span></div>
+  <div class="tile"><b>{c['failed']}</b><span>Failed</span></div>
+  <div class="tile"><b>{c['skipped']}</b><span>Skipped</span></div>
+  <div class="tile"><b>{_fmt_secs(s['elapsed_seconds'])}</b><span>Elapsed</span></div>
+  <div class="tile"><b>{s['avg_seconds'] or '-'}s</b><span>Avg / record</span></div>
+</div>
+<table><thead><tr>{head}</tr></thead><tbody>
+{body}
+</tbody></table>
+<footer>Generated by KPAC — Kiran Pact Automation System on {time.strftime('%d %b %Y %H:%M')}.
+Rows marked <b>skipped</b> were excluded in pre-flight, stopped before they ran, or verified under DRY RUN.</footer>
+<p class="noprint"><button onclick="window.print()">Print</button></p>
+</body></html>"""

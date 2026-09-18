@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-secondary-fixed":"#001d31","on-secondary-container":"#00476e","surface-container-low":"#eff4ff","surface-container-highest":"#d3e4fe","background":"#f8f9ff","surface":"#f8f9ff","secondary-container":"#5bb8fe","surface-container-lowest":"#ffffff","on-error":"#ffffff","tertiary-container":"#005136","tertiary-fixed":"#6ffbbe","tertiary-fixed-dim":"#4edea3","on-surface-variant":"#424750","inverse-primary":"#a3c9ff","primary-container":"#06477f","primary":"#00305b","surface-variant":"#d3e4fe","on-primary-fixed":"#001c39","tertiary":"#003824","on-background":"#0b1c30","surface-dim":"#cbdbf5","surface-bright":"#f8f9ff","outline":"#727781","on-secondary":"#ffffff","inverse-surface":"#213145","error-container":"#ffdad6","error":"#ba1a1a","surface-container":"#e5eeff","secondary":"#006398","on-tertiary-container":"#35cc92","secondary-fixed-dim":"#93ccff","on-primary":"#ffffff","primary-fixed-dim":"#a3c9ff","on-tertiary-fixed-variant":"#005236","on-error-container":"#93000a","secondary-fixed":"#cce5ff","surface-container-high":"#dce9ff","primary-fixed":"#d3e3ff","on-primary-container":"#88b6f5","on-tertiary-fixed":"#002113","on-surface":"#0b1c30","outline-variant":"#c2c6d1","on-primary-fixed-variant":"#084880","surface-tint":"#2d6099","on-tertiary":"#ffffff","on-secondary-fixed-variant":"#004b73","inverse-on-surface":"#eaf1ff"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"row-height":"36px","pad-lg":"16px","pad-md":"12px","inspector-width":"320px","pad-sm":"8px","sidebar-width":"240px","gap-inline":"6px","pad-xs":"4px","row-height-compact":"28px"},"fontFamily":{"header-section":["Inter"],"title-page":["Inter"],"caption-meta-medium":["Inter"],"shortcut-key":["Inter"],"body-medium":["Inter"],"body-default":["Inter"],"caption-meta":["Inter"],"code-badge":["JetBrains Mono"]},"fontSize":{"header-section":["14px",{"lineHeight":"18px","letterSpacing":"-0.005em","fontWeight":"600"}],"title-page":["16px",{"lineHeight":"20px","letterSpacing":"-0.01em","fontWeight":"600"}],"caption-meta-medium":["12px",{"lineHeight":"16px","fontWeight":"500"}],"shortcut-key":["10px",{"lineHeight":"12px","letterSpacing":"0.02em","fontWeight":"600"}],"body-medium":["13px",{"lineHeight":"18px","fontWeight":"500"}],"body-default":["13px",{"lineHeight":"18px","fontWeight":"400"}],"caption-meta":["12px",{"lineHeight":"16px","fontWeight":"400"}],"code-badge":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"500"}]}}}}</script></head><body class="bg-surface font-body-default text-body-default text-on-surface selection:bg-surface-variant"><aside class="fixed left-0 top-0 h-full w-sidebar-width bg-surface-container-lowest z-50 flex flex-col justify-between border-r border-outline-variant/30 select-none"><div class="flex flex-col flex-1 min-h-0"><div class="h-14 px-pad-md flex items-center justify-between border-b border-outline-variant/30"><div class="flex items-center gap-gap-inline min-w-0"><div class="w-7 h-7 rounded-lg bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">precision_manufacturing</span></div><div class="flex flex-col min-w-0"><span class="font-title-page text-header-section text-on-surface truncate leading-tight">Vectra Cables</span><span class="font-caption-meta text-caption-meta text-on-surface-variant truncate">Engineering Ops</span></div></div><button class="w-6 h-6 flex items-center justify-center rounded-lg hover:bg-surface-container-high hover:text-on-surface text-on-surface-variant" type="button"><span class="material-symbols-outlined text-[18px]">unfold_more</span></button></div><div class="px-pad-md py-pad-sm"><div class="relative flex items-center"><span class="material-symbols-outlined absolute left-2 text-[16px] text-outline">search</span><input class="w-full h-[30px] pl-7 pr-7 bg-surface-container-low rounded-lg font-caption-meta text-caption-meta text-on-surface border border-outline-variant/40 focus:outline-none focus:border-primary placeholder:text-outline" placeholder="Jump to issue..." type="text"/><kbd class="absolute right-2 font-shortcut-key text-shortcut-key bg-surface-container-lowest border border-outline-variant/60 rounded px-1 text-on-surface-variant">/</kbd></div></div><nav class="flex-1 overflow-y-auto px-pad-sm py-pad-xs flex flex-col gap-0.5" data-active-classes="bg-surface-container-high text-primary font-semibold border-l-2 border-primary rounded-r-lg"><div class="pt-pad-xs pb-1"><div class="flex items-center justify-between px-2 py-1 text-on-surface-variant"><div class="flex items-center gap-gap-inline cursor-pointer"><span class="material-symbols-outlined text-[14px]">expand_more</span><span class="font-caption-meta-medium text-caption-meta-medium uppercase tracking-wider text-outline">Projects</span></div><span class="font-code-badge text-code-badge text-outline">3</span></div><div class="flex flex-col gap-0.5 mt-0.5"><a class="flex items-center h-row-height-compact px-pad-sm pl-6 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-body-default text-body-default" data-path="sap-s4hana-migration" href="#"><span class="truncate">SAP S/4HANA Migration</span></a><a aria-current="page" class="flex items-center h-row-height-compact px-pad-sm pl-6 transition-colors bg-surface-container-high text-primary font-semibold border-l-2 border-primary rounded-r-lg" data-path="ul94-ev-qualification" href="#"><span class="truncate">UL94 EV Qualification</span></a><a class="flex items-center h-row-height-compact px-pad-sm pl-6 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-body-default text-body-default" data-path="line-4-capacity-expansion" href="#"><span class="truncate">Line 4 Capacity Expansion</span></a></div></div><div class="my-pad-xs border-t border-outline-variant/30"></div><a class="flex items-center gap-gap-inline h-row-height px-pad-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-body-medium text-body-medium" data-path="cycles" href="#"><span class="material-symbols-outlined text-[18px]">sync_alt</span><span>Cycles</span></a><a class="flex items-center gap-gap-inline h-row-height px-pad-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-body-medium text-body-medium" data-path="modules" href="#"><span class="material-symbols-outlined text-[18px]">view_in_ar</span><span>Modules</span></a><a class="flex items-center gap-gap-inline h-row-height px-pad-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-body-medium text-body-medium" data-path="reports" href="#"><span class="material-symbols-outlined text-[18px]">insert_chart</span><span>Reports</span></a></nav></div><div class="p-pad-sm border-t border-outline-variant/30 flex flex-col gap-pad-xs bg-surface-container-lowest"><div class="flex items-center justify-between px-2 py-1"><div class="flex items-center gap-1.5 min-w-0"><span class="w-2 h-2 rounded-full bg-tertiary-container shrink-0"></span><span class="font-code-badge text-code-badge text-on-surface-variant truncate">Plant 2 • Pune / BLR</span></div><div class="flex items-center gap-0.5"><button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container-high hover:text-on-surface text-outline" type="button"><span class="material-symbols-outlined text-[16px]">help</span></button><button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container-high hover:text-on-surface text-outline" type="button"><span class="material-symbols-outlined text-[16px]">settings</span></button></div></div><div class="flex items-center gap-gap-inline p-1.5 rounded-lg hover:bg-surface-container-low cursor-pointer transition-colors"><div class="relative"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><span class="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-tertiary-container border border-surface-container-lowest"></span></div><div class="flex flex-col min-w-0 flex-1"><span class="font-body-medium text-body-medium text-on-surface truncate leading-tight">K. Ranganathan</span><span class="font-caption-meta text-caption-meta text-outline truncate">Lead Cable Eng</span></div><span class="material-symbols-outlined text-outline text-[16px]">more_vert</span></div></div></aside><div class="pl-sidebar-width"><header class="fixed top-0 left-sidebar-width right-0 h-14 bg-surface-container-lowest border-b border-outline-variant/30 z-40 flex items-center justify-between px-pad-lg"><div class="flex items-center gap-2 min-w-0"><span class="material-symbols-outlined text-[18px] text-outline">cable</span><span class="font-caption-meta text-caption-meta text-on-surface-variant">Projects</span><span class="text-outline-variant font-caption-meta text-caption-meta">/</span><span class="font-header-section text-header-section text-on-surface truncate">Engineering Systems Console</span></div><div class="flex items-center gap-pad-md"><div class="flex items-center gap-1.5"><button class="h-7 px-2.5 rounded-lg border border-outline-variant/40 hover:bg-surface-container-high text-on-surface font-body-medium text-body-medium flex items-center gap-1" type="button"><span class="material-symbols-outlined text-[16px]">tune</span><span>Filter</span></button><button class="h-7 px-2.5 rounded-lg bg-primary-container text-on-primary font-body-medium text-body-medium hover:bg-primary flex items-center gap-1 shadow-sm" type="button"><span class="material-symbols-outlined text-[16px]">add</span><span>New Task</span><kbd class="font-shortcut-key text-shortcut-key bg-on-primary/20 rounded px-1 ml-1 text-on-primary">C</kbd></button></div><div class="h-4 w-px bg-outline-variant/40"></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="relative pt-14 w-full bg-background min-h-screen"><div class="flex flex-col w-full">
+<!-- Sub-Header / Breadcrumb Area -->
+<div class="h-12 px-pad-md bg-surface-container-lowest border-b border-outline-variant/30 flex items-center justify-between select-none">
+<div class="flex items-center gap-2 min-w-0">
+<span class="font-body-medium text-body-medium text-on-surface-variant truncate">UL94 EV Qualification</span>
+<span class="text-outline-variant font-caption-meta text-caption-meta">›</span>
+<span class="font-header-section text-header-section text-on-surface flex items-center gap-1.5">
+        Work Items
+        <span class="inline-flex items-center justify-center px-1.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-code-badge text-[11px] font-medium leading-none">28</span>
+</span>
+<span class="mx-1 h-3.5 w-px bg-outline-variant/30"></span>
+<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-tertiary-container/15 text-tertiary-container font-caption-meta-medium text-caption-meta-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
+        Sprint 4 • Active
+      </span>
+</div>
+<div class="flex items-center gap-2">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-2 text-[15px] text-outline">search</span>
+<input class="h-7 w-52 pl-6 pr-8 bg-surface-container-low rounded-lg font-caption-meta text-caption-meta text-on-surface border border-outline-variant/40 focus:outline-none focus:border-primary placeholder:text-outline" placeholder="Search issues..." type="text"/>
+<kbd class="absolute right-1.5 font-shortcut-key text-shortcut-key bg-surface-container-lowest border border-outline-variant/50 rounded px-1 text-on-surface-variant">⌘K</kbd>
+</div>
+<button class="h-7 px-2.5 rounded-lg bg-primary-container text-on-primary font-body-medium text-body-medium hover:bg-primary transition-colors flex items-center gap-1 shadow-sm" type="button">
+<span class="material-symbols-outlined text-[15px]">add</span>
+<span>New Issue</span>
+</button>
+</div>
+</div>
+<!-- View Controls / Filter Bar -->
+<div class="h-10 px-pad-md bg-surface-container-lowest border-b border-outline-variant/30 flex items-center justify-between select-none">
+<div class="flex items-center gap-2">
+<!-- Segmented View Selector -->
+<div class="flex items-center p-0.5 bg-surface-container-low rounded-lg border border-outline-variant/30 text-on-surface-variant">
+<button class="flex items-center gap-1 h-6 px-2 rounded-md bg-surface-container-lowest text-primary font-body-medium text-caption-meta-medium shadow-xs border border-outline-variant/30" title="List view" type="button">
+<span class="material-symbols-outlined text-[15px]">view_agenda</span>
+<span>List</span>
+</button>
+<button class="flex items-center gap-1 h-6 px-2 rounded-md text-on-surface-variant hover:text-on-surface font-caption-meta-medium text-caption-meta-medium transition-colors" title="Board view" type="button">
+<span class="material-symbols-outlined text-[15px]">view_kanban</span>
+<span>Board</span>
+</button>
+<button class="flex items-center gap-1 h-6 px-2 rounded-md text-on-surface-variant hover:text-on-surface font-caption-meta-medium text-caption-meta-medium transition-colors" title="Table view" type="button">
+<span class="material-symbols-outlined text-[15px]">table_rows</span>
+<span>Table</span>
+</button>
+<button class="flex items-center gap-1 h-6 px-1.5 rounded-md text-on-surface-variant hover:text-on-surface transition-colors" title="Calendar view" type="button">
+<span class="material-symbols-outlined text-[15px]">calendar_today</span>
+</button>
+<button class="flex items-center gap-1 h-6 px-1.5 rounded-md text-on-surface-variant hover:text-on-surface transition-colors" title="Timeline view" type="button">
+<span class="material-symbols-outlined text-[15px]">timeline</span>
+</button>
+</div>
+<div class="h-3.5 w-px bg-outline-variant/30"></div>
+<!-- Quick Filter Pills -->
+<div class="flex items-center gap-1 text-caption-meta font-caption-meta">
+<button class="h-6 px-2 rounded-md bg-surface-container hover:bg-surface-container-high text-on-surface-variant flex items-center gap-1 border border-outline-variant/20" type="button">
+<span>Assignee: All</span>
+<span class="material-symbols-outlined text-[12px]">expand_more</span>
+</button>
+<button class="h-6 px-2 rounded-md bg-surface-container hover:bg-surface-container-high text-on-surface-variant flex items-center gap-1 border border-outline-variant/20" type="button">
+<span>Priority: Any</span>
+<span class="material-symbols-outlined text-[12px]">expand_more</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-1.5">
+<button class="h-6 px-2 rounded-md border border-outline-variant/40 hover:bg-surface-container-low text-on-surface-variant font-caption-meta-medium text-caption-meta-medium flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[14px]">filter_list</span>
+<span>Filters</span>
+<span class="w-3.5 h-3.5 rounded-full bg-primary-container text-on-primary font-shortcut-key text-[9px] flex items-center justify-center">2</span>
+</button>
+<button class="h-6 px-2 rounded-md border border-outline-variant/40 hover:bg-surface-container-low text-on-surface-variant font-caption-meta-medium text-caption-meta-medium flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[14px]">layers</span>
+<span>Group: Status</span>
+<span class="material-symbols-outlined text-[12px] text-outline">expand_more</span>
+</button>
+<button class="h-6 px-2 rounded-md border border-outline-variant/40 hover:bg-surface-container-low text-on-surface-variant font-caption-meta-medium text-caption-meta-medium flex items-center gap-1" type="button">
+<span class="material-symbols-outlined text-[14px]">analytics</span>
+<span>Burndown</span>
+</button>
+</div>
+</div>
+<!-- Work Items Main Body (collapsible groups) -->
+<div class="flex flex-col divide-y divide-outline-variant/20 bg-surface-container-lowest">
+<!-- ==================== GROUP: IN PROGRESS ==================== -->
+<div class="flex flex-col" id="group-inprogress">
+<div class="h-9 px-pad-md bg-surface-container-low border-b border-outline-variant/20 flex items-center justify-between select-none cursor-pointer group hover:bg-surface-container transition-colors" onclick="toggleGroup('list-inprogress', this)">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-outline transition-transform duration-150 group-chevron">expand_more</span>
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-header-section text-[11px] uppercase tracking-wider text-on-surface-variant font-semibold">In Progress</span>
+<span class="font-code-badge text-code-badge text-outline bg-surface-container-lowest px-1.5 py-0.5 rounded border border-outline-variant/30">6</span>
+</div>
+<button class="w-5 h-5 rounded hover:bg-surface-container-high flex items-center justify-center text-outline hover:text-on-surface" onclick="event.stopPropagation()" title="Add item to In Progress" type="button">
+<span class="material-symbols-outlined text-[14px]">add</span>
+</button>
+</div>
+<div class="flex flex-col" id="list-inprogress">
+<!-- Item UL-14 -->
+<div class="h-[36px] px-pad-md flex items-center justify-between border-b border-outline-variant/20 hover:bg-surface-container-low/70 transition-colors group bg-surface-container-low border-l-2 border-primary">
+<div class="flex items-center gap-2.5 min-w-0 flex-1 pr-3">
+<span class="material-symbols-outlined text-[16px] text-secondary">progress_activity</span>
+<span class="font-code-badge text-code-badge text-on-surface-variant shrink-0 select-none">UL-14</span>
+<span class="font-body-default text-body-default text-on-surface truncate">Batch test reports for Motherson audit</span>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<span class="flex items-center text-error" title="Priority: Urgent">
+<span class="material-symbols-outlined text-[16px]">keyboard_double_arrow_up</span>
+</span>
+<span class="font-caption-meta text-[11px] px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant border border-outline-variant/30">Audit / OEM</span>
+<span class="font-caption-meta text-caption-meta text-error flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">schedule</span>
+              Tomorrow
+            </span>
+<div class="w-5 h-5 rounded-full bg-primary-container text-on-primary font-caption-meta-medium text-[10px] flex items-center justify-center" title="Assignee: Suresh K. (SK)">SK</div>
+</div>
+</div>
+<!-- Item UL-12 -->
+<div class="h-[36px] px-pad-md flex items-center justify-between border-b border-outline-variant/20 hover:bg-surface-container-low/70 transition-colors group">
+<div class="flex items-center gap-2.5 min-w-0 flex-1 pr-3">
+<span class="material-symbols-outlined text-[16px] text-secondary">progress_activity</span>
+<span class="font-code-badge text-code-badge text-outline shrink-0 select-none">UL-12</span>
+<span class="font-body-default text-body-default text-on-surface truncate">Thermal aging cycle 3 results (168 hrs @ 135°C in air oven)</span>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<span class="flex items-center text-secondary" title="Priority: High">
+<span class="material-symbols-outlined text-[16px]">signal_cellular_alt</span>
+</span>
+<span class="font-caption-meta text-[11px] px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant border border-outline-variant/30">Testing</span>
+<span class="font-caption-meta text-caption-meta text-on-surface-variant">Oct 19</span>
+<div class="w-5 h-5 rounded-full bg-secondary text-on-secondary font-caption-meta-medium text-[10px] flex items-center justify-center" title="Assignee: Varun N. (VN)">VN</div>
+</div>
+</div>
+<!-- Item UL-10 -->
+<div class="h-[36px] px-pad-md flex items-center justify-between border-b border-outline-variant/20 hover:bg-surface-container-low/70 transition-colors group">
+<div class="flex items-center gap-2.5 min-w-0 flex-1 pr-3">
+<span class="material-symbols-outlined text-[16px] text-secondary">progress_activity</span>
+<span class="font-code-badge text-code-badge text-outline shrink-0 select-none">UL-10</span>
+<span class="font-body-default text-body-default text-on-surface truncate">Vertical flame chamber sensor recalibration (VW-1 / FT1)</span>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<span class="flex items-center text-secondary" title="Priority: High">
+<span class="material-symbols-outlined text-[16px]">signal_cellular_alt</span>
+</span>
+<span class="font-caption-meta text-[11px] px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant border border-outline-variant/30">Safety Lab</span>
+<span class="font-caption-meta text-caption-meta text-on-surface-variant">Oct 21</span>
+<div class="w-5 h-5 rounded-full bg-primary text-on-primary font-caption-meta-medium text-[10px] flex items-center justify-center" title="Assignee: Deepak P. (DP)">DP</div>
+</div>
+</div>
+<!-- Item UL-09 -->
+<div class="h-[36px] px-pad-md flex items-center justify-between border-b border-outline-variant/20 hover:bg-surface-container-low/70 transition-colors group">
+<div class="flex items-center gap-2.5 min-w-0 flex-1 pr-3">
+<span class="material-symbols-outlined text-[16px] text-secondary">progress_activity</span>
+<span class="font-code-badge text-code-badge text-outline shrink-0 select-none">UL-09</span>
+<span class="font-body-default text-body-default text-on-surface truncate">Copper conductor strand compaction tolerance audit (Class 5)</span>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<span class="flex items-center text-outline" title="Priority: Medium">
+<span class="material-symbols-outlined text-[16px]">signal_cellular_alt_2_bar</span>
+</span>
+<span class="font-caption-meta text-[11px] px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant border border-outline-variant/30">Quality</span>
+<span class="font-caption-meta text-caption-meta text-on-surface-variant">Oct 24</span>
+<div class="w-5 h-5 rounded-full bg-primary-container text-on-primary font-caption-meta-medium text-[10px] flex items-center justify-center" title="Assignee: J. Swaminathan (JS)">JS</div>
+</div>
+</div>
+<!-- Item UL-08 -->
+<div class="h-[36px] px-pad-md flex items-center justify-between border-b border-outline-variant/20 hover:bg-surface-container-low/70 transition-colors group">
+<div class="flex items-center gap-2.5 min-w-0 flex-1 pr-3">
+<span class="material-symbols-outlined text-[16px] text-secondary">progress_activity</span>
+<span class="font-code-badge text-code-badge text-outline shrink-0 select-none">UL-08</span>
+<span class="font-body-default text-body-default text-on-surface truncate">Smoke density chamber photometric calibration (ASTM E662)</span>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<span class="flex items-center text-outline" title="Priority: Medium">
+<span class="material-symbols-outlined text-[16px]">signal_cellular_alt_2_bar</span>
+</span>
+<span class="font-caption-meta text-[11px] px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant border border-outline-variant/30">Testing</span>
+<span class="font-caption-meta text-caption-meta text-on-surface-variant">Oct 26</span>
+<div class="w-5 h-5 rounded-full bg-secondary-container text-on-secondary-container font-caption-meta-medium text-[10px] flex items-center justify-center" title="Assignee: Anand L. (AL)">AL</div>
+</div>
+</div>
+<!-- Item UL-07 -->
+<div class="h-[36px] px-pad-md flex items-center justify-between border-b border-outline-variant/20 hover:bg-surface-container-low/70 transition-colors group">
+<div class="flex items-center gap-2.5 min-w-0 flex-1 pr-3">
+<span class="material-symbols-outlined text-[16px] text-secondary">progress_activity</span>
+<span class="font-code-badge text-code-badge text-outline shrink-0 select-none">UL-07</span>
+<span class="font-body-default text-body-default text-on-surface truncate">Dual-wall heat shrink sleeve compatibility assessment</span>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<span class="flex items-center text-outline" title="Priority: Low">
+<span class="material-symbols-outlined text-[16px]">arrow_downward</span>
+</span>
+<span class="font-caption-meta text-[11px] px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant border border-outline-variant/30">Application</span>
+<span class="font-caption-meta text-caption-meta text-on-surface-variant">Oct 30</span>
+<div class="w-5 h-5 rounded-full bg-outline-variant text-on-surface-variant font-caption-meta-medium text-[10px] flex items-center justify-center" title="Assignee: Tanmay C. (TC)">TC</div>
+</div>
+</div>
+<!-- Compact Add Row -->
+<button class="h-8 px-pad-md flex items-center gap-2 text-outline hover:text-primary hover:bg-surface-container-low transition-colors text-left border-b border-outline-variant/10" type="button">
+<span class="material-symbols-outlined text-[14px]">add</span>
+<span class="font-caption-meta text-caption-meta">New issue in In Progress...</span>
+</button>
+</div>
+</div>
+<!-- ==================== GROUP: TODO ==================== -->
+<div class="flex flex-col" id="group-todo">
+<div class="h-9 px-pad-md bg-surface-container-low border-b border-outline-variant/20 flex items-center justify-between select-none cursor-pointer group hover:bg-surface-container transition-colors" onclick="toggleGroup('list-todo', this)">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-outline transition-transform duration-150 group-chevron">expand_more</span>
+<span class="w-2 h-2 rounded-full bg-secondary-container"></span>
+<span class="font-header-section text-[11px] uppercase tracking-wider text-on-surface-variant font-semibold">Todo</span>
+<span class="font-code-badge text-code-badge text-outline bg-surface-container-lowest px-1.5 py-0.5 rounded border border-outline-variant/30">7</span>
+</div>
+<button class="w-5 h-5 rounded hover:bg-surface-container-high flex items-center justify-center text-outline hover:text-on-surface" onclick="event.stopPropagation()" title="Add item to Todo" type="button">
+<span class="material-symbols-outlined text-[14px]">add</span>
+</button>
+</div>
+<div class="flex flex-col" id="list-todo">
+<!-- Item UL-22 -->
+<div class="h-[36px] px-pad-md flex items-center justify-between border-b border-outline-variant/20 hover:bg-surface-container-low/70 transition-colors group">
+<div class="flex items-center gap-2.5 min-w-0 flex-1 pr-3">
+<span class="material-symbols-outlined text-[16px] text-outline">radio_button_unchecked</span>
+<span class="font-code-badge text-code-badge text-on-surface-variant shrink-0 select-none">UL-22</span>
+<span class="font-body-default text-body-default text-on-surface truncate">Third-party flame retardancy testing at CPRI Bangalore</span>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<span class="flex items-center text-error" title="Priority: Urgent">
+<span class="material-symbols-outlined text-[16px]">keyboard_double_arrow_up</span>
+</span>
+<span class="font-caption-meta text-[11px] px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant border border-outline-variant/30">Compliance</span>
+<span class="font-caption-meta text-caption-meta text-on-surface-variant">Oct 18</span>
+<div class="w-5 h-5 rounded-full bg-primary-container text-on-primary font-caption-meta-medium text-[10px] flex items-center justify-center" title="Assignee: SK">SK</div>
+</div>
+</div>
+<!-- Item UL-21 -->
+<div class="h-[36px] px-pad-md flex items-center justify-between border-b border-outline-variant/20 hover:bg-surface-container-low/70 transition-colors group">
+<div class="flex items-center gap-2.5 min-w-0 flex-1 pr-3">
+<span class="material-symbols-outlined text-[16px] text-outline">radio_button_unchecked</span>
+<span class="font-code-badge text-code-badge text-outline shrink-0 select-none">UL-21</span>
+<span class="font-body-default text-body-default text-on-surface truncate">Tensile elongation compliance for irradiated polyolefin sheath</span>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<span class="flex items-center text-secondary" title="Priority: High">
+<span class="material-symbols-outlined text-[16px]">signal_cellular_alt</span>
+</span>
+<span class="font-caption-meta text-[11px] px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant border border-outline-variant/30">QA / Lab</span>
+<span class="font-caption-meta text-caption-meta text-on-surface-variant">Oct 20</span>
+<div class="w-5 h-5 rounded-full bg-secondary text-on-secondary font-caption-meta-medium text-[10px] flex items-center justify-center" title="Assignee: VN">VN</div>
+</div>
+</div>
+<!-- Item UL-19 -->
+<div class="h-[36px] px-pad-md flex items-center justify-between border-b border-outline-variant/20 hover:bg-surface-container-low/70 transition-colors group">
+<div class="flex items-center gap-2.5 min-w-0 flex-1 pr-3">
+<span class="material-symbols-outlined text-[16px] text-outline">radio_button_unchecked</span>
+<span class="font-code-badge text-code-badge text-outline shrink-0 select-none">UL-19</span>
+<span class="font-body-default text-body-default text-on-surface truncate">Dielectric breakdown voltage test on 1500V DC solar cable core</span>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<span class="flex items-center text-secondary" title="Priority: High">
+<span class="material-symbols-outlined text-[16px]">signal_cellular_alt</span>
+</span>
+<span class="font-caption-meta text-[11px] px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant border border-outline-variant/30">High Voltage</span>
+<span class="font-caption-meta text-caption-meta text-on-surface-variant">Oct 22</span>
+<div class="w-5 h-5 rounded-full bg-secondary-container text-on-secondary-container font-caption-meta-medium text-[10px] flex items-center justify-center" title="Assignee: AL">AL</div>
+</div>
+</div>
+<!-- Item UL-18 -->
+<div class="h-[36px] px-pad-md flex items-center justify-between border-b border-outline-variant/20 hover:bg-surface-container-low/70 transition-colors group">
+<div class="flex items-center gap-2.5 min-w-0 flex-1 pr-3">
+<span class="material-symbols-outlined text-[16px] text-outline">radio_button_unchecked</span>
+<span class="font-code-badge text-code-badge text-outline shrink-0 select-none">UL-18</span>
+<span class="font-body-default text-body-default text-on-surface truncate">Halogen acid gas evolution test data consolidation (IEC 60754)</span>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<span class="flex items-center text-outline" title="Priority: Medium">
+<span class="material-symbols-outlined text-[16px]">signal_cellular_alt_2_bar</span>
+</span>
+<span class="font-caption-meta text-[11px] px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant border border-outline-variant/30">Compliance</span>
+<span class="font-caption-meta text-caption-meta text-on-surface-variant">Oct 25</span>
+<div class="w-5 h-5 rounded-full bg-surface-container-highest text-on-surface font-caption-meta-medium text-[10px] flex items-center justify-center" title="Assignee: MN">MN</div>
+</div>
+</div>
+<!-- Item UL-17 -->
+<div class="h-[36px] px-pad-md flex items-center justify-between border-b border-outline-variant/20 hover:bg-surface-container-low/70 transition-colors group">
+<div class="flex items-center gap-2.5 min-w-0 flex-1 pr-3">
+<span class="material-symbols-outlined text-[16px] text-outline">radio_button_unchecked</span>
+<span class="font-code-badge text-code-badge text-outline shrink-0 select-none">UL-17</span>
+<span class="font-body-default text-body-default text-on-surface truncate">Calibrate optical diameter gauge on continuous vulcanization line</span>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<span class="flex items-center text-outline" title="Priority: Low">
+<span class="material-symbols-outlined text-[16px]">arrow_downward</span>
+</span>
+<span class="font-caption-meta text-[11px] px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant border border-outline-variant/30">Calibration</span>
+<span class="font-caption-meta text-caption-meta text-on-surface-variant">Oct 29</span>
+<div class="w-5 h-5 rounded-full bg-surface-variant text-on-primary-fixed-variant font-caption-meta-medium text-[10px] flex items-center justify-center" title="Assignee: PR">PR</div>
+</div>
+</div>
+<!-- Item UL-16 -->
+<div class="h-[36px] px-pad-md flex items-center justify-between border-b border-outline-variant/20 hover:bg-surface-container-low/70 transition-colors group">
+<div class="flex items-center gap-2.5 min-w-0 flex-1 pr-3">
+<span class="material-symbols-outlined text-[16px] text-outline">radio_button_unchecked</span>
+<span class="font-code-badge text-code-badge text-outline shrink-0 select-none">UL-16</span>
+<span class="font-body-default text-body-default text-on-surface truncate">Supplier RoHS3 certificate validation for antimony trioxide</span>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<span class="flex items-center text-outline" title="Priority: Medium">
+<span class="material-symbols-outlined text-[16px]">signal_cellular_alt_2_bar</span>
+</span>
+<span class="font-caption-meta text-[11px] px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant border border-outline-variant/30">Procurement</span>
+<span class="font-caption-meta text-caption-meta text-on-surface-variant">Nov 02</span>
+<div class="w-5 h-5 rounded-full bg-outline-variant text-on-surface-variant font-caption-meta-medium text-[10px] flex items-center justify-center" title="Assignee: TC">TC</div>
+</div>
+</div>
+<!-- Item UL-15 -->
+<div class="h-[36px] px-pad-md flex items-center justify-between border-b border-outline-variant/20 hover:bg-surface-container-low/70 transition-colors group">
+<div class="flex items-center gap-2.5 min-w-0 flex-1 pr-3">
+<span class="material-symbols-outlined text-[16px] text-outline">radio_button_unchecked</span>
+<span class="font-code-badge text-code-badge text-outline shrink-0 select-none">UL-15</span>
+<span class="font-body-default text-body-default text-on-surface truncate">Environmental stress cracking resistance (ESCR) bench testing</span>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<span class="flex items-center text-outline" title="Priority: Low">
+<span class="material-symbols-outlined text-[16px]">arrow_downward</span>
+</span>
+<span class="font-caption-meta text-[11px] px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant border border-outline-variant/30">R&amp;D</span>
+<span class="font-caption-meta text-caption-meta text-on-surface-variant">Nov 08</span>
+<div class="w-5 h-5 rounded-full bg-primary-container text-on-primary font-caption-meta-medium text-[10px] flex items-center justify-center" title="Assignee: RK">RK</div>
+</div>
+</div>
+<!-- Compact Add Row -->
+<button class="h-8 px-pad-md flex items-center gap-2 text-outline hover:text-primary hover:bg-surface-container-low transition-colors text-left border-b border-outline-variant/10" type="button">
+<span class="material-symbols-outlined text-[14px]">add</span>
+<span class="font-caption-meta text-caption-meta">New issue in Todo...</span>
+</button>
+</div>
+</div>
+<!-- ==================== GROUP: BACKLOG ==================== -->
+<div class="flex flex-col" id="group-backlog">
+<div class="h-9 px-pad-md bg-surface-container-low border-b border-outline-variant/20 flex items-center justify-between select-none cursor-pointer group hover:bg-surface-container transition-colors" onclick="toggleGroup('list-backlog', this)">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-outline transition-transform duration-150 group-chevron">expand_more</span>
+<span class="w-2 h-2 rounded-full bg-outline"></span>
+<span class="font-header-section text-[11px] uppercase tracking-wider text-on-surface-variant font-semibold">Backlog</span>
+<span class="font-code-badge text-code-badge text-outline bg-surface-container-lowest px-1.5 py-0.5 rounded border border-outline-variant/30">4</span>
+</div>
+<button class="w-5 h-5 rounded hover:bg-surface-container-high flex items-center justify-center text-outline hover:text-on-surface" onclick="event.stopPropagation()" title="Add item to Backlog" type="button">
+<span class="material-symbols-outlined text-[14px]">add</span>
+</button>
+</div>
+<div class="flex flex-col" id="list-backlog">
+<!-- Item UL-28 -->
+<div class="h-[36px] px-pad-md flex items-center justify-between border-b border-outline-variant/20 hover:bg-surface-container-low/70 transition-colors group">
+<div class="flex items-center gap-2.5 min-w-0 flex-1 pr-3">
+<span class="material-symbols-outlined text-[16px] text-outline">help_outline</span>
+<span class="font-code-badge text-code-badge text-outline shrink-0 select-none">UL-28</span>
+<span class="font-body-default text-body-default text-on-surface truncate">Raw polymer compound viscosity check against ASTM D1238</span>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<span class="flex items-center text-outline" title="Priority: Low">
+<span class="material-symbols-outlined text-[16px]">arrow_downward</span>
+</span>
+<span class="font-caption-meta text-[11px] px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant border border-outline-variant/30">Raw Material</span>
+<span class="font-caption-meta text-caption-meta text-on-surface-variant">Oct 28</span>
+<div class="w-5 h-5 rounded-full bg-primary-container text-on-primary font-caption-meta-medium text-[10px] flex items-center justify-center" title="Assignee: RK">RK</div>
+</div>
+</div>
+<!-- Item UL-26 -->
+<div class="h-[36px] px-pad-md flex items-center justify-between border-b border-outline-variant/20 hover:bg-surface-container-low/70 transition-colors group">
+<div class="flex items-center gap-2.5 min-w-0 flex-1 pr-3">
+<span class="material-symbols-outlined text-[16px] text-outline">help_outline</span>
+<span class="font-code-badge text-code-badge text-outline shrink-0 select-none">UL-26</span>
+<span class="font-body-default text-body-default text-on-surface truncate">Update BOM routing for KU-SLV-0625</span>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<span class="flex items-center text-outline" title="Priority: Medium">
+<span class="material-symbols-outlined text-[16px]">signal_cellular_alt_2_bar</span>
+</span>
+<span class="font-caption-meta text-[11px] px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant border border-outline-variant/30">Process Eng</span>
+<span class="font-caption-meta text-caption-meta text-on-surface-variant">Nov 04</span>
+<div class="w-5 h-5 rounded-full bg-tertiary-container text-on-tertiary font-caption-meta-medium text-[10px] flex items-center justify-center" title="Assignee: AM">AM</div>
+</div>
+</div>
+<!-- Item UL-25 -->
+<div class="h-[36px] px-pad-md flex items-center justify-between border-b border-outline-variant/20 hover:bg-surface-container-low/70 transition-colors group">
+<div class="flex items-center gap-2.5 min-w-0 flex-1 pr-3">
+<span class="material-symbols-outlined text-[16px] text-outline">help_outline</span>
+<span class="font-code-badge text-code-badge text-outline shrink-0 select-none">UL-25</span>
+<span class="font-body-default text-body-default text-on-surface truncate">Cross-link density testing protocol revision for XLPE jackets</span>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<span class="flex items-center text-outline" title="Priority: Low">
+<span class="material-symbols-outlined text-[16px]">arrow_downward</span>
+</span>
+<span class="font-caption-meta text-[11px] px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant border border-outline-variant/30">Testing</span>
+<span class="font-caption-meta text-caption-meta text-on-surface-variant">Nov 12</span>
+<div class="w-5 h-5 rounded-full bg-primary-container text-on-primary font-caption-meta-medium text-[10px] flex items-center justify-center" title="Assignee: JS">JS</div>
+</div>
+</div>
+<!-- Item UL-24 -->
+<div class="h-[36px] px-pad-md flex items-center justify-between border-b border-outline-variant/20 hover:bg-surface-container-low/70 transition-colors group">
+<div class="flex items-center gap-2.5 min-w-0 flex-1 pr-3">
+<span class="material-symbols-outlined text-[16px] text-outline">help_outline</span>
+<span class="font-code-badge text-code-badge text-outline shrink-0 select-none">UL-24</span>
+<span class="font-body-default text-body-default text-on-surface truncate">Tooling wear inspection report for extrusion die #4</span>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<span class="flex items-center text-outline" title="Priority: Medium">
+<span class="material-symbols-outlined text-[16px]">signal_cellular_alt_2_bar</span>
+</span>
+<span class="font-caption-meta text-[11px] px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant border border-outline-variant/30">Maintenance</span>
+<span class="font-caption-meta text-caption-meta text-on-surface-variant">Nov 15</span>
+<div class="w-5 h-5 rounded-full bg-primary text-on-primary font-caption-meta-medium text-[10px] flex items-center justify-center" title="Assignee: DP">DP</div>
+</div>
+</div>
+<!-- Compact Add Row -->
+<button class="h-8 px-pad-md flex items-center gap-2 text-outline hover:text-primary hover:bg-surface-container-low transition-colors text-left border-b border-outline-variant/10" type="button">
+<span class="material-symbols-outlined text-[14px]">add</span>
+<span class="font-caption-meta text-caption-meta">New issue in Backlog...</span>
+</button>
+</div>
+</div>
+<!-- ==================== GROUP: DONE ==================== -->
+<div class="flex flex-col" id="group-done">
+<div class="h-9 px-pad-md bg-surface-container-low border-b border-outline-variant/20 flex items-center justify-between select-none cursor-pointer group hover:bg-surface-container transition-colors" onclick="toggleGroup('list-done', this)">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-outline transition-transform duration-150 group-chevron">expand_more</span>
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></span>
+<span class="font-header-section text-[11px] uppercase tracking-wider text-on-surface-variant font-semibold">Done</span>
+<span class="font-code-badge text-code-badge text-outline bg-surface-container-lowest px-1.5 py-0.5 rounded border border-outline-variant/30">11</span>
+</div>
+<button class="w-5 h-5 rounded hover:bg-surface-container-high flex items-center justify-center text-outline hover:text-on-surface" onclick="event.stopPropagation()" title="Add item to Done" type="button">
+<span class="material-symbols-outlined text-[14px]">add</span>
+</button>
+</div>
+<div class="flex flex-col" id="list-done">
+<!-- Item UL-06 -->
+<div class="h-[36px] px-pad-md flex items-center justify-between border-b border-outline-variant/20 hover:bg-surface-container-low/70 transition-colors group opacity-85">
+<div class="flex items-center gap-2.5 min-w-0 flex-1 pr-3">
+<span class="material-symbols-outlined text-[16px] text-tertiary-fixed-dim">check_circle</span>
+<span class="font-code-badge text-code-badge text-outline shrink-0 select-none">UL-06</span>
+<span class="font-body-default text-body-default text-on-surface-variant line-through truncate">Pre-audit sample submission to UL International Demko</span>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<span class="flex items-center text-outline" title="Priority: Urgent">
+<span class="material-symbols-outlined text-[16px]">keyboard_double_arrow_up</span>
+</span>
+<span class="font-caption-meta text-[11px] px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant border border-outline-variant/30">Certification</span>
+<span class="font-caption-meta text-caption-meta text-outline">Oct 12</span>
+<div class="w-5 h-5 rounded-full bg-primary-container text-on-primary font-caption-meta-medium text-[10px] flex items-center justify-center" title="Assignee: SK">SK</div>
+</div>
+</div>
+<!-- Item UL-05 -->
+<div class="h-[36px] px-pad-md flex items-center justify-between border-b border-outline-variant/20 hover:bg-surface-container-low/70 transition-colors group opacity-85">
+<div class="flex items-center gap-2.5 min-w-0 flex-1 pr-3">
+<span class="material-symbols-outlined text-[16px] text-tertiary-fixed-dim">check_circle</span>
+<span class="font-code-badge text-code-badge text-outline shrink-0 select-none">UL-05</span>
+<span class="font-body-default text-body-default text-on-surface-variant line-through truncate">Accelerated water immersion test on EPR insulation (90°C)</span>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<span class="flex items-center text-outline" title="Priority: High">
+<span class="material-symbols-outlined text-[16px]">signal_cellular_alt</span>
+</span>
+<span class="font-caption-meta text-[11px] px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant border border-outline-variant/30">QA / Lab</span>
+<span class="font-caption-meta text-caption-meta text-outline">Oct 10</span>
+<div class="w-5 h-5 rounded-full bg-secondary text-on-secondary font-caption-meta-medium text-[10px] flex items-center justify-center" title="Assignee: VN">VN</div>
+</div>
+</div>
+<!-- Item UL-04 -->
+<div class="h-[36px] px-pad-md flex items-center justify-between border-b border-outline-variant/20 hover:bg-surface-container-low/70 transition-colors group opacity-85">
+<div class="flex items-center gap-2.5 min-w-0 flex-1 pr-3">
+<span class="material-symbols-outlined text-[16px] text-tertiary-fixed-dim">check_circle</span>
+<span class="font-code-badge text-code-badge text-outline shrink-0 select-none">UL-04</span>
+<span class="font-body-default text-body-default text-on-surface-variant line-through truncate">Tin coating thickness measurement on annealed copper wire</span>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<span class="flex items-center text-outline" title="Priority: Medium">
+<span class="material-symbols-outlined text-[16px]">signal_cellular_alt_2_bar</span>
+</span>
+<span class="font-caption-meta text-[11px] px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant border border-outline-variant/30">Raw Material</span>
+<span class="font-caption-meta text-caption-meta text-outline">Oct 08</span>
+<div class="w-5 h-5 rounded-full bg-surface-container-highest text-on-surface font-caption-meta-medium text-[10px] flex items-center justify-center" title="Assignee: MN">MN</div>
+</div>
+</div>
+<!-- Item UL-02 -->
+<div class="h-[36px] px-pad-md flex items-center justify-between border-b border-outline-variant/20 hover:bg-surface-container-low/70 transition-colors group opacity-85">
+<div class="flex items-center gap-2.5 min-w-0 flex-1 pr-3">
+<span class="material-symbols-outlined text-[16px] text-tertiary-fixed-dim">check_circle</span>
+<span class="font-code-badge text-code-badge text-outline shrink-0 select-none">UL-02</span>
+<span class="font-body-default text-body-default text-on-surface-variant line-through truncate">Vendor qualification for silane-crosslinkable base resin</span>
+</div>
+<div class="flex items-center gap-3 shrink-0">
+<span class="flex items-center text-outline" title="Priority: High">
+<span class="material-symbols-outlined text-[16px]">signal_cellular_alt</span>
+</span>
+<span class="font-caption-meta text-[11px] px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant border border-outline-variant/30">Procurement</span>
+<span class="font-caption-meta text-caption-meta text-outline">Oct 04</span>
+<div class="w-5 h-5 rounded-full bg-primary-container text-on-primary font-caption-meta-medium text-[10px] flex items-center justify-center" title="Assignee: RK">RK</div>
+</div>
+</div>
+<!-- 7 More Completed Tasks Indicator -->
+<div class="h-[30px] px-pad-md flex items-center gap-2 bg-surface-container-lowest text-outline hover:text-on-surface cursor-pointer text-caption-meta font-caption-meta transition-colors border-b border-outline-variant/10">
+<span class="material-symbols-outlined text-[14px]">more_horiz</span>
+<span>Show 7 more completed issues from previous cycles</span>
+</div>
+<!-- Compact Add Row -->
+<button class="h-8 px-pad-md flex items-center gap-2 text-outline hover:text-primary hover:bg-surface-container-low transition-colors text-left border-b border-outline-variant/10" type="button">
+<span class="material-symbols-outlined text-[14px]">add</span>
+<span class="font-caption-meta text-caption-meta">New issue in Done...</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Bottom Workspace Status Pill & Keyboard Hint Footer -->
+<div class="h-8 px-pad-md bg-surface border-t border-outline-variant/20 flex items-center justify-between text-outline select-none">
+<div class="flex items-center gap-3 text-caption-meta font-caption-meta">
+<span class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-fixed-dim"></span>
+<span>All 4 test benches synced</span>
+</span>
+<span>•</span>
+<span>Last sync: 2m ago via SAP RFC</span>
+</div>
+<div class="flex items-center gap-2 text-caption-meta font-caption-meta">
+<span class="flex items-center gap-1">
+<kbd class="font-shortcut-key text-shortcut-key bg-surface-container-lowest border border-outline-variant/40 rounded px-1 text-on-surface-variant">J</kbd>
+<kbd class="font-shortcut-key text-shortcut-key bg-surface-container-lowest border border-outline-variant/40 rounded px-1 text-on-surface-variant">K</kbd>
+<span>Navigate</span>
+</span>
+<span class="mx-1">•</span>
+<span class="flex items-center gap-1">
+<kbd class="font-shortcut-key text-shortcut-key bg-surface-container-lowest border border-outline-variant/40 rounded px-1 text-on-surface-variant">X</kbd>
+<span>Select</span>
+</span>
+<span class="mx-1">•</span>
+<span class="flex items-center gap-1">
+<kbd class="font-shortcut-key text-shortcut-key bg-surface-container-lowest border border-outline-variant/40 rounded px-1 text-on-surface-variant">Space</kbd>
+<span>Preview</span>
+</span>
+</div>
+</div>
+</div>
+<script>
+  function toggleGroup(listId, headerEl) {
+    const list = document.getElementById(listId);
+    const chevron = headerEl.querySelector('.group-chevron');
+    if (!list) return;
+    const isHidden = list.style.display === 'none';
+    list.style.display = isHidden ? 'flex' : 'none';
+    if (chevron) {
+      chevron.style.transform = isHidden ? 'rotate(0deg)' : 'rotate(-90deg)';
+    }
+  }
+</script><div class="fixed inset-0 left-sidebar-width bg-on-surface/20 z-40 backdrop-blur-[0.5px] transition-opacity duration-200" id="issue-detail-backdrop"></div><aside class="fixed top-0 right-0 bottom-0 z-50 w-[720px] max-w-[55vw] bg-surface-container-lowest border-l border-outline-variant/30 shadow-2xl flex flex-col min-h-screen select-none" id="issue-detail-panel"><div class="h-14 px-pad-md border-b border-outline-variant/30 flex items-center justify-between bg-surface-container-lowest shrink-0"><div class="flex items-center gap-2 min-w-0"><span class="material-symbols-outlined text-[16px] text-secondary">progress_activity</span><span class="font-code-badge text-code-badge font-semibold text-primary select-all">UL-14</span><button class="w-6 h-6 rounded flex items-center justify-center hover:bg-surface-container text-outline hover:text-on-surface transition-colors" title="Copy link"><span class="material-symbols-outlined text-[15px]">link</span></button><span class="h-3.5 w-px bg-outline-variant/40 mx-0.5"></span><span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-caption-meta-medium text-[11px] border border-outline-variant/30"><span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>In Progress</span></div><div class="flex items-center gap-1"><button class="h-7 px-2 rounded hover:bg-surface-container text-outline hover:text-on-surface flex items-center gap-1 font-caption-meta text-caption-meta transition-colors" title="Subscribe"><span class="material-symbols-outlined text-[16px]">notifications</span><span class="hidden sm:inline">Subscribe</span></button><button class="h-7 px-2 rounded hover:bg-surface-container text-outline hover:text-on-surface flex items-center gap-1 font-caption-meta text-caption-meta transition-colors" title="Share"><span class="material-symbols-outlined text-[16px]">share</span></button><button class="w-7 h-7 rounded hover:bg-surface-container text-outline hover:text-on-surface flex items-center justify-center transition-colors" title="More options"><span class="material-symbols-outlined text-[18px]">more_horiz</span></button><span class="h-4 w-px bg-outline-variant/40 mx-1"></span><button class="w-7 h-7 rounded-lg hover:bg-surface-container-high text-outline hover:text-on-surface flex items-center justify-center transition-colors group" onclick="document.getElementById('issue-detail-panel').remove(); document.getElementById('issue-detail-backdrop').remove();" title="Close panel (Esc)"><span class="material-symbols-outlined text-[18px]">close</span></button></div></div><div class="flex-1 flex overflow-hidden"><div class="flex-1 overflow-y-auto px-pad-lg py-pad-md flex flex-col gap-pad-lg border-r border-outline-variant/20"><div class="flex flex-col gap-2"><h1 class="text-[18px] font-semibold tracking-tight text-on-surface leading-snug outline-none cursor-text select-text hover:bg-surface-container-low/40 rounded p-0.5" contenteditable="true" spellcheck="false">Batch test reports for Motherson audit &amp; CPRI flammability qualification</h1><p class="text-body-default text-on-surface-variant font-body-default leading-relaxed select-text">Execute standardized UL94 V-0 flame retardancy protocol on 3.2mm and 1.6mm irradiated polyolefin crosslinked test plaques. Verify vertical test specimen flame chamber sensors against calibrated optical micro-gauges and submit pre-conditioning logs (48 hrs @ 23±2°C / 50±5% RH) prior to witnessing by OEM quality auditors.</p></div><div class="flex flex-col gap-2 pt-1"><div class="flex items-center justify-between"><div class="flex items-center gap-2"><span class="font-header-section text-[12px] uppercase tracking-wider text-outline font-semibold">Sub-items</span><span class="font-code-badge text-[11px] text-outline bg-surface-container px-1.5 py-0.2 rounded">2</span></div><button class="h-6 px-1.5 rounded hover:bg-surface-container-low text-primary text-caption-meta-medium font-caption-meta-medium flex items-center gap-1 transition-colors" type="button"><span class="material-symbols-outlined text-[14px]">add</span><span>Add sub-item</span></button></div><div class="flex flex-col rounded-lg border border-outline-variant/30 divide-y divide-outline-variant/20 bg-surface-container-lowest"><div class="h-9 px-pad-sm flex items-center justify-between hover:bg-surface-container-low/60 transition-colors group"><div class="flex items-center gap-2 min-w-0 flex-1"><span class="material-symbols-outlined text-[15px] text-tertiary-fixed-dim">check_circle</span><span class="font-code-badge text-caption-meta text-outline select-none">UL-14-1</span><span class="font-body-default text-caption-meta text-on-surface truncate line-through">Send 5 sets of 3.2mm plaques to CPRI Bangalore</span></div><div class="flex items-center gap-2 shrink-0"><span class="font-caption-meta text-[11px] text-outline">Oct 15</span><div class="w-5 h-5 rounded-full bg-primary text-on-primary font-caption-meta-medium text-[9px] flex items-center justify-center" title="Divya M.">DM</div></div></div><div class="h-9 px-pad-sm flex items-center justify-between hover:bg-surface-container-low/60 transition-colors group"><div class="flex items-center gap-2 min-w-0 flex-1"><span class="material-symbols-outlined text-[15px] text-secondary">progress_activity</span><span class="font-code-badge text-caption-meta text-outline select-none">UL-14-2</span><span class="font-body-default text-caption-meta text-on-surface truncate">Receive calibrated flame chamber certificate from NABL lab</span></div><div class="flex items-center gap-2 shrink-0"><span class="font-caption-meta text-[11px] text-on-surface-variant font-medium">Oct 18</span><div class="w-5 h-5 rounded-full bg-primary-container text-on-primary font-caption-meta-medium text-[9px] flex items-center justify-center" title="K. Ranganathan">KR</div></div></div></div></div><div class="flex flex-col gap-3 pt-2 border-t border-outline-variant/20"><div class="flex items-center justify-between"><span class="font-header-section text-[12px] uppercase tracking-wider text-outline font-semibold">Activity &amp; Comments</span><div class="flex items-center gap-1 text-[11px] font-caption-meta text-outline"><button class="px-2 py-0.5 rounded bg-surface-container text-primary font-medium border border-outline-variant/20">All</button><button class="px-2 py-0.5 rounded hover:bg-surface-container text-outline hover:text-on-surface">Comments</button></div></div><div class="flex flex-col gap-3"><div class="flex gap-2.5"><div class="w-7 h-7 rounded-full bg-primary text-on-primary font-caption-meta-medium text-[10px] flex items-center justify-center shrink-0 mt-0.5">DM</div><div class="flex flex-col min-w-0 flex-1 bg-surface-container-low/60 border border-outline-variant/30 rounded-lg p-2.5"><div class="flex items-center justify-between"><div class="flex items-center gap-1.5"><span class="font-body-medium text-caption-meta-medium text-on-surface font-semibold">Divya M.</span><span class="font-caption-meta text-[11px] text-outline">(QA Lead)</span></div><span class="font-caption-meta text-[11px] text-outline">1d ago</span></div><p class="font-body-default text-caption-meta text-on-surface-variant mt-1 leading-normal select-text">CPRI confirmed test bench slot for Thursday 10:00 AM. Ensure all 5 sets are conditioned for 48 hrs at 23°C / 50% RH prior to dispatch.</p></div></div><div class="flex gap-2.5"><div class="w-7 h-7 rounded-full bg-primary-container text-on-primary font-caption-meta-medium text-[10px] flex items-center justify-center shrink-0 mt-0.5">KR</div><div class="flex flex-col min-w-0 flex-1 bg-surface-container-low/60 border border-outline-variant/30 rounded-lg p-2.5"><div class="flex items-center justify-between"><div class="flex items-center gap-1.5"><span class="font-body-medium text-caption-meta-medium text-on-surface font-semibold">K. Ranganathan</span><span class="font-caption-meta text-[11px] text-outline">(Lead Cable Eng)</span></div><span class="font-caption-meta text-[11px] text-outline">4h ago</span></div><p class="font-body-default text-caption-meta text-on-surface-variant mt-1 leading-normal select-text">Conditioning chamber log verified and signed off. Dispatched via dedicated courier with transit tracker #CPRI-9482.</p></div></div><div class="flex flex-col gap-1.5 pl-9 text-[11px] text-outline font-caption-meta"><div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[13px] text-outline">swap_horiz</span><span>Divya changed state from <strong class="font-medium text-on-surface-variant">Todo</strong> to <strong class="font-medium text-secondary">In Progress</strong></span><span class="text-outline-variant">•</span><span>2d ago</span></div><div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[13px] text-outline">link</span><span>K. Ranganathan linked BOM routing <code class="font-code-badge text-[10px] bg-surface-container px-1 py-0.2 rounded">KU-SLV-0625</code></span><span class="text-outline-variant">•</span><span>3d ago</span></div><div class="flex items-center gap-1.5"><span class="material-symbols-outlined text-[13px] text-outline">bolt</span><span>System created issue from SAP QM notification #800192</span><span class="text-outline-variant">•</span><span>Oct 12</span></div></div><div class="flex flex-col gap-2 rounded-lg border border-outline-variant/40 bg-surface-container-lowest p-2 focus-within:border-primary"><textarea class="w-full text-caption-meta font-body-default text-on-surface placeholder:text-outline focus:outline-none resize-none bg-transparent min-h-[52px]" placeholder="Write a comment or mention @team..."></textarea><div class="flex items-center justify-between border-t border-outline-variant/20 pt-1.5"><div class="flex items-center gap-0.5"><button class="w-6 h-6 rounded hover:bg-surface-container flex items-center justify-center text-outline hover:text-on-surface" type="button"><span class="material-symbols-outlined text-[15px]">format_bold</span></button><button class="w-6 h-6 rounded hover:bg-surface-container flex items-center justify-center text-outline hover:text-on-surface" type="button"><span class="material-symbols-outlined text-[15px]">link</span></button><button class="w-6 h-6 rounded hover:bg-surface-container flex items-center justify-center text-outline hover:text-on-surface" type="button"><span class="material-symbols-outlined text-[15px]">alternate_email</span></button><button class="w-6 h-6 rounded hover:bg-surface-container flex items-center justify-center text-outline hover:text-on-surface" type="button"><span class="material-symbols-outlined text-[15px]">attach_file</span></button></div><button class="h-6 px-2.5 rounded bg-primary text-on-primary font-caption-meta-medium text-caption-meta hover:bg-primary-container transition-colors shadow-xs" type="button">Comment</button></div></div></div></div></div><div class="w-64 shrink-0 bg-surface-container-low/40 p-pad-md overflow-y-auto flex flex-col justify-between select-none"><div class="flex flex-col gap-3"><span class="font-header-section text-[11px] uppercase tracking-wider text-outline font-semibold">Attributes</span><div class="flex flex-col gap-2 text-caption-meta font-caption-meta"><div class="flex items-center justify-between py-1 border-b border-outline-variant/20"><span class="text-outline flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px]">toll</span>State</span><button class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-medium border border-outline-variant/30 hover:bg-surface-container-high transition-colors"><span class="w-2 h-2 rounded-full bg-secondary"></span><span>In Progress</span><span class="material-symbols-outlined text-[12px] text-outline">expand_more</span></button></div><div class="flex items-center justify-between py-1 border-b border-outline-variant/20"><span class="text-outline flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px] text-error">keyboard_double_arrow_up</span>Priority</span><button class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-surface-container text-error font-medium border border-outline-variant/30 hover:bg-surface-container-high transition-colors"><span>Urgent</span><span class="material-symbols-outlined text-[12px] text-outline">expand_more</span></button></div><div class="flex flex-col gap-1 py-1 border-b border-outline-variant/20"><span class="text-outline flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px]">person</span>Assignees</span><div class="flex items-center gap-1 mt-0.5"><span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-surface-container-lowest border border-outline-variant/30 text-[11px] text-on-surface"><div class="w-3.5 h-3.5 rounded-full bg-primary-container text-on-primary text-[8px] flex items-center justify-center font-bold">SK</div><span>Suresh K.</span></span><span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-surface-container-lowest border border-outline-variant/30 text-[11px] text-on-surface"><div class="w-3.5 h-3.5 rounded-full bg-primary text-on-primary text-[8px] flex items-center justify-center font-bold">DM</div><span>Divya M.</span></span></div></div><div class="flex flex-col gap-1 py-1 border-b border-outline-variant/20"><span class="text-outline flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px]">label</span>Labels</span><div class="flex flex-wrap gap-1 mt-0.5"><span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant text-[11px] border border-outline-variant/30">Audit / OEM</span><span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant text-[11px] border border-outline-variant/30">Compliance</span><span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant text-[11px] border border-outline-variant/30">UL94 V-0</span></div></div><div class="flex items-center justify-between py-1 border-b border-outline-variant/20"><span class="text-outline flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px]">calendar_today</span>Start date</span><span class="text-on-surface-variant">Oct 14, 2024</span></div><div class="flex items-center justify-between py-1 border-b border-outline-variant/20"><span class="text-outline flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px]">event</span>Due date</span><span class="text-error font-medium flex items-center gap-1"><span class="material-symbols-outlined text-[13px]">schedule</span>Tomorrow</span></div><div class="flex items-center justify-between py-1 border-b border-outline-variant/20"><span class="text-outline flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px]">timer</span>Estimate</span><span class="font-code-badge text-on-surface-variant">16 hrs (5 pts)</span></div><div class="flex items-center justify-between py-1 border-b border-outline-variant/20"><span class="text-outline flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px]">sync_alt</span>Cycle</span><span class="text-on-surface-variant font-medium">Sprint 4 (Active)</span></div><div class="flex items-center justify-between py-1 border-b border-outline-variant/20"><span class="text-outline flex items-center gap-1.5"><span class="material-symbols-outlined text-[14px]">view_in_ar</span>Module</span><span class="text-on-surface-variant truncate max-w-[110px]" title="Sheathing &amp; Flammability Lab">Flammability Lab</span></div></div></div><div class="flex flex-col gap-1 pt-3 border-t border-outline-variant/20 text-caption-meta font-caption-meta"><button class="h-6 px-1 flex items-center gap-1.5 text-outline hover:text-error hover:bg-surface-container-high/40 rounded transition-colors text-left"><span class="material-symbols-outlined text-[14px]">delete</span><span>Delete issue</span></button><button class="h-6 px-1 flex items-center gap-1.5 text-outline hover:text-on-surface hover:bg-surface-container-high/40 rounded transition-colors text-left"><span class="material-symbols-outlined text-[14px]">archive</span><span>Archive issue</span></button></div></div></div></aside></main></div></body></html>

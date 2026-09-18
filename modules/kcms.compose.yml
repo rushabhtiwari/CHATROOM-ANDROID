@@ -1,0 +1,33 @@
+# KCMS (Project Management) as one container: database, cache, file store, API,
+# workers and all four web apps behind one port. See kiran-mgmt/deployments/kcms.
+#
+#   docker compose -f modules/kcms.compose.yml up -d --build
+#
+# http://localhost:3020            the app
+# http://localhost:3020/god-mode/  instance admin
+name: kcms
+
+services:
+  kcms:
+    image: kcms:local
+    container_name: kcms
+    build:
+      context: ./kiran-mgmt
+      dockerfile: deployments/kcms/Dockerfile
+    ports:
+      - "3020:80"
+    environment:
+      WEB_URL: http://localhost:3020
+      # Load the Kiran demo workspace on the first boot of an empty volume.
+      KCMS_SEED_DEMO: "1"
+    env_file:
+      # Optional: the AI assistant's provider and key (LLM_PROVIDER, LLM_MODEL, LLM_API_KEY).
+      - path: ./kiran-mgmt/kcms.env
+        required: false
+    volumes:
+      - kcms-data:/data
+    restart: unless-stopped
+    stop_grace_period: 90s
+
+volumes:
+  kcms-data:

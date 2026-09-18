@@ -1,0 +1,1664 @@
+﻿{
+  "employees": [
+    {
+      "id": "EMP-01",
+      "name": "Ananya Iyer",
+      "employeeCode": "ULA-0401",
+      "department": "Engineering",
+      "designation": "Principal Engineer",
+      "managerName": "Rajat Khanna",
+      "email": "ananya.iyer@ulacorp.in",
+      "monthlyAllowance": 40000,
+      "usedThisMonth": 18400,
+      "pendingAmount": 6200,
+      "bankAccount": {
+        "bankName": "HDFC Bank",
+        "accountHolder": "Ananya Iyer",
+        "accountNumberMasked": "XXXX XXXX 4417",
+        "ifsc": "HDFC0001432",
+        "verified": true
+      }
+    },
+    {
+      "id": "EMP-02",
+      "name": "Rohan Deshmukh",
+      "employeeCode": "ULA-0402",
+      "department": "Sales",
+      "designation": "Regional Sales Manager",
+      "managerName": "Sunita Barve",
+      "email": "rohan.deshmukh@ulacorp.in",
+      "monthlyAllowance": 35000,
+      "usedThisMonth": 21600,
+      "pendingAmount": 8900,
+      "bankAccount": {
+        "bankName": "ICICI Bank",
+        "accountHolder": "Rohan Deshmukh",
+        "accountNumberMasked": "XXXX XXXX 9082",
+        "ifsc": "ICIC0000521",
+        "verified": true
+      }
+    },
+    {
+      "id": "EMP-03",
+      "name": "Farhan Qureshi",
+      "employeeCode": "ULA-0403",
+      "department": "Operations",
+      "designation": "Plant Operations Lead",
+      "managerName": "Sunita Barve",
+      "email": "farhan.qureshi@ulacorp.in",
+      "monthlyAllowance": 30000,
+      "usedThisMonth": 24800,
+      "pendingAmount": 3500,
+      "bankAccount": {
+        "bankName": "State Bank of India",
+        "accountHolder": "Farhan Qureshi",
+        "accountNumberMasked": "XXXX XXXX 3311",
+        "ifsc": "SBIN0004512",
+        "verified": true
+      }
+    },
+    {
+      "id": "EMP-04",
+      "name": "Meera Nair",
+      "employeeCode": "ULA-0404",
+      "department": "Finance",
+      "designation": "HR Business Partner",
+      "managerName": "Deepak Rao",
+      "email": "meera.nair@ulacorp.in",
+      "monthlyAllowance": 25000,
+      "usedThisMonth": 7200,
+      "pendingAmount": 0,
+      "bankAccount": {
+        "bankName": "Axis Bank",
+        "accountHolder": "Meera Nair",
+        "accountNumberMasked": "XXXX XXXX 7745",
+        "ifsc": "UTIB0000234",
+        "verified": true
+      }
+    },
+    {
+      "id": "EMP-05",
+      "name": "Vikram Sethi",
+      "employeeCode": "ULA-0405",
+      "department": "Finance",
+      "designation": "Accounts Controller",
+      "managerName": "Deepak Rao",
+      "email": "vikram.sethi@ulacorp.in",
+      "monthlyAllowance": 28000,
+      "usedThisMonth": 9400,
+      "pendingAmount": 2200,
+      "bankAccount": {
+        "bankName": "Kotak Mahindra Bank",
+        "accountHolder": "Vikram Sethi",
+        "accountNumberMasked": "XXXX XXXX 5120",
+        "ifsc": "KKBK0000958",
+        "verified": true
+      }
+    },
+    {
+      "id": "EMP-06",
+      "name": "Priya Raghavan",
+      "employeeCode": "ULA-0406",
+      "department": "Content",
+      "designation": "Senior Content Strategist",
+      "managerName": "Nisha Menon",
+      "email": "priya.raghavan@ulacorp.in",
+      "monthlyAllowance": 20000,
+      "usedThisMonth": 6800,
+      "pendingAmount": 4300,
+      "bankAccount": {
+        "bankName": "HDFC Bank",
+        "accountHolder": "Priya Raghavan",
+        "accountNumberMasked": "XXXX XXXX 8830",
+        "ifsc": "HDFC0001432",
+        "verified": false
+      }
+    },
+    {
+      "id": "EMP-07",
+      "name": "Arjun Bhatt",
+      "employeeCode": "ULA-0407",
+      "department": "Engineering",
+      "designation": "Field Systems Engineer",
+      "managerName": "Rajat Khanna",
+      "email": "arjun.bhatt@ulacorp.in",
+      "monthlyAllowance": 32000,
+      "usedThisMonth": 12900,
+      "pendingAmount": 7400,
+      "bankAccount": {
+        "bankName": "ICICI Bank",
+        "accountHolder": "Arjun Bhatt",
+        "accountNumberMasked": "XXXX XXXX 2264",
+        "ifsc": "ICIC0000521",
+        "verified": true
+      }
+    },
+    {
+      "id": "EMP-08",
+      "name": "Sneha Kulkarni",
+      "employeeCode": "ULA-0408",
+      "department": "Marketing",
+      "designation": "Marketing Manager",
+      "managerName": "Nisha Menon",
+      "email": "sneha.kulkarni@ulacorp.in",
+      "monthlyAllowance": 26000,
+      "usedThisMonth": 11200,
+      "pendingAmount": 5600,
+      "bankAccount": {
+        "bankName": "Axis Bank",
+        "accountHolder": "Sneha Kulkarni",
+        "accountNumberMasked": "XXXX XXXX 6019",
+        "ifsc": "UTIB0000234",
+        "verified": true
+      }
+    },
+    {
+      "id": "EMP-09",
+      "name": "Imran Shaikh",
+      "employeeCode": "ULA-0409",
+      "department": "Operations",
+      "designation": "Quality Inspector",
+      "managerName": "Sunita Barve",
+      "email": "imran.shaikh@ulacorp.in",
+      "monthlyAllowance": 18000,
+      "usedThisMonth": 5400,
+      "pendingAmount": 3900,
+      "bankAccount": {
+        "bankName": "State Bank of India",
+        "accountHolder": "Imran Shaikh",
+        "accountNumberMasked": "XXXX XXXX 4478",
+        "ifsc": "SBIN0004512",
+        "verified": false
+      }
+    },
+    {
+      "id": "EMP-10",
+      "name": "Kavya Reddy",
+      "employeeCode": "ULA-0410",
+      "department": "Finance",
+      "designation": "Payments Officer",
+      "managerName": "Deepak Rao",
+      "email": "kavya.reddy@ulacorp.in",
+      "monthlyAllowance": 22000,
+      "usedThisMonth": 4100,
+      "pendingAmount": 1800,
+      "bankAccount": {
+        "bankName": "Kotak Mahindra Bank",
+        "accountHolder": "Kavya Reddy",
+        "accountNumberMasked": "XXXX XXXX 9903",
+        "ifsc": "KKBK0000958",
+        "verified": true
+      }
+    },
+    {
+      "id": "EMP-11",
+      "name": "Nikhil Joshi",
+      "employeeCode": "ULA-0411",
+      "department": "Finance",
+      "designation": "Financial Analyst",
+      "managerName": "Deepak Rao",
+      "email": "nikhil.joshi@ulacorp.in",
+      "monthlyAllowance": 24000,
+      "usedThisMonth": 8700,
+      "pendingAmount": 2600,
+      "bankAccount": {
+        "bankName": "HDFC Bank",
+        "accountHolder": "Nikhil Joshi",
+        "accountNumberMasked": "XXXX XXXX 1157",
+        "ifsc": "HDFC0001432",
+        "verified": true
+      }
+    },
+    {
+      "id": "EMP-12",
+      "name": "Tanvi Malhotra",
+      "employeeCode": "ULA-0412",
+      "department": "Sales",
+      "designation": "HR Generalist",
+      "managerName": "Sunita Barve",
+      "email": "tanvi.malhotra@ulacorp.in",
+      "monthlyAllowance": 21000,
+      "usedThisMonth": 9800,
+      "pendingAmount": 4200,
+      "bankAccount": {
+        "bankName": "ICICI Bank",
+        "accountHolder": "Tanvi Malhotra",
+        "accountNumberMasked": "XXXX XXXX 7386",
+        "ifsc": "ICIC0000521",
+        "verified": false
+      }
+    }
+  ],
+  "requests": [
+    {
+      "id": "REQ-2026-0101",
+      "employeeId": "EMP-02",
+      "title": "Client visit - Pune, 3 days",
+      "category": "TRAVEL",
+      "amount": 18400,
+      "currency": "INR",
+      "submittedOn": "2026-08-28",
+      "travelDates": {
+        "from": "2026-09-02",
+        "to": "2026-09-04"
+      },
+      "justification": "Three-day on-site with Suzlon procurement to close the Q3 insulation supply renewal. Rail plus local transfers.",
+      "receipts": [
+        {
+          "id": "RCP-REQ-2026-0101-1",
+          "fileName": "irctc-pnr-4471203.pdf",
+          "sizeKb": 240,
+          "uploadedOn": "2026-08-28T02:30:00.000Z"
+        }
+      ],
+      "status": "DRAFT",
+      "currentStage": "HR",
+      "timeline": []
+    },
+    {
+      "id": "REQ-2026-0102",
+      "employeeId": "EMP-07",
+      "title": "Site inspection - Nashik plant",
+      "category": "FUEL",
+      "amount": 4200,
+      "currency": "INR",
+      "submittedOn": "2026-08-29",
+      "justification": "Self-drive to the Nashik line for a commissioning check on the new extrusion cell.",
+      "receipts": [
+        {
+          "id": "RCP-REQ-2026-0102-1",
+          "fileName": "hpcl-fuel-29aug.jpg",
+          "sizeKb": 380,
+          "uploadedOn": "2026-08-29T02:30:00.000Z"
+        }
+      ],
+      "status": "DRAFT",
+      "currentStage": "HR",
+      "timeline": []
+    },
+    {
+      "id": "REQ-2026-0103",
+      "employeeId": "EMP-01",
+      "title": "Vendor audit - Bengaluru",
+      "category": "TRAVEL",
+      "amount": 26800,
+      "currency": "INR",
+      "submittedOn": "2026-08-24",
+      "travelDates": {
+        "from": "2026-08-27",
+        "to": "2026-08-29"
+      },
+      "justification": "Annual quality audit at the Bengaluru cable supplier ahead of contract renewal. Flights and airport transfers.",
+      "receipts": [
+        {
+          "id": "RCP-REQ-2026-0103-1",
+          "fileName": "indigo-6E2043-boarding.pdf",
+          "sizeKb": 412,
+          "uploadedOn": "2026-08-24T02:30:00.000Z"
+        },
+        {
+          "id": "RCP-REQ-2026-0103-2",
+          "fileName": "ola-airport-transfer.pdf",
+          "sizeKb": 156,
+          "uploadedOn": "2026-08-24T03:30:00.000Z"
+        }
+      ],
+      "status": "SUBMITTED",
+      "currentStage": "HR",
+      "timeline": [
+        {
+          "id": "EVT-REQ-2026-0103-0",
+          "actor": "Ananya Iyer",
+          "role": "EMPLOYEE",
+          "action": "Submitted the request",
+          "comment": "Annual quality audit at the Bengaluru cable supplier ahead of contract renewal. Flights an",
+          "at": "2026-08-24T03:30:00.000Z"
+        }
+      ],
+      "slaDueOn": "2026-08-27"
+    },
+    {
+      "id": "REQ-2026-0104",
+      "employeeId": "EMP-08",
+      "title": "Trade expo travel - Delhi",
+      "category": "TRAVEL",
+      "amount": 31500,
+      "currency": "INR",
+      "submittedOn": "2026-08-26",
+      "travelDates": {
+        "from": "2026-09-08",
+        "to": "2026-09-11"
+      },
+      "justification": "Exhibiting at the India Electrical Expo. Covers return flights and two nights of accommodation.",
+      "receipts": [
+        {
+          "id": "RCP-REQ-2026-0104-1",
+          "fileName": "vistara-UK955-eticket.pdf",
+          "sizeKb": 508,
+          "uploadedOn": "2026-08-26T02:30:00.000Z"
+        }
+      ],
+      "status": "SUBMITTED",
+      "currentStage": "HR",
+      "timeline": [
+        {
+          "id": "EVT-REQ-2026-0104-0",
+          "actor": "Sneha Kulkarni",
+          "role": "EMPLOYEE",
+          "action": "Submitted the request",
+          "comment": "Exhibiting at the India Electrical Expo. Covers return flights and two nights of accommoda",
+          "at": "2026-08-26T03:30:00.000Z"
+        }
+      ],
+      "slaDueOn": "2026-09-02"
+    },
+    {
+      "id": "REQ-2026-0105",
+      "employeeId": "EMP-09",
+      "title": "Quality certification workshop - Mumbai",
+      "category": "OTHER",
+      "amount": 7600,
+      "currency": "INR",
+      "submittedOn": "2026-08-18",
+      "justification": "Two-day IS 7098 certification refresher required for the annual audit sign-off.",
+      "receipts": [
+        {
+          "id": "RCP-REQ-2026-0105-1",
+          "fileName": "bis-workshop-invoice.pdf",
+          "sizeKb": 290,
+          "uploadedOn": "2026-08-18T02:30:00.000Z"
+        }
+      ],
+      "status": "SUBMITTED",
+      "currentStage": "HR",
+      "timeline": [
+        {
+          "id": "EVT-REQ-2026-0105-0",
+          "actor": "Imran Shaikh",
+          "role": "EMPLOYEE",
+          "action": "Submitted the request",
+          "comment": "Two-day IS 7098 certification refresher required for the annual audit sign-off.",
+          "at": "2026-08-18T03:30:00.000Z"
+        }
+      ],
+      "slaDueOn": "2026-08-25"
+    },
+    {
+      "id": "REQ-2026-0106",
+      "employeeId": "EMP-02",
+      "title": "Distributor meet - Ahmedabad",
+      "category": "LODGING",
+      "amount": 12800,
+      "currency": "INR",
+      "submittedOn": "2026-08-14",
+      "travelDates": {
+        "from": "2026-08-19",
+        "to": "2026-08-21"
+      },
+      "justification": "Two nights during the western-region distributor meet. Hotel booked through the corporate desk.",
+      "receipts": [
+        {
+          "id": "RCP-REQ-2026-0106-1",
+          "fileName": "fortune-park-invoice-2214.jpg",
+          "sizeKb": 890,
+          "uploadedOn": "2026-08-14T02:30:00.000Z"
+        }
+      ],
+      "status": "HR_INFO_REQUESTED",
+      "currentStage": "HR",
+      "timeline": [
+        {
+          "id": "EVT-REQ-2026-0106-0",
+          "actor": "Rohan Deshmukh",
+          "role": "EMPLOYEE",
+          "action": "Submitted the request",
+          "comment": "Two nights during the western-region distributor meet. Hotel booked through the corporate ",
+          "at": "2026-08-14T03:30:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0106-1",
+          "actor": "Meera Nair",
+          "role": "HR",
+          "action": "More information requested by HR",
+          "comment": "Please attach the approved distributor meet agenda and confirm the second night was required.",
+          "at": "2026-08-15T04:37:00.000Z"
+        }
+      ],
+      "slaDueOn": "2026-08-20"
+    },
+    {
+      "id": "REQ-2026-0107",
+      "employeeId": "EMP-06",
+      "title": "Content shoot travel - Nashik",
+      "category": "TRAVEL",
+      "amount": 9300,
+      "currency": "INR",
+      "submittedOn": "2026-08-21",
+      "justification": "Travel for the plant-floor photography shoot feeding the new product microsite.",
+      "receipts": [
+        {
+          "id": "RCP-REQ-2026-0107-1",
+          "fileName": "cab-nashik-return.pdf",
+          "sizeKb": 175,
+          "uploadedOn": "2026-08-21T02:30:00.000Z"
+        }
+      ],
+      "status": "HR_INFO_REQUESTED",
+      "currentStage": "HR",
+      "timeline": [
+        {
+          "id": "EVT-REQ-2026-0107-0",
+          "actor": "Priya Raghavan",
+          "role": "EMPLOYEE",
+          "action": "Submitted the request",
+          "comment": "Travel for the plant-floor photography shoot feeding the new product microsite.",
+          "at": "2026-08-21T03:30:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0107-1",
+          "actor": "Tanvi Malhotra",
+          "role": "HR",
+          "action": "More information requested by HR",
+          "comment": "Shoot was rescheduled - confirm the revised dates before this goes to Accounts.",
+          "at": "2026-08-22T04:37:00.000Z"
+        }
+      ],
+      "slaDueOn": "2026-08-26"
+    },
+    {
+      "id": "REQ-2026-0108",
+      "employeeId": "EMP-02",
+      "title": "Weekend client dinner - Mumbai",
+      "category": "MEALS",
+      "amount": 8900,
+      "currency": "INR",
+      "submittedOn": "2026-08-09",
+      "justification": "Dinner with the Motherson Sumi account team following the Saturday review.",
+      "receipts": [
+        {
+          "id": "RCP-REQ-2026-0108-1",
+          "fileName": "bombay-canteen-bill.jpg",
+          "sizeKb": 620,
+          "uploadedOn": "2026-08-09T02:30:00.000Z"
+        }
+      ],
+      "status": "HR_REJECTED",
+      "currentStage": "HR",
+      "timeline": [
+        {
+          "id": "EVT-REQ-2026-0108-0",
+          "actor": "Rohan Deshmukh",
+          "role": "EMPLOYEE",
+          "action": "Submitted the request",
+          "comment": "Dinner with the Motherson Sumi account team following the Saturday review.",
+          "at": "2026-08-09T03:30:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0108-1",
+          "actor": "Meera Nair",
+          "role": "HR",
+          "action": "Rejected by HR",
+          "comment": "Entertainment on a non-working day needs prior written approval from the regional head. Please re-raise with that approval attached.",
+          "at": "2026-08-10T04:37:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "REQ-2026-0109",
+      "employeeId": "EMP-12",
+      "title": "Personal vehicle service claim",
+      "category": "OTHER",
+      "amount": 6400,
+      "currency": "INR",
+      "submittedOn": "2026-07-30",
+      "justification": "Servicing for the vehicle used on field visits through July.",
+      "receipts": [
+        {
+          "id": "RCP-REQ-2026-0109-1",
+          "fileName": "service-invoice-8841.pdf",
+          "sizeKb": 340,
+          "uploadedOn": "2026-07-30T02:30:00.000Z"
+        }
+      ],
+      "status": "HR_REJECTED",
+      "currentStage": "HR",
+      "timeline": [
+        {
+          "id": "EVT-REQ-2026-0109-0",
+          "actor": "Tanvi Malhotra",
+          "role": "EMPLOYEE",
+          "action": "Submitted the request",
+          "comment": "Servicing for the vehicle used on field visits through July.",
+          "at": "2026-07-30T03:30:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0109-1",
+          "actor": "Tanvi Malhotra",
+          "role": "HR",
+          "action": "Rejected by HR",
+          "comment": "Vehicle maintenance is not reimbursable under the travel policy - only fuel for approved field visits.",
+          "at": "2026-07-31T04:37:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "REQ-2026-0110",
+      "employeeId": "EMP-01",
+      "title": "Team offsite lodging - Lonavala",
+      "category": "LODGING",
+      "amount": 34200,
+      "currency": "INR",
+      "submittedOn": "2026-08-20",
+      "travelDates": {
+        "from": "2026-08-23",
+        "to": "2026-08-25"
+      },
+      "justification": "Two-night engineering offsite for the platform re-architecture planning. Twelve attendees, shared rooms.",
+      "receipts": [
+        {
+          "id": "RCP-REQ-2026-0110-1",
+          "fileName": "della-resorts-folio.pdf",
+          "sizeKb": 1240,
+          "uploadedOn": "2026-08-20T02:30:00.000Z"
+        },
+        {
+          "id": "RCP-REQ-2026-0110-2",
+          "fileName": "gst-invoice-lonavala.pdf",
+          "sizeKb": 410,
+          "uploadedOn": "2026-08-20T03:30:00.000Z"
+        }
+      ],
+      "status": "HR_APPROVED",
+      "currentStage": "ACCOUNTS",
+      "timeline": [
+        {
+          "id": "EVT-REQ-2026-0110-0",
+          "actor": "Ananya Iyer",
+          "role": "EMPLOYEE",
+          "action": "Submitted the request",
+          "comment": "Two-night engineering offsite for the platform re-architecture planning. Twelve attendees,",
+          "at": "2026-08-20T03:30:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0110-1",
+          "actor": "Meera Nair",
+          "role": "HR",
+          "action": "Approved by HR",
+          "comment": "Offsite was on the approved calendar. Headcount and duration check out.",
+          "at": "2026-08-21T04:37:00.000Z"
+        }
+      ],
+      "slaDueOn": "2026-08-27"
+    },
+    {
+      "id": "REQ-2026-0111",
+      "employeeId": "EMP-07",
+      "title": "Emergency line repair - Hyderabad",
+      "category": "TRAVEL",
+      "amount": 22400,
+      "currency": "INR",
+      "submittedOn": "2026-08-16",
+      "travelDates": {
+        "from": "2026-08-17",
+        "to": "2026-08-18"
+      },
+      "justification": "Same-day flight to Hyderabad to restore a failed insulation line at the customer site.",
+      "receipts": [
+        {
+          "id": "RCP-REQ-2026-0111-1",
+          "fileName": "indigo-6E511-eticket.pdf",
+          "sizeKb": 455,
+          "uploadedOn": "2026-08-16T02:30:00.000Z"
+        }
+      ],
+      "status": "HR_APPROVED",
+      "currentStage": "ACCOUNTS",
+      "timeline": [
+        {
+          "id": "EVT-REQ-2026-0111-0",
+          "actor": "Arjun Bhatt",
+          "role": "EMPLOYEE",
+          "action": "Submitted the request",
+          "comment": "Same-day flight to Hyderabad to restore a failed insulation line at the customer site.",
+          "at": "2026-08-16T03:30:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0111-1",
+          "actor": "Tanvi Malhotra",
+          "role": "HR",
+          "action": "Approved by HR",
+          "comment": "Emergency travel, approved retrospectively per the escalation policy.",
+          "at": "2026-08-17T04:37:00.000Z"
+        }
+      ],
+      "slaDueOn": "2026-08-22"
+    },
+    {
+      "id": "REQ-2026-0112",
+      "employeeId": "EMP-11",
+      "title": "Statutory audit support - Chennai",
+      "category": "TRAVEL",
+      "amount": 15600,
+      "currency": "INR",
+      "submittedOn": "2026-08-11",
+      "travelDates": {
+        "from": "2026-08-13",
+        "to": "2026-08-15"
+      },
+      "justification": "On-site support for the statutory auditors reviewing the Chennai depot inventory.",
+      "receipts": [
+        {
+          "id": "RCP-REQ-2026-0112-1",
+          "fileName": "train-chennai-2ac.pdf",
+          "sizeKb": 198,
+          "uploadedOn": "2026-08-11T02:30:00.000Z"
+        }
+      ],
+      "status": "HR_APPROVED",
+      "currentStage": "ACCOUNTS",
+      "timeline": [
+        {
+          "id": "EVT-REQ-2026-0112-0",
+          "actor": "Nikhil Joshi",
+          "role": "EMPLOYEE",
+          "action": "Submitted the request",
+          "comment": "On-site support for the statutory auditors reviewing the Chennai depot inventory.",
+          "at": "2026-08-11T03:30:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0112-1",
+          "actor": "Meera Nair",
+          "role": "HR",
+          "action": "Approved by HR",
+          "comment": "Audit attendance confirmed with Finance.",
+          "at": "2026-08-12T04:37:00.000Z"
+        }
+      ],
+      "slaDueOn": "2026-08-18"
+    },
+    {
+      "id": "REQ-2026-0113",
+      "employeeId": "EMP-03",
+      "title": "Raw material sourcing trip - Delhi",
+      "category": "TRAVEL",
+      "amount": 27300,
+      "currency": "INR",
+      "submittedOn": "2026-08-12",
+      "travelDates": {
+        "from": "2026-08-18",
+        "to": "2026-08-20"
+      },
+      "justification": "Three-day sourcing visit to evaluate two alternate XLPE compound suppliers.",
+      "receipts": [
+        {
+          "id": "RCP-REQ-2026-0113-1",
+          "fileName": "airasia-I5744-eticket.pdf",
+          "sizeKb": 388,
+          "uploadedOn": "2026-08-12T02:30:00.000Z"
+        },
+        {
+          "id": "RCP-REQ-2026-0113-2",
+          "fileName": "delhi-hotel-folio.pdf",
+          "sizeKb": 720,
+          "uploadedOn": "2026-08-12T03:30:00.000Z"
+        }
+      ],
+      "status": "ACC_INFO_REQUESTED",
+      "currentStage": "ACCOUNTS",
+      "timeline": [
+        {
+          "id": "EVT-REQ-2026-0113-0",
+          "actor": "Farhan Qureshi",
+          "role": "EMPLOYEE",
+          "action": "Submitted the request",
+          "comment": "Three-day sourcing visit to evaluate two alternate XLPE compound suppliers.",
+          "at": "2026-08-12T03:30:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0113-1",
+          "actor": "Tanvi Malhotra",
+          "role": "HR",
+          "action": "Approved by HR",
+          "comment": "Sourcing mandate confirmed with Operations.",
+          "at": "2026-08-13T04:37:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0113-2",
+          "actor": "Nikhil Joshi",
+          "role": "ACCOUNTS",
+          "action": "More information requested by Accounts",
+          "comment": "The hotel folio total does not match the claimed amount. Please share the itemised bill.",
+          "at": "2026-08-14T05:44:00.000Z"
+        }
+      ],
+      "slaDueOn": "2026-08-26"
+    },
+    {
+      "id": "REQ-2026-0114",
+      "employeeId": "EMP-08",
+      "title": "Campaign launch dinner - Mumbai",
+      "category": "MEALS",
+      "amount": 11400,
+      "currency": "INR",
+      "submittedOn": "2026-08-15",
+      "justification": "Launch dinner for the Q3 brand campaign with the agency and three channel partners.",
+      "receipts": [
+        {
+          "id": "RCP-REQ-2026-0114-1",
+          "fileName": "trident-banquet-invoice.pdf",
+          "sizeKb": 540,
+          "uploadedOn": "2026-08-15T02:30:00.000Z"
+        }
+      ],
+      "status": "ACC_INFO_REQUESTED",
+      "currentStage": "ACCOUNTS",
+      "timeline": [
+        {
+          "id": "EVT-REQ-2026-0114-0",
+          "actor": "Sneha Kulkarni",
+          "role": "EMPLOYEE",
+          "action": "Submitted the request",
+          "comment": "Launch dinner for the Q3 brand campaign with the agency and three channel partners.",
+          "at": "2026-08-15T03:30:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0114-1",
+          "actor": "Meera Nair",
+          "role": "HR",
+          "action": "Approved by HR",
+          "comment": "Business purpose is clear.",
+          "at": "2026-08-16T04:37:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0114-2",
+          "actor": "Vikram Sethi",
+          "role": "ACCOUNTS",
+          "action": "More information requested by Accounts",
+          "comment": "Attendee list needed - the per-head spend is above the meals cap without it.",
+          "at": "2026-08-17T05:44:00.000Z"
+        }
+      ],
+      "slaDueOn": "2026-08-24"
+    },
+    {
+      "id": "REQ-2026-0115",
+      "employeeId": "EMP-06",
+      "title": "Co-working day passes - Pune",
+      "category": "OTHER",
+      "amount": 13200,
+      "currency": "INR",
+      "submittedOn": "2026-08-06",
+      "justification": "Twelve co-working day passes used while the Pune office fit-out was in progress.",
+      "receipts": [
+        {
+          "id": "RCP-REQ-2026-0115-1",
+          "fileName": "wework-invoice-33127.pdf",
+          "sizeKb": 265,
+          "uploadedOn": "2026-08-06T02:30:00.000Z"
+        }
+      ],
+      "status": "ACC_REJECTED",
+      "currentStage": "ACCOUNTS",
+      "timeline": [
+        {
+          "id": "EVT-REQ-2026-0115-0",
+          "actor": "Priya Raghavan",
+          "role": "EMPLOYEE",
+          "action": "Submitted the request",
+          "comment": "Twelve co-working day passes used while the Pune office fit-out was in progress.",
+          "at": "2026-08-06T03:30:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0115-1",
+          "actor": "Tanvi Malhotra",
+          "role": "HR",
+          "action": "Approved by HR",
+          "comment": "Office was genuinely unavailable during the fit-out.",
+          "at": "2026-08-07T04:37:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0115-2",
+          "actor": "Nikhil Joshi",
+          "role": "ACCOUNTS",
+          "action": "Rejected by Accounts",
+          "comment": "Facilities already carried this cost centrally for the same period. Duplicate of the facilities invoice.",
+          "at": "2026-08-08T05:44:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "REQ-2026-0116",
+      "employeeId": "EMP-12",
+      "title": "Regional roadshow - Nagpur",
+      "category": "LODGING",
+      "amount": 19800,
+      "currency": "INR",
+      "submittedOn": "2026-07-28",
+      "travelDates": {
+        "from": "2026-08-02",
+        "to": "2026-08-05"
+      },
+      "justification": "Three nights covering the central-region dealer roadshow.",
+      "receipts": [
+        {
+          "id": "RCP-REQ-2026-0116-1",
+          "fileName": "radisson-nagpur-folio.pdf",
+          "sizeKb": 810,
+          "uploadedOn": "2026-07-28T02:30:00.000Z"
+        }
+      ],
+      "status": "ACC_REJECTED",
+      "currentStage": "ACCOUNTS",
+      "timeline": [
+        {
+          "id": "EVT-REQ-2026-0116-0",
+          "actor": "Tanvi Malhotra",
+          "role": "EMPLOYEE",
+          "action": "Submitted the request",
+          "comment": "Three nights covering the central-region dealer roadshow.",
+          "at": "2026-07-28T03:30:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0116-1",
+          "actor": "Meera Nair",
+          "role": "HR",
+          "action": "Approved by HR",
+          "comment": "Roadshow attendance approved.",
+          "at": "2026-07-29T04:37:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0116-2",
+          "actor": "Vikram Sethi",
+          "role": "ACCOUNTS",
+          "action": "Rejected by Accounts",
+          "comment": "Nightly rate exceeds the lodging cap by a wide margin and no exception was pre-approved.",
+          "at": "2026-07-30T05:44:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "REQ-2026-0117",
+      "employeeId": "EMP-02",
+      "title": "Key account review - Bengaluru",
+      "category": "TRAVEL",
+      "amount": 16700,
+      "currency": "INR",
+      "submittedOn": "2026-08-08",
+      "travelDates": {
+        "from": "2026-08-12",
+        "to": "2026-08-13"
+      },
+      "justification": "Quarterly business review with the GE account team covering the FY27 volume commitment.",
+      "receipts": [
+        {
+          "id": "RCP-REQ-2026-0117-1",
+          "fileName": "indigo-6E318-eticket.pdf",
+          "sizeKb": 402,
+          "uploadedOn": "2026-08-08T02:30:00.000Z"
+        },
+        {
+          "id": "RCP-REQ-2026-0117-2",
+          "fileName": "uber-blr-transfers.pdf",
+          "sizeKb": 120,
+          "uploadedOn": "2026-08-08T03:30:00.000Z"
+        }
+      ],
+      "status": "ACC_APPROVED",
+      "currentStage": "PAYMENT",
+      "timeline": [
+        {
+          "id": "EVT-REQ-2026-0117-0",
+          "actor": "Rohan Deshmukh",
+          "role": "EMPLOYEE",
+          "action": "Submitted the request",
+          "comment": "Quarterly business review with the GE account team covering the FY27 volume commitment.",
+          "at": "2026-08-08T03:30:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0117-1",
+          "actor": "Tanvi Malhotra",
+          "role": "HR",
+          "action": "Approved by HR",
+          "comment": "QBR is on the account calendar.",
+          "at": "2026-08-09T04:37:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0117-2",
+          "actor": "Nikhil Joshi",
+          "role": "ACCOUNTS",
+          "action": "Approved by Accounts",
+          "comment": "Within the travel cap and the Sales department headroom. Cleared for payment.",
+          "at": "2026-08-10T05:44:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "REQ-2026-0118",
+      "employeeId": "EMP-09",
+      "title": "Calibration lab visit - Pune",
+      "category": "FUEL",
+      "amount": 5100,
+      "currency": "INR",
+      "submittedOn": "2026-08-19",
+      "justification": "Fuel for four round trips to the NABL calibration lab during the instrument re-certification.",
+      "receipts": [
+        {
+          "id": "RCP-REQ-2026-0118-1",
+          "fileName": "hpcl-fuel-14aug.jpg",
+          "sizeKb": 356,
+          "uploadedOn": "2026-08-19T02:30:00.000Z"
+        },
+        {
+          "id": "RCP-REQ-2026-0118-2",
+          "fileName": "bpcl-fuel-18aug.jpg",
+          "sizeKb": 298,
+          "uploadedOn": "2026-08-19T03:30:00.000Z"
+        }
+      ],
+      "status": "ACC_APPROVED",
+      "currentStage": "PAYMENT",
+      "timeline": [
+        {
+          "id": "EVT-REQ-2026-0118-0",
+          "actor": "Imran Shaikh",
+          "role": "EMPLOYEE",
+          "action": "Submitted the request",
+          "comment": "Fuel for four round trips to the NABL calibration lab during the instrument re-certificati",
+          "at": "2026-08-19T03:30:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0118-1",
+          "actor": "Meera Nair",
+          "role": "HR",
+          "action": "Approved by HR",
+          "comment": "Re-certification schedule confirmed.",
+          "at": "2026-08-20T04:37:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0118-2",
+          "actor": "Vikram Sethi",
+          "role": "ACCOUNTS",
+          "action": "Approved by Accounts",
+          "comment": "Receipt totals match REQ-2026-0122 - flagged for a duplicate check before disbursement.",
+          "at": "2026-08-21T05:44:00.000Z"
+        }
+      ],
+      "duplicateOf": "REQ-2026-0122"
+    },
+    {
+      "id": "REQ-2026-0119",
+      "employeeId": "EMP-01",
+      "title": "Standards committee meeting - Delhi",
+      "category": "TRAVEL",
+      "amount": 21900,
+      "currency": "INR",
+      "submittedOn": "2026-08-04",
+      "travelDates": {
+        "from": "2026-08-07",
+        "to": "2026-08-08"
+      },
+      "justification": "Representing the company on the BIS insulation standards revision committee.",
+      "receipts": [
+        {
+          "id": "RCP-REQ-2026-0119-1",
+          "fileName": "airindia-AI865-eticket.pdf",
+          "sizeKb": 470,
+          "uploadedOn": "2026-08-04T02:30:00.000Z"
+        }
+      ],
+      "status": "PAYMENT_QUEUED",
+      "currentStage": "PAYMENT",
+      "timeline": [
+        {
+          "id": "EVT-REQ-2026-0119-0",
+          "actor": "Ananya Iyer",
+          "role": "EMPLOYEE",
+          "action": "Submitted the request",
+          "comment": "Representing the company on the BIS insulation standards revision committee.",
+          "at": "2026-08-04T03:30:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0119-1",
+          "actor": "Tanvi Malhotra",
+          "role": "HR",
+          "action": "Approved by HR",
+          "comment": "Committee representation is a standing commitment.",
+          "at": "2026-08-05T04:37:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0119-2",
+          "actor": "Nikhil Joshi",
+          "role": "ACCOUNTS",
+          "action": "Approved by Accounts",
+          "comment": "Within cap. Queued in the 12 Aug disbursement batch.",
+          "at": "2026-08-06T05:44:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0119-3",
+          "actor": "Kavya Reddy",
+          "role": "PAYMENTS",
+          "action": "Queued for payment",
+          "at": "2026-08-07T06:51:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "REQ-2026-0120",
+      "employeeId": "EMP-05",
+      "title": "Bank reconciliation visit - Mumbai",
+      "category": "FUEL",
+      "amount": 3400,
+      "currency": "INR",
+      "submittedOn": "2026-08-10",
+      "justification": "Local travel across three bank branches to close the July reconciliation.",
+      "receipts": [
+        {
+          "id": "RCP-REQ-2026-0120-1",
+          "fileName": "fuel-mumbai-10aug.jpg",
+          "sizeKb": 212,
+          "uploadedOn": "2026-08-10T02:30:00.000Z"
+        }
+      ],
+      "status": "PAYMENT_QUEUED",
+      "currentStage": "PAYMENT",
+      "timeline": [
+        {
+          "id": "EVT-REQ-2026-0120-0",
+          "actor": "Vikram Sethi",
+          "role": "EMPLOYEE",
+          "action": "Submitted the request",
+          "comment": "Local travel across three bank branches to close the July reconciliation.",
+          "at": "2026-08-10T03:30:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0120-1",
+          "actor": "Meera Nair",
+          "role": "HR",
+          "action": "Approved by HR",
+          "comment": "Routine finance activity.",
+          "at": "2026-08-11T04:37:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0120-2",
+          "actor": "Vikram Sethi",
+          "role": "ACCOUNTS",
+          "action": "Approved by Accounts",
+          "comment": "Small-value claim, within the fuel cap.",
+          "at": "2026-08-12T05:44:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0120-3",
+          "actor": "Kavya Reddy",
+          "role": "PAYMENTS",
+          "action": "Queued for payment",
+          "at": "2026-08-13T06:51:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "REQ-2026-0121",
+      "employeeId": "EMP-02",
+      "title": "Partner onboarding - Chennai",
+      "category": "TRAVEL",
+      "amount": 14300,
+      "currency": "INR",
+      "submittedOn": "2026-07-24",
+      "travelDates": {
+        "from": "2026-07-29",
+        "to": "2026-07-30"
+      },
+      "justification": "Onboarding visit for the new southern-region channel partner, including the contract signing.",
+      "receipts": [
+        {
+          "id": "RCP-REQ-2026-0121-1",
+          "fileName": "train-chennai-3ac.pdf",
+          "sizeKb": 186,
+          "uploadedOn": "2026-07-24T02:30:00.000Z"
+        }
+      ],
+      "status": "PAID",
+      "currentStage": "DONE",
+      "timeline": [
+        {
+          "id": "EVT-REQ-2026-0121-0",
+          "actor": "Rohan Deshmukh",
+          "role": "EMPLOYEE",
+          "action": "Submitted the request",
+          "comment": "Onboarding visit for the new southern-region channel partner, including the contract signi",
+          "at": "2026-07-24T03:30:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0121-1",
+          "actor": "Tanvi Malhotra",
+          "role": "HR",
+          "action": "Approved by HR",
+          "comment": "Partner onboarding approved by the regional head.",
+          "at": "2026-07-25T04:37:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0121-2",
+          "actor": "Nikhil Joshi",
+          "role": "ACCOUNTS",
+          "action": "Approved by Accounts",
+          "comment": "Cleared. Within travel cap and department headroom.",
+          "at": "2026-07-26T05:44:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0121-3",
+          "actor": "Kavya Reddy",
+          "role": "PAYMENTS",
+          "action": "Queued for payment",
+          "at": "2026-07-27T06:51:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0121-4",
+          "actor": "Kavya Reddy",
+          "role": "PAYMENTS",
+          "action": "Payment disbursed",
+          "comment": "Disbursed via NEFT to the registered account.",
+          "at": "2026-07-28T07:58:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "REQ-2026-0122",
+      "employeeId": "EMP-09",
+      "title": "Instrument re-certification - Pune",
+      "category": "FUEL",
+      "amount": 5100,
+      "currency": "INR",
+      "submittedOn": "2026-07-21",
+      "justification": "Fuel for the NABL calibration lab round trips during the July re-certification cycle.",
+      "receipts": [
+        {
+          "id": "RCP-REQ-2026-0122-1",
+          "fileName": "hpcl-fuel-21jul.jpg",
+          "sizeKb": 344,
+          "uploadedOn": "2026-07-21T02:30:00.000Z"
+        }
+      ],
+      "status": "PAID",
+      "currentStage": "DONE",
+      "timeline": [
+        {
+          "id": "EVT-REQ-2026-0122-0",
+          "actor": "Imran Shaikh",
+          "role": "EMPLOYEE",
+          "action": "Submitted the request",
+          "comment": "Fuel for the NABL calibration lab round trips during the July re-certification cycle.",
+          "at": "2026-07-21T03:30:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0122-1",
+          "actor": "Meera Nair",
+          "role": "HR",
+          "action": "Approved by HR",
+          "comment": "Re-certification is mandatory annually.",
+          "at": "2026-07-22T04:37:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0122-2",
+          "actor": "Vikram Sethi",
+          "role": "ACCOUNTS",
+          "action": "Approved by Accounts",
+          "comment": "Approved against the July fuel budget.",
+          "at": "2026-07-23T05:44:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0122-3",
+          "actor": "Kavya Reddy",
+          "role": "PAYMENTS",
+          "action": "Queued for payment",
+          "at": "2026-07-24T06:51:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0122-4",
+          "actor": "Kavya Reddy",
+          "role": "PAYMENTS",
+          "action": "Payment disbursed",
+          "comment": "Disbursed via NEFT to the registered account.",
+          "at": "2026-07-25T07:58:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "REQ-2026-0123",
+      "employeeId": "EMP-02",
+      "title": "Customer escalation visit - Pune",
+      "category": "TRAVEL",
+      "amount": 11200,
+      "currency": "INR",
+      "submittedOn": "2026-07-14",
+      "travelDates": {
+        "from": "2026-07-16",
+        "to": "2026-07-17"
+      },
+      "justification": "Overnight visit to resolve the Alstom delivery escalation and agree a revised schedule.",
+      "receipts": [
+        {
+          "id": "RCP-REQ-2026-0123-1",
+          "fileName": "cab-pune-return.pdf",
+          "sizeKb": 165,
+          "uploadedOn": "2026-07-14T02:30:00.000Z"
+        },
+        {
+          "id": "RCP-REQ-2026-0123-2",
+          "fileName": "hotel-pune-folio.pdf",
+          "sizeKb": 640,
+          "uploadedOn": "2026-07-14T03:30:00.000Z"
+        }
+      ],
+      "status": "CREDITED",
+      "currentStage": "DONE",
+      "timeline": [
+        {
+          "id": "EVT-REQ-2026-0123-0",
+          "actor": "Rohan Deshmukh",
+          "role": "EMPLOYEE",
+          "action": "Submitted the request",
+          "comment": "Overnight visit to resolve the Alstom delivery escalation and agree a revised schedule.",
+          "at": "2026-07-14T03:30:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0123-1",
+          "actor": "Tanvi Malhotra",
+          "role": "HR",
+          "action": "Approved by HR",
+          "comment": "Escalation visit was necessary and time-critical.",
+          "at": "2026-07-15T04:37:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0123-2",
+          "actor": "Nikhil Joshi",
+          "role": "ACCOUNTS",
+          "action": "Approved by Accounts",
+          "comment": "Within all caps. Approved for disbursement.",
+          "at": "2026-07-16T05:44:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0123-3",
+          "actor": "Kavya Reddy",
+          "role": "PAYMENTS",
+          "action": "Queued for payment",
+          "at": "2026-07-17T06:51:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0123-4",
+          "actor": "Kavya Reddy",
+          "role": "PAYMENTS",
+          "action": "Payment disbursed",
+          "comment": "Disbursed via NEFT to the registered account.",
+          "at": "2026-07-18T07:58:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0123-5",
+          "actor": "Kavya Reddy",
+          "role": "PAYMENTS",
+          "action": "Credited to allowance",
+          "comment": "Monthly allowance balance restored.",
+          "at": "2026-07-19T09:05:00.000Z"
+        }
+      ]
+    },
+    {
+      "id": "REQ-2026-0124",
+      "employeeId": "EMP-04",
+      "title": "Campus hiring drive - Pune",
+      "category": "OTHER",
+      "amount": 17800,
+      "currency": "INR",
+      "submittedOn": "2026-07-08",
+      "travelDates": {
+        "from": "2026-07-11",
+        "to": "2026-07-12"
+      },
+      "justification": "Two-day campus hiring drive at COEP covering venue charges and candidate refreshments.",
+      "receipts": [
+        {
+          "id": "RCP-REQ-2026-0124-1",
+          "fileName": "coep-venue-invoice.pdf",
+          "sizeKb": 430,
+          "uploadedOn": "2026-07-08T02:30:00.000Z"
+        },
+        {
+          "id": "RCP-REQ-2026-0124-2",
+          "fileName": "catering-bill-11jul.jpg",
+          "sizeKb": 275,
+          "uploadedOn": "2026-07-08T03:30:00.000Z"
+        }
+      ],
+      "status": "CREDITED",
+      "currentStage": "DONE",
+      "timeline": [
+        {
+          "id": "EVT-REQ-2026-0124-0",
+          "actor": "Meera Nair",
+          "role": "EMPLOYEE",
+          "action": "Submitted the request",
+          "comment": "Two-day campus hiring drive at COEP covering venue charges and candidate refreshments.",
+          "at": "2026-07-08T03:30:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0124-1",
+          "actor": "Meera Nair",
+          "role": "HR",
+          "action": "Approved by HR",
+          "comment": "Hiring drive was on the approved recruitment plan.",
+          "at": "2026-07-09T04:37:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0124-2",
+          "actor": "Vikram Sethi",
+          "role": "ACCOUNTS",
+          "action": "Approved by Accounts",
+          "comment": "Venue and catering within the events allocation.",
+          "at": "2026-07-10T05:44:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0124-3",
+          "actor": "Kavya Reddy",
+          "role": "PAYMENTS",
+          "action": "Queued for payment",
+          "at": "2026-07-11T06:51:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0124-4",
+          "actor": "Kavya Reddy",
+          "role": "PAYMENTS",
+          "action": "Payment disbursed",
+          "comment": "Disbursed via NEFT to the registered account.",
+          "at": "2026-07-12T07:58:00.000Z"
+        },
+        {
+          "id": "EVT-REQ-2026-0124-5",
+          "actor": "Kavya Reddy",
+          "role": "PAYMENTS",
+          "action": "Credited to allowance",
+          "comment": "Monthly allowance balance restored.",
+          "at": "2026-07-13T09:05:00.000Z"
+        }
+      ]
+    }
+  ],
+  "payouts": [
+    {
+      "id": "PAY-2026-0081",
+      "requestId": "REQ-2026-0117",
+      "employeeId": "EMP-02",
+      "amount": 16700,
+      "method": "NEFT",
+      "status": "QUEUED",
+      "initiatedOn": "2026-08-30"
+    },
+    {
+      "id": "PAY-2026-0082",
+      "requestId": "REQ-2026-0118",
+      "employeeId": "EMP-09",
+      "amount": 5100,
+      "method": "UPI",
+      "status": "QUEUED",
+      "initiatedOn": "2026-08-30"
+    },
+    {
+      "id": "PAY-2026-0083",
+      "requestId": "REQ-2026-0119",
+      "employeeId": "EMP-01",
+      "amount": 21900,
+      "method": "NEFT",
+      "status": "PROCESSING",
+      "initiatedOn": "2026-08-29"
+    },
+    {
+      "id": "PAY-2026-0084",
+      "requestId": "REQ-2026-0120",
+      "employeeId": "EMP-05",
+      "amount": 3400,
+      "method": "IMPS",
+      "status": "PROCESSING",
+      "initiatedOn": "2026-08-29"
+    },
+    {
+      "id": "PAY-2026-0085",
+      "requestId": "REQ-2026-0121",
+      "employeeId": "EMP-02",
+      "amount": 14300,
+      "method": "NEFT",
+      "status": "PAID",
+      "utr": "UTR2026080112345678",
+      "initiatedOn": "2026-08-01",
+      "settledOn": "2026-08-02"
+    },
+    {
+      "id": "PAY-2026-0086",
+      "requestId": "REQ-2026-0122",
+      "employeeId": "EMP-09",
+      "amount": 5100,
+      "method": "UPI",
+      "status": "PAID",
+      "utr": "UTR2026072998765432",
+      "initiatedOn": "2026-07-29",
+      "settledOn": "2026-07-29"
+    },
+    {
+      "id": "PAY-2026-0087",
+      "requestId": "REQ-2026-0123",
+      "employeeId": "EMP-02",
+      "amount": 11200,
+      "method": "NEFT",
+      "status": "PAID",
+      "utr": "UTR2026072244556677",
+      "initiatedOn": "2026-07-22",
+      "settledOn": "2026-07-23"
+    },
+    {
+      "id": "PAY-2026-0088",
+      "requestId": "REQ-2026-0124",
+      "employeeId": "EMP-04",
+      "amount": 17800,
+      "method": "IMPS",
+      "status": "FAILED",
+      "initiatedOn": "2026-07-16",
+      "failureReason": "Beneficiary IFSC mismatch - account frozen by bank"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "NTF-01",
+      "toRole": "HR",
+      "title": "New request awaiting HR review",
+      "body": "Ananya Iyer raised REQ-2026-0103 for a Bengaluru vendor audit. SLA expires today.",
+      "at": "2026-08-31T09:15:00+05:30",
+      "read": false,
+      "requestId": "REQ-2026-0103"
+    },
+    {
+      "id": "NTF-02",
+      "toRole": "ACCOUNTS",
+      "title": "Possible duplicate claim flagged",
+      "body": "REQ-2026-0118 has receipt totals matching REQ-2026-0122. Review before disbursement.",
+      "at": "2026-08-31T08:40:00+05:30",
+      "read": false,
+      "requestId": "REQ-2026-0118"
+    },
+    {
+      "id": "NTF-03",
+      "toRole": "EMPLOYEE",
+      "toEmployeeId": "EMP-02",
+      "title": "More information requested on REQ-2026-0106",
+      "body": "HR asked for the distributor meet agenda and confirmation of the second night.",
+      "at": "2026-08-31T07:55:00+05:30",
+      "read": false,
+      "requestId": "REQ-2026-0106"
+    },
+    {
+      "id": "NTF-04",
+      "toRole": "PAYMENTS",
+      "title": "Payout failed - action required",
+      "body": "PAY-2026-0088 failed with an IFSC mismatch. Retry once the bank record is corrected.",
+      "at": "2026-08-30T16:20:00+05:30",
+      "read": false,
+      "requestId": "REQ-2026-0124"
+    },
+    {
+      "id": "NTF-05",
+      "toRole": "ACCOUNTS",
+      "title": "Request overdue in the Accounts queue",
+      "body": "REQ-2026-0112 passed its SLA on 18 Aug and is still awaiting financial review.",
+      "at": "2026-08-29T11:05:00+05:30",
+      "read": true,
+      "requestId": "REQ-2026-0112"
+    },
+    {
+      "id": "NTF-06",
+      "toRole": "EMPLOYEE",
+      "toEmployeeId": "EMP-02",
+      "title": "REQ-2026-0117 approved by Accounts",
+      "body": "Your Bengaluru key account review was cleared and is queued for payment.",
+      "at": "2026-08-28T14:30:00+05:30",
+      "read": true,
+      "requestId": "REQ-2026-0117"
+    },
+    {
+      "id": "NTF-07",
+      "toRole": "HR",
+      "title": "Two requests rejected this week",
+      "body": "REQ-2026-0108 and REQ-2026-0109 were declined. Both employees have been notified.",
+      "at": "2026-08-27T10:10:00+05:30",
+      "read": true
+    },
+    {
+      "id": "NTF-08",
+      "toRole": "EMPLOYEE",
+      "toEmployeeId": "EMP-02",
+      "title": "REQ-2026-0123 credited to your allowance",
+      "body": "Rs 11,200 has been credited. Your remaining balance has been updated.",
+      "at": "2026-08-25T09:00:00+05:30",
+      "read": true,
+      "requestId": "REQ-2026-0123"
+    },
+    {
+      "id": "NTF-09",
+      "toRole": "PAYMENTS",
+      "title": "Three bank accounts pending verification",
+      "body": "Priya Raghavan, Imran Shaikh and Tanvi Malhotra have unverified account records.",
+      "at": "2026-08-24T15:45:00+05:30",
+      "read": true
+    },
+    {
+      "id": "NTF-10",
+      "toRole": "ADMIN",
+      "title": "Engineering is at 84% allowance utilisation",
+      "body": "The Engineering department has used most of its monthly allocation with a week to run.",
+      "at": "2026-08-23T12:00:00+05:30",
+      "read": true
+    }
+  ],
+  "monthlySpend": [
+    {
+      "month": "Mar",
+      "disbursed": 1180000,
+      "budget": 1400000
+    },
+    {
+      "month": "Apr",
+      "disbursed": 1320000,
+      "budget": 1400000
+    },
+    {
+      "month": "May",
+      "disbursed": 960000,
+      "budget": 1400000
+    },
+    {
+      "month": "Jun",
+      "disbursed": 1540000,
+      "budget": 1600000
+    },
+    {
+      "month": "Jul",
+      "disbursed": 1710000,
+      "budget": 1600000
+    },
+    {
+      "month": "Aug",
+      "disbursed": 1285000,
+      "budget": 1600000
+    }
+  ],
+  "departmentUtilisation": [
+    {
+      "department": "Engineering",
+      "allocated": 720000,
+      "used": 605000,
+      "pending": 42000,
+      "headcount": 3
+    },
+    {
+      "department": "Sales",
+      "allocated": 560000,
+      "used": 318000,
+      "pending": 74000,
+      "headcount": 3
+    },
+    {
+      "department": "Operations",
+      "allocated": 480000,
+      "used": 291000,
+      "pending": 38000,
+      "headcount": 2
+    },
+    {
+      "department": "Finance",
+      "allocated": 640000,
+      "used": 274000,
+      "pending": 31000,
+      "headcount": 4
+    },
+    {
+      "department": "Content",
+      "allocated": 240000,
+      "used": 118000,
+      "pending": 22000,
+      "headcount": 1
+    },
+    {
+      "department": "Marketing",
+      "allocated": 320000,
+      "used": 176000,
+      "pending": 29000,
+      "headcount": 1
+    }
+  ],
+  "policyCaps": [
+    {
+      "category": "TRAVEL",
+      "label": "Travel cap",
+      "cap": 25000,
+      "unit": "per trip"
+    },
+    {
+      "category": "LODGING",
+      "label": "Lodging cap",
+      "cap": 4000,
+      "unit": "per night"
+    },
+    {
+      "category": "MEALS",
+      "label": "Meals cap",
+      "cap": 1200,
+      "unit": "per day"
+    },
+    {
+      "category": "FUEL",
+      "label": "Fuel cap",
+      "cap": 8000,
+      "unit": "per month"
+    },
+    {
+      "category": "OTHER",
+      "label": "General claim cap",
+      "cap": 10000,
+      "unit": "per claim"
+    }
+  ]
+}

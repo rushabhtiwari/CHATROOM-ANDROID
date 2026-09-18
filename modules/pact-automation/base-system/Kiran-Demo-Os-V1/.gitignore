@@ -1,0 +1,33 @@
+# Superseded standalone apps. Kept on disk for reference; each has its own
+# repository and its own history.
+#   frontend/                 https://github.com/Creaitify/Kiran-Payment
+#   chatroom/CHATROOM-FINAL/  https://github.com/Creaitify/CHATROOM-FINAL
+frontend/
+chatroom/
+
+# Dependencies and build output
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Secrets and local overrides
+.env
+.env.*
+!.env.example
+*.local
+
+# Editor and OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
+
+# Plane UI reference screenshots — copyrighted build reference, never committed
+docs/plane-reference/

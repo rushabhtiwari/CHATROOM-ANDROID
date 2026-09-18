@@ -1,0 +1,58 @@
+# One port for the whole of KCMS. The web and admin apps are static bundles served
+# from disk; everything else is a process on the container's loopback.
+{
+	auto_https off
+	admin off
+	servers {
+		max_header_size 25MB
+	}
+}
+
+{$SITE_ADDRESS} {
+	encode zstd gzip
+
+	request_body {
+		max_size {$FILE_SIZE_LIMIT}
+	}
+
+	redir /spaces /spaces/ permanent
+	redir /god-mode /god-mode/ permanent
+
+	handle /spaces/* {
+		reverse_proxy 127.0.0.1:3002
+	}
+	handle /live/* {
+		reverse_proxy 127.0.0.1:3005
+	}
+	handle /api/* {
+		reverse_proxy 127.0.0.1:3004
+	}
+	handle /auth/* {
+		reverse_proxy 127.0.0.1:3004
+	}
+	handle /static/* {
+		reverse_proxy 127.0.0.1:3004
+	}
+
+	# Uploaded files. The API signs upload URLs for this same host, so MinIO has to
+	# see the Host header the browser sent.
+	handle /{$BUCKET_NAME}* {
+		reverse_proxy 127.0.0.1:9000
+	}
+
+	handle_path /god-mode/* {
+		root * /app/admin
+		@hashed path /assets/*
+		header @hashed Cache-Control "public, max-age=31536000, immutable"
+		try_files {path} /index.html
+		file_server
+	}
+
+	handle {
+		root * /app/web
+		@hashed path /assets/*
+		header @hashed Cache-Control "public, max-age=31536000, immutable"
+		try_files {path} /index.html
+		file_server
+	}
+}

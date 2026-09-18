@@ -1,0 +1,18 @@
+﻿record_id,customer_name,phone,email,city,credit_limit,active,notes,saved_at
+CUST-0001,"Deshmukh Hardware","9123456780","","Pune","20000",False,"Inactive since 2025",2026-09-03T10:27:12
+CUST-0002,"Deshmukh Hardware","9123456780","","Pune","20000",False,"Inactive since 2025",2026-09-03T10:27:22
+CUST-0003,"Deshmukh Hardware","9123456780","","Pune","20000",False,"Inactive since 2025",2026-09-03T10:27:26
+CUST-0004,"Deshmukh Hardware","9123456780","","Pune","20000",False,"Inactive since 2025",2026-09-03T10:27:27
+CUST-0005,"Deshmukh Hardware","9123456780","","Pune","20000",False,"Inactive since 2025",2026-09-03T10:27:30
+CUST-0006,"Al Noor Electricals","+971501234567","info@alnoor.ae","Dubai","80000",True,"Export customer - USD invoices",2026-09-03T10:27:46
+CUST-0007,"Al Noor Electricals","+971501234567","info@alnoor.ae","Dubai","80000",True,"Export customer - USD invoices",2026-09-03T10:27:51
+CUST-0008,"Al Noor Electricals","+971501234567","info@alnoor.ae","Dubai","80000",True,"Export customer - USD invoices",2026-09-03T10:27:58
+CUST-0009,"Al Noor Electricals","+971501234567","info@alnoor.ae","Dubai","80000",True,"Export customer - USD invoices",2026-09-03T10:29:47
+CUST-0010,"Kiran Cables Pvt Ltd","9876543210","billing@kirancables.com","Pune","125000",True,"Priority account",2026-09-03T10:29:59
+CUST-0011,"Kiran Cables Pvt Ltd","9876543210","billing@kirancables.com","Pune","125000",True,"Priority account",2026-09-03T11:01:50
+CUST-0012,"Sharma Traders","9820011223","accounts@sharmatraders.in","Mumbai","50000",True,"Net 30 terms",2026-09-04T11:29:19
+CUST-0013,"Kiran Cables Pvt Ltd","9876543210","billing@kirancables.com","Pune","125000",True,"Priority account",2026-09-04T11:29:59
+CUST-0014,"Al Noor Electricals","+971501234567","info@alnoor.ae","Dubai","80000",True,"Export customer - USD invoices",2026-09-04T11:30:38
+CUST-0015,"Deshmukh Hardware","9123456780","","Pune","20000",False,"Inactive since 2025",2026-09-04T11:31:14
+CUST-0016,"Sharma Traders","9820011223","accounts@sharmatraders.in","Mumbai","50000",True,"Net 30 terms",2026-09-04T11:32:55
+CUST-0017,"Al Noor Electricals","+971501234567","info@alnoor.ae","Dubai","80000",True,"Export customer - USD invoices",2026-09-04T11:36:12

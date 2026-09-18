@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{"colors":{"on-secondary-fixed":"#001d31","on-secondary-container":"#00476e","surface-container-low":"#eff4ff","surface-container-highest":"#d3e4fe","background":"#f8f9ff","surface":"#f8f9ff","secondary-container":"#5bb8fe","surface-container-lowest":"#ffffff","on-error":"#ffffff","tertiary-container":"#005136","tertiary-fixed":"#6ffbbe","tertiary-fixed-dim":"#4edea3","on-surface-variant":"#424750","inverse-primary":"#a3c9ff","primary-container":"#06477f","primary":"#00305b","surface-variant":"#d3e4fe","on-primary-fixed":"#001c39","tertiary":"#003824","on-background":"#0b1c30","surface-dim":"#cbdbf5","surface-bright":"#f8f9ff","outline":"#727781","on-secondary":"#ffffff","inverse-surface":"#213145","error-container":"#ffdad6","error":"#ba1a1a","surface-container":"#e5eeff","secondary":"#006398","on-tertiary-container":"#35cc92","secondary-fixed-dim":"#93ccff","on-primary":"#ffffff","primary-fixed-dim":"#a3c9ff","on-tertiary-fixed-variant":"#005236","on-error-container":"#93000a","secondary-fixed":"#cce5ff","surface-container-high":"#dce9ff","primary-fixed":"#d3e3ff","on-primary-container":"#88b6f5","on-tertiary-fixed":"#002113","on-surface":"#0b1c30","outline-variant":"#c2c6d1","on-primary-fixed-variant":"#084880","surface-tint":"#2d6099","on-tertiary":"#ffffff","on-secondary-fixed-variant":"#004b73","inverse-on-surface":"#eaf1ff"},"borderRadius":{"DEFAULT":"0.125rem","lg":"0.25rem","xl":"0.5rem","full":"0.75rem"},"spacing":{"row-height":"36px","pad-lg":"16px","pad-md":"12px","inspector-width":"320px","pad-sm":"8px","sidebar-width":"240px","gap-inline":"6px","pad-xs":"4px","row-height-compact":"28px"},"fontFamily":{"header-section":["Inter"],"title-page":["Inter"],"caption-meta-medium":["Inter"],"shortcut-key":["Inter"],"body-medium":["Inter"],"body-default":["Inter"],"caption-meta":["Inter"],"code-badge":["JetBrains Mono"]},"fontSize":{"header-section":["14px",{"lineHeight":"18px","letterSpacing":"-0.005em","fontWeight":"600"}],"title-page":["16px",{"lineHeight":"20px","letterSpacing":"-0.01em","fontWeight":"600"}],"caption-meta-medium":["12px",{"lineHeight":"16px","fontWeight":"500"}],"shortcut-key":["10px",{"lineHeight":"12px","letterSpacing":"0.02em","fontWeight":"600"}],"body-medium":["13px",{"lineHeight":"18px","fontWeight":"500"}],"body-default":["13px",{"lineHeight":"18px","fontWeight":"400"}],"caption-meta":["12px",{"lineHeight":"16px","fontWeight":"400"}],"code-badge":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"500"}]}}}}</script></head><body class="bg-surface font-body-default text-body-default text-on-surface selection:bg-surface-variant"><aside class="fixed left-0 top-0 h-full w-sidebar-width bg-surface-container-lowest z-50 flex flex-col justify-between border-r border-outline-variant/30 select-none"><div class="flex flex-col flex-1 min-h-0"><div class="h-14 px-pad-md flex items-center justify-between border-b border-outline-variant/30"><div class="flex items-center gap-gap-inline min-w-0"><div class="w-7 h-7 rounded-lg bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">precision_manufacturing</span></div><div class="flex flex-col min-w-0"><span class="font-title-page text-header-section text-on-surface truncate leading-tight">Vectra Cables</span><span class="font-caption-meta text-caption-meta text-on-surface-variant truncate">Engineering Ops</span></div></div><button class="w-6 h-6 flex items-center justify-center rounded-lg hover:bg-surface-container-high hover:text-on-surface text-on-surface-variant" type="button"><span class="material-symbols-outlined text-[18px]">unfold_more</span></button></div><div class="px-pad-md py-pad-sm"><div class="relative flex items-center"><span class="material-symbols-outlined absolute left-2 text-[16px] text-outline">search</span><input class="w-full h-[30px] pl-7 pr-7 bg-surface-container-low rounded-lg font-caption-meta text-caption-meta text-on-surface border border-outline-variant/40 focus:outline-none focus:border-primary placeholder:text-outline" placeholder="Jump to issue..." type="text"/><kbd class="absolute right-2 font-shortcut-key text-shortcut-key bg-surface-container-lowest border border-outline-variant/60 rounded px-1 text-on-surface-variant">/</kbd></div></div><nav class="flex-1 overflow-y-auto px-pad-sm py-pad-xs flex flex-col gap-0.5" data-active-classes="bg-surface-container-high text-primary font-semibold border-l-2 border-primary rounded-r-lg"><div class="pt-pad-xs pb-1"><div class="flex items-center justify-between px-2 py-1 text-on-surface-variant"><div class="flex items-center gap-gap-inline cursor-pointer"><span class="material-symbols-outlined text-[14px]">expand_more</span><span class="font-caption-meta-medium text-caption-meta-medium uppercase tracking-wider text-outline">Projects</span></div><span class="font-code-badge text-code-badge text-outline">3</span></div><div class="flex flex-col gap-0.5 mt-0.5"><a class="flex items-center h-row-height-compact px-pad-sm pl-6 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-body-default text-body-default" data-path="sap-s4hana-migration" href="#"><span class="truncate">SAP S/4HANA Migration</span></a><a aria-current="page" class="flex items-center h-row-height-compact px-pad-sm pl-6 transition-colors bg-surface-container-high text-primary font-semibold border-l-2 border-primary rounded-r-lg" data-path="ul94-ev-qualification" href="#"><span class="truncate">UL94 EV Qualification</span></a><a class="flex items-center h-row-height-compact px-pad-sm pl-6 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-body-default text-body-default" data-path="line-4-capacity-expansion" href="#"><span class="truncate">Line 4 Capacity Expansion</span></a></div></div><div class="my-pad-xs border-t border-outline-variant/30"></div><a class="flex items-center gap-gap-inline h-row-height px-pad-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-body-medium text-body-medium" data-path="cycles" href="#"><span class="material-symbols-outlined text-[18px]">sync_alt</span><span>Cycles</span></a><a class="flex items-center gap-gap-inline h-row-height px-pad-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-body-medium text-body-medium" data-path="modules" href="#"><span class="material-symbols-outlined text-[18px]">view_in_ar</span><span>Modules</span></a><a class="flex items-center gap-gap-inline h-row-height px-pad-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface transition-colors font-body-medium text-body-medium" data-path="reports" href="#"><span class="material-symbols-outlined text-[18px]">insert_chart</span><span>Reports</span></a></nav></div><div class="p-pad-sm border-t border-outline-variant/30 flex flex-col gap-pad-xs bg-surface-container-lowest"><div class="flex items-center justify-between px-2 py-1"><div class="flex items-center gap-1.5 min-w-0"><span class="w-2 h-2 rounded-full bg-tertiary-container shrink-0"></span><span class="font-code-badge text-code-badge text-on-surface-variant truncate">Plant 2 • Pune / BLR</span></div><div class="flex items-center gap-0.5"><button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container-high hover:text-on-surface text-outline" type="button"><span class="material-symbols-outlined text-[16px]">help</span></button><button class="w-6 h-6 flex items-center justify-center rounded hover:bg-surface-container-high hover:text-on-surface text-outline" type="button"><span class="material-symbols-outlined text-[16px]">settings</span></button></div></div><div class="flex items-center gap-gap-inline p-1.5 rounded-lg hover:bg-surface-container-low cursor-pointer transition-colors"><div class="relative"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><span class="absolute bottom-0 right-0 w-2 h-2 rounded-full bg-tertiary-container border border-surface-container-lowest"></span></div><div class="flex flex-col min-w-0 flex-1"><span class="font-body-medium text-body-medium text-on-surface truncate leading-tight">K. Ranganathan</span><span class="font-caption-meta text-caption-meta text-outline truncate">Lead Cable Eng</span></div><span class="material-symbols-outlined text-outline text-[16px]">more_vert</span></div></div></aside><div class="pl-sidebar-width"><header class="fixed top-0 left-sidebar-width right-0 h-14 bg-surface-container-lowest border-b border-outline-variant/30 z-40 flex items-center justify-between px-pad-lg"><div class="flex items-center gap-2 min-w-0"><span class="material-symbols-outlined text-[18px] text-outline">cable</span><span class="font-caption-meta text-caption-meta text-on-surface-variant">Projects</span><span class="text-outline-variant font-caption-meta text-caption-meta">/</span><span class="font-header-section text-header-section text-on-surface truncate">Engineering Systems Console</span></div><div class="flex items-center gap-pad-md"><div class="flex items-center gap-1.5"><button class="h-7 px-2.5 rounded-lg border border-outline-variant/40 hover:bg-surface-container-high text-on-surface font-body-medium text-body-medium flex items-center gap-1" type="button"><span class="material-symbols-outlined text-[16px]">tune</span><span>Filter</span></button><button class="h-7 px-2.5 rounded-lg bg-primary-container text-on-primary font-body-medium text-body-medium hover:bg-primary flex items-center gap-1 shadow-sm" type="button"><span class="material-symbols-outlined text-[16px]">add</span><span>New Task</span><kbd class="font-shortcut-key text-shortcut-key bg-on-primary/20 rounded px-1 ml-1 text-on-primary">C</kbd></button></div><div class="h-4 w-px bg-outline-variant/40"></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></header><main class="relative pt-14 w-full bg-background min-h-screen"><div class="flex flex-col w-full">
+<!-- Active Sidebar Nav Sync Trigger -->
+<script>
+    (function() {
+      const cyclesLink = document.querySelector('aside a[data-path="cycles"]');
+      if (cyclesLink) {
+        cyclesLink.classList.remove('text-on-surface-variant');
+        cyclesLink.classList.add('bg-surface-container-high', 'text-primary', 'font-semibold', 'border-l-2', 'border-primary', 'rounded-r-lg');
+      }
+    })();
+  </script>
+<!-- Top Context Header Bar -->
+<div class="px-pad-lg py-3 bg-surface-container-lowest shadow-sm flex flex-col gap-3">
+<!-- Breadcrumb + Actions -->
+<div class="flex flex-wrap items-center justify-between gap-3">
+<div class="flex items-center gap-2 min-w-0">
+<a class="font-caption-meta-medium text-caption-meta-medium text-on-surface-variant hover:text-primary transition-colors flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-[15px]">sync_alt</span>
+<span>Cycles</span>
+</a>
+<span class="text-outline-variant font-caption-meta text-caption-meta">/</span>
+<span class="font-header-section text-header-section text-on-surface truncate">Cycle 12 · 11–25 August</span>
+<div class="ml-2 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-surface-container-low text-primary text-caption-meta-medium font-caption-meta-medium">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+<span>Active · 4 days remaining</span>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex items-center gap-2">
+<button class="h-7 px-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-body-medium text-body-medium flex items-center gap-1 transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">tune</span>
+<span>Filter</span>
+</button>
+<button class="h-7 px-2.5 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-body-medium text-body-medium flex items-center gap-1 transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">pixel_6a_7</span>
+<span>Cycle Settings</span>
+</button>
+<button class="h-7 px-3 rounded-lg bg-primary-container text-on-primary font-body-medium text-body-medium hover:bg-primary flex items-center gap-1.5 shadow-sm transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<span>Complete Cycle</span>
+<kbd class="font-shortcut-key text-shortcut-key bg-on-primary/20 rounded px-1 text-on-primary">⌘E</kbd>
+</button>
+</div>
+</div>
+<!-- Cycle Details & Progress Row -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pt-1">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 text-on-surface-variant font-caption-meta-medium text-caption-meta-medium bg-surface-container-low px-2.5 py-1 rounded-lg">
+<span class="material-symbols-outlined text-[16px] text-outline">calendar_today</span>
+<span class="text-on-surface font-semibold">Aug 11, 2025</span>
+<span class="text-outline">→</span>
+<span class="text-on-surface font-semibold">Aug 25, 2025</span>
+<span class="text-outline font-code-badge text-code-badge ml-1">(14d sprint)</span>
+</div>
+<div class="hidden sm:flex items-center gap-2 font-caption-meta text-caption-meta text-on-surface-variant">
+<span class="w-1.5 h-1.5 rounded-full bg-outline-variant"></span>
+<span>Milestone: UL94-V0 Extrusion Testrun II</span>
+</div>
+</div>
+<!-- Linear Progress Bar -->
+<div class="flex items-center gap-3 min-w-[280px] lg:w-80">
+<div class="flex flex-col flex-1 gap-1">
+<div class="flex items-center justify-between font-caption-meta-medium text-caption-meta-medium">
+<span class="text-on-surface-variant">Overall Cycle Completion</span>
+<span class="text-primary font-bold">68% <span class="text-outline font-normal font-code-badge text-code-badge">(38 / 56 pts)</span></span>
+</div>
+<div class="w-full h-2 rounded-full bg-surface-container overflow-hidden flex">
+<div class="h-full bg-primary-container transition-all duration-500" style="width: 68%;"></div>
+<div class="h-full bg-secondary-container transition-all duration-500" style="width: 20%;"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Canvas Content -->
+<div class="p-pad-lg flex flex-col gap-pad-lg">
+<!-- KPI Tiles Grid (4-Across) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-pad-md">
+<!-- KPI 1: Total Items -->
+<div class="bg-surface-container-lowest p-3.5 rounded-lg shadow-sm flex flex-col justify-between relative overflow-hidden group hover:shadow transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-caption-meta-medium text-caption-meta-medium text-on-surface-variant uppercase tracking-wider">Total Workload</span>
+<span class="material-symbols-outlined text-[18px] text-outline">assignment</span>
+</div>
+<div class="mt-2 flex items-baseline gap-2">
+<span class="font-title-page text-[22px] font-bold text-on-surface leading-none">42</span>
+<span class="font-body-medium text-body-medium text-on-surface-variant">items</span>
+<span class="font-code-badge text-code-badge text-outline ml-auto">56 pts</span>
+</div>
+<div class="mt-2 pt-2 flex items-center justify-between text-caption-meta font-caption-meta bg-surface-container-low -mx-3.5 -mb-3.5 px-3.5 py-1.5">
+<span class="text-primary font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">add_circle</span> +6 added mid-cycle
+          </span>
+<span class="text-outline text-code-badge font-code-badge">Scope 100%</span>
+</div>
+</div>
+<!-- KPI 2: Completed -->
+<div class="bg-surface-container-lowest p-3.5 rounded-lg shadow-sm flex flex-col justify-between relative overflow-hidden group hover:shadow transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-caption-meta-medium text-caption-meta-medium text-on-surface-variant uppercase tracking-wider">Completed</span>
+<div class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></div>
+</div>
+<div class="mt-2 flex items-baseline gap-2">
+<span class="font-title-page text-[22px] font-bold text-tertiary-container leading-none">26</span>
+<span class="font-body-medium text-body-medium text-on-surface-variant">items</span>
+<span class="font-code-badge text-code-badge text-tertiary-container bg-surface-container-low px-1.5 py-0.5 rounded ml-auto">62%</span>
+</div>
+<div class="mt-2 pt-2 flex items-center justify-between text-caption-meta font-caption-meta bg-surface-container-low -mx-3.5 -mb-3.5 px-3.5 py-1.5">
+<span class="text-tertiary-container font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> 38 story points
+          </span>
+<span class="text-outline text-code-badge font-code-badge">On Track</span>
+</div>
+</div>
+<!-- KPI 3: In Progress -->
+<div class="bg-surface-container-lowest p-3.5 rounded-lg shadow-sm flex flex-col justify-between relative overflow-hidden group hover:shadow transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-caption-meta-medium text-caption-meta-medium text-on-surface-variant uppercase tracking-wider">In Progress</span>
+<div class="w-2 h-2 rounded-full bg-secondary animate-pulse"></div>
+</div>
+<div class="mt-2 flex items-baseline gap-2">
+<span class="font-title-page text-[22px] font-bold text-primary-container leading-none">11</span>
+<span class="font-body-medium text-body-medium text-on-surface-variant">items</span>
+<span class="font-code-badge text-code-badge text-primary-container bg-surface-container-low px-1.5 py-0.5 rounded ml-auto">26%</span>
+</div>
+<div class="mt-2 pt-2 flex items-center justify-between text-caption-meta font-caption-meta bg-surface-container-low -mx-3.5 -mb-3.5 px-3.5 py-1.5">
+<span class="text-secondary font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">hourglass_top</span> 14 story points
+          </span>
+<span class="text-outline text-code-badge font-code-badge">5 engineers</span>
+</div>
+</div>
+<!-- KPI 4: Pending / Todo -->
+<div class="bg-surface-container-lowest p-3.5 rounded-lg shadow-sm flex flex-col justify-between relative overflow-hidden group hover:shadow transition-shadow">
+<div class="flex items-center justify-between">
+<span class="font-caption-meta-medium text-caption-meta-medium text-on-surface-variant uppercase tracking-wider">Pending / Todo</span>
+<div class="w-2 h-2 rounded-full bg-outline"></div>
+</div>
+<div class="mt-2 flex items-baseline gap-2">
+<span class="font-title-page text-[22px] font-bold text-on-surface leading-none">5</span>
+<span class="font-body-medium text-body-medium text-on-surface-variant">items</span>
+<span class="font-code-badge text-code-badge text-error bg-error-container/40 px-1.5 py-0.5 rounded ml-auto flex items-center gap-0.5">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span> 1 Blocked
+          </span>
+</div>
+<div class="mt-2 pt-2 flex items-center justify-between text-caption-meta font-caption-meta bg-surface-container-low -mx-3.5 -mb-3.5 px-3.5 py-1.5">
+<span class="text-outline font-medium">4 story points</span>
+<span class="text-outline text-code-badge font-code-badge">Est. 1.5 days</span>
+</div>
+</div>
+</div>
+<!-- Burndown Chart Section -->
+<div class="bg-surface-container-lowest rounded-lg p-pad-lg shadow-sm flex flex-col gap-4">
+<!-- Section Header with Controls -->
+<div class="flex flex-wrap items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<div class="w-7 h-7 rounded-lg bg-surface-container-high flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[18px]">show_chart</span>
+</div>
+<div>
+<h2 class="font-title-page text-title-page text-on-surface leading-tight">Cycle Burndown</h2>
+<p class="font-caption-meta text-caption-meta text-on-surface-variant">Real-time depletion model tracking test-bench qualifications &amp; tasks</p>
+</div>
+</div>
+<!-- Legend and Mode Toggle -->
+<div class="flex flex-wrap items-center gap-4">
+<div class="flex items-center gap-4 font-caption-meta text-caption-meta text-on-surface-variant">
+<div class="flex items-center gap-1.5">
+<span class="inline-block w-4 h-0 border-b border-dashed border-outline"></span>
+<span>Ideal Burndown</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="inline-block w-4 h-0.5 bg-primary-container"></span>
+<span class="text-on-surface font-medium">Actual Remaining</span>
+</div>
+</div>
+<div class="flex items-center bg-surface-container-low p-0.5 rounded-lg text-caption-meta font-caption-meta-medium">
+<button class="px-2.5 py-1 rounded bg-surface-container-lowest text-primary shadow-xs font-semibold" type="button">Issue Count</button>
+<button class="px-2.5 py-1 rounded text-on-surface-variant hover:text-on-surface" type="button">Story Points</button>
+</div>
+</div>
+</div>
+<!-- High-Precision SVG Burndown Chart -->
+<div class="relative w-full overflow-x-auto">
+<div class="min-w-[720px] h-64 relative flex flex-col justify-end select-none">
+<!-- Chart SVG Graphic -->
+<svg class="w-full h-full" fill="none" preserveaspectratio="none" viewbox="0 0 880 230">
+<defs>
+<!-- Gradient under actual line -->
+<lineargradient id="burndownGrad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#06477f" stop-opacity="0.18"></stop>
+<stop offset="100%" stop-color="#06477f" stop-opacity="0.0"></stop>
+</lineargradient>
+<lineargradient id="todayHighlight" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#06477f" stop-opacity="0.25"></stop>
+<stop offset="100%" stop-color="#06477f" stop-opacity="0.02"></stop>
+</lineargradient>
+</defs>
+<!-- Horizontal Grid lines & Y-Axis Labels -->
+<!-- 40 items (y = 20) -->
+<line stroke="#dce9ff" stroke-dasharray="3 3" stroke-width="1" x1="45" x2="860" y1="20" y2="20"></line>
+<text fill="#727781" font-family="JetBrains Mono" font-size="10" text-anchor="end" x="35" y="24">40</text>
+<!-- 30 items (y = 65) -->
+<line stroke="#dce9ff" stroke-dasharray="3 3" stroke-width="1" x1="45" x2="860" y1="65" y2="65"></line>
+<text fill="#727781" font-family="JetBrains Mono" font-size="10" text-anchor="end" x="35" y="69">30</text>
+<!-- 20 items (y = 110) -->
+<line stroke="#dce9ff" stroke-dasharray="3 3" stroke-width="1" x1="45" x2="860" y1="110" y2="110"></line>
+<text fill="#727781" font-family="JetBrains Mono" font-size="10" text-anchor="end" x="35" y="114">20</text>
+<!-- 10 items (y = 155) -->
+<line stroke="#dce9ff" stroke-dasharray="3 3" stroke-width="1" x1="45" x2="860" y1="155" y2="155"></line>
+<text fill="#727781" font-family="JetBrains Mono" font-size="10" text-anchor="end" x="35" y="159">10</text>
+<!-- 0 baseline (y = 200) -->
+<line stroke="#c2c6d1" stroke-width="1" x1="45" x2="860" y1="200" y2="200"></line>
+<text fill="#727781" font-family="JetBrains Mono" font-size="10" text-anchor="end" x="35" y="204">0</text>
+<!-- Ideal Guideline: Aug 11 (42 items, y=11) to Aug 25 (0 items, y=200) -->
+<!-- Points: (60, 11) to (840, 200) -->
+<line stroke="#727781" stroke-dasharray="6 5" stroke-opacity="0.8" stroke-width="1.75" x1="60" x2="840" y1="11" y2="200"></line>
+<!-- Current Day Band (Aug 21 = x: 615) -->
+<rect fill="url(#todayHighlight)" height="185" rx="4" width="70" x="580" y="15"></rect>
+<line stroke="#06477f" stroke-dasharray="2 2" stroke-width="1.25" x1="615" x2="615" y1="15" y2="200"></line>
+<!-- Area fill under actual progress curve (Aug 11 to Aug 21) -->
+<path d="M 60 11 
+                     L 171 28 
+                     L 282 52 
+                     L 393 72 
+                     L 504 102 
+                     L 615 128 
+                     L 615 200 
+                     L 60 200 Z" fill="url(#burndownGrad)"></path>
+<!-- Actual Burndown Line (Aug 11 to Aug 21) -->
+<!-- Values: Aug 11: 42 (y=11), Aug 13: 38 (y=28), Aug 15: 33 (y=52), Aug 17: 28 (y=72), Aug 19: 22 (y=102), Aug 21: 16 (y=128) -->
+<path d="M 60 11 
+                     L 171 28 
+                     L 282 52 
+                     L 393 72 
+                     L 504 102 
+                     L 615 128" stroke="#06477f" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+<!-- Actual Data Point Dots -->
+<circle cx="60" cy="11" fill="#ffffff" r="3.5" stroke="#06477f" stroke-width="2"></circle>
+<circle cx="171" cy="28" fill="#ffffff" r="3.5" stroke="#06477f" stroke-width="2"></circle>
+<circle cx="282" cy="52" fill="#ffffff" r="3.5" stroke="#06477f" stroke-width="2"></circle>
+<circle cx="393" cy="72" fill="#ffffff" r="3.5" stroke="#06477f" stroke-width="2"></circle>
+<circle cx="504" cy="102" fill="#ffffff" r="3.5" stroke="#06477f" stroke-width="2"></circle>
+<!-- Current Active Marker on Aug 21 (x=615, y=128) -->
+<circle class="animate-ping" cx="615" cy="128" fill="#06477f" opacity="0.4" r="6"></circle>
+<circle cx="615" cy="128" fill="#06477f" r="4.5" stroke="#ffffff" stroke-width="2"></circle>
+<!-- X-Axis Labels -->
+<text fill="#727781" font-family="Inter" font-size="11" font-weight="500" text-anchor="middle" x="60" y="218">Aug 11</text>
+<text fill="#727781" font-family="Inter" font-size="11" text-anchor="middle" x="171" y="218">Aug 13</text>
+<text fill="#727781" font-family="Inter" font-size="11" text-anchor="middle" x="282" y="218">Aug 15</text>
+<text fill="#727781" font-family="Inter" font-size="11" text-anchor="middle" x="393" y="218">Aug 17</text>
+<text fill="#727781" font-family="Inter" font-size="11" text-anchor="middle" x="504" y="218">Aug 19</text>
+<text fill="#00305b" font-family="Inter" font-size="11" font-weight="600" text-anchor="middle" x="615" y="218">Aug 21 (Today)</text>
+<text fill="#727781" font-family="Inter" font-size="11" text-anchor="middle" x="726" y="218">Aug 23</text>
+<text fill="#727781" font-family="Inter" font-size="11" text-anchor="middle" x="840" y="218">Aug 25</text>
+</svg>
+<!-- Floating Status Badge for Today -->
+<div class="absolute top-16 left-[56%] -translate-x-1/2 bg-surface-container-lowest shadow-md px-2.5 py-1.5 rounded-lg flex items-center gap-2 pointer-events-none border border-surface-container">
+<span class="w-2 h-2 rounded-full bg-tertiary-fixed-dim"></span>
+<div class="flex flex-col">
+<div class="flex items-center gap-1.5 font-code-badge text-code-badge font-semibold text-on-surface">
+<span>16 items remaining</span>
+<span class="text-tertiary font-bold bg-surface-container-low px-1 rounded">Ahead of schedule</span>
+</div>
+<span class="font-caption-meta text-[10px] text-outline">Ideal trajectory: 18.2 items at day 10</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Two-Panel Lower Row (Workload vs Work Items Breakdown) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-pad-lg">
+<!-- Panel 1: Assignee Workload (7 Cols) -->
+<div class="lg:col-span-7 bg-surface-container-lowest rounded-lg p-pad-lg shadow-sm flex flex-col gap-3.5">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary">groups</span>
+<h3 class="font-header-section text-header-section text-on-surface">Assignee Workload</h3>
+</div>
+<span class="font-caption-meta-medium text-caption-meta-medium text-on-surface-variant bg-surface-container-low px-2 py-0.5 rounded">6 engineers assigned</span>
+</div>
+<p class="font-caption-meta text-caption-meta text-on-surface-variant">Task distribution and completion across production, test bench, and quality squads.</p>
+<!-- Workload List -->
+<div class="flex flex-col gap-2.5 mt-1">
+<!-- Row 1: K. Ranganathan -->
+<div class="flex items-center justify-between gap-3 p-2 rounded hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-2.5 min-w-[190px]">
+<div class="w-7 h-7 rounded-full bg-primary flex items-center justify-center text-on-primary font-caption-meta-medium text-caption-meta-medium font-bold shrink-0">KR</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-medium text-body-medium text-on-surface truncate">K. Ranganathan</span>
+<span class="font-caption-meta text-[11px] text-outline truncate">Lead Cable Eng</span>
+</div>
+</div>
+<!-- Segmented Progress Bar -->
+<div class="flex-1 flex flex-col gap-1 max-w-xs">
+<div class="w-full h-2 rounded-full bg-surface-container overflow-hidden flex">
+<div class="bg-tertiary-container h-full" style="width: 70%;" title="7 Done"></div>
+<div class="bg-primary-container h-full" style="width: 20%;" title="2 In Progress"></div>
+<div class="bg-outline-variant h-full" style="width: 10%;" title="1 Pending"></div>
+</div>
+<div class="flex items-center justify-between text-[10px] font-code-badge text-outline">
+<span>7 done · 2 active</span>
+<span>1 pending</span>
+</div>
+</div>
+<div class="font-code-badge text-code-badge font-semibold text-on-surface bg-surface-container px-2 py-0.5 rounded min-w-[65px] text-right">
+              10 items
+            </div>
+</div>
+<!-- Row 2: Divya M. -->
+<div class="flex items-center justify-between gap-3 p-2 rounded hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-2.5 min-w-[190px]">
+<div class="w-7 h-7 rounded-full bg-secondary flex items-center justify-center text-on-secondary font-caption-meta-medium text-caption-meta-medium font-bold shrink-0">DM</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-medium text-body-medium text-on-surface truncate">Divya M.</span>
+<span class="font-caption-meta text-[11px] text-outline truncate">QA Lead</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-1 max-w-xs">
+<div class="w-full h-2 rounded-full bg-surface-container overflow-hidden flex">
+<div class="bg-tertiary-container h-full" style="width: 66.6%;" title="6 Done"></div>
+<div class="bg-primary-container h-full" style="width: 33.4%;" title="3 In Progress"></div>
+</div>
+<div class="flex items-center justify-between text-[10px] font-code-badge text-outline">
+<span>6 done · 3 active</span>
+<span>0 pending</span>
+</div>
+</div>
+<div class="font-code-badge text-code-badge font-semibold text-on-surface bg-surface-container px-2 py-0.5 rounded min-w-[65px] text-right">
+              9 items
+            </div>
+</div>
+<!-- Row 3: Suresh K. -->
+<div class="flex items-center justify-between gap-3 p-2 rounded hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-2.5 min-w-[190px]">
+<div class="w-7 h-7 rounded-full bg-surface-container-high flex items-center justify-center text-primary font-caption-meta-medium text-caption-meta-medium font-bold shrink-0">SK</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-medium text-body-medium text-on-surface truncate">Suresh K.</span>
+<span class="font-caption-meta text-[11px] text-outline truncate">Process Eng</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-1 max-w-xs">
+<div class="w-full h-2 rounded-full bg-surface-container overflow-hidden flex">
+<div class="bg-tertiary-container h-full" style="width: 62.5%;" title="5 Done"></div>
+<div class="bg-primary-container h-full" style="width: 25%;" title="2 In Progress"></div>
+<div class="bg-outline-variant h-full" style="width: 12.5%;" title="1 Pending"></div>
+</div>
+<div class="flex items-center justify-between text-[10px] font-code-badge text-outline">
+<span>5 done · 2 active</span>
+<span>1 pending</span>
+</div>
+</div>
+<div class="font-code-badge text-code-badge font-semibold text-on-surface bg-surface-container px-2 py-0.5 rounded min-w-[65px] text-right">
+              8 items
+            </div>
+</div>
+<!-- Row 4: Arun M. -->
+<div class="flex items-center justify-between gap-3 p-2 rounded hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-2.5 min-w-[190px]">
+<div class="w-7 h-7 rounded-full bg-surface-variant flex items-center justify-center text-on-surface font-caption-meta-medium text-caption-meta-medium font-bold shrink-0">AM</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-medium text-body-medium text-on-surface truncate">Arun M.</span>
+<span class="font-caption-meta text-[11px] text-outline truncate">High Voltage Spec</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-1 max-w-xs">
+<div class="w-full h-2 rounded-full bg-surface-container overflow-hidden flex">
+<div class="bg-tertiary-container h-full" style="width: 57.1%;" title="4 Done"></div>
+<div class="bg-primary-container h-full" style="width: 28.6%;" title="2 In Progress"></div>
+<div class="bg-outline-variant h-full" style="width: 14.3%;" title="1 Pending"></div>
+</div>
+<div class="flex items-center justify-between text-[10px] font-code-badge text-outline">
+<span>4 done · 2 active</span>
+<span>1 pending</span>
+</div>
+</div>
+<div class="font-code-badge text-code-badge font-semibold text-on-surface bg-surface-container px-2 py-0.5 rounded min-w-[65px] text-right">
+              7 items
+            </div>
+</div>
+<!-- Row 5: T. Chandran -->
+<div class="flex items-center justify-between gap-3 p-2 rounded hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-2.5 min-w-[190px]">
+<div class="w-7 h-7 rounded-full bg-surface-container-high flex items-center justify-center text-secondary font-caption-meta-medium text-caption-meta-medium font-bold shrink-0">TC</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-medium text-body-medium text-on-surface truncate">T. Chandran</span>
+<span class="font-caption-meta text-[11px] text-outline truncate">Compliance Spec</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-1 max-w-xs">
+<div class="w-full h-2 rounded-full bg-surface-container overflow-hidden flex">
+<div class="bg-tertiary-container h-full" style="width: 60%;" title="3 Done"></div>
+<div class="bg-primary-container h-full" style="width: 20%;" title="1 In Progress"></div>
+<div class="bg-outline-variant h-full" style="width: 20%;" title="1 Pending"></div>
+</div>
+<div class="flex items-center justify-between text-[10px] font-code-badge text-outline">
+<span>3 done · 1 active</span>
+<span>1 pending</span>
+</div>
+</div>
+<div class="font-code-badge text-code-badge font-semibold text-on-surface bg-surface-container px-2 py-0.5 rounded min-w-[65px] text-right">
+              5 items
+            </div>
+</div>
+<!-- Row 6: J. Sharma -->
+<div class="flex items-center justify-between gap-3 p-2 rounded hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-2.5 min-w-[190px]">
+<div class="w-7 h-7 rounded-full bg-surface-dim flex items-center justify-center text-primary font-caption-meta-medium text-caption-meta-medium font-bold shrink-0">JS</div>
+<div class="flex flex-col min-w-0">
+<span class="font-body-medium text-body-medium text-on-surface truncate">J. Sharma</span>
+<span class="font-caption-meta text-[11px] text-outline truncate">Test Bench Tech</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-1 max-w-xs">
+<div class="w-full h-2 rounded-full bg-surface-container overflow-hidden flex">
+<div class="bg-tertiary-container h-full" style="width: 33.3%;" title="1 Done"></div>
+<div class="bg-primary-container h-full" style="width: 33.3%;" title="1 In Progress"></div>
+<div class="bg-outline-variant h-full" style="width: 33.4%;" title="1 Pending"></div>
+</div>
+<div class="flex items-center justify-between text-[10px] font-code-badge text-outline">
+<span>1 done · 1 active</span>
+<span>1 pending</span>
+</div>
+</div>
+<div class="font-code-badge text-code-badge font-semibold text-on-surface bg-surface-container px-2 py-0.5 rounded min-w-[65px] text-right">
+              3 items
+            </div>
+</div>
+</div>
+</div>
+<!-- Panel 2: Work Items by State (5 Cols) -->
+<div class="lg:col-span-5 bg-surface-container-lowest rounded-lg p-pad-lg shadow-sm flex flex-col justify-between gap-4">
+<div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary">pie_chart</span>
+<h3 class="font-header-section text-header-section text-on-surface">Work Items by State</h3>
+</div>
+<span class="font-code-badge text-code-badge text-outline">42 total</span>
+</div>
+<p class="font-caption-meta text-caption-meta text-on-surface-variant mt-0.5">Status breakdown of current sprint commits</p>
+</div>
+<!-- Donut Chart and Metrics Row -->
+<div class="flex flex-col sm:flex-row items-center justify-center gap-6 py-2">
+<!-- Donut SVG (Circumference ~ 282.7 for r=45) -->
+<!-- 61.9% (175) / 26.2% (74) / 11.9% (33.7) -->
+<div class="relative w-36 h-36 shrink-0 flex items-center justify-center">
+<svg class="w-full h-full -rotate-90" viewbox="0 0 120 120">
+<!-- Base Circle -->
+<circle cx="60" cy="60" fill="none" r="45" stroke="#eff4ff" stroke-width="12"></circle>
+<!-- Done Segment: 61.9% -> 175 stroke-dasharray -->
+<circle cx="60" cy="60" fill="none" r="45" stroke="#005136" stroke-dasharray="175 283" stroke-dashoffset="0" stroke-linecap="round" stroke-width="12"></circle>
+<!-- In Progress Segment: 26.2% -> 74 stroke-dasharray -->
+<circle cx="60" cy="60" fill="none" r="45" stroke="#06477f" stroke-dasharray="74 283" stroke-dashoffset="-178" stroke-linecap="round" stroke-width="12"></circle>
+<!-- Todo/Pending Segment: 11.9% -> 33.7 stroke-dasharray -->
+<circle cx="60" cy="60" fill="none" r="45" stroke="#727781" stroke-dasharray="32 283" stroke-dashoffset="-254" stroke-linecap="round" stroke-width="12"></circle>
+</svg>
+<!-- Centered Text in Donut -->
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+<span class="font-title-page text-[20px] font-bold text-on-surface leading-tight">62%</span>
+<span class="font-caption-meta text-[10px] uppercase text-outline tracking-wider font-semibold">Completed</span>
+</div>
+</div>
+<!-- Legend List -->
+<div class="flex flex-col gap-2.5 w-full sm:w-auto">
+<div class="flex items-center justify-between gap-4 font-caption-meta text-caption-meta">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary-container"></span>
+<span class="text-on-surface font-medium">Done</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-code-badge text-code-badge text-on-surface font-semibold">26</span>
+<span class="text-outline text-[11px]">(62%)</span>
+</div>
+</div>
+<div class="flex items-center justify-between gap-4 font-caption-meta text-caption-meta">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary-container"></span>
+<span class="text-on-surface font-medium">In Progress</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-code-badge text-code-badge text-on-surface font-semibold">11</span>
+<span class="text-outline text-[11px]">(26%)</span>
+</div>
+</div>
+<div class="flex items-center justify-between gap-4 font-caption-meta text-caption-meta">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-outline"></span>
+<span class="text-on-surface font-medium">Todo / Backlog</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-code-badge text-code-badge text-on-surface font-semibold">5</span>
+<span class="text-outline text-[11px]">(12%)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Velocity Insight Note -->
+<div class="bg-surface-container-low p-2.5 rounded-lg flex items-center justify-between gap-2">
+<div class="flex items-center gap-2 min-w-0">
+<span class="material-symbols-outlined text-[16px] text-tertiary-container">speed</span>
+<span class="font-caption-meta-medium text-caption-meta-medium text-on-surface truncate">Cycle velocity: 14.2 pts/week</span>
+</div>
+<span class="font-code-badge text-[11px] font-semibold text-tertiary-container bg-surface-container-lowest px-1.5 py-0.5 rounded shrink-0">+8% vs C11</span>
+</div>
+</div>
+</div>
+<!-- Active Tasks Quick Filter Table -->
+<div class="bg-surface-container-lowest rounded-lg shadow-sm flex flex-col overflow-hidden">
+<div class="p-pad-md flex items-center justify-between bg-surface-container-lowest">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-outline">checklist</span>
+<span class="font-header-section text-header-section text-on-surface">Critical Cycle Tasks</span>
+<span class="font-code-badge text-code-badge text-outline ml-1">Showing 4 of 42</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="relative flex items-center">
+<input class="h-6 text-[12px] bg-surface-container-low rounded px-2 text-on-surface focus:outline-none focus:ring-1 focus:ring-primary placeholder:text-outline w-44" placeholder="Filter cycle issues..." type="text"/>
+</div>
+<button class="font-caption-meta-medium text-caption-meta-medium text-primary hover:underline px-1" type="button">View All (42)</button>
+</div>
+</div>
+<!-- Task Table Rows -->
+<div class="flex flex-col">
+<!-- Task 1 -->
+<div class="h-row-height px-pad-lg flex items-center justify-between hover:bg-surface-container-low/60 transition-colors cursor-pointer group">
+<div class="flex items-center gap-3 min-w-0 flex-1">
+<span class="material-symbols-outlined text-[16px] text-tertiary-container">check_circle</span>
+<span class="font-code-badge text-code-badge text-outline">VEC-1048</span>
+<span class="font-body-default text-body-default text-on-surface truncate group-hover:text-primary font-medium">UL94 vertical burn chamber calibration for XLPO batch #34</span>
+<span class="font-caption-meta text-[11px] bg-surface-container px-1.5 py-0.5 rounded text-on-surface-variant shrink-0">Line 4</span>
+</div>
+<div class="flex items-center gap-4 shrink-0">
+<span class="font-code-badge text-code-badge text-outline">3 pts</span>
+<div class="w-6 h-6 rounded-full bg-primary text-on-primary text-[10px] font-bold flex items-center justify-center">KR</div>
+<span class="font-caption-meta text-caption-meta text-outline w-16 text-right">Aug 18</span>
+</div>
+</div>
+<!-- Task 2 -->
+<div class="h-row-height px-pad-lg flex items-center justify-between hover:bg-surface-container-low/60 transition-colors cursor-pointer group">
+<div class="flex items-center gap-3 min-w-0 flex-1">
+<span class="material-symbols-outlined text-[16px] text-primary">radio_button_checked</span>
+<span class="font-code-badge text-code-badge text-outline">VEC-1052</span>
+<span class="font-body-default text-body-default text-on-surface truncate group-hover:text-primary font-medium">High voltage spark test on 800V silicon rubber insulation</span>
+<span class="font-caption-meta text-[11px] bg-surface-container px-1.5 py-0.5 rounded text-on-surface-variant shrink-0">Test Bench 2</span>
+</div>
+<div class="flex items-center gap-4 shrink-0">
+<span class="font-code-badge text-code-badge text-outline">5 pts</span>
+<div class="w-6 h-6 rounded-full bg-surface-variant text-on-surface text-[10px] font-bold flex items-center justify-center">AM</div>
+<span class="font-caption-meta text-caption-meta text-outline w-16 text-right">Aug 20</span>
+</div>
+</div>
+<!-- Task 3 -->
+<div class="h-row-height px-pad-lg flex items-center justify-between hover:bg-surface-container-low/60 transition-colors cursor-pointer group">
+<div class="flex items-center gap-3 min-w-0 flex-1">
+<span class="material-symbols-outlined text-[16px] text-primary">radio_button_checked</span>
+<span class="font-code-badge text-code-badge text-outline">VEC-1057</span>
+<span class="font-body-default text-body-default text-on-surface truncate group-hover:text-primary font-medium">SAP S/4HANA material recipe synchronization for extrusion dies</span>
+<span class="font-caption-meta text-[11px] bg-surface-container px-1.5 py-0.5 rounded text-on-surface-variant shrink-0">SAP RFC</span>
+</div>
+<div class="flex items-center gap-4 shrink-0">
+<span class="font-code-badge text-code-badge text-outline">8 pts</span>
+<div class="w-6 h-6 rounded-full bg-secondary text-on-secondary text-[10px] font-bold flex items-center justify-center">DM</div>
+<span class="font-caption-meta text-caption-meta text-outline w-16 text-right">Aug 21</span>
+</div>
+</div>
+<!-- Task 4 -->
+<div class="h-row-height px-pad-lg flex items-center justify-between hover:bg-surface-container-low/60 transition-colors cursor-pointer group">
+<div class="flex items-center gap-3 min-w-0 flex-1">
+<span class="material-symbols-outlined text-[16px] text-error">error</span>
+<span class="font-code-badge text-code-badge text-outline">VEC-1061</span>
+<span class="font-body-default text-body-default text-on-surface truncate group-hover:text-primary font-medium">Die temperature thermocouple failure alert on Extruder Unit B</span>
+<span class="font-caption-meta text-[11px] bg-error-container/50 px-1.5 py-0.5 rounded text-error font-semibold shrink-0">Blocked</span>
+</div>
+<div class="flex items-center gap-4 shrink-0">
+<span class="font-code-badge text-code-badge text-outline">2 pts</span>
+<div class="w-6 h-6 rounded-full bg-surface-container-high text-primary text-[10px] font-bold flex items-center justify-center">SK</div>
+<span class="font-caption-meta text-caption-meta text-outline w-16 text-right">Today</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Operational Bottom Footer Status Bar -->
+<footer class="mt-4 px-pad-lg py-2.5 bg-surface-container-lowest shadow-sm flex flex-wrap items-center justify-between gap-3 text-caption-meta font-caption-meta text-on-surface-variant select-none">
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-tertiary-container animate-pulse"></span>
+<span class="text-on-surface font-medium">All 4 test benches synced</span>
+</div>
+<span class="text-outline-variant">•</span>
+<span class="text-outline font-code-badge text-code-badge">Last sync: 1m ago via SAP RFC</span>
+<span class="text-outline-variant hidden sm:inline">•</span>
+<span class="hidden sm:inline text-outline font-code-badge text-code-badge">Cycle ID: CYC-2025-08-12</span>
+</div>
+<!-- Keyboard Shortcuts Helper -->
+<div class="flex items-center gap-3 font-shortcut-key text-shortcut-key text-outline">
+<div class="flex items-center gap-1">
+<kbd class="bg-surface-container px-1 py-0.5 rounded text-on-surface-variant font-semibold">C</kbd>
+<span>New Task</span>
+</div>
+<div class="flex items-center gap-1">
+<kbd class="bg-surface-container px-1 py-0.5 rounded text-on-surface-variant font-semibold">/</kbd>
+<span>Filter</span>
+</div>
+<div class="flex items-center gap-1">
+<kbd class="bg-surface-container px-1 py-0.5 rounded text-on-surface-variant font-semibold">B</kbd>
+<span>Toggle Burndown</span>
+</div>
+</div>
+</footer>
+</div></main></div></body></html>

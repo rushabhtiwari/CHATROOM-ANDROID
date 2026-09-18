@@ -1,0 +1,566 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   The Ledger design system — see LEDGERDESIGNSYSTEM.md
+
+   It is a ruled ledger, not a card dashboard. The page is `canvas` grey and
+   surfaces are white sheets ruled onto it; hairlines divide, 3px `structure`
+   caps and anchors, 2px borders hold controls. Every figure is mono and
+   tabular; prose stays sans. Colour is spent once or twice a page.
+   ========================================================================== */
+
+@layer base {
+  :root {
+    /* §2.1 structural greys — the six values everything else rests on */
+    --canvas: #E9EDF0;
+    --canvas-deep: #DBE2E7;
+    --hairline: #D2D9DF;
+    --hairline-strong: #A7B3BE;
+    --meta: #5C6975;
+    --ink: #011627;
+    --ink-soft: #333333;
+
+    /* §2.2 the two brand slots */
+    --accent: #E99741;
+    --accent-ink: #011627;
+    --accent-link: #B26516;
+    --structure: #02223C;
+    --structure-600: #083352;
+
+    /* Legacy aliases kept so older markup resolves into the same palette */
+    --ink-2: #02223C;
+    --ink-3: #083352;
+    --slate: #5C6975;
+    --muted: #5C6975;
+    --line: #D2D9DF;
+    --line-2: #E4E8EC;
+    --surface: #FFFFFF;
+    --kiran: #02223C;
+    --kiran-600: #083352;
+    --kiran-tint: #E9EDF0;
+    --ku-rich-black: #011627;
+    --ku-navy: #02223C;
+    --ku-orange: #E99741;
+    --ku-orange-soft: rgba(233, 151, 65, 0.55);
+    --ku-on-orange: #011627;
+    --ku-link-on-light: #B26516;
+
+    /* §2.3 status tones — ink stamps, wash grounds, soft inner rules */
+    --st-grey-ink: #3F4A55;   --st-grey-bg: #E4E8EC;   --st-grey-line: #B4BEC7;
+    --st-blue-ink: #0B4A78;   --st-blue-bg: #DCEAF5;   --st-blue-line: #7FB0D4;
+    --st-amber-ink: #8A5A00;  --st-amber-bg: #F8EBD3;  --st-amber-line: #DFB463;
+    --st-red-ink: #A11020;    --st-red-bg: #F7DDE0;    --st-red-line: #E09AA3;
+    --st-green-ink: #0F5B3D;  --st-green-bg: #DAEEE3;  --st-green-line: #7FC0A2;
+
+    /* The four fan strands, retuned to status inks so the loader and the
+       stamps speak the same five hues. */
+    --strand-red: #A11020;
+    --strand-amber: #8A5A00;
+    --strand-green: #0F5B3D;
+    --strand-teal: #0B4A78;
+
+    --ai: #4A3FA0;
+    --ai-tint: #E8E6F4;
+
+    /* Surface scale — white sheets on a drafting ground */
+    --surface-container-lowest: #ffffff;
+    --surface-container-low: #F4F6F8;
+    --surface-container: #E9EDF0;
+    --surface-container-high: #DBE2E7;
+    --surface-container-highest: #D2D9DF;
+    --on-surface: #011627;
+    --on-surface-variant: #5C6975;
+    --outline: #5C6975;
+    --outline-variant: #D2D9DF;
+    --primary-container: #02223C;
+    --on-primary: #ffffff;
+    --on-primary-container: #E9EDF0;
+    --secondary-container: #DCEAF5;
+    --on-secondary-container: #0B4A78;
+    --tertiary-container: #0F5B3D;
+    --tertiary-fixed: #DAEEE3;
+    --tertiary-fixed-dim: #7FC0A2;
+    --on-tertiary-fixed: #011627;
+
+    /* ------------------------------------------------------------------ */
+    /* Chat chrome — the conversation surface paints from these, so it     */
+    /* re-skins with the console rather than holding its own opinions.     */
+    /* ------------------------------------------------------------------ */
+    --rail: #F4F6F8;
+    --rail-active: #E9EDF0;
+    --rail-active-border: var(--hairline-strong);
+    --header-surface: #FFFFFF;
+    --chat-canvas: #E9EDF0;
+    --chat-canvas-dot: rgba(1, 22, 39, 0.05);
+    --bubble-mine: var(--structure);
+    --bubble-mine-foreground: #FFFFFF;
+    --bubble-mine-border: #011627;
+    --bubble-mine-accent: var(--accent);
+    --bubble-other: #FFFFFF;
+    --bubble-other-border: var(--hairline);
+    --bubble-other-accent: var(--hairline-strong);
+    --composer: #F4F6F8;
+    --composer-field: #FFFFFF;
+    --composer-field-border: var(--hairline-strong);
+    --online: var(--st-green-ink);
+
+    --shadow-float: none;
+    --shadow-soft: none;
+  }
+
+  * {
+    border-color: var(--hairline);
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    /* §9 the single highest-leverage change: the ground is canvas, not white.
+       Surfaces are white on top of it — that inversion is what makes ruled
+       panels read as sheets of paper rather than as div soup. */
+    background-color: var(--canvas);
+    color: var(--ink-soft);
+    font-family: 'Archivo', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Archivo', system-ui, sans-serif;
+    color: var(--ink);
+    /* The display voice is the same face set wider — not a second typeface. */
+    font-variation-settings: 'wdth' 112;
+  }
+
+  ::placeholder {
+    color: var(--meta);
+    opacity: 1;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    border-radius: 0;
+  }
+
+  /* Figures align to the pixel in every dense operational table */
+  .font-mono,
+  table td,
+  table th {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .font-mono {
+    font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-feature-settings: 'tnum' 1, 'zero' 1;
+    letter-spacing: -0.01em;
+  }
+
+  /* §8.4 visible focus everywhere, one treatment */
+  :focus-visible,
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
+    }
+    /* The stamp's angle is form, not motion — it stays. */
+    .ku-stamp-struck { transform: rotate(-3deg) !important; }
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+}
+
+@layer components {
+  /* ==================================================================== */
+  /* §3 The instrument voice                                              */
+  /*                                                                      */
+  /* Every money value, date, ID, count and percentage is monospace with   */
+  /* tabular figures. Prose stays sans even when it sits beside a figure:  */
+  /* mono for everything looks like a terminal, mono for figures only      */
+  /* looks like an instrument. That distinction is the whole trick.        */
+  /* ==================================================================== */
+  .tnum { font-variant-numeric: tabular-nums; font-feature-settings: 'tnum' 1; }
+
+  .ku-fig {
+    @apply font-mono tabular-nums;
+    font-feature-settings: 'tnum' 1, 'zero' 1;
+  }
+
+  /* The anchor figure on a page — a total. */
+  .ku-total {
+    @apply ku-fig font-semibold text-ink;
+    letter-spacing: -0.04em;
+  }
+
+  /* An identifier: PO-2026-0103, an invoice no, a SKU. */
+  .ku-docket {
+    @apply font-mono text-caption font-medium uppercase text-meta;
+    letter-spacing: 0.06em;
+  }
+
+  /* The stamped micro-label above a block. Never a sentence. */
+  .ku-eyebrow {
+    @apply font-mono text-micro font-semibold uppercase text-meta;
+  }
+
+  /* The width axis carries the display voice. */
+  .ku-wide   { font-variation-settings: 'wdth' 112; }
+  .ku-xwide  { font-variation-settings: 'wdth' 125; }
+  .ku-narrow { font-variation-settings: 'wdth' 88; }
+
+  /* ==================================================================== */
+  /* §4 Surfaces — depth from contrast, never shadow                      */
+  /* ==================================================================== */
+
+  /* Ordinary flat panel. */
+  .ku-card { @apply border border-hairline bg-white; }
+
+  /* The PRIMARY artifact on a page — a 3px structure rule across the top.
+     Use once per page, on the thing the page is actually about. */
+  .ku-sheet { @apply border border-hairline border-t-3 border-t-structure bg-white; }
+
+  /* A pulled-out note or quote. */
+  .ku-rule-accent { @apply border-l-6 border-accent pl-4; }
+
+  /* The ledger band: N related numbers are ONE ruled row, not N cards.
+     A `gap-4` grid of stat cards is the single most template-looking thing
+     you can put on a page. */
+  .ku-ledger { @apply grid border border-hairline bg-white; }
+  @media (min-width: 768px) { .ku-ledger > * + * { border-left-width: 1px; border-color: #D2D9DF; } }
+  @media (max-width: 767px) { .ku-ledger > * + * { border-top-width: 1px; border-color: #D2D9DF; } }
+
+  /* Ruled rows — a hairline under every entry. No zebra striping, ever. */
+  .ku-ruled > * + * { @apply border-t border-hairline; }
+
+  /* The ledger cursor: an accent rule that follows the pointer down the page
+     like a finger on a ledger line. This replaces zebra striping entirely. */
+  .ku-row {
+    @apply border-l-3 border-l-transparent bg-white transition-colors duration-150;
+  }
+  .ku-row:hover { @apply border-l-accent bg-canvas; }
+
+  /* ==================================================================== */
+  /* §5.4 The stamp — status as an office stamp, not a pastel pill        */
+  /*                                                                      */
+  /* Outline and letters are the same ink, which is how a rubber stamp     */
+  /* actually prints, and keeps the mark legible in greyscale and on       */
+  /* tinted rows where a wash would vanish.                                */
+  /* ==================================================================== */
+  .ku-stamp {
+    @apply inline-flex items-center gap-1.5 whitespace-nowrap border-2 bg-transparent px-2 py-0.5;
+    @apply font-mono text-micro font-semibold uppercase leading-none;
+    letter-spacing: 0.12em;
+  }
+  .ku-stamp-lg {
+    @apply gap-2 border-3 px-3 py-1.5 text-caption;
+    letter-spacing: 0.14em;
+  }
+  .ku-stamp-struck {
+    @apply inline-flex items-center justify-center border-3 px-5 py-2;
+    @apply font-mono text-lead font-bold uppercase;
+    letter-spacing: 0.18em;
+    transform: rotate(-3deg);
+  }
+
+  /* ==================================================================== */
+  /* Signature marks. Each does real work; none is decoration.            */
+  /* ==================================================================== */
+  .ku-notch    { clip-path: polygon(0 0, calc(100% - 52px) 0, 100% 52px, 100% 100%, 0 100%); }
+  .ku-notch-sm { clip-path: polygon(0 0, calc(100% - 28px) 0, 100% 28px, 100% 100%, 0 100%); }
+  .ku-dots     { background-image: radial-gradient(currentColor 1.5px, transparent 1.6px);
+                 background-size: 24px 24px; }
+  /* The drawing-office mark for "void". Rejected/failed records only. */
+  .ku-hatch    { background-image: repeating-linear-gradient(-45deg,
+                   currentColor 0, currentColor 1px, transparent 1px, transparent 7px); }
+
+  .ku-scrollbar { scrollbar-width: thin; scrollbar-color: #A7B3BE transparent; }
+  .ku-scrollbar::-webkit-scrollbar       { height: 10px; width: 10px; }
+  .ku-scrollbar::-webkit-scrollbar-thumb { background: #A7B3BE; }
+  .ku-scrollbar::-webkit-scrollbar-track { background: transparent; }
+
+  /* Staggered list entries; the index is set inline as `--i`. */
+  .ku-stagger > * {
+    animation: page-in 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(var(--stagger-step, 40ms) * var(--i, 0));
+  }
+
+  /* ==================================================================== */
+  /* Console primitives, re-cut on the ledger                             */
+  /*                                                                      */
+  /* `.panel` is the surface every page already composes from, so it is    */
+  /* the same thing as `.ku-card` — that is what carries the system into   */
+  /* pages this port never opened.                                        */
+  /* ==================================================================== */
+  .panel { @apply border border-hairline bg-white; }
+
+  .panel-header {
+    @apply flex items-center justify-between gap-3 border-b border-hairline px-5 py-3.5;
+  }
+
+  /* The primary artifact on a page. No gradient "milled edge" — the 3px
+     structure cap is what says "this is the thing". */
+  .panel-lift { @apply border border-hairline border-t-3 border-t-structure bg-white; }
+
+  .label-eyebrow { @apply ku-eyebrow; }
+
+  /* A 2px structure rule under the whole head — not a grey border-b. Drawn
+     as an ::after inside the cell, because under border-collapse a sticky
+     th's own bottom border scrolls away in Chromium. */
+  .grid-head {
+    @apply sticky top-0 z-10 bg-white font-mono text-micro font-semibold uppercase text-meta;
+    box-shadow: inset 0 -2px 0 var(--structure);
+  }
+
+  .industrial-rule   { border-top: 3px solid var(--structure); }
+  .industrial-accent { border-left: 3px solid var(--accent); }
+}
+
+/* Scrollbars, everywhere: a square thumb in hairline-strong, no track. */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #A7B3BE;
+  border-radius: 0;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #5C6975;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Fan loading animation — mirrors the four strands of the Kiran mark */
+@keyframes fan-1 {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-30deg); }
+}
+@keyframes fan-2 {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-10deg); }
+}
+@keyframes fan-3 {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(10deg); }
+}
+@keyframes fan-4 {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(30deg); }
+}
+
+.animate-fan-1 { animation: fan-1 1.5s ease-in-out infinite; transform-origin: bottom center; }
+.animate-fan-2 { animation: fan-2 1.5s ease-in-out infinite; transform-origin: bottom center; }
+.animate-fan-3 { animation: fan-3 1.5s ease-in-out infinite; transform-origin: bottom center; }
+.animate-fan-4 { animation: fan-4 1.5s ease-in-out infinite; transform-origin: bottom center; }
+
+/* §7 Page transition — one decisive ease-out, no overshoot */
+@keyframes page-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-page-enter {
+  animation: page-enter 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes dialog-in {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+.animate-overlay-in { animation: overlay-in 140ms ease-out both; }
+.animate-dialog-in { animation: dialog-in 200ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+/* Legacy alias used across pages — resolves to the same fade-rise */
+.animate-fadeIn {
+  animation: page-enter 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ========================================================================== */
+/* Chat surfaces                                                              */
+/*                                                                            */
+/* The conversation module composes from these named surfaces rather than     */
+/* from ad-hoc utilities, so the whole chat can be re-skinned by editing the  */
+/* variables above and nothing else.                                          */
+/* ========================================================================== */
+
+.glass {
+  background: var(--surface);
+  border: 1px solid var(--hairline-strong);
+}
+
+.ai-card {
+  background: var(--ai-tint);
+  border: 1px solid rgba(74, 63, 160, 0.24);
+}
+
+.workspace-shell {
+  position: relative;
+  isolation: isolate;
+  background: var(--canvas);
+}
+
+.conversation-rail {
+  border-color: var(--hairline);
+  background: var(--rail);
+}
+
+.conversation-rail [aria-current="true"] {
+  background: var(--rail-active);
+  border-color: var(--rail-active-border);
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.chat-header {
+  background: var(--header-surface);
+  box-shadow: 0 1px 0 var(--hairline);
+  z-index: 2;
+}
+
+.chat-canvas {
+  background-color: var(--chat-canvas);
+  background-image: radial-gradient(circle, var(--chat-canvas-dot) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+
+/* Bubbles carry a 2px leading edge instead of a drop shadow: at conversation
+   density a shadow on every message turns the thread into visual noise. */
+.message-bubble-mine {
+  background: var(--bubble-mine);
+  color: var(--bubble-mine-foreground);
+  border: 1px solid var(--bubble-mine-border);
+  border-left: 3px solid var(--bubble-mine-accent);
+}
+
+.message-bubble-other {
+  background: var(--bubble-other);
+  border: 1px solid var(--bubble-other-border);
+  border-left: 3px solid var(--bubble-other-accent);
+}
+
+.composer-shell {
+  background: var(--composer);
+  box-shadow: 0 -1px 0 var(--hairline);
+}
+
+.composer-field {
+  background: var(--composer-field);
+  border-color: var(--composer-field-border);
+}
+
+.composer-shell textarea,
+.composer-shell input {
+  background: transparent;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Rendered markdown — agent replies and pinned notes                          */
+/* -------------------------------------------------------------------------- */
+
+.md-body {
+  font-size: 14px;
+  line-height: 1.6;
+}
+.md-body > * + * { margin-top: 0.6em; }
+.md-body ul, .md-body ol { padding-left: 1.15em; }
+.md-body ul { list-style: disc; }
+.md-body ol { list-style: decimal; }
+.md-body li + li { margin-top: 0.25em; }
+.md-body a { color: var(--accent-link); text-decoration: underline; text-underline-offset: 2px; }
+.md-body strong { font-weight: 600; color: var(--ink); }
+.md-body blockquote {
+  border-left: 3px solid var(--accent);
+  padding-left: 0.75em;
+  color: var(--meta);
+}
+.md-body code {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.88em;
+  background: var(--line-2);
+  border: 1px solid var(--hairline);
+  border-radius: 0;
+  padding: 0.08em 0.32em;
+}
+.md-body pre {
+  background: var(--ink);
+  color: #E9EDF0;
+  border-radius: 0;
+  padding: 0.75em 0.9em;
+  overflow-x: auto;
+}
+.md-body pre code {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: inherit;
+}
+.md-body table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.md-body th, .md-body td {
+  border: 1px solid var(--hairline);
+  padding: 0.35em 0.55em;
+  text-align: left;
+}
+.md-body th {
+  background: var(--line-2);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--meta);
+}
+.md-body h1, .md-body h2, .md-body h3 {
+  font-family: 'Archivo', sans-serif;
+  font-variation-settings: 'wdth' 112;
+  font-weight: 600;
+  font-size: 1em;
+  margin-top: 1em;
+}
+.md-body hr { border: 0; border-top: 1px solid var(--hairline); margin: 1em 0; }
+
+/* Syntax highlighting, tuned to the console's ink surface */
+.md-body .hljs-comment, .md-body .hljs-quote { color: #8CA0B8; font-style: italic; }
+.md-body .hljs-keyword, .md-body .hljs-selector-tag, .md-body .hljs-literal, .md-body .hljs-type { color: #7FB4E8; }
+.md-body .hljs-string, .md-body .hljs-regexp, .md-body .hljs-addition { color: #86D9A6; }
+.md-body .hljs-number, .md-body .hljs-built_in { color: #F0B75F; }
+.md-body .hljs-title, .md-body .hljs-section { color: #C3B0F5; }
+.md-body .hljs-attr, .md-body .hljs-attribute { color: #7FD5E8; }
+
+/* -------------------------------------------------------------------------- */
+/* Project module — the peek panel slide-in                                    */
+/* -------------------------------------------------------------------------- */
+
+@keyframes peek-in {
+  from { opacity: 0; transform: translateX(16px); }
+  to   { opacity: 1; transform: none; }
+}

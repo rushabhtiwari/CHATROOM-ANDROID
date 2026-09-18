@@ -1,0 +1,101 @@
+{
+  "_comment": "PACT RevenU Purchase Order, KIRAN CABLE PROTECTION PRODUCTS PVT LTD [Index 13], user Aniket [Test Trail]. Built from discovery/20260904_105539_PACT_RevenU.json. Numeric auto_ids are this company's field IDs and will differ in another PACT company.",
+  "window": { "title_re": "PACT RevenU - KIRAN CABLE" },
+  "duplicate_key": ["party_ref_no"],
+  "date_format": "%d/%m/%Y",
+  "accounting_period": {
+    "from": "01/04/2026",
+    "to": "31/03/2027",
+    "note": "Financial year 2026-27. Evidence: PACT writes 04/09/2026 into Doc Date on a brand-new document, and the document-number prefix is S/26-27/09/ (FY 26-27, month 09). The DatePicker blacks out nothing, so PACT enforces this on save - pre-flight blocks rows outside it so a batch does not fail row by row. CONFIRMED 04/09/2026 13:03: a Save Draft with doc_date 04/09/2026 was accepted ('Saved SuccesfullyDraft Saved At 01:03 PM'), so that date is inside the period PACT accepts."
+  },
+
+  "fields": {
+    "doc_date":            { "auto_id": "DtpVoucherDate", "type": "date", "child_edit": "PART_TextBox", "required": true },
+    "doc_no":              { "auto_id": "txtVoucherNo",   "type": "edit", "validate": "text" },
+    "vendor_name":         { "auto_id": "lstname",        "type": "lookup_combo", "child_edit": "PART_EditableTextBox", "required": true,
+                             "settle_ms": 300, "dropdown_wait_ms": 400,
+                             "note": "must match the vendor master EXACTLY. Verified on the live screen: the combo drops keystrokes while it queries the master, so KPAC sets all but the last character through the ValuePattern and types only the last one; Enter on the filtered dropdown either commits the true match (selection count 1) or clears the box (selection count 0). Down+Enter is NOT used - it selects the first row of the unfiltered list, i.e. a real but WRONG vendor." },
+    "narration":           { "auto_id": "7090",           "type": "edit", "validate": "text" },
+
+    "duties_and_taxes":    { "auto_id": "4344", "type": "edit", "tab": "Extra Fields", "validate": "text" },
+    "mode_of_transport":   { "auto_id": "4345", "type": "edit", "tab": "Extra Fields", "required": true, "validate": "text" },
+    "supplier_validity":   { "auto_id": "4347", "type": "date", "tab": "Extra Fields", "child_edit": "PART_TextBox" },
+    "transporter":         { "auto_id": "4349", "type": "edit", "tab": "Extra Fields", "required": true, "validate": "text" },
+    "delivery_terms":      { "auto_id": "4350", "type": "edit", "tab": "Extra Fields", "required": true, "validate": "text" },
+    "payment_terms":       { "auto_id": "4351", "type": "edit", "tab": "Extra Fields", "required": true, "validate": "text" },
+    "po_validity":         { "auto_id": "4352", "type": "date", "tab": "Extra Fields", "child_edit": "PART_TextBox" },
+    "party_ref_no":        { "auto_id": "4354", "type": "edit", "tab": "Extra Fields", "validate": "text" },
+    "party_ref_date":      { "auto_id": "4355", "type": "date", "tab": "Extra Fields", "child_edit": "PART_TextBox" },
+    "po_confirmation":     { "auto_id": "4356", "type": "combo", "tab": "Extra Fields" },
+    "packing_instruction": { "auto_id": "4363", "type": "edit", "tab": "Extra Fields", "validate": "text" },
+    "shipping_instructions": { "auto_id": "4364", "type": "edit", "tab": "Extra Fields", "validate": "text" }
+  },
+
+  "tabs": { "container": "PACTContainer2", "names": ["Extra Fields", "Dimensions", "GST"] },
+
+  "grid": {
+    "auto_id": "GrdBody",
+    "required": true,
+    "note": "WPF DataGrid, rows virtualised, cells have NO automation ids. Fill by keyboard: focus row 1 col 'Product Code', type, Tab to next column. Ctrl+G = GoToLine. Product Code is a lookup against the product master.",
+    "note4": "Verified on the live screen: a DataGridRow's children include 0x0 placeholders for unrealised columns, so cell POSITION IN THAT LIST IS MEANINGLESS. KPAC matches each cell to its column by (left, width) against the header row. With the window at 1920 wide the rendered cells are Product Code=2, Qty=7, UnitPrice=9 of 28 -> 5 tabs then 2 tabs.",
+    "columns": ["", "#", "Approval Status", "Product Code", "Product Name", "HSNCODE", "ProductAliasNames",
+                "Purchase Account", "Qty", "Units", "UnitPrice", "Value", "Discount", "TaxableAmount",
+                "GSTTax", "SGST", "CGST", "IGST", "CGSTAmnt", "SGSTAmnt", "IGSTAmnt", "TOTAL",
+                "Purpouse Of Usage", "Roff", "Order Category", "DeliveryReqByDate", "Remarks", "", "Last PP"],
+    "entry_columns": ["Product Code", "Qty"],
+    "item_keys": { "Product Code": "product_code", "Qty": "qty", "UnitPrice": "unit_price" },
+    "price_column": "UnitPrice",
+    "price_key": "unit_price",
+    "verify_columns": ["Product Code", "Qty"],
+    "lookup_columns": ["Product Code"],
+    "commit_key": "{ENTER}",
+    "focus_out_field": "narration",
+    "lookup_wait_ms": 400,
+    "lookup_resolved_column": "Product Name",
+    "resolve_timeout_ms": 4000,
+    "post_resolve_ms": 250,
+    "cell_settle_ms": 300,
+    "cell_child_edit": "PART_EditableTextBox",
+    "cell_edit_ms": 150,
+    "lookup_timeout_ms": 4000,
+    "lookup_attempts": 3,
+    "lookup_attempts_total": 5,
+    "note8": "lookup_attempts is per commit; lookup_attempts_total is the budget for one row across the fill and every repair pass. Each attempt against a code the master does not have costs about ten seconds (dropdown timeout + resolve timeout), and the old shape spent nine of them - two minutes of visible lag on a code that was never going to resolve. Five keeps the retry that the run log shows succeeding on attempt 2 and bounds the failure at under a minute.",
+    "note7": "Verified on the live screen: a Product Code cell in edit mode hosts the same editable ComboBox the header lookups use, with a PART_EditableTextBox underneath. That matters because PACT queries the product master on every text change and DROPS keystrokes while the query is in flight - see vendor_name. Typing 45629 character by character therefore lands 456 on a busy master, Enter matches nothing, and PACT clears the cell; that is the failure where the vendor name arrives and the grid stays empty. KPAC now sets all but the last character through the ValuePattern, types only the last one so the dropdown filters on the whole value, CHECKS the box really holds it before pressing Enter, and polls the combo selection count instead of sleeping a fixed lookup_filter_ms.",
+    "row_repair_passes": 2,
+    "note6": "Verified on the live screen: UnitPrice is NOT editable on this screen for any product - F2 opens no editor in the cell and typing is ignored (46893 stayed at its master rate 265 when 300 was typed; 42010 stayed at 0). PACT sources the rate from the product master, so UnitPrice is deliberately NOT in entry_columns. The unit price in a CSV is treated as the EXPECTED price: KPAC reads back what PACT actually used and records a warning on the row if they differ.",
+    "note5": "Verified on the live screen: once a Product Code resolves, PACT recalculates the row (Product Name, HSN, Purchase Account, GST, TOTAL) and DROPS keystrokes while it does. Typing Qty straight after lost a digit - 10 became 1. PACT resolves the code when focus LEAVES the cell and then resets Qty to 1, and a cell being edited reports stale text to UIA. KPAC therefore waits for lookup_resolved_column after tabbing out, and verifies/repairs the row only once it is committed.",
+    "note2": "Product Name, HSN, tax columns and TOTAL are computed by PACT after Product Code is accepted - do not type them.",
+    "note3": "columns[] mirrors the real header row including the two unnamed columns. It is used to sanity-check the screen and to document the layout - NOT for indexing cells; see note4. Header[0] spans the whole grid and has no cell, so header i corresponds to rendered cell i-1."
+  },
+
+  "footer_grid": { "auto_id": "Grdfooter", "columns": ["#", "Name", "Amount", "Calculated Amount", "Remarks", "Currency", "Exchange Rate"] },
+
+  "actions": {
+    "new":        { "name": "New",        "type": "text", "found_index": 0,
+                    "note": "the ribbon Button itself has no name; its child TextBlock is called New, and clicking that hits the button" },
+    "save_draft": { "keys": "^+d",        "type": "hotkey", "note": "Ctrl+Shift+D - SAFE, does not commit to the books" },
+    "post":       { "name": "Post",       "type": "button", "note": "COMMITS the document. NOT WIRED UP - do not use." },
+    "goto_line":  { "keys": "^g",         "type": "hotkey" },
+    "search":     { "keys": "^f",         "type": "hotkey" },
+    "load_doc":   { "keys": "{F4}",       "type": "hotkey" }
+  },
+
+  "locked_marker": "(locked)",
+  "locked_marker_note": "PACT keeps a hidden 0x0 '(locked)' TextBlock in the tree at all times; only a RENDERED one means the document is really read-only. KPAC checks visibility, not existence.",
+
+  "confirmation": { "auto_id": "FlshMsg", "success_re": "(?i)saved|success|draft", "error_re": "(?i)error|mandatory|required|invalid",
+    "note": "On a successful Save Draft FlshMsg reads e.g. 'Saved SuccesfullyDraft Saved At 01:03 PM'. It carries no document number, so KPAC falls back to reading txtVoucherNo. A DRAFT's Doc No is a plain sequence number ('1'); the S/26-27/09/ series prefix is NOT rendered anywhere while the document is [Draft], so it is presumably applied on Post - which KPAC never does." },
+
+  "totals": { "net_total_label": "Net Total", "balance_label": "Balance" },
+
+  "verify_labels": {
+    "doc_date": "Doc Date", "doc_no": "Doc No", "vendor_name": "Vendor Name", "narration": "Narration",
+    "duties_and_taxes": "Duties and Taxes", "mode_of_transport": "Mode of Transport",
+    "supplier_validity": "Supplier Validity", "transporter": "Transporter",
+    "delivery_terms": "Delivery Terms", "payment_terms": "Payment Terms", "po_validity": "PO Validity",
+    "party_ref_no": "Party Ref No", "party_ref_date": "Party Ref Date",
+    "po_confirmation": "PO Confirmation", "packing_instruction": "Packing Instruction",
+    "shipping_instructions": "Shipping Instructions"
+  }
+}
