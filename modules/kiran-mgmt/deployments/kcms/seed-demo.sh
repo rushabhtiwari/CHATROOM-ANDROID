@@ -13,6 +13,11 @@ demo_password="${DEMO_PASSWORD:-}"
 . /run/kcms-env.sh
 export DEMO_PASSWORD="$demo_password"
 python manage.py wait_for_migrations
+# The API registers the instance row after migrations, in its own process. The seeder
+# returns quietly when that row is missing, so on a first boot wait for it.
+until python manage.py shell -c "import sys; from plane.license.models import Instance; sys.exit(0 if Instance.objects.exists() else 1)" >/dev/null 2>&1; do
+    sleep 5
+done
 DEBUG=1 python manage.py seed_kcms_demo
 # The API caches the instance record (including "has setup been done"), so without
 # this the admin console keeps offering first-run setup after the seeder has done it.
