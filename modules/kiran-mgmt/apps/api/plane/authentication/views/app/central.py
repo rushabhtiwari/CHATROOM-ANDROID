@@ -88,6 +88,8 @@ class CentralInitiateEndpoint(View):
             "state": state,
             "code_challenge": challenge,
             "code_challenge_method": "S256",
+            # The identity service is strict about OpenID Connect: a nonce is required.
+            "nonce": secrets.token_urlsafe(24),
         })
         return HttpResponseRedirect(f"{conf['issuer']}/authorize?{query}")
 
