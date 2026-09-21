@@ -820,14 +820,19 @@ td code {
 }
 
 /* ---------------- app mark ---------------- */
+/* The mark carries the platform's blue at rest, so the colour a tile turns on hover is
+   already on the tile rather than arriving from nowhere. */
 .app-mark {
   position: relative;
   flex: none;
   display: grid;
   place-items: center;
   overflow: hidden;
-  color: var(--text-2);
-  background: #f0f0f3;
+  color: var(--primary);
+  background: var(--primary-soft);
+  transition:
+    color 160ms ease,
+    background-color 160ms ease;
 }
 
 .app-mark::after {
@@ -1048,8 +1053,9 @@ td code {
   color: var(--text);
   text-decoration: none;
   transition:
-    border-color 150ms ease,
-    background-color 150ms ease;
+    border-color 160ms ease,
+    background-color 160ms ease,
+    color 160ms ease;
 }
 
 .app-card b {
@@ -1071,13 +1077,25 @@ td code {
     transform 150ms ease;
 }
 
-a.app-card:hover {
-  border-color: #c6c6cd;
+/* Hover fills the whole tile with the accent tint - the same blue the mark already
+   wears - and the mark inverts to solid so the tile reads as one lit object. */
+a.app-card:hover,
+a.app-card:focus-visible {
+  background: var(--primary-soft);
+  border-color: var(--primary);
+  color: var(--primary-hover);
 }
 
-a.app-card:hover .app-card-go {
+a.app-card:hover .app-mark,
+a.app-card:focus-visible .app-mark {
+  background: var(--primary);
+  color: #fff;
+}
+
+a.app-card:hover .app-card-go,
+a.app-card:focus-visible .app-card-go {
   color: var(--primary);
-  transform: translateX(2px);
+  transform: translateX(3px);
 }
 
 .status {
@@ -1106,7 +1124,8 @@ a.app-card:hover .app-card-go {
 }
 
 .app-card-soon .app-mark {
-  opacity: 0.6;
+  color: var(--faint);
+  background: #f0f0f3;
 }
 
 .empty-state {

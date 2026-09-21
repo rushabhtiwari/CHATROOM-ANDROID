@@ -53,7 +53,9 @@ export const Sidebar: React.FC = () => {
     } ${
       isActive
         ? 'bg-[#DCE6F4] text-[#0B4F9C]'
-        : 'text-ink-3 hover:bg-black/[0.05] hover:text-ink'
+        // Hover lands on the same blue the active row wears, one shade lighter, so a
+        // pointer moving down the rail previews what selecting would look like.
+        : 'text-ink-3 hover:bg-[#E7EFFA] hover:text-[#0B4F9C]'
     }`;
 
   const renderItem = (item: WorkspaceNavItem) => {
@@ -64,7 +66,9 @@ export const Sidebar: React.FC = () => {
     const content = (
       <>
         <Icon
-          className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#0B4F9C]' : 'text-[#6E6E76]'}`}
+          className={`w-4 h-4 shrink-0 transition-colors duration-150 ${
+            isActive ? 'text-[#0B4F9C]' : 'text-[#6E6E76] group-hover:text-[#0A63C9]'
+          }`}
           strokeWidth={1.8}
         />
         {!collapsed && <span className="truncate flex-1">{item.name}</span>}
@@ -185,7 +189,7 @@ export const Sidebar: React.FC = () => {
         <a
           href="http://localhost:3000"
           title="All apps"
-          className={`flex items-center gap-2.5 h-9 rounded-md text-[14px] font-medium text-[#5B5B63] hover:bg-black/[0.05] hover:text-ink transition-colors ${
+          className={`group flex items-center gap-2.5 h-9 rounded-md text-[14px] font-medium text-[#5B5B63] hover:bg-[#E7EFFA] hover:text-[#0B4F9C] transition-colors ${
             collapsed ? 'justify-center' : 'px-2.5'
           }`}
         >

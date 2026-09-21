@@ -296,7 +296,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen = false, onMobileCl
   const ROW =
     'group relative flex h-9 items-center rounded-md text-[14px] font-medium transition-colors duration-150';
   const ROW_ACTIVE = 'bg-[#DCE6F4] text-[#0B4F9C]';
-  const ROW_IDLE = 'text-ink-soft hover:bg-black/5';
+  // Hover lands on the same blue the active row wears, one shade lighter, so a pointer
+  // moving down the rail previews what selecting would look like.
+  const ROW_IDLE = 'text-ink-soft hover:bg-[#E7EFFA] hover:text-[#0B4F9C]';
   const BADGE =
     'tnum shrink-0 rounded-full bg-[#D93A2F] px-1.5 py-[3px] text-[12px] font-semibold leading-none text-white';
 
@@ -379,7 +381,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen = false, onMobileCl
                         title={item.name}
                         className="flex h-full min-w-0 flex-1 items-center gap-2.5 pl-2.5"
                       >
-                        <Icon className="h-[17px] w-[17px] shrink-0 text-faint" strokeWidth={1.8} />
+                        <Icon
+                          className="h-[17px] w-[17px] shrink-0 text-faint transition-colors duration-150 group-hover:text-[#0A63C9]"
+                          strokeWidth={1.8}
+                        />
                         <span className="truncate">{item.name}</span>
                       </NavLink>
 
@@ -435,7 +440,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen = false, onMobileCl
                   }`}
                 >
                   <Icon
-                    className={`h-[17px] w-[17px] shrink-0 ${isActive ? '' : 'text-faint'}`}
+                    className={`h-[17px] w-[17px] shrink-0 transition-colors duration-150 ${
+                      isActive ? '' : 'text-faint group-hover:text-[#0A63C9]'
+                    }`}
                     strokeWidth={1.8}
                   />
                   {!collapsed && <span className="flex-1 truncate">{item.name}</span>}
@@ -461,7 +468,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen = false, onMobileCl
           title="Team Chat (opens the department workspace)"
           className={`${ROW} gap-2.5 ${collapsed ? 'justify-center px-0' : 'px-2.5'} ${ROW_IDLE}`}
         >
-          <MessageSquareText className="h-[17px] w-[17px] shrink-0 text-faint" strokeWidth={1.8} />
+          <MessageSquareText
+            className="h-[17px] w-[17px] shrink-0 text-faint transition-colors duration-150 group-hover:text-[#0A63C9]"
+            strokeWidth={1.8}
+          />
           {!collapsed && <span className="flex-1 truncate">Team chat</span>}
         </a>
       </div>
