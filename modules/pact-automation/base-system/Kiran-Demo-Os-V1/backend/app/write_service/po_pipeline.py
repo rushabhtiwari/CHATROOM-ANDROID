@@ -71,6 +71,7 @@ from __future__ import annotations
 
 import asyncio
 import os
+import threading
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 from typing import Any, Optional
@@ -93,6 +94,31 @@ from ..store import store as console_store
 from .errors import WriteServiceError
 
 PIPELINE_ACTOR = "pipeline"
+
+#: Jobs whose PACT release is in flight, and the lock that makes claiming one atomic.
+#:
+#: Three doors open onto the same release - the admin approval releases automatically, the
+#: on-hold resolver offers it as a retry, and the pipeline view has its own Run - and none
+#: of them knew about the others. The stored check is for a push that has already SUCCEEDED,
+#: which says nothing about one still running, so two callers seconds apart both passed it
+#: and the robot typed and saved the same order twice. A job is claimed here for the length
+#: of its release and let go in a `finally`, so the second caller is told it is already
+#: running instead of starting a second document.
+_releasing: set[str] = set()
+_releasing_lock = threading.Lock()
+
+
+def _claim_release(job_id: str) -> bool:
+    with _releasing_lock:
+        if job_id in _releasing:
+            return False
+        _releasing.add(job_id)
+        return True
+
+
+def _drop_release(job_id: str) -> None:
+    with _releasing_lock:
+        _releasing.discard(job_id)
 
 SELLER_NAME = "Kiran Cable Protection Products Pvt Ltd"
 
@@ -696,8 +722,24 @@ async def run_after_accounts_approval(job_id: str, *, actor: str = PIPELINE_ACTO
     """Fill one PACT draft, then close the order out with the customer and the team.
 
     Reachable only from `AWAITING_ACCOUNTS_APPROVAL`. Refuses from anywhere else, so
-    nothing gets into PACT by another route.
+    nothing gets into PACT by another route. One release at a time per job: a second
+    caller while the robot is working is answered rather than run (see `_releasing`).
     """
+    if not _claim_release(job_id):
+        run = PipelineRun(ok=True)
+        outcome = StepOutcome(
+            "pact_push", "done", "A release for this order is already running", True
+        )
+        run.steps.append(outcome)
+        return run
+    try:
+        return await _release_into_pact(job_id, actor=actor)
+    finally:
+        _drop_release(job_id)
+
+
+async def _release_into_pact(job_id: str, *, actor: str = PIPELINE_ACTOR) -> PipelineRun:
+    """The body of `run_after_accounts_approval`, with the job already claimed."""
     job = _job_or_die(job_id)
     # PUSHED_TO_PACT and COMPLETED are here so a retry after a partial run resumes rather
     # than being refused - every step below is idempotent, so a re-run of a finished order
