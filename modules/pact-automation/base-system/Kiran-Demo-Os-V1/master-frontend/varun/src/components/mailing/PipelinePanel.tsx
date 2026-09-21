@@ -81,7 +81,7 @@ export const PipelinePanel: React.FC<{ jobId: string }> = ({ jobId }) => {
         )}
         {view.status === 'AWAITING_ACCOUNTS_APPROVAL' && (
           <>
-            Waiting for Accounts. {openTasks} task(s) open.
+            Approved. Releasing into PACT. {openTasks} task(s) open.
           </>
         )}
         {pushed && (

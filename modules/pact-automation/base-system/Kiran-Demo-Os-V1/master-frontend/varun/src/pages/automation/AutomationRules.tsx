@@ -77,23 +77,23 @@ export const AutomationRules: React.FC = () => {
             )}
           </div>
 
-          {/* ---- Gate 2 ------------------------------------------------ */}
+          {/* ---- Into PACT --------------------------------------------- */}
           <div className="my-6 border-y-2 border-ink py-4">
-            <p className="ku-eyebrow">Gate 2 — Accounts</p>
+            <p className="ku-eyebrow">Into PACT</p>
             <p className="mt-2 max-w-3xl text-body font-semibold text-ink">
-              Accounts release the order into PACT. This is the only edge into the accounting
-              system, from anywhere.
+              The approved order is released into PACT. This is the only edge into the
+              accounting system, from anywhere.
             </p>
             <p className="mt-2 max-w-3xl text-body-s text-meta">
               One purchase order becomes one PACT document: every line of the order is typed
-              into the same grid and committed with a single Save Draft. There is no flag,
-              threshold or timeout that reaches past this gate.
+              into the same grid and committed with a single Save Draft. The release follows
+              the admin approval by itself, so there is no second queue to work. Turning
+              PACT_AUTO_RELEASE off puts a separate Accounts sign-off back in front of this
+              step; nothing else about the path changes. There is no flag, threshold or
+              timeout that reaches past the approval.
             </p>
             {summary && (
               <div className="mt-3 flex flex-wrap gap-2">
-                <span className={`ku-stamp ${TONE.amber.stamp}`}>
-                  {summary.awaitingAccounts} awaiting Accounts
-                </span>
                 <span className={`ku-stamp ${TONE.green.stamp}`}>
                   {summary.completed} completed
                 </span>
@@ -104,7 +104,7 @@ export const AutomationRules: React.FC = () => {
           <Phase
             label="Gated"
             tone="green"
-            note="Reachable only through the Accounts approval."
+            note="Reachable only through the admin approval."
           >
             <Step
               index="4"

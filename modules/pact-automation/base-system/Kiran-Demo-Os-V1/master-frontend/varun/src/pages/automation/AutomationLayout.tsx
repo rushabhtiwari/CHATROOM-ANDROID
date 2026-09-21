@@ -74,13 +74,13 @@ export const AutomationLayout: React.FC = () => {
           title="Awaiting an admin"
           value={summary ? summary.awaitingAdmin.toLocaleString() : '—'}
           tone={summary && summary.awaitingAdmin > 0 ? 'amber' : undefined}
-          subtitle="Gate 1 — no work starts until somebody approves"
+          subtitle="No work starts until somebody approves"
         />
         <KPICard
-          title="Awaiting Accounts"
+          title="Releasing into PACT"
           value={summary ? summary.awaitingAccounts.toLocaleString() : '—'}
           tone={summary && summary.awaitingAccounts > 0 ? 'amber' : undefined}
-          subtitle="Gate 2 — the only route into PACT"
+          subtitle="Approved, being typed into PACT"
         />
         <KPICard
           title="PACT drafts"

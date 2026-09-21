@@ -104,6 +104,9 @@ DEMO_CUSTOMERS: tuple[DemoCustomer, ...] = (
         city="Hubballi",
         code="CUST-P02",
     ),
+    # Not resolvable on the live window as of 2026-09-21: PACT clears the box rather than
+    # matching, so the push stops safely instead of saving a wrong party. Kept here so the
+    # sender is still a known domain and the failure is the master lookup, which says so.
     DemoCustomer(
         name="M.a. Mannan Silk Lining House",
         domain="mamannansilklininghouse.example",
@@ -112,6 +115,7 @@ DEMO_CUSTOMERS: tuple[DemoCustomer, ...] = (
         city="Mysuru",
         code="CUST-P03",
     ),
+    # Not resolvable on the live window either - see the note above.
     DemoCustomer(
         name="M.J.COMFORT",
         domain="mjcomfort.example",
@@ -153,10 +157,25 @@ def by_name(name: str) -> Optional[DemoCustomer]:
 # KiranOS company name -> PACT master name                                     #
 # --------------------------------------------------------------------------- #
 
-#: Identity for all four. They were created in PACT with exactly these strings, so there
-#: is nothing to translate. Listed explicitly rather than inferred, because "the table is
-#: empty so anything goes" is the behaviour this module exists to prevent.
-PACT_MASTER_MAP: dict[str, str] = {c.name: c.name for c in DEMO_CUSTOMERS}
+#: Every name above is identity: the rows were created in PACT with exactly these
+#: strings, so there is nothing to translate. Listed explicitly rather than inferred,
+#: because "the table is empty so anything goes" is the behaviour this module exists to
+#: prevent.
+#:
+#: `OTHER_PACT_VENDORS` are the remaining rows of PACT's vendor master. No demo PDF is
+#: written from them, but an order can still name one - the seeded ledger does - and
+#: without them the push fails with "customer not in PACT master" for a company PACT
+#: demonstrably holds. They are spelled as the master spells them.
+OTHER_PACT_VENDORS: tuple[str, ...] = (
+    "M.a. Road Lines",
+    "M S Enterpries",
+    "M K MOBILES PRIVATE LIMITED",
+)
+
+PACT_MASTER_MAP: dict[str, str] = {
+    **{c.name: c.name for c in DEMO_CUSTOMERS},
+    **{name: name for name in OTHER_PACT_VENDORS},
+}
 
 
 def parse_pairs(raw: str | None) -> dict[str, str]:

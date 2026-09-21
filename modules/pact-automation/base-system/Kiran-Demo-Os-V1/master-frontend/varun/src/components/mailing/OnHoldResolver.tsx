@@ -260,30 +260,31 @@ export const OnHoldResolver: React.FC<Props> = ({ job, onResolved, onError }) =>
                 type="button"
                 onClick={() => act('COMMIT_EDITED')}
                 disabled={busy !== null}
-                title="Gate 1 — acknowledge the customer and task Sales, Accounts and Manufacturing"
+                title="Approve: acknowledge the customer, task the teams, and release the order into PACT"
                 className="inline-flex h-10 items-center gap-2 rounded-md border border-transparent bg-accent px-5 text-body-s font-semibold leading-none text-white transition-colors duration-150 hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <Check aria-hidden className="h-4 w-4" />
-                {busy === 'COMMIT_EDITED' ? 'Approving…' : 'Approve as admin'}
+                {busy === 'COMMIT_EDITED' ? 'Approving…' : 'Approve and release to PACT'}
               </button>
             )}
 
-            {/* Gate 2. The server offers this only on a job already through gate 1, so the
-                button appears exactly when it can be pressed - and it is the same call the
-                Order Automation screen makes. It drives the real PACT window, so it is slow
-                and the label says so rather than looking hung. */}
+            {/* The release into PACT. The admin approval normally does this by itself
+                (PACT_AUTO_RELEASE), and the server then offers this action only while the
+                order is still at the gate - a release that never started, or one to retry.
+                It drives the real PACT window, so it is slow and the label says so rather
+                than looking hung. */}
             {can('ACCOUNTS_APPROVE') && (
               <button
                 type="button"
                 onClick={() => act('ACCOUNTS_APPROVE')}
                 disabled={busy !== null}
-                title="Gate 2 — save one PACT Purchase Order draft with every line item, then close the order out"
+                title="Save one PACT Purchase Order draft with every line item, then close the order out"
                 className="inline-flex h-10 items-center gap-2 rounded-md border border-transparent bg-accent px-5 text-body-s font-semibold leading-none text-white transition-colors duration-150 hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <Check aria-hidden className="h-4 w-4" />
                 {busy === 'ACCOUNTS_APPROVE'
                   ? 'Filling PACT — this takes a minute…'
-                  : 'Release to PACT as Accounts'}
+                  : 'Release to PACT now'}
               </button>
             )}
           </div>
