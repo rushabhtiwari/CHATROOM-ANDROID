@@ -212,9 +212,20 @@ class MailingStore:
         # exactly like the claims ledger does.
         events.publish("mailing", self.summary())
 
-    def reset(self) -> dict[str, Any]:
+    def reset(self, keep_mailbox: bool = False) -> dict[str, Any]:
+        """Back to the seeded demo ledger.
+
+        Everything a test run left behind - its mails, jobs, orders and PACT pushes - goes,
+        so the same purchase order can be sent again and be treated as new. With
+        `keep_mailbox` the live connection and its read position survive, which is what a
+        rehearsal before a demo wants: the watcher keeps running and does not re-ingest
+        every message it has already seen.
+        """
         with self._lock:
+            monitor = dict(self._state.get("monitor") or {})
             self._state = self._blank()
+            if keep_mailbox and monitor.get("connected"):
+                self._state["monitor"] = monitor
             self._persist()
             events.publish("mailing", self.summary())
             return self.summary()

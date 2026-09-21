@@ -369,6 +369,18 @@ def list_tasks(job_id: Optional[str] = Query(None, alias="jobId")) -> list[dict]
     return mailing_store.tasks(job_id)
 
 
+@router.post("/demo/reset")
+def reset_demo(keep_mailbox: bool = Query(True, alias="keepMailbox")) -> dict:
+    """Clear what test runs left behind and put the seeded demo ledger back.
+
+    A purchase order that has already been through the pipeline is refused the second
+    time as a duplicate, which is correct in production and unhelpful when rehearsing.
+    This forgets those runs so the same PDF can be sent again. The mailbox stays
+    connected unless `keepMailbox=false`.
+    """
+    return mailing_store.reset(keep_mailbox=keep_mailbox)
+
+
 @router.post("/direct-send", status_code=201)
 async def direct_send(
     from_address: str = Form(..., alias="fromAddress"),

@@ -81,6 +81,61 @@ DEMO_CUSTOMERS: tuple[DemoCustomer, ...] = (
         city="Mumbai",
         code="CUST-D04",
     ),
+) + (
+    # The six customers the PDFs in `demo-pos/` are written from. Unlike the four above
+    # these are real rows of PACT's vendor master, so the names are spelled exactly as
+    # PACT holds them (capitals and stops included) - the party lookup matches on the
+    # name and resolves nothing by guessing. They are listed here so their domains are
+    # seeded as known: a demo PO then runs the whole path without an operator first
+    # having to clear it out of the unknown-sender queue.
+    DemoCustomer(
+        name="M/s Accurate Weight Industries",
+        domain="msaccurateweightindustries.example",
+        contact_email="purchase@msaccurateweightindustries.example",
+        contact_name="Accurate Weight Purchase Desk",
+        city="Belagavi",
+        code="CUST-P01",
+    ),
+    DemoCustomer(
+        name="M/s B R Traders",
+        domain="msbrtraders.example",
+        contact_email="purchase@msbrtraders.example",
+        contact_name="B R Traders Purchase Desk",
+        city="Hubballi",
+        code="CUST-P02",
+    ),
+    DemoCustomer(
+        name="M.a. Mannan Silk Lining House",
+        domain="mamannansilklininghouse.example",
+        contact_email="purchase@mamannansilklininghouse.example",
+        contact_name="Mannan Purchase Desk",
+        city="Mysuru",
+        code="CUST-P03",
+    ),
+    DemoCustomer(
+        name="M.J.COMFORT",
+        domain="mjcomfort.example",
+        contact_email="purchase@mjcomfort.example",
+        contact_name="M J Comfort Purchase Desk",
+        city="Mangaluru",
+        code="CUST-P04",
+    ),
+    DemoCustomer(
+        name="M.K.INDUSTRIES",
+        domain="mkindustries.example",
+        contact_email="purchase@mkindustries.example",
+        contact_name="M K Industries Purchase Desk",
+        city="Bengaluru",
+        code="CUST-P05",
+    ),
+    DemoCustomer(
+        name="M.r. Enterprises",
+        domain="mrenterprises.example",
+        contact_email="purchase@mrenterprises.example",
+        contact_name="M R Enterprises Purchase Desk",
+        city="Mysuru",
+        code="CUST-P06",
+    ),
 )
 
 
