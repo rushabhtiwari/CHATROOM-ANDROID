@@ -200,8 +200,8 @@ export const ModuleGlyph: React.FC<{ className?: string }> = ({ className = '' }
 
 const AVATAR_SIZES = {
   xs: 'h-[16px] w-[16px] text-[7.5px]',
-  sm: 'h-5 w-5 text-[9px]',
-  md: 'h-6 w-6 text-[10px]',
+  sm: 'h-5 w-5 text-[12px]',
+  md: 'h-6 w-6 text-[12px]',
   lg: 'h-8 w-8 text-[12px]',
 } as const;
 
@@ -215,7 +215,7 @@ export const Avatar: React.FC<{
   <span
     title={name}
     style={{ backgroundColor: color }}
-    className={`inline-flex shrink-0 items-center justify-center rounded-full font-semibold uppercase leading-none text-white ring-1 ring-white ${AVATAR_SIZES[size]} ${className}`}
+    className={`inline-flex shrink-0 items-center justify-center rounded-full font-semibold leading-none text-white ring-1 ring-white ${AVATAR_SIZES[size]} ${className}`}
   >
     {initials}
   </span>
@@ -282,7 +282,7 @@ export const LabelChip: React.FC<{
   className?: string;
 }> = ({ name, color, onRemove, className = '' }) => (
   <span
-    className={`inline-flex items-center gap-1 whitespace-nowrap text-[11px] font-medium text-slate-700 ${className}`}
+    className={`inline-flex items-center gap-1 whitespace-nowrap text-[12px] font-medium text-slate-700 ${className}`}
   >
     <span
       aria-hidden
@@ -348,7 +348,7 @@ export const Pill = React.forwardRef<
       title={title}
       style={style}
       onClick={onClick}
-      className={`inline-flex h-[22px] shrink-0 cursor-pointer select-none items-center gap-1 whitespace-nowrap rounded border px-1.5 text-[11px] leading-none transition-colors ${tones[tone]} ${className}`}
+      className={`inline-flex h-[22px] shrink-0 cursor-pointer select-none items-center gap-1 whitespace-nowrap rounded border px-1.5 text-[12px] leading-none transition-colors ${tones[tone]} ${className}`}
     >
       {children}
     </span>

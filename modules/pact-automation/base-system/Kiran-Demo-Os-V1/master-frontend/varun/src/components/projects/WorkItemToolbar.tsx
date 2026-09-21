@@ -236,7 +236,7 @@ export const WorkItemToolbar: React.FC<Props> = ({
           <ToolbarButton active={open || view.filtersActive} chevron>
             Filters
             {view.filtersActive && (
-              <span className="rounded-full bg-kiran px-1.5 text-[10px] font-semibold text-white">
+              <span className="rounded-full bg-kiran px-1.5 text-[12px] font-semibold text-white">
                 {chips.length + (filters.search ? 1 : 0)}
               </span>
             )}
@@ -398,7 +398,7 @@ export const WorkItemToolbar: React.FC<Props> = ({
               type="button"
               onClick={() => toggleDisplay(key)}
               aria-pressed={display[key]}
-              className={`rounded border px-1.5 py-[2px] text-[11px] transition-colors ${
+              className={`rounded border px-1.5 py-[2px] text-[12px] transition-colors ${
                 display[key]
                   ? 'border-kiran/40 bg-kiran-tint text-kiran'
                   : 'border-line bg-white text-slate-500 hover:bg-canvas'
@@ -433,7 +433,7 @@ export const WorkItemToolbar: React.FC<Props> = ({
           {chips.map((chip) => (
             <span
               key={chip.key}
-              className="inline-flex h-[22px] items-center gap-1 rounded border border-line bg-white pl-1.5 pr-1 text-[11px] text-slate-700"
+              className="inline-flex h-[22px] items-center gap-1 rounded border border-line bg-white pl-1.5 pr-1 text-[12px] text-slate-700"
             >
               {chip.icon}
               {chip.label}
@@ -447,7 +447,7 @@ export const WorkItemToolbar: React.FC<Props> = ({
               </button>
             </span>
           ))}
-          <span className="ml-1 font-mono text-[11px] text-muted">
+          <span className="ml-1 font-mono text-[12px] text-muted">
             {view.items.length} of {view.totalInScope}
           </span>
           <button
@@ -456,7 +456,7 @@ export const WorkItemToolbar: React.FC<Props> = ({
               clearFilters();
               setSearchOpen(false);
             }}
-            className="ml-auto text-[11px] font-medium text-kiran hover:underline"
+            className="ml-auto text-[12px] font-medium text-kiran hover:underline"
           >
             Clear all
           </button>
@@ -477,7 +477,7 @@ const DueBound: React.FC<{
     trigger={() => (
       <button
         type="button"
-        className={`inline-flex h-6 items-center gap-1 rounded border px-1.5 text-[11px] ${
+        className={`inline-flex h-6 items-center gap-1 rounded border px-1.5 text-[12px] ${
           value ? 'border-kiran/40 bg-kiran-tint text-kiran' : 'border-line bg-white text-slate-600 hover:bg-canvas'
         }`}
       >

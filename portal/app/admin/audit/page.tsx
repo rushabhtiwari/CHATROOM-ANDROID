@@ -39,7 +39,6 @@ export default async function ActivityPage({ searchParams }: PageProps<"/admin/a
     <>
       <PageHeader
         title="Activity log"
-        description="Sign-ins, refusals and every change made by admins, newest first."
       />
       <div className="card table-card">
         <form className="table-toolbar" role="search" aria-label="Filter activity">

@@ -304,12 +304,12 @@ export const Chatroom: React.FC = () => {
               <span className="flex items-center gap-2 truncate text-[13.5px] font-semibold text-ink">
                 {roomTitle(activeRoom)}
                 {activeRoom.archived && (
-                  <span className="rounded-badge bg-line-2 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-muted">
+                  <span className="rounded-badge bg-line-2 px-1.5 py-0.5 text-[12px] font-semibold text-muted">
                     Archived
                   </span>
                 )}
               </span>
-              <span className="block truncate text-[11px] text-muted">
+              <span className="block truncate text-[12px] text-muted">
                 {activeRoom.topic
                   ? activeRoom.topic
                   : activeRoom.type === 'direct'
@@ -322,7 +322,7 @@ export const Chatroom: React.FC = () => {
 
             <div className="ml-auto flex items-center gap-1">
               {outbox.length > 0 && (
-                <span className="hidden rounded-badge bg-strand-amber/12 px-2 py-1 font-mono text-[10px] font-medium text-strand-amber sm:inline">
+                <span className="hidden rounded-badge bg-strand-amber/12 px-2 py-1 font-mono text-[12px] font-medium text-strand-amber sm:inline">
                   {outbox.length} queued
                 </span>
               )}
@@ -330,7 +330,7 @@ export const Chatroom: React.FC = () => {
                 <button
                   onClick={() => setOnline(true)}
                   title="Offline — click to reconnect"
-                  className="flex items-center gap-1.5 rounded-badge bg-strand-red/10 px-2 py-1 text-[10px] font-medium text-strand-red"
+                  className="flex items-center gap-1.5 rounded-badge bg-strand-red/10 px-2 py-1 text-[12px] font-medium text-strand-red"
                 >
                   <WifiOff className="h-3 w-3" /> Offline
                 </button>
@@ -339,7 +339,7 @@ export const Chatroom: React.FC = () => {
               {unread.total > 0 && (
                 <button
                   onClick={() => void summarizeRoom(activeRoom.id)}
-                  className="hidden items-center gap-1.5 rounded-md border border-ai/20 bg-ai-tint px-2.5 py-1.5 text-[11px] font-medium text-ai transition-colors hover:border-ai/35 sm:flex"
+                  className="hidden items-center gap-1.5 rounded-md border border-ai/20 bg-ai-tint px-2.5 py-1.5 text-[12px] font-medium text-ai transition-colors hover:border-ai/35 sm:flex"
                 >
                   <Sparkles className="h-3.5 w-3.5" /> Catch me up
                 </button>
@@ -471,7 +471,7 @@ export const Chatroom: React.FC = () => {
                       <span className="min-w-0 flex-1 truncate">
                         {plainText(previewText(message))}
                       </span>
-                      <span className="shrink-0 font-mono text-[10px] text-muted">
+                      <span className="shrink-0 font-mono text-[12px] text-muted">
                         {formatRelative(message.timestamp)}
                       </span>
                     </button>

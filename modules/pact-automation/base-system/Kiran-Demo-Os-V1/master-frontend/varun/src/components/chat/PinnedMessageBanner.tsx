@@ -39,7 +39,7 @@ export function PinnedMessageBanner({ onViewAll }: { onViewAll: () => void }) {
           <Pin className="h-3.5 w-3.5 fill-current" />
         </span>
         <span className="min-w-0 flex-1">
-          <span className="flex items-center gap-2 text-[11px] font-semibold text-primary">
+          <span className="flex items-center gap-2 text-[12px] font-semibold text-primary">
             Pinned message
             {pinned.length > 1 && (
               <span className="font-normal text-muted-foreground">
@@ -57,7 +57,7 @@ export function PinnedMessageBanner({ onViewAll }: { onViewAll: () => void }) {
         <button
           type="button"
           onClick={onViewAll}
-          className="hidden rounded-md px-2 py-1 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground sm:block"
+          className="hidden rounded-md px-2 py-1 text-[12px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground sm:block"
         >
           View all
         </button>

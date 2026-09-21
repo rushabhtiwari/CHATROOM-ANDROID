@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, FileText, FileCheck2, Users, ShoppingCart, ArrowRight, ReceiptText } from 'lucide-react';
+import { Search, FileText, FileCheck2, Users, ShoppingCart, ReceiptText } from 'lucide-react';
 import { mockRFQs } from '../../data/rfqs';
 import { mockQuotations } from '../../data/quotations';
 import { mockCustomers } from '../../data/customers';
@@ -89,7 +89,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
       id: request.id,
       title: `${request.title} — ${formatCurrency(request.amount)}`,
       subtitle: `${employeeById(request.employeeId)?.name ?? 'Unknown'} · ${statusLabel(request.status)}`,
-      category: 'Reimbursement claims',
+      category: 'Claims',
       icon: ReceiptText,
       path: `/reimbursements/${request.id}`,
       mono: request.id,
@@ -101,8 +101,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
     .map((r) => ({
       id: r.id,
       title: `${r.customerName} — ${r.partNumber}`,
-      subtitle: `${r.stage} · Qty: ${r.quantity.toLocaleString('en-IN')}m`,
-      category: 'RFQs & Tickets',
+      subtitle: `${r.stage} · ${r.quantity.toLocaleString('en-IN')} m`,
+      category: 'RFQs',
       icon: FileText,
       path: `/rfq/${r.id}`,
       mono: r.rfqNumber
@@ -114,7 +114,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
     .map((c) => ({
       id: c.id,
       title: c.name,
-      subtitle: `${c.region} Zone · ${c.city}, ${c.state}`,
+      subtitle: `${c.city}, ${c.state}`,
       category: 'Customers',
       icon: Users,
       path: `/rfq`,
@@ -127,7 +127,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
     .map((qu) => ({
       id: qu.id,
       title: `${qu.customerName} — ₹${qu.totalValue.toLocaleString('en-IN')}`,
-      subtitle: `Status: ${qu.status} · Linked: ${qu.rfqNumber}`,
+      subtitle: `${qu.status} · ${qu.rfqNumber}`,
       category: 'Quotations',
       icon: FileCheck2,
       path: `/quotations/${qu.id}`,
@@ -140,8 +140,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
     .map((o) => ({
       id: o.id,
       title: `${o.customerName} — ${o.product}`,
-      subtitle: `Balance: ${o.balanceQty.toLocaleString('en-IN')}m (₹${o.balanceValue.toLocaleString('en-IN')})`,
-      category: 'Sales Orders',
+      subtitle: `${o.balanceQty.toLocaleString('en-IN')} m pending · ₹${o.balanceValue.toLocaleString('en-IN')}`,
+      category: 'Sales orders',
       icon: ShoppingCart,
       path: `/orders/${o.id}`,
       mono: o.poNumber
@@ -181,92 +181,67 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-ink/50 backdrop-blur-[3px] flex items-start justify-center pt-[12vh] px-4 animate-overlay-in">
+    <div className="fixed inset-0 z-50 bg-black/30 flex items-start justify-center pt-[12vh] px-4 animate-overlay-in">
       <div
-        className="w-full max-w-2xl bg-surface rounded-xl shadow-modal border border-line overflow-hidden flex flex-col max-h-[72vh] animate-dialog-in"
+        className="w-full max-w-xl bg-surface rounded-xl shadow-modal border border-line overflow-hidden flex flex-col max-h-[72vh] animate-dialog-in"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Search Input Box */}
-        <div className="px-4 py-4 border-b border-line flex items-center gap-3 bg-surface-2">
-          <Search className="w-5 h-5 text-muted shrink-0" />
+        {/* Search input */}
+        <div className="px-4 h-14 border-b border-line flex items-center gap-3">
+          <Search className="w-5 h-5 text-slate-500 shrink-0" />
           <input
             ref={inputRef}
             type="text"
-            placeholder="Jump to a screen or search this workspace..."
+            placeholder="Search"
+            aria-label="Search"
             value={query}
             onChange={(e) => {
               setQuery(e.target.value);
               setSelectedIndex(0);
             }}
             onKeyDown={handleKeyDown}
-            className="w-full text-[15px] bg-transparent focus:outline-none focus-visible:shadow-none text-ink placeholder:text-muted/80"
+            className="w-full text-[16px] bg-transparent focus:outline-none focus-visible:shadow-none text-ink placeholder:text-slate-500"
           />
-          <kbd className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-white border border-line text-slate-500 shadow-2xs">
-            ESC
-          </kbd>
+          <kbd className="text-[12px] px-1.5 py-0.5 rounded border border-line text-muted">Esc</kbd>
         </div>
 
-        {/* Results List */}
-        <div className="flex-1 overflow-y-auto p-2 space-y-1">
+        {/* Results */}
+        <div className="flex-1 overflow-y-auto p-2">
           {allResults.length === 0 ? (
-            <div className="p-8 text-center text-muted text-xs">
-              No matching records or actions found for "{query}".
-            </div>
+            <div className="p-10 text-center text-muted text-[14px]">No results.</div>
           ) : (
             allResults.map((item, idx) => {
               const Icon = item.icon;
               const isSelected = idx === selectedIndex;
+              const subtitle = 'subtitle' in item ? (item as { subtitle?: string }).subtitle : undefined;
 
               return (
                 <div
                   key={`${item.category}-${item.id}`}
                   onClick={() => handleSelect(item.path)}
                   onMouseEnter={() => setSelectedIndex(idx)}
-                  className={`p-2.5 rounded text-xs flex items-center justify-between gap-3 cursor-pointer transition-colors ${
-                    isSelected ? 'bg-kiran-tint text-kiran' : 'hover:bg-canvas text-slate'
+                  className={`px-3 py-2.5 rounded-md text-[14px] flex items-center justify-between gap-3 cursor-pointer transition-colors ${
+                    isSelected ? 'bg-kiran-tint' : ''
                   }`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
-                    <div
-                      className={`w-7 h-7 rounded flex items-center justify-center shrink-0 ${
-                        isSelected ? 'bg-kiran text-white' : 'bg-canvas text-slate-600 border border-line'
-                      }`}
-                    >
-                      <Icon className="w-3.5 h-3.5" />
-                    </div>
+                    <Icon className="w-4 h-4 text-slate-500 shrink-0" />
                     <div className="min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold text-ink truncate">{item.title}</span>
-                        <span className="font-mono text-[10px] text-muted px-1 rounded bg-slate-100 border border-line">
-                          {item.mono}
-                        </span>
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="font-medium text-ink truncate">{item.title}</span>
+                        {item.mono !== 'GO' && (
+                          <span className="font-code text-[13px] text-muted whitespace-nowrap">{item.mono}</span>
+                        )}
                       </div>
-                      {'subtitle' in item && (item as any).subtitle && (
-                        <div className="text-[11px] text-muted truncate">{(item as any).subtitle}</div>
-                      )}
+                      {subtitle && <div className="text-[13px] text-muted truncate">{subtitle}</div>}
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 shrink-0">
-                    <span className="text-[10px] font-mono text-muted uppercase tracking-wider">
-                      {item.category}
-                    </span>
-                    <ArrowRight className="w-3.5 h-3.5 opacity-40 group-hover:opacity-100" />
-                  </div>
+                  <span className="text-[13px] text-muted whitespace-nowrap shrink-0">{item.category}</span>
                 </div>
               );
             })
           )}
-        </div>
-
-        {/* Footer shortcuts */}
-        <div className="px-4 py-2 bg-canvas border-t border-line flex items-center justify-between text-[11px] text-muted">
-          <span>
-            Use <kbd className="font-mono bg-white px-1 border border-line rounded">↑</kbd>{' '}
-            <kbd className="font-mono bg-white px-1 border border-line rounded">↓</kbd> to navigate,{' '}
-            <kbd className="font-mono bg-white px-1 border border-line rounded">↵</kbd> to select
-          </span>
-          <span className="font-mono text-[10px]">Kiran Central Platform</span>
         </div>
       </div>
     </div>

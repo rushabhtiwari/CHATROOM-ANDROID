@@ -16,7 +16,7 @@ import { DataGrid, type ColumnDef } from '@/components/common/DataGrid';
 import { EmptyState } from '@/components/common/EmptyState';
 import { useRts } from '@/modules/rts/store';
 import { formatCurrency, formatDate } from '@/modules/rts/format';
-import { CATEGORY_LABEL, actionOwner, statusLabel, statusTone } from '@/modules/rts/status';
+import { CATEGORY_LABEL, actionOwner, statusLabel } from '@/modules/rts/status';
 import type { ReceiptRequest } from '@/modules/rts/types';
 import { ClaimStatusPill } from './ClaimStatusPill';
 import { ClaimSummaryBar } from './ClaimSummaryBar';
@@ -26,8 +26,8 @@ type Scope = 'all' | 'hr' | 'accounts' | 'payment' | 'settled';
 const TITLE: Record<Scope, string> = {
   all: 'All claims',
   hr: 'With HR',
-  accounts: 'With Accounts',
-  payment: 'Awaiting payment',
+  accounts: 'With accounts',
+  payment: 'To pay',
   settled: 'Settled',
 };
 
@@ -58,7 +58,6 @@ export const ReimbursementsList: React.FC = () => {
       isMono: true,
       sortable: true,
       accessorKey: 'id',
-      width: '110px',
     },
     {
       id: 'title',
@@ -68,7 +67,7 @@ export const ReimbursementsList: React.FC = () => {
       cell: (row) => (
         <div className="min-w-0">
           <div className="truncate font-medium text-ink">{row.title}</div>
-          <div className="truncate text-[11px] text-muted">
+          <div className="truncate text-[13px] text-muted">
             {employeeById(row.employeeId)?.name ?? 'Unknown'} ·{' '}
             {employeeById(row.employeeId)?.department ?? '—'}
           </div>
@@ -80,27 +79,22 @@ export const ReimbursementsList: React.FC = () => {
       header: 'Category',
       sortable: true,
       accessorKey: 'category',
-      cell: (row) => <span className="text-slate-700">{CATEGORY_LABEL[row.category]}</span>,
-      width: '110px',
+      cell: (row) => <span className="whitespace-nowrap">{CATEGORY_LABEL[row.category]}</span>,
     },
     {
       id: 'amount',
       header: 'Amount',
       isNumeric: true,
-      isMono: true,
       sortable: true,
       accessorKey: 'amount',
-      cell: (row) => <span className="font-semibold">{formatCurrency(row.amount)}</span>,
-      width: '120px',
+      cell: (row) => <span className="tabular-nums text-ink">{formatCurrency(row.amount)}</span>,
     },
     {
       id: 'submittedOn',
       header: 'Filed',
-      isMono: true,
       sortable: true,
       accessorKey: 'submittedOn',
-      cell: (row) => <span className="text-muted">{formatDate(row.submittedOn)}</span>,
-      width: '110px',
+      cell: (row) => <span className="whitespace-nowrap text-muted">{formatDate(row.submittedOn)}</span>,
     },
     {
       id: 'status',
@@ -108,7 +102,6 @@ export const ReimbursementsList: React.FC = () => {
       sortable: true,
       accessorKey: 'status',
       cell: (row) => <ClaimStatusPill status={row.status} />,
-      width: '160px',
     },
   ];
 
@@ -118,8 +111,8 @@ export const ReimbursementsList: React.FC = () => {
         title="Reimbursements"
         badge={
           !connected && !loading ? (
-            <span className="inline-flex items-center gap-1.5 rounded-badge border border-strand-amber/30 bg-strand-amber/10 px-2 py-0.5 text-[10.5px] font-medium text-strand-amber">
-              <WifiOff className="h-3 w-3" /> Live updates off
+            <span className="inline-flex items-center gap-1.5 rounded-badge bg-[#FBEFDC] px-2 py-0.5 text-[12px] font-medium text-[#8A4F00]">
+              <WifiOff className="h-3 w-3" /> Offline
             </span>
           ) : undefined
         }
@@ -138,15 +131,12 @@ export const ReimbursementsList: React.FC = () => {
         />
       </PageHeader>
 
-      <ClaimSummaryBar className="mb-5" />
+      <ClaimSummaryBar className="mb-6" />
 
       {rows.length === 0 ? (
         <EmptyState
           icon={ReceiptText}
-          statement={
-            scope === 'all' ? 'No claims have been filed yet' : `Nothing sits ${TITLE[scope].toLowerCase()}`
-          }
-          instruction="Claims filed from a conversation or from the portal appear here."
+          statement={scope === 'all' ? 'No claims yet' : 'Nothing here'}
         />
       ) : (
         <DataGrid
@@ -154,7 +144,7 @@ export const ReimbursementsList: React.FC = () => {
           columns={columns}
           keyExtractor={(row) => row.id}
           onRowClick={(row) => navigate(`/reimbursements/${row.id}`)}
-          searchPlaceholder="Search by claim id, purpose or employee…"
+          searchPlaceholder="Search claims"
           searchKey={(row) =>
             `${row.id} ${row.title} ${employeeById(row.employeeId)?.name ?? ''} ${statusLabel(row.status)}`
           }

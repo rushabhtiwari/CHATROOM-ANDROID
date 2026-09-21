@@ -52,7 +52,7 @@ export const AIModels: React.FC = () => {
       <div className="bg-surface border border-line rounded-lg shadow-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs font-mono">
-            <thead className="bg-canvas text-muted text-[10px] uppercase border-b border-line">
+            <thead className="bg-canvas text-muted text-[12px] border-b border-line">
               <tr>
                 <th className="p-3 font-sans">Model Engine</th>
                 <th className="p-3 font-sans">Provider</th>
@@ -77,7 +77,7 @@ export const AIModels: React.FC = () => {
                           <Cpu className="w-4 h-4 text-ai" />
                           <span>{m.name}</span>
                         </div>
-                        <div className="text-[10px] text-muted font-sans mt-0.5">
+                        <div className="text-[12px] text-muted font-sans mt-0.5">
                           {m.assignedFeatures.join(', ')}
                         </div>
                       </td>
@@ -98,7 +98,7 @@ export const AIModels: React.FC = () => {
                         <div className="flex items-center justify-center gap-1.5">
                           <button
                             onClick={() => setSelectedChangeModel(m)}
-                            className="px-2 py-1 bg-ai-tint text-ai hover:bg-ai-tint/80 border border-ai/30 rounded text-[11px] font-sans font-semibold shadow-2xs"
+                            className="px-2 py-1 bg-ai-tint text-ai hover:bg-ai-tint/80 border border-ai/30 rounded text-[12px] font-sans font-semibold shadow-2xs"
                           >
                             Route
                           </button>
@@ -119,24 +119,24 @@ export const AIModels: React.FC = () => {
                         <td colSpan={9} className="p-4">
                           <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-xs font-mono">
                             <div className="p-3 bg-white rounded border border-line space-y-1">
-                              <span className="text-muted text-[10px] uppercase font-sans">Sampling Temperature</span>
+                              <span className="text-muted text-[12px] font-sans">Sampling Temperature</span>
                               <div className="text-sm font-bold text-ink">{m.config.temperature}</div>
-                              <div className="text-[10px] text-muted font-sans">Deterministic parsing</div>
+                              <div className="text-[12px] text-muted font-sans">Deterministic parsing</div>
                             </div>
                             <div className="p-3 bg-white rounded border border-line space-y-1">
-                              <span className="text-muted text-[10px] uppercase font-sans">Max Generation Limit</span>
+                              <span className="text-muted text-[12px] font-sans">Max Generation Limit</span>
                               <div className="text-sm font-bold text-ink">{m.config.maxTokens} tokens</div>
-                              <div className="text-[10px] text-muted font-sans">Safety ceiling per turn</div>
+                              <div className="text-[12px] text-muted font-sans">Safety ceiling per turn</div>
                             </div>
                             <div className="p-3 bg-white rounded border border-line space-y-1">
-                              <span className="text-muted text-[10px] uppercase font-sans">Network Timeout</span>
+                              <span className="text-muted text-[12px] font-sans">Network Timeout</span>
                               <div className="text-sm font-bold text-ink">{m.config.timeoutSec}s</div>
-                              <div className="text-[10px] text-muted font-sans">Circuit-breaker trigger</div>
+                              <div className="text-[12px] text-muted font-sans">Circuit-breaker trigger</div>
                             </div>
                             <div className="p-3 bg-white rounded border border-line space-y-1">
-                              <span className="text-muted text-[10px] uppercase font-sans">Rate Limiting</span>
+                              <span className="text-muted text-[12px] font-sans">Rate Limiting</span>
                               <div className="text-sm font-bold text-ink">{m.config.rateLimit}</div>
-                              <div className="text-[10px] text-muted font-sans">Provider tier quota</div>
+                              <div className="text-[12px] text-muted font-sans">Provider tier quota</div>
                             </div>
                           </div>
                         </td>
@@ -171,14 +171,14 @@ export const AIModels: React.FC = () => {
 
             <div className="space-y-3 text-xs">
               <div className="p-3 bg-canvas rounded border border-line space-y-1 font-mono">
-                <div className="text-muted text-[10px] uppercase font-sans">Target Engine:</div>
+                <div className="text-muted text-[12px] font-sans">Target Engine:</div>
                 <div className="font-bold text-ink text-sm font-sans">{selectedChangeModel.name}</div>
                 <div className="text-slate-600 text-xs">Provider: {selectedChangeModel.provider}</div>
               </div>
 
               {/* Impact Delta Table */}
               <div className="p-3 bg-ai-tint/30 border border-ai/30 rounded space-y-2 font-mono text-xs">
-                <div className="text-ai font-semibold font-sans uppercase tracking-wider text-[11px]">
+                <div className="text-ai font-semibold font-sans text-[12px]">
                   Projected Monthly Delta:
                 </div>
                 <div className="flex justify-between text-slate-800">

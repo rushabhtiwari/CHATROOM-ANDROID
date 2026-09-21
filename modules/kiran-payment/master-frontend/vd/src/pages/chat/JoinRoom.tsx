@@ -33,7 +33,7 @@ export const JoinRoom: React.FC = () => {
             <p className="label-eyebrow">You have been invited to</p>
             <div className="mt-5 flex flex-col items-center gap-3">
               <GroupAvatar name={roomTitle(room)} color={room.color} photo={room.photo} size={64} />
-              <h1 className="font-display text-xl font-semibold text-ink">{roomTitle(room)}</h1>
+              <h1 className="text-xl font-semibold text-ink">{roomTitle(room)}</h1>
               {room.description && <p className="text-xs text-muted">{room.description}</p>}
               <div className="flex -space-x-2">
                 {room.participantIds.slice(0, 6).map((id) => (
@@ -44,7 +44,7 @@ export const JoinRoom: React.FC = () => {
                 <Users className="h-3.5 w-3.5" /> {room.participantIds.length} members
               </p>
               {room.invite?.expiresAt && !alreadyMember && (
-                <p className="flex items-center gap-1.5 font-mono text-[11px] text-muted">
+                <p className="flex items-center gap-1.5 font-mono text-[12px] text-muted">
                   <Clock className="h-3 w-3" /> Expires {formatUntil(room.invite.expiresAt)}
                   {room.invite.maxUses
                     ? ` · ${room.invite.maxUses - room.invite.uses} uses left`
@@ -74,7 +74,7 @@ export const JoinRoom: React.FC = () => {
             <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-strand-red/10 text-strand-red">
               <AlertTriangle className="h-4.5 w-4.5" />
             </span>
-            <h1 className="mt-4 font-display text-lg font-semibold text-ink">
+            <h1 className="mt-4 text-lg font-semibold text-ink">
               {status === 'expired'
                 ? 'This invite has expired'
                 : status === 'exhausted'

@@ -1,5 +1,4 @@
 import React from 'react';
-import { BadgeCheck, ShieldAlert } from 'lucide-react';
 import { PageHeader } from '@/components/shell/PageHeader';
 import { DataGrid, ColumnDef } from '@/components/common/DataGrid';
 import { useRts } from '@/modules/rts/store';
@@ -20,31 +19,27 @@ export const Employees: React.FC = () => {
       header: 'Code',
       accessorKey: 'employeeCode',
       isMono: true,
-      width: '110px',
-      cell: (row) => <span className="font-mono font-semibold text-kiran">{row.employeeCode}</span>,
+      cell: (row) => <span className="font-code text-[13px] text-ink whitespace-nowrap">{row.employeeCode}</span>,
     },
     {
       id: 'name',
       header: 'Employee',
       accessorKey: 'name',
-      width: '220px',
       cell: (row) => (
         <div className="min-w-0">
-          <div className="font-semibold text-ink truncate">{row.name}</div>
-          <div className="text-[11px] text-muted truncate">{row.email}</div>
+          <div className="font-medium text-ink truncate">{row.name}</div>
+          <div className="text-[13px] text-muted truncate">{row.email}</div>
         </div>
       ),
     },
-    { id: 'department', header: 'Department', accessorKey: 'department', width: '130px' },
-    { id: 'designation', header: 'Designation', accessorKey: 'designation', width: '200px' },
-    { id: 'managerName', header: 'Reports to', accessorKey: 'managerName', width: '150px' },
+    { id: 'department', header: 'Department', accessorKey: 'department' },
+    { id: 'designation', header: 'Designation', accessorKey: 'designation' },
+    { id: 'managerName', header: 'Reports to', accessorKey: 'managerName' },
     {
       id: 'monthlyAllowance',
-      header: 'Monthly allowance',
+      header: 'Allowance',
       accessorKey: 'monthlyAllowance',
       isNumeric: true,
-      isMono: true,
-      width: '150px',
       cell: (row) => formatCurrency(row.monthlyAllowance),
     },
     {
@@ -52,20 +47,16 @@ export const Employees: React.FC = () => {
       header: 'Claimed',
       accessorKey: 'usedThisMonth',
       isNumeric: true,
-      isMono: true,
-      width: '120px',
       cell: (row) => formatCurrency(row.usedThisMonth),
     },
     {
       id: 'bank',
-      header: 'Bank account',
-      width: '230px',
+      header: 'Bank',
       sortable: false,
       cell: (row) =>
         row.bankAccount.verified ? (
-          <span className="inline-flex items-center gap-1.5 text-xs text-emerald-800">
-            <BadgeCheck className="w-3.5 h-3.5 text-strand-green" />
-            <span className="font-mono">{row.bankAccount.accountNumberMasked}</span>
+          <span className="inline-flex items-center gap-2 text-[14px] whitespace-nowrap">
+            <span className="text-ink tabular-nums">{row.bankAccount.accountNumberMasked}</span>
             <span className="text-muted">{row.bankAccount.bankName}</span>
           </span>
         ) : (
@@ -74,10 +65,9 @@ export const Employees: React.FC = () => {
               event.stopPropagation();
               verifyBankAccount(row.id);
             }}
-            className="inline-flex items-center gap-1.5 px-2 py-1 rounded border border-strand-amber/40 bg-amber-50 text-amber-800 text-xs font-semibold hover:bg-amber-100"
+            className="btn-secondary"
             title="The disbursement screen flags this account to Accounts until it is verified"
           >
-            <ShieldAlert className="w-3.5 h-3.5" />
             Verify {row.bankAccount.accountNumberMasked}
           </button>
         ),
@@ -85,16 +75,13 @@ export const Employees: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-4 animate-fadeIn">
-      <PageHeader
-        title="Employees"
-        description="The directory claims are paid against. An unverified bank account is flagged to Accounts at disbursement until it is verified here."
-      />
+    <div className="space-y-6 animate-fadeIn">
+      <PageHeader title="Employees" />
       <DataGrid
         data={employees}
         columns={columns}
         keyExtractor={(employee) => employee.id}
-        searchPlaceholder="Search by name, department or designation..."
+        searchPlaceholder="Search employees"
         searchKey={(employee) => `${employee.name} ${employee.department} ${employee.designation} ${employee.employeeCode}`}
         initialSortKey="employeeCode"
         initialSortDir="asc"

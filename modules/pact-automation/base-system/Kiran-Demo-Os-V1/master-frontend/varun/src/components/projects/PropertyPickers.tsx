@@ -316,7 +316,7 @@ export const LabelPicker: React.FC<{
               {shown.map((label) => (
                 <LabelChip key={label.id} name={label.name} color={label.color} />
               ))}
-              {overflow > 0 && <span className="text-[10.5px] text-muted">+{overflow}</span>}
+              {overflow > 0 && <span className="text-[12px] text-muted">+{overflow}</span>}
             </>
           )}
         </Trigger>
@@ -601,7 +601,7 @@ export const ParentPicker: React.FC<{
         <Trigger variant="field">
           {current ? (
             <span className="truncate">
-              <span className="font-mono text-[11px] text-muted">{displayId(state, current)}</span>{' '}
+              <span className="font-mono text-[12px] text-muted">{displayId(state, current)}</span>{' '}
               {current.title}
             </span>
           ) : (
@@ -643,7 +643,7 @@ export const ParentPicker: React.FC<{
                   close();
                 }}
               >
-                <span className="font-mono text-[10.5px] text-muted">{displayId(state, item)}</span>{' '}
+                <span className="font-mono text-[12px] text-muted">{displayId(state, item)}</span>{' '}
                 {item.title}
               </DropdownItem>
             ))}

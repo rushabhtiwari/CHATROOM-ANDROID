@@ -23,7 +23,7 @@ export const AutomationRules: React.FC = () => {
       <section className="ku-sheet">
         <div className="border-b border-hairline px-5 py-4">
           <p className="ku-eyebrow">The flow</p>
-          <h2 className="ku-wide mt-1.5 font-display text-h3 font-semibold text-ink">
+          <h2 className="mt-1.5 font-display text-h3 font-semibold text-ink">
             What happens to a purchase order
           </h2>
           <p className="mt-2 max-w-3xl text-body-s text-meta">
@@ -128,7 +128,7 @@ export const AutomationRules: React.FC = () => {
       <section className="ku-sheet">
         <div className="border-b border-hairline px-5 py-4">
           <p className="ku-eyebrow">Re-running</p>
-          <h2 className="ku-wide mt-1.5 font-display text-h3 font-semibold text-ink">
+          <h2 className="mt-1.5 font-display text-h3 font-semibold text-ink">
             Every step is safe to repeat
           </h2>
         </div>

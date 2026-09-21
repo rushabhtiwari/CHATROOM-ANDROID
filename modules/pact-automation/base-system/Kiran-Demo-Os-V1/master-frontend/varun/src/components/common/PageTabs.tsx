@@ -16,14 +16,7 @@ interface PageTabsProps {
   className?: string;
 }
 
-/**
- * Tabs — LEDGERDESIGNSYSTEM.md §5.6.
- *
- * The active tab's 2px accent rule sits *on* the container's hairline via
- * `-mb-px`, so the two read as one continuous line rather than as a rule
- * floating above a border. The count chip inverts on the active tab: accent
- * ground with dark ink on it, never white.
- */
+/** Segmented control: 32px track, white selected segment. */
 export const PageTabs: React.FC<PageTabsProps> = ({
   tabs,
   activeTab,
@@ -34,7 +27,7 @@ export const PageTabs: React.FC<PageTabsProps> = ({
     <div
       role="tablist"
       aria-label="Page sections"
-      className={`ku-scrollbar flex overflow-x-auto border-b border-hairline ${className}`}
+      className={`ku-scrollbar inline-flex max-w-full gap-0.5 overflow-x-auto rounded-md bg-[#EBEBEF] p-0.5 ${className}`}
     >
       {tabs.map((tab) => {
         const isActive = activeTab === tab.id;
@@ -45,18 +38,14 @@ export const PageTabs: React.FC<PageTabsProps> = ({
             role="tab"
             aria-selected={isActive}
             onClick={() => onChange(tab.id)}
-            className={`-mb-px flex shrink-0 items-center gap-2 whitespace-nowrap border-b-2 px-4 py-3 text-body-s transition-colors duration-150 ${
-              isActive
-                ? 'border-accent font-semibold text-ink'
-                : 'border-transparent text-meta hover:text-ink'
+            className={`flex h-7 shrink-0 items-center gap-2 whitespace-nowrap rounded-sm px-3.5 text-caption font-medium transition-colors duration-150 ${
+              isActive ? 'bg-white text-ink' : 'text-meta hover:text-ink'
             }`}
           >
             <span>{tab.label}</span>
             {tab.count !== undefined && (
               <span
-                className={`tnum px-2 py-0.5 font-mono text-caption font-semibold ${
-                  isActive ? 'bg-accent text-accent-ink' : 'bg-canvas text-meta'
-                }`}
+                className="tnum text-caption font-medium text-faint"
               >
                 {tab.count}
               </span>

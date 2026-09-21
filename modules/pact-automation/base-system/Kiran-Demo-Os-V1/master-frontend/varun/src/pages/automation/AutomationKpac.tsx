@@ -29,7 +29,7 @@ export const AutomationKpac: React.FC = () => {
         <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4 border-b border-hairline px-5 py-4">
           <div className="min-w-0">
             <p className="ku-eyebrow">The bridge</p>
-            <h2 className="ku-wide mt-1.5 font-display text-h3 font-semibold text-ink">
+            <h2 className="mt-1.5 font-display text-h3 font-semibold text-ink">
               KPAC — PACT Automation
             </h2>
           </div>
@@ -90,7 +90,7 @@ export const AutomationKpac: React.FC = () => {
       <section className="ku-sheet">
         <div className="border-b border-hairline px-5 py-4">
           <p className="ku-eyebrow">Safety</p>
-          <h2 className="ku-wide mt-1.5 font-display text-h3 font-semibold text-ink">
+          <h2 className="mt-1.5 font-display text-h3 font-semibold text-ink">
             What this system will not do
           </h2>
         </div>
@@ -123,7 +123,7 @@ export const AutomationKpac: React.FC = () => {
       <section className="ku-sheet">
         <div className="border-b border-hairline px-5 py-4">
           <p className="ku-eyebrow">Reference data</p>
-          <h2 className="ku-wide mt-1.5 font-display text-h3 font-semibold text-ink">
+          <h2 className="mt-1.5 font-display text-h3 font-semibold text-ink">
             Demo customers
           </h2>
           <p className="mt-2 max-w-2xl text-body-s text-meta">
@@ -154,7 +154,7 @@ export const AutomationKpac: React.FC = () => {
       <section className="ku-sheet">
         <div className="border-b border-hairline px-5 py-4">
           <p className="ku-eyebrow">Delivery</p>
-          <h2 className="ku-wide mt-1.5 font-display text-h3 font-semibold text-ink">
+          <h2 className="mt-1.5 font-display text-h3 font-semibold text-ink">
             Where the messages go
           </h2>
         </div>

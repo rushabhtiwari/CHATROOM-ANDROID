@@ -11,13 +11,11 @@ test("people see their department's apps and the company tools", async ({ page }
   await signInAs(page, USERS.sales);
 
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Sam");
-  await expect(page.getByRole("list", { name: "Summary" })).toContainText("Apps you can open");
   const departments = page.getByRole("region", { name: "Departments" });
   const tools = page.getByRole("region", { name: "Company tools" });
 
   const example = departments.getByRole("link", { name: "Example App" });
   await expect(example).toHaveAttribute("href", "http://localhost:3001");
-  await expect(example).toContainText("Manager");
   await expect(departments.locator('[aria-disabled="true"]', { hasText: "Sales" })).toContainText("Coming soon");
   await expect(departments.getByText("Dispatch")).toHaveCount(0);
   for (const name of ["Automation", "Chat", "Projects", "Requisitions & Budget"]) {

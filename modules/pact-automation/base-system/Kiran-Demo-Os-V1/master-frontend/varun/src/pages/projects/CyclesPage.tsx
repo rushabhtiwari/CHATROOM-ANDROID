@@ -95,13 +95,13 @@ export const CyclesPage: React.FC = () => {
                       {cycle.name}
                     </Link>
                     <span
-                      className={`rounded-full border px-2 py-[1px] text-[10px] font-semibold uppercase tracking-wide ${PHASE_STYLE[phase]}`}
+                      className={`rounded-full border px-2 py-[1px] text-[12px] font-semibold ${PHASE_STYLE[phase]}`}
                     >
                       {phase}
                     </span>
                   </div>
                   <p className="mt-1 text-[12px] text-muted">{cycle.description}</p>
-                  <p className="mt-1 font-mono text-[11px] text-slate-500">
+                  <p className="mt-1 font-mono text-[12px] text-slate-500">
                     {format(parseISO(cycle.startDate), 'd MMM')} –{' '}
                     {format(parseISO(cycle.endDate), 'd MMM yyyy')}
                     {phase === 'active' && remaining >= 0 && (
@@ -120,7 +120,7 @@ export const CyclesPage: React.FC = () => {
                 </Link>
               </div>
 
-              <dl className="mt-3 grid grid-cols-4 gap-3 border-t border-line pt-3 text-[11.5px]">
+              <dl className="mt-3 grid grid-cols-4 gap-3 border-t border-line pt-3 text-[12px]">
                 <div>
                   <dt className="text-muted">Items</dt>
                   <dd className="font-mono font-semibold text-ink">

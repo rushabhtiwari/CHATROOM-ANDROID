@@ -64,13 +64,6 @@ Start-Service-Once 'payment-api' 3011 (Join-Path $pay 'backend\.venv\Scripts\pyt
 Start-Service-Once 'payment-console' 5174 'cmd.exe' @('/c', 'npm run dev') (Join-Path $pay 'master-frontend\vd') `
     @{ KIRAN_API = 'http://127.0.0.1:3011'; KIRAN_PORT = '5174' }
 
-if ($Kcms) {
-    Write-Host 'KCMS (Project Management)' -ForegroundColor Cyan
-    # One container holds all of KCMS. The first run builds the image (about 15 minutes);
-    # after that this returns in seconds and the app answers on :3020 within a minute or two.
-    docker compose -f (Join-Path $modules 'kcms.compose.yml') up -d
-}
-
 # Take the department tiles live in the launcher. The SQL only touches tiles that are still
 # "coming soon", so running it on every start is harmless.
 $platform = Split-Path $modules
@@ -80,6 +73,35 @@ if (docker compose --project-directory $platform ps -q postgres) {
     Write-Host 'Launcher tiles: departments, chat and projects are live' -ForegroundColor Cyan
 } else {
     Write-Host 'Platform database is not running; skipped opening the department tiles.' -ForegroundColor Yellow
+}
+
+if ($Kcms) {
+    Write-Host 'KCMS (Project Management)' -ForegroundColor Cyan
+
+    # Single sign-on: KCMS and the identity service share one client secret. It is generated
+    # once into kcms.env (not committed) and its hash is set on the `projects` app.
+    $kcmsEnv = Join-Path $modules 'kiran-mgmt\kcms.env'
+    if (-not (Test-Path $kcmsEnv)) { New-Item -ItemType File $kcmsEnv | Out-Null }
+    $line = Select-String -Path $kcmsEnv -Pattern '^CENTRAL_CLIENT_SECRET=(.+)$' | Select-Object -First 1
+    if ($line) {
+        $kcmsSecret = $line.Matches[0].Groups[1].Value
+    } else {
+        $bytes = New-Object byte[] 32
+        [Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($bytes)
+        $kcmsSecret = -join ($bytes | ForEach-Object { $_.ToString('x2') })
+        Add-Content -Path $kcmsEnv -Value "`nCENTRAL_CLIENT_SECRET=$kcmsSecret" -Encoding ascii
+    }
+    if (docker compose --project-directory $platform ps -q identity) {
+        Get-Content (Join-Path $modules 'pair-kcms.py') -Raw |
+            docker compose --project-directory $platform exec -T -e "KCMS_CLIENT_SECRET=$kcmsSecret" identity python - | Out-Null
+        Write-Host 'KCMS signs in through Central' -ForegroundColor Cyan
+    } else {
+        Write-Host 'Identity service is not running; KCMS will show its own sign-in form.' -ForegroundColor Yellow
+    }
+
+    # One container holds all of KCMS. The first run builds the image (about 15 minutes);
+    # after that this returns in seconds and the app answers on :3020 within a minute or two.
+    docker compose -f (Join-Path $modules 'kcms.compose.yml') up -d
 }
 
 Write-Host ''

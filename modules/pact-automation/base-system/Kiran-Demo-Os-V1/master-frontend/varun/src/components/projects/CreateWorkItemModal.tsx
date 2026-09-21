@@ -129,7 +129,7 @@ export const CreateWorkItemModal: React.FC<{
       >
         <header className="flex items-center justify-between border-b border-line px-4 py-2.5">
           <div className="flex items-center gap-2 text-[12px] text-muted">
-            <span className="rounded border border-line bg-canvas px-1.5 font-mono text-[10.5px] font-bold text-kiran">
+            <span className="rounded border border-line bg-canvas px-1.5 font-mono text-[12px] font-bold text-kiran">
               {state.projects.byId[projectId]?.key}
             </span>
             New work item

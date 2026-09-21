@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Inbox } from 'lucide-react';
 import { usePipelineBoard } from '../../modules/pipeline/usePipeline';
 import { OrderFlow } from '../../components/automation/OrderFlow';
-import { TONE, Tone } from '../../lib/tone';
+import { TONE, sentenceCase, Tone } from '../../lib/tone';
 
 /**
  * The orders board, and the flow for whichever one is selected.
@@ -39,7 +39,7 @@ export const AutomationOrders: React.FC = () => {
         <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4 border-b border-hairline px-5 py-4">
           <div className="min-w-0">
             <p className="ku-eyebrow">Purchase orders</p>
-            <h2 className="ku-wide mt-1.5 font-display text-h3 font-semibold text-ink">
+            <h2 className="mt-1.5 font-display text-h3 font-semibold text-ink">
               In the automation
             </h2>
           </div>
@@ -84,7 +84,7 @@ export const AutomationOrders: React.FC = () => {
                       {row.poNumber || '(no PO number)'}
                     </span>
                     <span className={`ku-stamp ${TONE[tone as Tone].stamp}`}>
-                      {row.statusLabel}
+                      {sentenceCase(row.statusLabel)}
                     </span>
                     {row.lineCount > 1 && (
                       <span className="ku-docket">{row.lineCount} lines</span>

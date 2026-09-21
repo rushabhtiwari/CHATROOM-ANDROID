@@ -34,7 +34,7 @@ export const AIRuns: React.FC = () => {
       cell: (row) => (
         <div>
           <div className="font-semibold text-ink">{row.feature}</div>
-          <div className="text-[10px] text-muted font-mono">{row.timestamp}</div>
+          <div className="text-[12px] text-muted font-mono">{row.timestamp}</div>
         </div>
       )
     },

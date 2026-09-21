@@ -59,7 +59,7 @@ export function NotificationsPanel({
     <section className="shrink-0 rounded-xl border border-border bg-surface p-3 shadow-[var(--shadow-soft)]">
       <div className="mb-2 flex items-center gap-1.5 px-1">
         <Bell className="h-3 w-3 text-muted-foreground" />
-        <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+        <p className="text-[12px] font-semibold text-muted-foreground">
           Notifications
         </p>
       </div>
@@ -136,14 +136,14 @@ function NotificationGroup({
             tone === "accent" ? "text-ai" : "text-muted-foreground",
           )}
         />
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+        <span className="text-[12px] font-semibold text-muted-foreground">
           {title}
         </span>
         {unread > 0 && (
           <span
             aria-label={`${unread} unread`}
             className={cn(
-              "ml-auto min-w-5 rounded-full px-1.5 py-0.5 text-center text-[10px] font-semibold",
+              "ml-auto min-w-5 rounded-full px-1.5 py-0.5 text-center text-[12px] font-semibold",
               tone === "accent"
                 ? "bg-ai text-ai-foreground"
                 : "bg-secondary text-secondary-foreground",
@@ -157,7 +157,7 @@ function NotificationGroup({
       {open && (
         <div className="mt-1 space-y-1">
           {items.length === 0 && (
-            <p className="px-2 py-2 text-[11px] leading-relaxed text-muted-foreground">{empty}</p>
+            <p className="px-2 py-2 text-[12px] leading-relaxed text-muted-foreground">{empty}</p>
           )}
           {visible.map((notification) => (
             <NotificationRow key={notification.id} notification={notification} tone={tone} />
@@ -166,7 +166,7 @@ function NotificationGroup({
             <button
               type="button"
               onClick={() => setExpanded(true)}
-              className="w-full rounded-lg px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+              className="w-full rounded-lg px-2 py-1.5 text-[12px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
             >
               Show all {items.length}
             </button>
@@ -205,14 +205,14 @@ function NotificationRow({
       <div className="min-w-0 flex-1">
         <p
           className={cn(
-            "text-[11px] leading-snug",
+            "text-[12px] leading-snug",
             tone === "accent" ? "text-foreground" : "text-muted-foreground",
           )}
         >
           <HighlightedText text={notification.text} name={currentUser.name} />
         </p>
         <div className="mt-0.5 flex items-center gap-2">
-          <span suppressHydrationWarning className="text-[10px] text-muted-foreground">
+          <span suppressHydrationWarning className="text-[12px] text-muted-foreground">
             {formatRelative(notification.timestamp)}
           </span>
           {notification.messageId && (
@@ -222,7 +222,7 @@ function NotificationRow({
                 markNotificationRead(notification.id);
                 jumpToMessage(notification.roomId, notification.messageId!);
               }}
-              className="flex items-center gap-0.5 text-[10px] font-medium text-primary transition-colors hover:underline"
+              className="flex items-center gap-0.5 text-[12px] font-medium text-primary transition-colors hover:underline"
             >
               <CornerUpRight className="h-2.5 w-2.5" /> Jump
             </button>

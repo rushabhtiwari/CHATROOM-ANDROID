@@ -1,7 +1,7 @@
 import React from 'react';
 import { FileText, Paperclip, ShieldCheck, ShieldX } from 'lucide-react';
 import type { MailDetail } from '../../modules/mailing/types';
-import { TONE, Tone } from '../../lib/tone';
+import { TONE, sentenceCase, Tone } from '../../lib/tone';
 import { PipelinePanel } from './PipelinePanel';
 
 /**
@@ -24,19 +24,16 @@ export const MailInspector: React.FC<{ detail: MailDetail; onOpenJob?: (jobId: s
       <div className="border-b border-hairline px-5 py-4">
         <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-2">
           <div className="min-w-0">
-            <p className="ku-docket">{email.id}</p>
-            <h3 className="ku-wide mt-1.5 font-display text-h3 font-semibold text-ink">
-              {email.subject}
-            </h3>
+            <h3 className="text-h3 font-semibold text-ink">{email.subject}</h3>
+            <p className="ku-docket mt-0.5">{email.id}</p>
           </div>
-          <span className={`ku-stamp ${TONE[email.tone as Tone].stamp}`}>{email.statusLabel}</span>
+          <span className={`ku-stamp ${TONE[email.tone as Tone].stamp}`}>{sentenceCase(email.statusLabel)}</span>
         </div>
 
-        <dl className="mt-4 grid grid-cols-1 gap-x-8 gap-y-2 sm:grid-cols-2">
+        <dl className="mt-4 grid grid-cols-1 gap-x-8 gap-y-3 sm:grid-cols-2">
           <Row label="From" value={email.fromAddress} mono />
           <Row label="To" value={email.toAddress} mono />
           <Row label="Date" value={new Date(email.receivedAt).toLocaleString()} mono />
-          <Row label="Message-ID" value={email.headers?.messageId ?? email.messageId} mono truncate />
         </dl>
 
         {/* Authentication results. A directly injected message never crossed
@@ -59,12 +56,7 @@ export const MailInspector: React.FC<{ detail: MailDetail; onOpenJob?: (jobId: s
                 }`}
                 title={`${key.toUpperCase()}: ${value}`}
               >
-                {notApplicable ? null : passed ? (
-                  <ShieldCheck aria-hidden size={11} />
-                ) : (
-                  <ShieldX aria-hidden size={11} />
-                )}
-                {key} {value}
+                {key.toUpperCase()} {value}
               </span>
             );
           })}
@@ -74,41 +66,27 @@ export const MailInspector: React.FC<{ detail: MailDetail; onOpenJob?: (jobId: s
       {/* ---- Body ----------------------------------------------------- */}
       <div className="ku-scrollbar min-h-0 flex-1 overflow-y-auto">
         <section className="border-b border-hairline px-5 py-4">
-          <p className="ku-eyebrow">Message body</p>
-          <pre className="mt-2 whitespace-pre-wrap break-words font-sans text-body-s leading-6 text-ink">
+          <pre className="whitespace-pre-wrap break-words font-sans text-body-s leading-6 text-ink">
             {email.bodyText || '(no body)'}
           </pre>
         </section>
 
         {/* ---- Attachment tray --------------------------------------- */}
         <section className="border-b border-hairline px-5 py-4">
-          <p className="ku-eyebrow">
-            Attachments <span className="ku-fig">{email.attachments.length}</span>
-          </p>
+          <p className="ku-eyebrow">Attachments</p>
           {email.attachments.length === 0 ? (
-            <p className="mt-2 text-body-s text-meta">No attachments on this message.</p>
+            <p className="mt-1 text-body-s text-meta">None</p>
           ) : (
-            <ul className="ku-ruled mt-2 border border-hairline">
+            <ul className="ku-ruled mt-2 overflow-hidden rounded-md border border-hairline">
               {email.attachments.map((attachment) => (
                 <li key={attachment.id} className="flex flex-wrap items-center gap-x-4 gap-y-2 px-3 py-2.5">
-                  <FileText aria-hidden className="h-4 w-4 shrink-0 text-hairline-strong" />
-                  <span className="min-w-0 flex-1 truncate text-body-s font-semibold text-ink">
+                  <FileText aria-hidden className="h-4 w-4 shrink-0 text-faint" />
+                  <span className="min-w-0 flex-1 truncate text-body-s font-medium text-ink">
                     {attachment.filename}
                   </span>
-                  <span className="ku-stamp border-st-grey-ink text-st-grey-ink">
-                    {attachment.mimeType.split('/').pop()}
-                  </span>
-                  <span className="ku-stamp border-st-grey-ink text-st-grey-ink">
-                    OCR {attachment.ocrStatus}
-                  </span>
-                  <span className="ku-fig text-caption text-meta">
-                    {attachment.pages}p · {(attachment.sizeBytes / 1024).toFixed(0)} KB
-                  </span>
-                  <span
-                    className="ku-fig w-full truncate text-caption text-meta"
-                    title={attachment.sha256}
-                  >
-                    sha256 {attachment.sha256.slice(0, 32)}…
+                  <span className="tnum text-caption text-meta" title={`sha256 ${attachment.sha256}`}>
+                    {attachment.mimeType.split('/').pop()?.toUpperCase()} · {attachment.pages}p ·{' '}
+                    {(attachment.sizeBytes / 1024).toFixed(0)} KB
                   </span>
                 </li>
               ))}
@@ -120,36 +98,36 @@ export const MailInspector: React.FC<{ detail: MailDetail; onOpenJob?: (jobId: s
         {job && (
           <section className="border-b border-hairline px-5 py-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <p className="ku-eyebrow">Lifecycle</p>
+              <p className="ku-eyebrow">History</p>
               {job.holdReason && onOpenJob && (
                 <button
                   type="button"
                   onClick={() => onOpenJob(job.id)}
-                  className="inline-flex h-8 items-center gap-1.5 border-2 border-hairline-strong bg-white px-3 text-body-s font-semibold leading-none text-ink transition-all duration-150 hover:border-ink hover:bg-canvas active:translate-y-px"
+                  className="inline-flex h-8 items-center gap-1.5 rounded-md border border-hairline-strong bg-white px-3 text-body-s font-medium leading-none text-ink transition-colors duration-150 hover:bg-canvas"
                 >
-                  Open in triage
+                  Review
                 </button>
               )}
             </div>
 
             {/* Ruled like a ledger: a mono timestamp in a right-ranged rail, a
                 hairline spine, one actor and one action per entry. */}
-            <ol className="mt-3 border-l border-hairline pl-0">
+            <ol className="mt-2">
               {job.timeline.map((entry, index) => (
                 <li key={`${entry.at}-${index}`} className="flex flex-wrap gap-x-4 gap-y-1 py-2">
-                  <span className="ku-fig w-24 shrink-0 text-right text-caption text-meta">
+                  <span className="tnum w-20 shrink-0 text-caption leading-[21px] text-meta">
                     {new Date(entry.at).toLocaleTimeString()}
                   </span>
                   <span
                     aria-hidden
-                    className={`mt-1.5 h-1.5 w-1.5 shrink-0 ${
-                      index === job.timeline.length - 1 ? 'bg-accent' : 'bg-structure'
+                    className={`mt-2 h-1.5 w-1.5 shrink-0 rounded-full ${
+                      index === job.timeline.length - 1 ? 'bg-accent' : 'bg-slate-300'
                     }`}
                   />
                   <span className="min-w-0 flex-1 basis-40 text-body-s text-ink">
                     {entry.action}
                     {entry.note && <span className="text-meta"> — {entry.note}</span>}
-                    <span className="ku-docket ml-2">{entry.actor}</span>
+                    <span className="ml-2 text-caption text-meta">{entry.actor}</span>
                   </span>
                 </li>
               ))}
@@ -168,7 +146,7 @@ export const MailInspector: React.FC<{ detail: MailDetail; onOpenJob?: (jobId: s
         {/* ---- Linked canonical order -------------------------------- */}
         {order && (
           <section className="px-5 py-4">
-            <p className="ku-eyebrow">Canonical order</p>
+            <p className="ku-eyebrow">Order</p>
             <dl className="mt-2 grid grid-cols-1 gap-x-8 gap-y-2 sm:grid-cols-2">
               <Row label="Order" value={String(order.id)} mono />
               <Row label="PO number" value={String(order.poNumber ?? '—')} mono />
@@ -181,14 +159,14 @@ export const MailInspector: React.FC<{ detail: MailDetail; onOpenJob?: (jobId: s
             </dl>
 
             <p className="ku-eyebrow mt-4">Versions</p>
-            <ul className="ku-ruled mt-2 border border-hairline">
+            <ul className="ku-ruled mt-2 overflow-hidden rounded-md border border-hairline">
               {order.versions.map((version) => (
                 <li key={version.id} className="flex flex-wrap items-baseline gap-x-4 px-3 py-2">
                   <span className="ku-fig text-body-s font-semibold text-ink">
                     v{version.versionNo}
                   </span>
                   <span className="text-body-s text-ink">{version.reason}</span>
-                  <span className="ku-docket">{version.actor}</span>
+                  <span className="text-caption text-meta">{version.actor}</span>
                   <span className="ku-fig ml-auto text-caption text-meta">
                     {new Date(version.createdAt).toLocaleString()}
                   </span>
@@ -209,7 +187,7 @@ const Row: React.FC<{ label: string; value?: string | null; mono?: boolean; trun
   truncate,
 }) => (
   <div className="min-w-0">
-    <dt className="ku-eyebrow">{label}</dt>
+    <dt className="text-caption text-meta">{label}</dt>
     <dd
       className={`mt-0.5 text-body-s text-ink ${mono ? 'ku-fig' : ''} ${truncate ? 'truncate' : 'break-words'}`}
       title={value ?? undefined}

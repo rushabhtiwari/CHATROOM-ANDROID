@@ -44,7 +44,7 @@ export function AgentMessage({
       style={dock ? undefined : { maxWidth: "86%", marginLeft: "auto" }}
     >
       <div className={cn("mb-1.5 flex", dock ? "justify-start" : "justify-end")}>
-        <span className="rounded-lg border border-border bg-surface px-3 py-1.5 text-xs text-muted-foreground shadow-sm">
+        <span className="rounded-lg border border-border bg-surface px-3 py-1.5 text-xs text-muted-foreground">
           <span className="text-ai">@agent</span> {ai.prompt}
         </span>
       </div>
@@ -54,10 +54,10 @@ export function AgentMessage({
           <span className="text-sm font-semibold">
             {ai.kind === "summary" ? "Catch-up summary" : "AI Agent"}
           </span>
-          <span className="flex items-center gap-1 rounded-full border border-primary/15 bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-ai">
+          <span className="flex items-center gap-1 rounded-full border border-primary/15 bg-primary/10 px-2 py-0.5 text-[12px] font-medium text-ai">
             <Lock className="h-2.5 w-2.5" /> Private to you
           </span>
-          <span suppressHydrationWarning className="ml-auto text-[10px] text-muted-foreground">
+          <span suppressHydrationWarning className="ml-auto text-[12px] text-muted-foreground">
             {formatTime(ai.timestamp, { timeZone: currentUser.timeZone })}
           </span>
         </div>
@@ -126,7 +126,7 @@ function AgentAction({
   return (
     <button
       onClick={onClick}
-      className="flex items-center gap-1.5 rounded-lg border border-border bg-surface px-2.5 py-1.5 text-[11px] font-medium text-secondary-foreground shadow-sm transition-colors hover:bg-secondary"
+      className="flex items-center gap-1.5 rounded-lg border border-border bg-surface px-2.5 py-1.5 text-[12px] font-medium text-secondary-foreground transition-colors hover:bg-secondary"
     >
       <Icon className="h-3 w-3" /> {label}
     </button>

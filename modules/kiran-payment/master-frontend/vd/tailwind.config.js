@@ -12,133 +12,121 @@ export default {
         /* Brand — sampled from the Kiran Cable Protection wordmark          */
         /* ---------------------------------------------------------------- */
         ink: {
-          DEFAULT: '#0A2547',
-          2: '#123863',
-          3: '#1D4A7C',
+          DEFAULT: '#1D1D1F',
+          2: '#2C2C30',
+          3: '#3A3A40',
         },
         brand: {
-          DEFAULT: '#06477F',
-          600: '#053D6E',
-          700: '#04305A',
-          900: '#031F3B',
+          DEFAULT: '#0A63C9',
+          600: '#0855AD',
+          700: '#0B4F9C',
+          900: '#02223C',
         },
-        // Neutral ramp retuned to a navy cast so every gray in the console
-        // sits in the same family as the brand mark.
+        // Neutral greys, no colour cast.
         slate: {
-          DEFAULT: '#4A5A70',
-          50: '#F7F9FC',
-          100: '#EFF3F8',
-          200: '#E1E8F1',
-          300: '#C7D2E0',
-          400: '#94A3B8',
-          500: '#6E7F96',
-          600: '#55657A',
-          700: '#3D4C61',
-          800: '#2A384A',
-          900: '#1B2735',
+          DEFAULT: '#5B5B63',
+          50: '#FBFBFC',
+          100: '#F4F4F6',
+          200: '#E6E6EB',
+          300: '#D8D8DE',
+          400: '#9A9AA2',
+          500: '#6E6E76',
+          600: '#5B5B63',
+          700: '#3A3A40',
+          800: '#2C2C30',
+          900: '#1D1D1F',
         },
         line: {
-          DEFAULT: '#E4E9F0',
-          2: '#EEF2F7',
+          DEFAULT: '#E6E6EB',
+          2: '#EEEEF1',
         },
         surface: {
           DEFAULT: '#FFFFFF',
-          2: '#F7FAFD',
+          2: '#FBFBFC',
         },
         canvas: {
-          DEFAULT: '#F4F7FB',
+          DEFAULT: '#F7F7F9',
         },
         kiran: {
-          DEFAULT: '#06477F',
-          600: '#05609E',
-          tint: '#EAF2F9',
+          DEFAULT: '#0A63C9',
+          600: '#0855AD',
+          tint: '#E7EFFA',
         },
-        // The four fan strands, sampled from the logo mark
+        // Status hues (names kept from the old logo strands)
         strand: {
-          red: '#B5070E',
-          amber: '#E9991B',
-          green: '#018F3D',
-          teal: '#00AEEF',
+          red: '#B3302A',
+          amber: '#A96500',
+          green: '#17723F',
+          teal: '#0A63C9',
         },
 
-        /* ---------------------------------------------------------------- */
-        /* Role tokens                                                       */
-        /*                                                                   */
-        /* The chat module was authored against a shadcn token vocabulary    */
-        /* (primary / secondary / muted-foreground / border / …). Rather     */
-        /* than rewrite two thousand class names, those names are defined    */
-        /* here as aliases of the Kiran palette above. The chat therefore    */
-        /* inherits the console's colour system by construction — there is   */
-        /* only one palette in this application, addressed two ways.         */
-        /* ---------------------------------------------------------------- */
-        background: '#F4F7FB',
-        foreground: '#0A2547',
+        /* Role tokens: shadcn-style aliases of the same palette (chat module) */
+        background: '#F7F7F9',
+        foreground: '#1D1D1F',
         card: {
           DEFAULT: '#FFFFFF',
-          foreground: '#0A2547',
+          foreground: '#1D1D1F',
         },
         popover: {
           DEFAULT: '#FFFFFF',
-          foreground: '#0A2547',
+          foreground: '#1D1D1F',
         },
         primary: {
-          DEFAULT: '#06477F',
+          DEFAULT: '#0A63C9',
           foreground: '#FFFFFF',
         },
         secondary: {
-          DEFAULT: '#EFF3F8',
-          foreground: '#1B2735',
+          DEFAULT: '#F4F4F6',
+          foreground: '#1D1D1F',
         },
         accent: {
-          DEFAULT: '#EAF2F9',
-          foreground: '#04305A',
+          DEFAULT: '#E7EFFA',
+          foreground: '#0B4F9C',
         },
-        // `muted` is a text colour in the console (`text-muted`) and a surface
-        // in shadcn (`bg-muted`). Both readings resolve correctly: the DEFAULT
-        // is the grey the console has always used, and `bg-muted` is remapped
-        // to `bg-line-2` in the chat module during the port.
         muted: {
-          DEFAULT: '#75849A',
-          foreground: '#75849A',
+          DEFAULT: '#5B5B63',
+          foreground: '#5B5B63',
         },
         destructive: {
-          DEFAULT: '#B5070E',
+          DEFAULT: '#B3302A',
           foreground: '#FFFFFF',
         },
-        border: '#E4E9F0',
-        input: '#C7D2E0',
-        ring: '#06477F',
-        online: '#018F3D',
+        border: '#E6E6EB',
+        input: '#D8D8DE',
+        ring: '#0A63C9',
+        online: '#17723F',
         ai: {
-          DEFAULT: '#5B46C8',
-          tint: '#F0EDFC',
+          DEFAULT: '#0A63C9',
+          tint: '#E7EFFA',
           foreground: '#FFFFFF',
         },
       },
       fontFamily: {
-        display: ['Archivo', 'sans-serif'],
-        sans: ['"Inter Tight"', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
-        mono: ['"IBM Plex Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
+        display: ['Geist', 'system-ui', '-apple-system', '"Segoe UI"', 'Roboto', 'sans-serif'],
+        sans: ['Geist', 'system-ui', '-apple-system', '"Segoe UI"', 'Roboto', 'sans-serif'],
+        // Deliberately the sans stack: amounts and dates are ordinary text.
+        mono: ['Geist', 'system-ui', '-apple-system', '"Segoe UI"', 'Roboto', 'sans-serif'],
+        // Record numbers only (PO-..., REQ-...).
+        code: ['"Geist Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
       },
       borderRadius: {
-        DEFAULT: '7px',
-        xs: '3px',
-        sm: '5px',
-        md: '7px',
-        lg: '10px',
-        xl: '14px',
-        '2xl': '18px',
-        badge: '4px',
+        DEFAULT: '8px',
+        xs: '4px',
+        sm: '6px',
+        md: '8px',
+        lg: '12px',
+        xl: '16px',
+        '2xl': '20px',
+        badge: '6px',
       },
       boxShadow: {
-        // A tight, layered elevation scale — never more than one visible shadow
-        'hairline': '0 0 0 1px rgba(10, 37, 71, 0.06)',
-        'xs': '0 1px 1px rgba(10, 37, 71, 0.05)',
-        'card': '0 1px 2px rgba(10, 37, 71, 0.04), 0 1px 1px rgba(10, 37, 71, 0.03)',
-        'raised': '0 1px 2px rgba(10, 37, 71, 0.05), 0 4px 12px -4px rgba(10, 37, 71, 0.10)',
-        'popover': '0 8px 28px -6px rgba(10, 37, 71, 0.18), 0 2px 6px rgba(10, 37, 71, 0.06)',
-        'modal': '0 24px 64px -12px rgba(10, 37, 71, 0.30), 0 8px 20px -8px rgba(10, 37, 71, 0.14)',
-        'inset-line': 'inset 0 -1px 0 rgba(10, 37, 71, 0.06)',
+        'hairline': '0 0 0 1px #E6E6EB',
+        'xs': 'none',
+        'card': 'none',
+        'raised': 'none',
+        'popover': '0 10px 30px -8px rgba(0, 0, 0, 0.16), 0 2px 6px rgba(0, 0, 0, 0.05)',
+        'modal': '0 24px 64px -12px rgba(0, 0, 0, 0.24), 0 8px 20px -8px rgba(0, 0, 0, 0.10)',
+        'inset-line': 'inset 0 -1px 0 #E6E6EB',
       },
       transitionTimingFunction: {
         'out-refined': 'cubic-bezier(0.22, 1, 0.36, 1)',
@@ -153,9 +141,9 @@ export default {
           '50%': { opacity: '1' },
         },
         'pulse-ring': {
-          '0%': { boxShadow: '0 0 0 0 rgba(1, 143, 61, 0.55)' },
-          '70%': { boxShadow: '0 0 0 5px rgba(1, 143, 61, 0)' },
-          '100%': { boxShadow: '0 0 0 0 rgba(1, 143, 61, 0)' },
+          '0%': { boxShadow: '0 0 0 0 rgba(23, 114, 63, 0.55)' },
+          '70%': { boxShadow: '0 0 0 5px rgba(23, 114, 63, 0)' },
+          '100%': { boxShadow: '0 0 0 0 rgba(23, 114, 63, 0)' },
         },
       },
       animation: {

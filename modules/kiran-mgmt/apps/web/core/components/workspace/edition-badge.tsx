@@ -5,27 +5,26 @@
  */
 
 import { observer } from "mobx-react";
-// ui
-import { Tooltip } from "@plane/propel/tooltip";
-// hooks
-import { usePlatformOS } from "@/hooks/use-platform-os";
-import packageJson from "package.json";
+import { ArrowLeft } from "lucide-react";
+
+// The Central launcher this app is opened from. Set at build time for another host.
+const PORTAL_URL = process.env.VITE_CENTRAL_PORTAL_URL || "http://localhost:3000";
 
 /**
- * The build stamp at the foot of the sidebar.
+ * The foot of the sidebar.
  *
- * Upstream shows its edition name here ("Community") as a button that opens a
- * paid-plan upgrade dialog. KCMS is one product with no plans to sell, so this is
- * a label, not a button.
+ * Upstream shows its edition name here ("Community") as a button that opens a paid-plan
+ * upgrade dialog. KCMS is one app inside the Central Platform, so this is the way back to
+ * the launcher, the same link every other Kiran app keeps in this spot.
  */
 export const WorkspaceEditionBadge = observer(function WorkspaceEditionBadge() {
-  const { isMobile } = usePlatformOS();
-
   return (
-    <Tooltip tooltipContent="Kiran Cable Management System" isMobile={isMobile}>
-      <span className="cursor-default rounded-md bg-layer-1 px-2.5 py-1.5 text-12 font-medium text-tertiary select-none">
-        KCMS v{packageJson.version}
-      </span>
-    </Tooltip>
+    <a
+      href={PORTAL_URL}
+      className="flex items-center gap-2 rounded-md px-2.5 py-1.5 text-13 font-medium text-tertiary hover:bg-layer-transparent-hover hover:text-primary"
+    >
+      <ArrowLeft className="size-4" />
+      All apps
+    </a>
   );
 });

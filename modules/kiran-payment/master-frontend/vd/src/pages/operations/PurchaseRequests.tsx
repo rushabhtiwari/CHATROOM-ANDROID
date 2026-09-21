@@ -5,35 +5,32 @@ import { DataGrid, ColumnDef } from '../../components/common/DataGrid';
 import { StatusPill } from '../../components/common/StatusPill';
 import { PageHeader } from '../../components/shell/PageHeader';
 import { IndianRupee } from '../../components/common/IndianRupee';
-import { formatINR } from '../../utils/formatters';
-import { Sparkles, Plus, ShoppingBag } from 'lucide-react';
+import { Plus } from 'lucide-react';
 
 export const PurchaseRequests: React.FC = () => {
   const columns: ColumnDef<PurchaseRequest>[] = [
     {
       id: 'prNumber',
-      header: 'PR No.',
+      header: 'Request no.',
       accessorKey: 'prNumber',
       isMono: true,
-      width: '140px',
       cell: (row) => (
-        <div className="flex items-center gap-1.5 font-mono font-semibold text-kiran">
-          {row.isAutoPopulatedMRP && (
-            <span className="w-1.5 h-1.5 rounded-full bg-ai" title="Auto-populated by Stock / MRP trigger" />
-          )}
-          <span>{row.prNumber}</span>
-        </div>
+        <span
+          className="font-code text-[13px] text-ink whitespace-nowrap"
+          title={row.isAutoPopulatedMRP ? 'Auto-populated by Stock / MRP trigger' : undefined}
+        >
+          {row.prNumber}
+        </span>
       )
     },
     {
       id: 'item',
-      header: 'Item & Specification',
+      header: 'Item',
       accessorKey: 'item',
-      width: '260px',
       cell: (row) => (
-        <div className={row.isAutoPopulatedMRP ? 'border-l-2 border-ai pl-2 py-0.5' : ''}>
-          <div className="font-semibold text-ink">{row.item}</div>
-          <div className="text-[10px] text-muted font-mono">{row.partNumber} · {row.costCenter}</div>
+        <div>
+          <div className="font-medium text-ink">{row.item}</div>
+          <div className="text-[13px] text-muted">{row.partNumber} · {row.costCenter}</div>
         </div>
       )
     },
@@ -42,57 +39,43 @@ export const PurchaseRequests: React.FC = () => {
       header: 'Quantity',
       accessorKey: 'quantity',
       isNumeric: true,
-      isMono: true,
-      width: '110px',
       cell: (row) => `${row.quantity.toLocaleString('en-IN')} ${row.uom}`
     },
     {
       id: 'estimatedValue',
-      header: 'Est. Value',
+      header: 'Value',
       accessorKey: 'estimatedValue',
       isNumeric: true,
-      isMono: true,
-      width: '130px',
       cell: (row) => <IndianRupee amount={row.estimatedValue} />
     },
     {
       id: 'suggestedVendor',
-      header: 'Suggested Vendor',
+      header: 'Vendor',
       accessorKey: 'suggestedVendor',
-      width: '220px',
-      cell: (row) => <span className="text-xs text-slate-800">{row.suggestedVendor}</span>
+      cell: (row) => <span className="text-slate-800">{row.suggestedVendor}</span>
     },
     {
       id: 'approvalRoute',
-      header: 'Trigger Source / Route',
+      header: 'Source',
       accessorKey: 'approvalRoute',
-      width: '240px',
-      cell: (row) => (
-        <span className={`text-[11px] ${row.isAutoPopulatedMRP ? 'text-ai font-medium' : 'text-slate-600'}`}>
-          {row.approvalRoute}
-        </span>
-      )
+      cell: (row) => <span className="text-[13px] text-muted">{row.approvalRoute}</span>
     },
     {
       id: 'status',
       header: 'Status',
       accessorKey: 'status',
-      width: '130px',
       cell: (row) => <StatusPill status={row.status} />
     }
   ];
 
   return (
-    <div className="space-y-4 animate-fadeIn">
+    <div className="space-y-6 animate-fadeIn">
       <PageHeader
-        title="Purchase Requisitions & MRP Triggers"
+        title="Purchase requests"
         actions={
-          <button
-            onClick={() => alert('New purchase indent form')}
-            className="px-3 py-1.5 bg-kiran hover:bg-blue-700 text-white rounded text-xs font-semibold shadow-xs flex items-center gap-1.5"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            Raise Purchase Indent
+          <button onClick={() => alert('New purchase indent form')} className="btn-primary">
+            <Plus className="w-4 h-4" />
+            New request
           </button>
         }
       />
@@ -101,7 +84,7 @@ export const PurchaseRequests: React.FC = () => {
         data={mockPurchaseRequests}
         columns={columns}
         keyExtractor={(item) => item.id}
-        searchPlaceholder="Search PR number, item description, suggested vendor..."
+        searchPlaceholder="Search requests"
       />
     </div>
   );

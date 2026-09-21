@@ -84,7 +84,7 @@ export class PanelErrorBoundary extends Component<
           <p className="mt-1 text-xs text-muted-foreground">
             {this.props.label} could not be displayed. The rest of your workspace is still working.
           </p>
-          <p className="mt-2 max-w-full break-words text-[11px] text-muted-foreground/80">
+          <p className="mt-2 max-w-full break-words text-[12px] text-muted-foreground/80">
             {message}
           </p>
           <button

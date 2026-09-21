@@ -82,7 +82,7 @@ export const Chatroom: React.FC = () => {
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [headerProfile, setHeaderProfile] = useState<User | null>(null);
   const [groupProfileOpen, setGroupProfileOpen] = useState(false);
-  const [contextPanelOpen, setContextPanelOpen] = useState(true);
+  const [contextPanelOpen, setContextPanelOpen] = useState(false);
 
   const {
     activeRoom,
@@ -247,7 +247,7 @@ export const Chatroom: React.FC = () => {
 
         {/* Conversation */}
         <main className="flex min-w-0 flex-1 flex-col">
-          <div className="chat-header flex h-[60px] shrink-0 items-center gap-3 border-b border-line px-4 md:px-5">
+          <div className="chat-header flex h-14 shrink-0 items-center gap-3 px-4 md:px-5">
             <button
               aria-label="Open conversation list"
               className="rounded-md border border-line p-2 text-muted hover:bg-line-2 hover:text-ink lg:hidden"
@@ -301,15 +301,15 @@ export const Chatroom: React.FC = () => {
               }
               className="min-w-0 rounded-md text-left transition-opacity hover:opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-kiran"
             >
-              <span className="flex items-center gap-2 truncate text-[13.5px] font-semibold text-ink">
+              <span className="flex items-center gap-2 truncate text-[15px] font-semibold text-ink">
                 {roomTitle(activeRoom)}
                 {activeRoom.archived && (
-                  <span className="rounded-badge bg-line-2 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-muted">
+                  <span className="rounded-badge bg-line-2 px-1.5 py-0.5 text-[11px] font-semibold text-muted">
                     Archived
                   </span>
                 )}
               </span>
-              <span className="block truncate text-[11px] text-muted">
+              <span className="block truncate text-[12px] text-muted">
                 {activeRoom.topic
                   ? activeRoom.topic
                   : activeRoom.type === 'direct'
@@ -322,7 +322,7 @@ export const Chatroom: React.FC = () => {
 
             <div className="ml-auto flex items-center gap-1">
               {outbox.length > 0 && (
-                <span className="hidden rounded-badge bg-strand-amber/12 px-2 py-1 font-mono text-[10px] font-medium text-strand-amber sm:inline">
+                <span className="hidden rounded-badge bg-[#FBEFDC] px-2 py-1 text-[12px] font-medium text-[#8A4F00] sm:inline">
                   {outbox.length} queued
                 </span>
               )}
@@ -330,7 +330,7 @@ export const Chatroom: React.FC = () => {
                 <button
                   onClick={() => setOnline(true)}
                   title="Offline — click to reconnect"
-                  className="flex items-center gap-1.5 rounded-badge bg-strand-red/10 px-2 py-1 text-[10px] font-medium text-strand-red"
+                  className="flex items-center gap-1.5 rounded-badge bg-[#FBE9E7] px-2 py-1 text-[12px] font-medium text-[#B3302A]"
                 >
                   <WifiOff className="h-3 w-3" /> Offline
                 </button>
@@ -339,16 +339,16 @@ export const Chatroom: React.FC = () => {
               {unread.total > 0 && (
                 <button
                   onClick={() => void summarizeRoom(activeRoom.id)}
-                  className="hidden items-center gap-1.5 rounded-md border border-ai/20 bg-ai-tint px-2.5 py-1.5 text-[11px] font-medium text-ai transition-colors hover:border-ai/35 sm:flex"
+                  className="mr-1 hidden h-9 items-center gap-1.5 rounded-md border border-input bg-white px-3 text-[14px] font-medium text-ink transition-colors hover:bg-[#F4F4F6] sm:flex"
                 >
-                  <Sparkles className="h-3.5 w-3.5" /> Catch me up
+                  <Sparkles className="h-4 w-4 text-[#6E6E76]" /> Catch up
                 </button>
               )}
 
               <button
                 onClick={() => setSavedMode('pinned')}
                 aria-label="Pinned messages"
-                className="rounded-md p-2 text-muted transition-colors hover:bg-line-2 hover:text-ink"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-md text-[#6E6E76] transition-colors hover:bg-black/[0.05] hover:text-ink"
               >
                 <Pin className="h-4 w-4" />
               </button>
@@ -356,7 +356,7 @@ export const Chatroom: React.FC = () => {
                 onClick={() => setSearchOpen((open) => !open)}
                 aria-label="Search in conversation"
                 aria-expanded={searchOpen}
-                className="rounded-md p-2 text-muted transition-colors hover:bg-line-2 hover:text-ink"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-md text-[#6E6E76] transition-colors hover:bg-black/[0.05] hover:text-ink"
               >
                 <Search className="h-4 w-4" />
               </button>
@@ -373,8 +373,8 @@ export const Chatroom: React.FC = () => {
                 }
                 aria-expanded={contextPanelOpen}
                 className={cn(
-                  'rounded-md p-2 transition-colors hover:bg-line-2',
-                  contextPanelOpen ? 'bg-line-2 text-ink' : 'text-muted hover:text-ink',
+                  'inline-flex h-9 w-9 items-center justify-center rounded-md transition-colors hover:bg-black/[0.05]',
+                  contextPanelOpen ? 'bg-kiran-tint text-[#0B4F9C]' : 'text-[#6E6E76] hover:text-ink',
                 )}
               >
                 <Info className="h-4 w-4" />
@@ -383,7 +383,7 @@ export const Chatroom: React.FC = () => {
               <DropdownMenu>
                 <DropdownMenuTrigger
                   aria-label="Conversation actions"
-                  className="rounded-md p-2 text-muted transition-colors hover:bg-line-2 hover:text-ink"
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-md text-[#6E6E76] transition-colors hover:bg-black/[0.05] hover:text-ink"
                 >
                   <MoreVertical className="h-4 w-4" />
                 </DropdownMenuTrigger>
@@ -471,7 +471,7 @@ export const Chatroom: React.FC = () => {
                       <span className="min-w-0 flex-1 truncate">
                         {plainText(previewText(message))}
                       </span>
-                      <span className="shrink-0 font-mono text-[10px] text-muted">
+                      <span className="shrink-0 font-mono text-[12px] text-muted">
                         {formatRelative(message.timestamp)}
                       </span>
                     </button>

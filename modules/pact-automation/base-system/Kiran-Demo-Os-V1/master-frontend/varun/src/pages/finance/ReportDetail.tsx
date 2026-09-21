@@ -114,12 +114,12 @@ export const ReportDetail: React.FC = () => {
         <div className="flex items-center justify-between border-b border-ai/20 pb-2">
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-ai" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-ai font-mono">
+            <span className="text-xs font-semibold text-ai font-mono">
               AI Executive Observations & Narrative
             </span>
           </div>
           <div className="flex items-center gap-3">
-            <span className="font-mono text-[11px] text-muted">
+            <span className="font-mono text-[12px] text-muted">
               Model: <strong className="text-ai">{report.aiSummary.generatedByModel}</strong> · {report.aiSummary.generatedAt}
             </span>
             <button
@@ -148,12 +148,12 @@ export const ReportDetail: React.FC = () => {
       {/* 1. Pending Sales Orders */}
       {report.id === 'pending-sales-orders' && (
         <div className="bg-surface border border-line rounded-lg p-5 shadow-card space-y-4">
-          <h3 className="font-display font-semibold text-sm text-ink uppercase tracking-wider font-mono">
+          <h3 className="font-display font-semibold text-sm text-ink font-mono">
             Customer & PO-Wise Pending Balance Breakdown
           </h3>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs font-mono">
-              <thead className="bg-canvas text-muted text-[10px] uppercase border-b border-line">
+              <thead className="bg-canvas text-muted text-[12px] border-b border-line">
                 <tr>
                   <th className="p-2.5 font-sans">Customer Name</th>
                   <th className="p-2.5">PO Number</th>
@@ -179,7 +179,7 @@ export const ReportDetail: React.FC = () => {
               </tbody>
               <tfoot className="bg-canvas/80 border-t-2 border-line font-bold text-xs">
                 <tr>
-                  <td colSpan={5} className="p-2.5 text-ink font-sans uppercase">Total Unexecuted Pending Portfolio</td>
+                  <td colSpan={5} className="p-2.5 text-ink font-sans ">Total Unexecuted Pending Portfolio</td>
                   <td className="p-2.5 text-right text-strand-amber">690,000m</td>
                   <td className="p-2.5 text-right text-kiran text-sm">₹1,74,92,979</td>
                 </tr>
@@ -193,7 +193,7 @@ export const ReportDetail: React.FC = () => {
       {report.id === 'product-wise-consolidated' && (
         <div className="space-y-6">
           <div className="bg-surface border border-line rounded-lg p-5 shadow-card space-y-4">
-            <h3 className="font-display font-semibold text-sm text-ink uppercase tracking-wider font-mono">
+            <h3 className="font-display font-semibold text-sm text-ink font-mono">
               Balance Value by Product Category
             </h3>
             <div className="h-64 w-full">
@@ -209,12 +209,12 @@ export const ReportDetail: React.FC = () => {
           </div>
 
           <div className="bg-surface border border-line rounded-lg p-5 shadow-card space-y-4">
-            <h3 className="font-display font-semibold text-sm text-ink uppercase tracking-wider font-mono">
+            <h3 className="font-display font-semibold text-sm text-ink font-mono">
               Product-Wise Quantity & Value Matrix
             </h3>
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs font-mono">
-                <thead className="bg-canvas text-muted text-[10px] uppercase border-b border-line">
+                <thead className="bg-canvas text-muted text-[12px] border-b border-line">
                   <tr>
                     <th className="p-2.5 font-sans">Product</th>
                     <th className="p-2.5 text-right">PO Qty</th>
@@ -247,12 +247,12 @@ export const ReportDetail: React.FC = () => {
       {/* 3. Customer-Wise Revenue & Collection MIS */}
       {report.id === 'customer-wise-mis' && (
         <div className="bg-surface border border-line rounded-lg p-5 shadow-card space-y-4">
-          <h3 className="font-display font-semibold text-sm text-ink uppercase tracking-wider font-mono">
+          <h3 className="font-display font-semibold text-sm text-ink font-mono">
             Client Revenue, Order Backlog & Collection Status
           </h3>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs font-mono">
-              <thead className="bg-canvas text-muted text-[10px] uppercase border-b border-line">
+              <thead className="bg-canvas text-muted text-[12px] border-b border-line">
                 <tr>
                   <th className="p-2.5 font-sans">Customer</th>
                   <th className="p-2.5 text-right">Sales Value</th>
@@ -288,12 +288,12 @@ export const ReportDetail: React.FC = () => {
       {/* 4. Weekly Receivables Ageing Report */}
       {report.id === 'weekly-receivables' && (
         <div className="bg-surface border border-line rounded-lg p-5 shadow-card space-y-4">
-          <h3 className="font-display font-semibold text-sm text-ink uppercase tracking-wider font-mono">
+          <h3 className="font-display font-semibold text-sm text-ink font-mono">
             Receivables Ageing Slab Matrix (Severity Shaded)
           </h3>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs font-mono">
-              <thead className="bg-canvas text-muted text-[10px] uppercase border-b border-line">
+              <thead className="bg-canvas text-muted text-[12px] border-b border-line">
                 <tr>
                   <th className="p-2.5 font-sans">Customer</th>
                   <th className="p-2.5 text-right">0–30 Days</th>

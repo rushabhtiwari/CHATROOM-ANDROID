@@ -37,7 +37,7 @@ export function ContextPanel({
       <div className="flex h-full flex-col gap-3 overflow-y-auto bg-background p-4">
         {onClose && (
           <div className="flex items-center justify-between px-1">
-            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <span className="text-xs font-semibold text-muted-foreground">
               Contact Info
             </span>
             <button
@@ -62,7 +62,7 @@ export function ContextPanel({
           </p>
           <span
             className={cn(
-              "mt-2 rounded-full px-2.5 py-0.5 text-[11px]",
+              "mt-2 rounded-full px-2.5 py-0.5 text-[12px]",
               other.online ? "bg-online/15 text-online" : "bg-secondary text-muted-foreground",
             )}
           >
@@ -70,7 +70,7 @@ export function ContextPanel({
           </span>
           <p
             suppressHydrationWarning
-            className="mt-2 flex items-center gap-1 text-[11px] text-muted-foreground"
+            className="mt-2 flex items-center gap-1 text-[12px] text-muted-foreground"
           >
             <Clock className="h-3 w-3" /> {localTimeFor(other.timeZone)} local time
           </p>
@@ -96,7 +96,7 @@ export function ContextPanel({
         <Section title={`Mutual groups · ${mutual.length}`}>
           <div className="space-y-2">
             {mutual.length === 0 && (
-              <p className="text-[11px] text-muted-foreground">No shared groups yet.</p>
+              <p className="text-[12px] text-muted-foreground">No shared groups yet.</p>
             )}
             {mutual.map((room) => (
               <div key={room.id} className="flex items-center gap-2 text-sm">
@@ -136,7 +136,7 @@ export function ContextPanel({
     <div className="flex h-full flex-col gap-3 overflow-y-auto bg-background p-4">
       {onClose && (
         <div className="flex items-center justify-between px-1">
-          <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <span className="text-xs font-semibold text-muted-foreground">
             Group Info
           </span>
           <button
@@ -161,16 +161,16 @@ export function ContextPanel({
         />
         <h3 className="mt-3 text-lg font-semibold">{roomTitle(activeRoom)}</h3>
         {isGroup && <CategoryBadge room={activeRoom} />}
-        {activeRoom.topic && <p className="mt-0.5 text-[11px] text-primary">{activeRoom.topic}</p>}
+        {activeRoom.topic && <p className="mt-0.5 text-[12px] text-primary">{activeRoom.topic}</p>}
         {activeRoom.description && (
           <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
             {activeRoom.description}
           </p>
         )}
-        <p className="mt-3 text-[11px] text-muted-foreground">
+        <p className="mt-3 text-[12px] text-muted-foreground">
           {participants.length} members • {onlineCount} online
         </p>
-        <p suppressHydrationWarning className="text-[11px] text-muted-foreground">
+        <p suppressHydrationWarning className="text-[12px] text-muted-foreground">
           {activeRoom.createdBy
             ? `Created by ${userById(activeRoom.createdBy).name.split(" ")[0]} · `
             : ""}
@@ -191,7 +191,7 @@ export function ContextPanel({
           <button
             type="button"
             onClick={() => onOpenSettings("members")}
-            className="text-[11px] font-medium text-primary transition-colors hover:underline"
+            className="text-[12px] font-medium text-primary transition-colors hover:underline"
           >
             View all
           </button>
@@ -215,7 +215,7 @@ export function ContextPanel({
                     <Crown className="h-3 w-3 shrink-0 text-amber-500" aria-label="Administrator" />
                   )}
                 </span>
-                <span className="truncate text-[11px] text-muted-foreground">{user.role}</span>
+                <span className="truncate text-[12px] text-muted-foreground">{user.role}</span>
               </span>
             </button>
           ))}
@@ -223,7 +223,7 @@ export function ContextPanel({
             <button
               type="button"
               onClick={() => onOpenSettings("members")}
-              className="w-full rounded-lg px-2 py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+              className="w-full rounded-lg px-2 py-1.5 text-[12px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
             >
               {hidden} more {hidden === 1 ? "member" : "members"}
             </button>
@@ -259,10 +259,10 @@ export function ContextPanel({
               >
                 <Pin className="mt-0.5 h-3 w-3 shrink-0 text-muted-foreground" />
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate text-[11px] font-medium">
+                  <span className="block truncate text-[12px] font-medium">
                     {userById(message.senderId).name.split(" ")[0]}
                   </span>
-                  <span className="line-clamp-2 text-[11px] leading-snug text-muted-foreground">
+                  <span className="line-clamp-2 text-[12px] leading-snug text-muted-foreground">
                     {previewText(message)}
                   </span>
                 </span>
@@ -284,7 +284,7 @@ const CATEGORY_LABEL: Record<string, string> = {
 function CategoryBadge({ room }: { room: Room }) {
   const label = room.category ? CATEGORY_LABEL[room.category] : "Group chat";
   return (
-    <span className="mt-1.5 rounded-full border border-border bg-surface-2 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+    <span className="mt-1.5 rounded-full border border-border bg-surface-2 px-2 py-0.5 text-[12px] font-medium text-muted-foreground">
       {label}
     </span>
   );
@@ -322,7 +322,7 @@ function Section({
   return (
     <section className="rounded-xl border border-border bg-surface p-3 shadow-[var(--shadow-soft)]">
       <div className="mb-2 flex items-center justify-between px-1">
-        <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+        <p className="text-[12px] font-semibold text-muted-foreground">
           {title}
         </p>
         {action}

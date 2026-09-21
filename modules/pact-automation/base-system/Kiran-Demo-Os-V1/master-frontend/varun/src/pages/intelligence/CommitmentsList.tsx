@@ -16,7 +16,7 @@ export const CommitmentsList: React.FC = () => {
       cell: (row) => (
         <div>
           <div className="font-semibold text-ink">{row.personName}</div>
-          <div className="text-[10px] text-muted font-mono">{row.department}</div>
+          <div className="text-[12px] text-muted font-mono">{row.department}</div>
         </div>
       )
     },
@@ -45,7 +45,7 @@ export const CommitmentsList: React.FC = () => {
       cell: (row) => (
         <div>
           <div className="text-xs text-kiran font-mono">{row.sourceChannel}</div>
-          <div className="text-[10px] text-muted truncate italic">"{row.sourceMessage}"</div>
+          <div className="text-[12px] text-muted truncate italic">"{row.sourceMessage}"</div>
         </div>
       )
     },

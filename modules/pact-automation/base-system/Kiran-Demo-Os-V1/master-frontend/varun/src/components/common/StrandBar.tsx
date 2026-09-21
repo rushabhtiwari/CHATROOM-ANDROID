@@ -41,7 +41,7 @@ export const StrandBar: React.FC<StrandBarProps> = ({
     <div className={`w-full bg-surface border border-line rounded-md p-4 shadow-card ${className}`}>
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-ink">Order Lifecycle Pipeline</span>
+          <span className="text-xs font-semibold text-ink">Order Lifecycle Pipeline</span>
           <span className="text-xs font-mono text-muted">({totalCount} active operations)</span>
         </div>
         {hoveredSegment ? (
@@ -50,12 +50,12 @@ export const StrandBar: React.FC<StrandBarProps> = ({
               <span className="w-2 h-2 rounded-full" style={{ backgroundColor: hoveredSegment.color }} />
               {hoveredSegment.name}: <strong className="font-mono">{hoveredSegment.count} records</strong>
             </span>
-            <span className={`font-mono text-[11px] ${hoveredSegment.avgDwellDays > hoveredSegment.slaLimitDays && hoveredSegment.slaLimitDays > 0 ? 'text-strand-red font-semibold' : 'text-muted'}`}>
+            <span className={`font-mono text-[12px] ${hoveredSegment.avgDwellDays > hoveredSegment.slaLimitDays && hoveredSegment.slaLimitDays > 0 ? 'text-strand-red font-semibold' : 'text-muted'}`}>
               Avg dwell: {hoveredSegment.avgDwellDays}d (SLA: {hoveredSegment.slaLimitDays}d)
             </span>
           </div>
         ) : (
-          <span className="text-[11px] text-muted">Hover segments to inspect dwell time & SLAs</span>
+          <span className="text-[12px] text-muted">Hover segments to inspect dwell time & SLAs</span>
         )}
       </div>
 
@@ -79,7 +79,7 @@ export const StrandBar: React.FC<StrandBarProps> = ({
       </div>
 
       {/* Stage Labels */}
-      <div className="flex items-center justify-between mt-2 pt-2 border-t border-line/60 text-[10px] text-muted overflow-x-auto gap-2">
+      <div className="flex items-center justify-between mt-2 pt-2 border-t border-line/60 text-[12px] text-muted overflow-x-auto gap-2">
         {segments.slice(0, 8).map((seg) => (
           <div key={seg.id} className="flex items-center gap-1 shrink-0">
             <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: seg.color }} />

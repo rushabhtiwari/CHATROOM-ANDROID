@@ -19,7 +19,6 @@ export default async function DepartmentsPage() {
     <>
       <PageHeader
         title="Departments"
-        description="Choose which apps each department can open, and with which role."
         actions={
           <Disclosure
             label="Add department"

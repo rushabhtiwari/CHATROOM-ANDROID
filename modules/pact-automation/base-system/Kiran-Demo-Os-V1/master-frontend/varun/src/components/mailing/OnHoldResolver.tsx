@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { AlertTriangle, Check, RotateCcw, ShieldPlus, Trash2 } from 'lucide-react';
 import { mailingApi } from '../../modules/mailing/api';
 import type { ExtractedField, JobRow, TriageAction } from '../../modules/mailing/types';
-import { TONE, Tone } from '../../lib/tone';
+import { TONE, sentenceCase, Tone } from '../../lib/tone';
 
 interface Props {
   job: JobRow;
@@ -108,13 +108,13 @@ export const OnHoldResolver: React.FC<Props> = ({ job, onResolved, onError }) =>
         <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-2">
           <div className="min-w-0">
             <p className="ku-docket">{job.id}</p>
-            <h3 className="ku-wide mt-1.5 font-display text-h3 font-semibold text-ink">
+            <h3 className="mt-1.5 font-display text-h3 font-semibold text-ink">
               {job.subject}
             </h3>
             <p className="ku-fig mt-1 text-caption text-meta">{job.fromAddress}</p>
           </div>
           <div className="flex shrink-0 flex-col items-end gap-1.5">
-            <span className={`ku-stamp ${TONE[job.tone as Tone].stamp}`}>{job.statusLabel}</span>
+            <span className={`ku-stamp ${TONE[job.tone as Tone].stamp}`}>{sentenceCase(job.statusLabel)}</span>
             <span className="ku-stamp border-meta border-l-3 border-l-accent text-ink">
               {job.holdReasonLabel}
             </span>
@@ -122,7 +122,7 @@ export const OnHoldResolver: React.FC<Props> = ({ job, onResolved, onError }) =>
         </div>
 
         {job.causeLabel && (
-          <div className="mt-3 flex items-start gap-2.5 border border-l-3 border-hairline border-l-st-amber-ink bg-st-amber-bg px-3 py-2.5">
+          <div className="mt-3 flex items-start gap-2.5 rounded-md bg-st-amber-bg px-3 py-2.5">
             <AlertTriangle aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-st-amber-ink" />
             <p className="min-w-0 flex-1 text-body-s text-st-amber-ink">
               {job.causeLabel}
@@ -155,7 +155,7 @@ export const OnHoldResolver: React.FC<Props> = ({ job, onResolved, onError }) =>
                   <th
                     key={heading}
                     scope="col"
-                    className="ku-narrow sticky top-0 z-10 bg-white px-4 py-2.5 text-left align-bottom text-micro font-semibold uppercase text-meta after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-structure after:content-['']"
+                    className="ku-narrow sticky top-0 z-10 bg-white px-4 py-2.5 text-left align-bottom text-micro font-semibold text-meta after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-structure after:content-['']"
                   >
                     {heading}
                   </th>
@@ -188,7 +188,7 @@ export const OnHoldResolver: React.FC<Props> = ({ job, onResolved, onError }) =>
             value={note}
             onChange={(event) => setNote(event.target.value)}
             placeholder="Why are you taking this decision?"
-            className="mt-1.5 w-full min-w-0 border border-b-2 border-hairline-strong border-b-meta bg-white px-3 py-2 text-body-s text-ink transition-colors duration-150 placeholder:text-meta hover:border-b-ink focus:border-b-ink"
+            className="mt-1.5 w-full min-w-0 rounded-md border border-hairline-strong bg-white px-3 py-2 text-body-s text-ink transition-colors duration-150 placeholder:text-meta focus:border-accent"
           />
         </label>
 
@@ -198,7 +198,7 @@ export const OnHoldResolver: React.FC<Props> = ({ job, onResolved, onError }) =>
             <input
               value={company}
               onChange={(event) => setCompany(event.target.value)}
-              className="mt-1.5 w-full min-w-0 border border-b-2 border-hairline-strong border-b-meta bg-white px-3 py-2 text-body-s text-ink transition-colors duration-150 hover:border-b-ink focus:border-b-ink"
+              className="mt-1.5 w-full min-w-0 rounded-md border border-hairline-strong bg-white px-3 py-2 text-body-s text-ink transition-colors duration-150 focus:border-accent"
             />
           </label>
         )}
@@ -222,7 +222,7 @@ export const OnHoldResolver: React.FC<Props> = ({ job, onResolved, onError }) =>
                 onClick={() => act('REJECT')}
                 disabled={busy !== null}
                 title="Discard this message"
-                className="inline-flex h-10 items-center gap-2 border-2 border-danger bg-transparent px-4 text-body-s font-semibold leading-none text-danger transition-all duration-150 hover:bg-st-red-bg active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50"
+                className="inline-flex h-10 items-center gap-2 border border-danger bg-transparent px-4 text-body-s font-semibold leading-none text-danger transition-colors duration-150 hover:bg-st-red-bg disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <Trash2 aria-hidden className="h-4 w-4" />
                 Discard
@@ -235,7 +235,7 @@ export const OnHoldResolver: React.FC<Props> = ({ job, onResolved, onError }) =>
                 onClick={() => act('RETRY_EXTRACTION')}
                 disabled={busy !== null}
                 title="Re-queue this document for extraction"
-                className="inline-flex h-10 items-center gap-2 border-2 border-hairline-strong bg-white px-4 text-body-s font-semibold leading-none text-ink transition-all duration-150 hover:border-ink hover:bg-canvas active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50"
+                className="inline-flex h-10 items-center gap-2 rounded-md border border-hairline-strong bg-white px-4 text-body-s font-medium leading-none text-ink transition-colors duration-150 hover:bg-canvas disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <RotateCcw aria-hidden className="h-4 w-4" />
                 Re-extract
@@ -248,7 +248,7 @@ export const OnHoldResolver: React.FC<Props> = ({ job, onResolved, onError }) =>
                 onClick={() => act('WHITELIST')}
                 disabled={busy !== null}
                 title="Whitelist this sender domain and re-ingest"
-                className="inline-flex h-10 items-center gap-2 border-2 border-structure bg-structure px-4 text-body-s font-semibold leading-none text-white transition-all duration-150 hover:bg-structure-600 active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50"
+                className="inline-flex h-10 items-center gap-2 rounded-md border border-hairline-strong bg-white px-4 text-body-s font-medium leading-none text-ink transition-colors duration-150 hover:bg-canvas disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <ShieldPlus aria-hidden className="h-4 w-4" />
                 Whitelist domain
@@ -261,7 +261,7 @@ export const OnHoldResolver: React.FC<Props> = ({ job, onResolved, onError }) =>
                 onClick={() => act('COMMIT_EDITED')}
                 disabled={busy !== null}
                 title="Gate 1 — acknowledge the customer and task Sales, Accounts and Manufacturing"
-                className="inline-flex h-10 items-center gap-2 border-2 border-ink bg-accent px-5 text-body-s font-semibold leading-none text-accent-ink transition-all duration-150 hover:brightness-95 active:translate-y-px active:brightness-90 disabled:cursor-not-allowed disabled:opacity-50"
+                className="inline-flex h-10 items-center gap-2 rounded-md border border-transparent bg-accent px-5 text-body-s font-semibold leading-none text-white transition-colors duration-150 hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <Check aria-hidden className="h-4 w-4" />
                 {busy === 'COMMIT_EDITED' ? 'Approving…' : 'Approve as admin'}
@@ -278,7 +278,7 @@ export const OnHoldResolver: React.FC<Props> = ({ job, onResolved, onError }) =>
                 onClick={() => act('ACCOUNTS_APPROVE')}
                 disabled={busy !== null}
                 title="Gate 2 — save one PACT Purchase Order draft with every line item, then close the order out"
-                className="inline-flex h-10 items-center gap-2 border-2 border-ink bg-accent px-5 text-body-s font-semibold leading-none text-accent-ink transition-all duration-150 hover:brightness-95 active:translate-y-px active:brightness-90 disabled:cursor-not-allowed disabled:opacity-50"
+                className="inline-flex h-10 items-center gap-2 rounded-md border border-transparent bg-accent px-5 text-body-s font-semibold leading-none text-white transition-colors duration-150 hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <Check aria-hidden className="h-4 w-4" />
                 {busy === 'ACCOUNTS_APPROVE'
@@ -303,7 +303,7 @@ const FieldRow: React.FC<{
   const dirty = value !== String(field.value ?? '');
 
   return (
-    <tr className="border-b border-hairline border-l-3 border-l-transparent bg-white transition-colors duration-150 last:border-b-0 hover:border-l-accent hover:bg-canvas">
+    <tr className="border-b border-hairline bg-white transition-colors duration-150 last:border-b-0 hover:bg-canvas">
       <td className="px-4 py-3 align-top">
         <span className="font-semibold text-ink">{FIELD_LABELS[name] ?? name}</span>
         {field.source === 'HUMAN' && (
@@ -350,7 +350,7 @@ const FieldRow: React.FC<{
           className={`w-full min-w-0 border border-b-2 bg-white px-2.5 py-1.5 text-body-s text-ink transition-colors duration-150 ${
             dirty
               ? 'border-accent border-b-ink'
-              : 'border-hairline-strong border-b-meta hover:border-b-ink focus:border-b-ink'
+              : 'border-hairline-strong border-b-meta focus:border-accent'
           }`}
         />
       </td>

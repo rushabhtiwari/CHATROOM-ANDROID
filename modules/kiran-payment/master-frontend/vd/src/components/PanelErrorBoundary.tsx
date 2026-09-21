@@ -81,16 +81,16 @@ export class PanelErrorBoundary extends Component<
             <AlertTriangle className="h-5 w-5" />
           </span>
           <h3 className="mt-3 text-sm font-semibold">This panel stopped responding</h3>
-          <p className="mt-1 text-xs text-muted-foreground">
+          <p className="mt-1 text-[13px] text-muted-foreground">
             {this.props.label} could not be displayed. The rest of your workspace is still working.
           </p>
-          <p className="mt-2 max-w-full break-words text-[11px] text-muted-foreground/80">
+          <p className="mt-2 max-w-full break-words text-[12px] text-muted-foreground/80">
             {message}
           </p>
           <button
             type="button"
             onClick={this.retry}
-            className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-xs font-medium text-primary-foreground transition-opacity hover:opacity-90"
+            className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-primary px-3 py-1.5 text-[13px] font-medium text-primary-foreground transition-opacity hover:opacity-90"
           >
             <RotateCcw className="h-3.5 w-3.5" /> Try again
           </button>

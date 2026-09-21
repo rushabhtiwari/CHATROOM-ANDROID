@@ -44,7 +44,7 @@ export const JoinRoom: React.FC = () => {
                 <Users className="h-3.5 w-3.5" /> {room.participantIds.length} members
               </p>
               {room.invite?.expiresAt && !alreadyMember && (
-                <p className="flex items-center gap-1.5 font-mono text-[11px] text-muted">
+                <p className="flex items-center gap-1.5 font-mono text-[12px] text-muted">
                   <Clock className="h-3 w-3" /> Expires {formatUntil(room.invite.expiresAt)}
                   {room.invite.maxUses
                     ? ` · ${room.invite.maxUses - room.invite.uses} uses left`

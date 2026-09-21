@@ -30,7 +30,7 @@ export const AccountsOverview: React.FC = () => {
           <div className="flex items-center gap-3">
             {/* 5th Metric Companion Pill in Action Toolbar */}
             <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-lowest border border-outline-variant shadow-xs text-xs font-mono">
-              <span className="text-outline uppercase text-[10px] tracking-wider font-semibold">Unreconciled:</span>
+              <span className="text-outline text-[12px] font-semibold">Unreconciled:</span>
               <span className="font-bold text-strand-amber tabular-nums">
                 {formatINR(mockAccountsKPI.unreconciledAmount)}
               </span>
@@ -59,7 +59,7 @@ export const AccountsOverview: React.FC = () => {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-mono text-xs font-bold uppercase tracking-wider text-strand-amber">
+              <span className="font-mono text-xs font-bold text-strand-amber">
                 Bank-vs-Books Variance Alert
               </span>
               <HealthPill status="at_risk" label={`${mockAccountsKPI.unreconciledCount} Unmatched Entries`} size="sm" />
@@ -71,7 +71,7 @@ export const AccountsOverview: React.FC = () => {
         </div>
         <div className="flex items-center gap-3 ml-auto">
           <div className="text-right hidden sm:block">
-            <div className="text-[10px] uppercase font-mono text-outline">Unreconciled Delta</div>
+            <div className="text-[12px] font-mono text-outline">Unreconciled Delta</div>
             <div className="font-mono font-bold text-base text-strand-amber tabular-nums leading-tight">
               {formatINR(mockAccountsKPI.unreconciledAmount)}
             </div>
@@ -203,7 +203,7 @@ export const AccountsOverview: React.FC = () => {
       </div>
 
       {/* Quick Access Modules Navigation */}
-      <div className="ku-ledger border-t-3 border-t-structure grid-cols-1 md:grid-cols-3">
+      <div className="ku-ledger grid-cols-1 md:grid-cols-3">
         <Link
           to="/accounts/reconciliation"
           className="p-4.5 bg-white hover:border-primary/60 rounded-xl transition-all group flex flex-col justify-between"

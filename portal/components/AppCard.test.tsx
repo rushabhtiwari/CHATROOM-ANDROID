@@ -24,10 +24,7 @@ describe("AppCard", () => {
     expect(link).toHaveAttribute("target", "_blank");
     expect(link).toHaveAttribute("rel", "noopener noreferrer");
     expect(link).toHaveAccessibleDescription("Reference integration");
-    expect(link).toHaveTextContent("Department");
-    expect(link).toHaveTextContent("Live");
-    expect(link).toHaveTextContent("Manager");
-    expect(link).toHaveTextContent("Open");
+    expect(link).not.toHaveTextContent("Coming soon");
   });
 
   it("shows coming-soon apps as a disabled card without a link", () => {
@@ -39,8 +36,6 @@ describe("AppCard", () => {
     expect(screen.queryByRole("link")).toBeNull();
     const card = screen.getByText("Chat").closest("[aria-disabled]") as HTMLElement;
     expect(card).toHaveAttribute("aria-disabled", "true");
-    expect(card).toHaveTextContent("Company tool");
     expect(card).toHaveTextContent("Coming soon");
-    expect(card).not.toHaveTextContent("Open");
   });
 });

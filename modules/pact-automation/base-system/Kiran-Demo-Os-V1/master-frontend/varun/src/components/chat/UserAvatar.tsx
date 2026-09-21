@@ -40,7 +40,7 @@ export function UserAvatar({
       {showStatus && (
         <span
           className={cn(
-            "absolute -bottom-0.5 -right-0.5 rounded-full border-2 border-surface",
+            "absolute -bottom-0.5 -right-0.5 rounded-full border border-surface",
             user.online ? "bg-online animate-pulse-ring" : "bg-muted-foreground",
           )}
           style={{ width: size * 0.28, height: size * 0.28 }}

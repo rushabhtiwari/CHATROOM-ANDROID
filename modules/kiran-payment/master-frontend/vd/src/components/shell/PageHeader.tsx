@@ -9,9 +9,12 @@ interface PageHeaderProps {
   className?: string;
 }
 
+/**
+ * A page says what it is once: the title. `description` stays in the props so
+ * callers compile, but it is deliberately not rendered.
+ */
 export const PageHeader: React.FC<PageHeaderProps> = ({
   title,
-  description,
   badge,
   actions,
   children,
@@ -19,19 +22,14 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
 }) => {
   return (
     <div className={`space-y-4 mb-6 ${className}`}>
-      <div className="flex flex-wrap items-start justify-between gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-4 min-h-[44px]">
         <div>
           <div className="flex items-center gap-2.5">
-            <h1 className="font-display font-semibold text-[26px] leading-[1.15] text-ink tracking-[-0.025em]">
+            <h1 className="font-semibold text-[26px] leading-[1.2] text-ink tracking-[-0.02em]">
               {title}
             </h1>
             {badge}
           </div>
-          {description && (
-            <p className="text-[13px] text-muted mt-1.5 max-w-3xl leading-relaxed">
-              {description}
-            </p>
-          )}
         </div>
 
         {actions && (

@@ -78,7 +78,7 @@ export const LinearProgressBar: React.FC<LinearProgressBarProps> = ({
               {primaryDisplay}
             </span>
             {fraction && (
-              <span className="text-outline font-normal font-mono text-[11px]">
+              <span className="text-outline font-normal font-mono text-[12px]">
                 ({fraction})
               </span>
             )}

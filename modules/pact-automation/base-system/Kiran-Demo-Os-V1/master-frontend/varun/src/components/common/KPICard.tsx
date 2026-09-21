@@ -104,30 +104,24 @@ export const KPICard: React.FC<KPICardProps> = ({
     if (!icon) return null;
     if (React.isValidElement(icon)) return icon;
     const IconComponent = icon as React.ElementType;
-    return <IconComponent className="h-3.5 w-3.5 shrink-0 text-hairline-strong" />;
+    return <IconComponent className="h-4 w-4 shrink-0 text-slate-400" />;
   };
 
   const isPositiveTrend = trend?.positive ?? trend?.isPositive;
   const isNeutralTrend = trend?.neutral ?? trend?.isNeutral;
   const interactive = Boolean(to || onClick);
 
+  // Rule 1, say it once: a cell is a short label and a number. The `subtitle`
+  // caption is accepted for compatibility but no longer rendered.
   const cardContent = (
     <div
       onClick={onClick}
-      className={`group relative flex min-w-0 flex-col px-4 py-4 transition-colors duration-150 sm:px-5 ${
-        inBand ? 'bg-white' : 'border border-hairline bg-white'
+      className={`group relative flex min-w-0 flex-col px-5 py-5 transition-colors duration-150 ${
+        inBand ? 'bg-white' : 'rounded-lg border border-hairline bg-white'
       } ${interactive ? 'cursor-pointer select-none hover:bg-canvas' : ''} ${className}`}
     >
-      {/* The cap. It draws in from the left like a pen across a ledger line. */}
-      <span
-        aria-hidden
-        className={`absolute inset-x-0 top-0 origin-left animate-rule-in border-t-3 ${
-          tone ? TONE[tone].rule : 'border-t-structure'
-        }`}
-      />
-
-      <div className="flex items-start justify-between gap-2">
-        <p className="ku-eyebrow min-h-7 min-w-0 flex-1">{title}</p>
+      <div className="flex items-center justify-between gap-2">
+        <p className="min-w-0 flex-1 truncate text-caption font-medium text-meta">{title}</p>
         <div className="flex shrink-0 items-center gap-1.5">
           {badge}
           {!badge && status && <HealthPill status={status} />}
@@ -135,17 +129,18 @@ export const KPICard: React.FC<KPICardProps> = ({
         </div>
       </div>
 
-      <div className="mt-1.5 flex flex-wrap items-baseline gap-x-2 gap-y-1">
-        <span className="ku-total text-h2 leading-none tracking-tighter xl:text-figure">
+      <div className="mt-2 flex flex-wrap items-baseline gap-x-2 gap-y-1">
+        <span
+          className={`text-figure font-semibold tabular-nums ${
+            tone === 'red' ? 'text-st-red-ink' : tone === 'amber' ? 'text-st-amber-ink' : 'text-ink'
+          }`}
+        >
           {value}
         </span>
         {unit && <span className="text-caption font-medium text-meta">{unit}</span>}
-        {subtitle && !unit && <span className="text-caption text-meta">{subtitle}</span>}
         {trend && (
-          /* §8.3 colour is never the only carrier: the direction ships as a
-             glyph and an sr-only word alongside the ink. */
           <span
-            className={`ku-fig ml-auto shrink-0 text-caption font-semibold ${
+            className={`ml-auto shrink-0 text-caption font-medium tabular-nums ${
               isNeutralTrend
                 ? 'text-meta'
                 : isPositiveTrend
@@ -164,12 +159,10 @@ export const KPICard: React.FC<KPICardProps> = ({
         )}
       </div>
 
-      {(footerLeft || footerRight || (subtitle && unit)) && (
+      {(footerLeft || footerRight) && (
         <div className="mt-2 flex items-center justify-between gap-2 text-caption text-meta">
-          <div className="min-w-0 truncate">
-            {footerLeft || (subtitle && unit ? subtitle : null)}
-          </div>
-          {footerRight && <div className="ku-fig shrink-0">{footerRight}</div>}
+          <div className="min-w-0 truncate">{footerLeft}</div>
+          {footerRight && <div className="shrink-0 tabular-nums">{footerRight}</div>}
         </div>
       )}
     </div>

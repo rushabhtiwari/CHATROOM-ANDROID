@@ -149,32 +149,32 @@
     /* -------------------- Light mode color tokens -------------------- */
     /* Neutral colors */
     --neutral-white: oklch(1 0 0);
-    --neutral-100: oklch(0.9848 0.0003 230.66);
-    --neutral-200: oklch(0.9696 0.0007 230.67);
-    --neutral-300: oklch(0.9543 0.001 230.67);
-    --neutral-400: oklch(0.9389 0.0014 230.68);
-    --neutral-500: oklch(0.9235 0.001733 230.6853);
-    --neutral-600: oklch(0.8925 0.0024 230.7);
-    --neutral-700: oklch(0.8612 0.0032 230.71);
-    --neutral-800: oklch(0.6668 0.0079 230.82);
-    --neutral-900: oklch(0.6161 0.009153 230.867);
-    --neutral-1000: oklch(0.5288 0.0083 230.88);
-    --neutral-1100: oklch(0.4377 0.0066 230.87);
-    --neutral-1200: oklch(0.2378 0.0029 230.83);
+    --neutral-100: #fbfbfc;
+    --neutral-200: #f7f7f9;
+    --neutral-300: #f2f2f5;
+    --neutral-400: #ebebef;
+    --neutral-500: #e6e6eb;
+    --neutral-600: #d8d8de;
+    --neutral-700: #c6c6cd;
+    --neutral-800: #9a9aa2;
+    --neutral-900: #6e6e76;
+    --neutral-1000: #5b5b63;
+    --neutral-1100: #3a3a40;
+    --neutral-1200: #1d1d1f;
     --neutral-black: oklch(0.1472 0.0034 230.83);
     /* Brand colors */
-    --brand-100: oklch(0.9847 0.0083 236.56);
-    --brand-200: oklch(0.9715 0.0167 230.9);
-    --brand-300: oklch(0.9428 0.0341 230.22);
-    --brand-400: oklch(0.9008 0.0587 232);
-    --brand-500: oklch(0.8414 0.0947 233.08);
-    --brand-600: oklch(0.7649 0.1392 236.3);
-    --brand-700: oklch(0.6766 0.1665 243.91);
-    --brand-900: oklch(0.4347 0.104093 242.4823);
-    --brand-1000: oklch(0.3399 0.0783 240.32);
-    --brand-1100: oklch(0.2626 0.0578 237.5);
-    --brand-1200: oklch(0.2093 0.0438 234.02);
-    --brand-default: oklch(0.4799 0.1158 242.91);
+    --brand-100: #f1f6fd;
+    --brand-200: #e7effa;
+    --brand-300: #dce6f4;
+    --brand-400: #c3d6ef;
+    --brand-500: #9dbde6;
+    --brand-600: #6a9bda;
+    --brand-700: #3b7fd1;
+    --brand-900: #0855ad;
+    --brand-1000: #084e9f;
+    --brand-1100: #06386f;
+    --brand-1200: #042548;
+    --brand-default: #0a63c9;
     /* Green/Success colors */
     --green-100: oklch(0.9819 0.0181 155.83);
     --green-200: oklch(0.9624 0.0434 156.74);
@@ -265,7 +265,7 @@
     --bg-backdrop: var(--alpha-black-500);
     --bg-inverse: var(--alpha-black-1000);
     /* Border colors */
-    --border-subtle: var(--neutral-400);
+    --border-subtle: var(--neutral-500);
     --border-subtle-1: var(--neutral-500);
     --border-strong: var(--neutral-600);
     --border-strong-1: var(--neutral-700);
@@ -980,13 +980,12 @@
   /* ---------- Font family ---------- */
   --font-*: initial;
   --font-heading:
-    "Plus Jakarta Sans", "Inter Variable", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
   --font-body:
-    "Inter Variable", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-    "Noto Color Emoji";
-  --font-code:
-    "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+  --font-code: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
 
   /* ---------- Font weight ---------- */
   --font-weight-*: initial;

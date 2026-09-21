@@ -253,7 +253,7 @@ const MonthView: React.FC<{
         {WEEKDAYS.map((day) => (
           <div
             key={day}
-            className="px-2 py-2 text-center text-[10px] font-semibold uppercase tracking-[0.1em] text-muted"
+            className="px-2 py-2 text-center text-[12px] font-semibold text-muted"
           >
             {day}
           </div>
@@ -272,7 +272,7 @@ const MonthView: React.FC<{
               }`}
             >
               <span
-                className={`inline-flex h-6 min-w-6 items-center justify-center rounded-full px-1 font-mono text-[11px] font-semibold ${
+                className={`inline-flex h-6 min-w-6 items-center justify-center rounded-full px-1 font-mono text-[12px] font-semibold ${
                   isToday(day)
                     ? 'bg-kiran text-white'
                     : outside
@@ -298,21 +298,21 @@ const MonthView: React.FC<{
                       keyEvent.stopPropagation();
                       onSelect(event);
                     }}
-                    className="flex items-center gap-1 truncate rounded-xs px-1 py-0.5 text-[10.5px] leading-tight text-ink hover:bg-kiran-tint"
+                    className="flex items-center gap-1 truncate rounded-xs px-1 py-0.5 text-[12px] leading-tight text-ink hover:bg-kiran-tint"
                   >
                     <span
                       className={`h-1.5 w-1.5 shrink-0 rounded-full ${
                         eventState(event) === 'past' ? 'bg-slate-300' : 'bg-strand-teal'
                       }`}
                     />
-                    <span className="font-mono text-[9.5px] text-muted">
+                    <span className="font-mono text-[12px] text-muted">
                       {formatTime(event.startAt)}
                     </span>
                     <span className="truncate">{event.title}</span>
                   </span>
                 ))}
                 {dayEvents.length > 3 && (
-                  <span className="block px-1 text-[10px] font-medium text-muted">
+                  <span className="block px-1 text-[12px] font-medium text-muted">
                     +{dayEvents.length - 3} more
                   </span>
                 )}
@@ -356,11 +356,11 @@ const WeekView: React.FC<{
           <div />
           {days.map((day) => (
             <div key={day.toISOString()} className="px-2 py-2 text-center">
-              <div className="text-[10px] font-semibold uppercase tracking-[0.1em] text-muted">
+              <div className="text-[12px] font-semibold text-muted">
                 {WEEKDAYS[(day.getDay() + 6) % 7]}
               </div>
               <div
-                className={`mx-auto mt-1 flex h-6 w-6 items-center justify-center rounded-full font-mono text-[11px] font-semibold ${
+                className={`mx-auto mt-1 flex h-6 w-6 items-center justify-center rounded-full font-mono text-[12px] font-semibold ${
                   isToday(day) ? 'bg-kiran text-white' : 'text-slate-700'
                 }`}
               >
@@ -376,7 +376,7 @@ const WeekView: React.FC<{
           <div className="border-r border-line">
             {hours.map((hour) => (
               <div key={hour} className="relative h-14">
-                <span className="absolute -top-1.5 right-2 font-mono text-[10px] text-muted">
+                <span className="absolute -top-1.5 right-2 font-mono text-[12px] text-muted">
                   {hour === 12 ? '12 pm' : hour > 12 ? `${hour - 12} pm` : `${hour} am`}
                 </span>
               </div>
@@ -420,10 +420,10 @@ const WeekView: React.FC<{
                             : 'border-l-strand-teal bg-kiran-tint text-ink'
                       }`}
                     >
-                      <span className="block truncate text-[10.5px] font-semibold leading-tight">
+                      <span className="block truncate text-[12px] font-semibold leading-tight">
                         {event.title}
                       </span>
-                      <span className="block truncate font-mono text-[9.5px] opacity-70">
+                      <span className="block truncate font-mono text-[12px] opacity-70">
                         {formatTime(event.startAt)}
                       </span>
                     </button>
@@ -491,7 +491,7 @@ const AgendaView: React.FC<{
             >
               {isToday(day) ? 'Today' : day.toLocaleDateString(undefined, { weekday: 'long' })}
             </div>
-            <div className="font-mono text-[11px] text-muted">
+            <div className="font-mono text-[12px] text-muted">
               {day.toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}
             </div>
           </div>
@@ -518,7 +518,7 @@ const AgendaView: React.FC<{
                     <span className="block truncate text-[13px] font-semibold text-ink">
                       {event.title}
                     </span>
-                    <span className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 font-mono text-[11px] text-muted">
+                    <span className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 font-mono text-[12px] text-muted">
                       <span>{formatTimeRange(event.startAt, event.endAt)}</span>
                       {event.attendeeNames && event.attendeeNames.length > 0 && (
                         <span className="flex items-center gap-1">
@@ -576,7 +576,7 @@ const EventDetail: React.FC<{
             <h2 className="font-display text-[17px] font-semibold leading-snug text-ink">
               {event.title}
             </h2>
-            <p className="mt-0.5 font-mono text-[11.5px] text-muted">
+            <p className="mt-0.5 font-mono text-[12px] text-muted">
               {formatDayLong(event.startAt)} · {formatTimeRange(event.startAt, event.endAt)}
             </p>
           </div>
@@ -605,14 +605,14 @@ const EventDetail: React.FC<{
               <p className="label-eyebrow">Attendees</p>
               <div className="mt-1.5 flex flex-wrap gap-1">
                 {event.organizerName && (
-                  <span className="rounded-badge bg-kiran-tint px-2 py-0.5 text-[11px] font-medium text-kiran">
+                  <span className="rounded-badge bg-kiran-tint px-2 py-0.5 text-[12px] font-medium text-kiran">
                     {event.organizerName} · organiser
                   </span>
                 )}
                 {event.attendeeNames?.map((name) => (
                   <span
                     key={name}
-                    className="rounded-badge bg-line-2 px-2 py-0.5 text-[11px] text-slate-700"
+                    className="rounded-badge bg-line-2 px-2 py-0.5 text-[12px] text-slate-700"
                   >
                     {name}
                   </span>
@@ -653,7 +653,7 @@ const EventDetail: React.FC<{
           </div>
 
           {event.demo && (
-            <p className="rounded-md bg-strand-amber/10 px-2.5 py-2 text-[11px] leading-relaxed text-strand-amber">
+            <p className="rounded-md bg-strand-amber/10 px-2.5 py-2 text-[12px] leading-relaxed text-strand-amber">
               Google credentials are not configured on this server, so the Meet link is a
               placeholder. The Calendar link opens a real event with everything filled in.
             </p>
@@ -798,7 +798,7 @@ const EventComposer: React.FC<{
                   key={minutes}
                   onClick={() => setDuration(minutes)}
                   aria-pressed={duration === minutes}
-                  className={`rounded-md border px-2.5 py-1.5 text-[11px] font-medium transition-colors ${
+                  className={`rounded-md border px-2.5 py-1.5 text-[12px] font-medium transition-colors ${
                     duration === minutes
                       ? 'border-kiran bg-kiran-tint text-kiran'
                       : 'border-line bg-surface text-slate-700 hover:bg-line-2'

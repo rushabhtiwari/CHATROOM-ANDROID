@@ -77,7 +77,7 @@ export const ProjectShell: React.FC = () => {
           to={`/projects/${project.id}/items`}
           className="flex min-w-0 items-center gap-1.5 transition-colors hover:text-kiran"
         >
-          <span className="shrink-0 rounded border border-line bg-canvas px-1.5 font-mono text-[10.5px] font-bold text-kiran">
+          <span className="shrink-0 rounded border border-line bg-canvas px-1.5 font-mono text-[12px] font-bold text-kiran">
             {project.key}
           </span>
           <span className="max-w-[22rem] truncate text-[12.5px] font-semibold text-ink">
@@ -95,7 +95,7 @@ export const ProjectShell: React.FC = () => {
               <span className="text-[12.5px] font-semibold text-ink">{active.label}</span>
             )}
             {segment === 'items' && !detail && (
-              <span className="rounded-full bg-kiran-tint px-1.5 py-[1px] font-mono text-[10.5px] font-semibold text-kiran">
+              <span className="rounded-full bg-kiran-tint px-1.5 py-[1px] font-mono text-[12px] font-semibold text-kiran">
                 {itemCount}
               </span>
             )}

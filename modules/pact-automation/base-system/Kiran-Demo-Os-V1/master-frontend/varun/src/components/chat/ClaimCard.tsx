@@ -130,7 +130,7 @@ export const ClaimCard: React.FC<ClaimCardProps> = ({ claimId, mine }) => {
         </span>
         <div className="min-w-0 flex-1">
           <p className="truncate text-[13px] font-semibold leading-snug">{claim.title}</p>
-          <p className="mt-0.5 font-mono text-[10.5px] text-muted">
+          <p className="mt-0.5 font-mono text-[12px] text-muted">
             {claim.id} · {CATEGORY_LABEL[claim.category]} · {formatDate(claim.submittedOn)}
           </p>
         </div>
@@ -146,7 +146,7 @@ export const ClaimCard: React.FC<ClaimCardProps> = ({ claimId, mine }) => {
         <div className="flex flex-wrap items-center gap-2">
           <span
             className={cn(
-              'inline-flex items-center gap-1.5 rounded-badge border px-2 py-0.5 text-[10.5px] font-semibold',
+              'inline-flex items-center gap-1.5 rounded-badge border px-2 py-0.5 text-[12px] font-semibold',
               tone.pill,
             )}
           >
@@ -154,7 +154,7 @@ export const ClaimCard: React.FC<ClaimCardProps> = ({ claimId, mine }) => {
             {statusLabel(claim.status)}
           </span>
           {employee && (
-            <span className="text-[11px] text-muted">
+            <span className="text-[12px] text-muted">
               {employee.name} · {employee.department}
             </span>
           )}
@@ -182,7 +182,7 @@ export const ClaimCard: React.FC<ClaimCardProps> = ({ claimId, mine }) => {
             <span
               key={stage.role}
               className={cn(
-                'text-[9.5px] font-medium uppercase tracking-[0.08em]',
+                'text-[12px] font-medium ',
                 owner === stage.role ? 'text-strand-amber' : 'text-muted',
               )}
             >
@@ -199,14 +199,14 @@ export const ClaimCard: React.FC<ClaimCardProps> = ({ claimId, mine }) => {
                 href={receipt.url ?? '#'}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex max-w-[160px] items-center gap-1 rounded-badge border border-line bg-surface-2 px-1.5 py-0.5 text-[10px] text-slate-700 transition-colors hover:bg-line-2"
+                className="inline-flex max-w-[160px] items-center gap-1 rounded-badge border border-line bg-surface-2 px-1.5 py-0.5 text-[12px] text-slate-700 transition-colors hover:bg-line-2"
               >
                 <Paperclip className="h-2.5 w-2.5 shrink-0" />
                 <span className="truncate">{receipt.fileName}</span>
               </a>
             ))}
             {claim.receipts.length > 3 && (
-              <span className="px-1 text-[10px] text-muted">
+              <span className="px-1 text-[12px] text-muted">
                 +{claim.receipts.length - 3}
               </span>
             )}
@@ -214,7 +214,7 @@ export const ClaimCard: React.FC<ClaimCardProps> = ({ claimId, mine }) => {
         )}
 
         {claim.extraction && (
-          <p className="mt-2 flex items-start gap-1.5 text-[10.5px] leading-relaxed text-ai">
+          <p className="mt-2 flex items-start gap-1.5 text-[12px] leading-relaxed text-ai">
             <Sparkles className="mt-px h-2.5 w-2.5 shrink-0" />
             Read from the receipt and confirmed by {employee?.name.split(' ')[0] ?? 'the employee'}.
           </p>
@@ -266,7 +266,7 @@ export const ClaimCard: React.FC<ClaimCardProps> = ({ claimId, mine }) => {
         )}
 
         {!viewerCanAct && (
-          <span className="text-[11px] text-muted">
+          <span className="text-[12px] text-muted">
             {owner === null
               ? claim.status === 'CREDITED' || claim.status === 'PAID'
                 ? 'Settled.'
@@ -279,7 +279,7 @@ export const ClaimCard: React.FC<ClaimCardProps> = ({ claimId, mine }) => {
 
         <Link
           to={`/reimbursements/${claim.id}`}
-          className="ml-auto inline-flex shrink-0 items-center gap-1 rounded-md px-2 py-1 text-[11px] font-medium text-kiran transition-colors hover:bg-kiran-tint"
+          className="ml-auto inline-flex shrink-0 items-center gap-1 rounded-md px-2 py-1 text-[12px] font-medium text-kiran transition-colors hover:bg-kiran-tint"
         >
           Open claim <ArrowUpRight className="h-3 w-3" />
         </Link>
@@ -300,7 +300,7 @@ const ActionButton: React.FC<{
     onClick={onClick}
     disabled={disabled}
     className={cn(
-      'inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-[11px] font-semibold transition-colors disabled:opacity-50',
+      'inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-[12px] font-semibold transition-colors disabled:opacity-50',
       tone === 'approve'
         ? 'bg-strand-green text-white hover:bg-emerald-700'
         : 'border border-line bg-surface text-strand-red hover:bg-strand-red/5',

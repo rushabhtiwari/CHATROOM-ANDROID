@@ -70,7 +70,7 @@ export const DateCalendar: React.FC<{
 
       <div className="grid grid-cols-7">
         {WEEKDAYS.map((label) => (
-          <div key={label} className="py-1 text-center text-[9.5px] font-semibold text-muted">
+          <div key={label} className="py-1 text-center text-[12px] font-semibold text-muted">
             {label}
           </div>
         ))}
@@ -86,7 +86,7 @@ export const DateCalendar: React.FC<{
               type="button"
               disabled={disabled}
               onClick={() => onChange(iso)}
-              className={`relative mx-auto my-[1px] flex h-7 w-7 items-center justify-center rounded-full text-[11.5px] transition-colors ${
+              className={`relative mx-auto my-[1px] flex h-7 w-7 items-center justify-center rounded-full text-[12px] transition-colors ${
                 isSelected
                   ? 'bg-kiran font-semibold text-white'
                   : disabled
@@ -109,7 +109,7 @@ export const DateCalendar: React.FC<{
         <button
           type="button"
           onClick={() => onChange(isoDay(new Date()))}
-          className="text-[11px] font-medium text-kiran hover:underline"
+          className="text-[12px] font-medium text-kiran hover:underline"
         >
           Today
         </button>
@@ -117,7 +117,7 @@ export const DateCalendar: React.FC<{
           <button
             type="button"
             onClick={() => onChange(null)}
-            className="text-[11px] font-medium text-slate-500 hover:text-strand-red"
+            className="text-[12px] font-medium text-slate-500 hover:text-strand-red"
           >
             Clear
           </button>

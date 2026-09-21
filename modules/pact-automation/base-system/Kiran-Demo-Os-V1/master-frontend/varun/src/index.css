@@ -3,110 +3,137 @@
 @tailwind utilities;
 
 /* ==========================================================================
-   The Ledger design system — see LEDGERDESIGNSYSTEM.md
+   Kiran design language - see docs/design-language.md
 
-   It is a ruled ledger, not a card dashboard. The page is `canvas` grey and
-   surfaces are white sheets ruled onto it; hairlines divide, 3px `structure`
-   caps and anchors, 2px borders hold controls. Every figure is mono and
-   tabular; prose stays sans. Colour is spent once or twice a page.
+   Quiet grey chrome, white rounded groups, one blue, hairlines instead of
+   shadows. Geist for everything; Geist Mono only for record numbers.
    ========================================================================== */
+
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/geist-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/geist-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/geist-mono-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/geist-mono-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
 
 @layer base {
   :root {
-    /* §2.1 structural greys — the six values everything else rests on */
-    --canvas: #E9EDF0;
-    --canvas-deep: #DBE2E7;
-    --hairline: #D2D9DF;
-    --hairline-strong: #A7B3BE;
-    --meta: #5C6975;
-    --ink: #011627;
-    --ink-soft: #333333;
+    --canvas: #F7F7F9;
+    --canvas-deep: #EFEFF2;
+    --sidebar: #F2F2F5;
+    --hairline: #E6E6EB;
+    --hairline-2: #EEEEF1;
+    --hairline-strong: #D8D8DE;
+    --meta: #5B5B63;
+    --faint: #6E6E76;
+    --ink: #1D1D1F;
+    --ink-soft: #3A3A40;
 
-    /* §2.2 the two brand slots */
-    --accent: #E99741;
-    --accent-ink: #011627;
-    --accent-link: #B26516;
-    --structure: #02223C;
-    --structure-600: #083352;
+    --accent: #0A63C9;
+    --accent-hover: #0855AD;
+    --accent-tint: #E7EFFA;
+    --accent-ink: #FFFFFF;
+    --accent-link: #0A63C9;
+    --structure: #1D1D1F;
+    --structure-600: #2C2C30;
 
     /* Legacy aliases kept so older markup resolves into the same palette */
-    --ink-2: #02223C;
-    --ink-3: #083352;
-    --slate: #5C6975;
-    --muted: #5C6975;
-    --line: #D2D9DF;
-    --line-2: #E4E8EC;
+    --ink-2: #3A3A40;
+    --ink-3: #5B5B63;
+    --slate: #5B5B63;
+    --muted: #5B5B63;
+    --line: #E6E6EB;
+    --line-2: #EEEEF1;
     --surface: #FFFFFF;
-    --kiran: #02223C;
-    --kiran-600: #083352;
-    --kiran-tint: #E9EDF0;
-    --ku-rich-black: #011627;
+    --kiran: #0A63C9;
+    --kiran-600: #0855AD;
+    --kiran-tint: #E7EFFA;
+    --ku-rich-black: #1D1D1F;
     --ku-navy: #02223C;
-    --ku-orange: #E99741;
-    --ku-orange-soft: rgba(233, 151, 65, 0.55);
-    --ku-on-orange: #011627;
-    --ku-link-on-light: #B26516;
+    --ku-orange: #0A63C9;
+    --ku-orange-soft: rgba(10, 99, 201, 0.35);
+    --ku-on-orange: #FFFFFF;
+    --ku-link-on-light: #0A63C9;
 
-    /* §2.3 status tones — ink stamps, wash grounds, soft inner rules */
-    --st-grey-ink: #3F4A55;   --st-grey-bg: #E4E8EC;   --st-grey-line: #B4BEC7;
-    --st-blue-ink: #0B4A78;   --st-blue-bg: #DCEAF5;   --st-blue-line: #7FB0D4;
-    --st-amber-ink: #8A5A00;  --st-amber-bg: #F8EBD3;  --st-amber-line: #DFB463;
-    --st-red-ink: #A11020;    --st-red-bg: #F7DDE0;    --st-red-line: #E09AA3;
-    --st-green-ink: #0F5B3D;  --st-green-bg: #DAEEE3;  --st-green-line: #7FC0A2;
+    --st-grey-ink: #48484F;   --st-grey-bg: #EFEFF2;   --st-grey-line: #D8D8DE;
+    --st-blue-ink: #0B4F9C;   --st-blue-bg: #E7EFFA;   --st-blue-line: #B3CDEE;
+    --st-amber-ink: #8A4F00;  --st-amber-bg: #FBEFDC;  --st-amber-line: #EBCB94;
+    --st-red-ink: #B3302A;    --st-red-bg: #FBE9E7;    --st-red-line: #EDB5B0;
+    --st-green-ink: #17723F;  --st-green-bg: #E7F3EB;  --st-green-line: #B5D9C3;
 
-    /* The four fan strands, retuned to status inks so the loader and the
-       stamps speak the same five hues. */
-    --strand-red: #A11020;
-    --strand-amber: #8A5A00;
-    --strand-green: #0F5B3D;
-    --strand-teal: #0B4A78;
+    --strand-red: #B3302A;
+    --strand-amber: #8A4F00;
+    --strand-green: #17723F;
+    --strand-teal: #0A63C9;
 
     --ai: #4A3FA0;
     --ai-tint: #E8E6F4;
 
-    /* Surface scale — white sheets on a drafting ground */
     --surface-container-lowest: #ffffff;
-    --surface-container-low: #F4F6F8;
-    --surface-container: #E9EDF0;
-    --surface-container-high: #DBE2E7;
-    --surface-container-highest: #D2D9DF;
-    --on-surface: #011627;
-    --on-surface-variant: #5C6975;
-    --outline: #5C6975;
-    --outline-variant: #D2D9DF;
-    --primary-container: #02223C;
+    --surface-container-low: #FBFBFC;
+    --surface-container: #F4F4F6;
+    --surface-container-high: #EFEFF2;
+    --surface-container-highest: #E6E6EB;
+    --on-surface: #1D1D1F;
+    --on-surface-variant: #5B5B63;
+    --outline: #5B5B63;
+    --outline-variant: #E6E6EB;
+    --primary-container: #0A63C9;
     --on-primary: #ffffff;
-    --on-primary-container: #E9EDF0;
-    --secondary-container: #DCEAF5;
-    --on-secondary-container: #0B4A78;
-    --tertiary-container: #0F5B3D;
-    --tertiary-fixed: #DAEEE3;
-    --tertiary-fixed-dim: #7FC0A2;
-    --on-tertiary-fixed: #011627;
+    --on-primary-container: #ffffff;
+    --secondary-container: #E7EFFA;
+    --on-secondary-container: #0B4F9C;
+    --tertiary-container: #17723F;
+    --tertiary-fixed: #E7F3EB;
+    --tertiary-fixed-dim: #B5D9C3;
+    --on-tertiary-fixed: #1D1D1F;
 
-    /* ------------------------------------------------------------------ */
-    /* Chat chrome — the conversation surface paints from these, so it     */
-    /* re-skins with the console rather than holding its own opinions.     */
-    /* ------------------------------------------------------------------ */
-    --rail: #F4F6F8;
-    --rail-active: #E9EDF0;
-    --rail-active-border: var(--hairline-strong);
+    /* Chat chrome */
+    --rail: #F2F2F5;
+    --rail-active: #DCE6F4;
+    --rail-active-border: transparent;
     --header-surface: #FFFFFF;
-    --chat-canvas: #E9EDF0;
-    --chat-canvas-dot: rgba(1, 22, 39, 0.05);
-    --bubble-mine: var(--structure);
+    --chat-canvas: #F7F7F9;
+    --chat-canvas-dot: transparent;
+    --bubble-mine: var(--accent);
     --bubble-mine-foreground: #FFFFFF;
-    --bubble-mine-border: #011627;
+    --bubble-mine-border: var(--accent);
     --bubble-mine-accent: var(--accent);
     --bubble-other: #FFFFFF;
     --bubble-other-border: var(--hairline);
-    --bubble-other-accent: var(--hairline-strong);
-    --composer: #F4F6F8;
+    --bubble-other-accent: var(--hairline);
+    --composer: #FFFFFF;
     --composer-field: #FFFFFF;
     --composer-field-border: var(--hairline-strong);
     --online: var(--st-green-ink);
 
-    --shadow-float: none;
+    --shadow-float: 0 8px 24px rgba(0, 0, 0, 0.10);
     --shadow-soft: none;
   }
 
@@ -121,26 +148,22 @@
   }
 
   body {
-    /* §9 the single highest-leverage change: the ground is canvas, not white.
-       Surfaces are white on top of it — that inversion is what makes ruled
-       panels read as sheets of paper rather than as div soup. */
     background-color: var(--canvas);
     color: var(--ink-soft);
-    font-family: 'Archivo', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-    font-size: 16px;
-    line-height: 24px;
-    letter-spacing: 0;
+    font-family: 'Geist', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Archivo', system-ui, sans-serif;
+    font-family: inherit;
     color: var(--ink);
-    /* The display voice is the same face set wider — not a second typeface. */
-    font-variation-settings: 'wdth' 112;
+    font-weight: 600;
+    letter-spacing: -0.02em;
   }
 
   ::placeholder {
-    color: var(--meta);
+    color: var(--faint);
     opacity: 1;
   }
 
@@ -148,23 +171,16 @@
   input,
   textarea,
   select {
-    border-radius: 0;
+    border-radius: 8px;
   }
 
-  /* Figures align to the pixel in every dense operational table */
+  /* Ordinary figures are sans with tabular numerals, never monospace. */
   .font-mono,
   table td,
   table th {
     font-variant-numeric: tabular-nums;
   }
 
-  .font-mono {
-    font-family: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    font-feature-settings: 'tnum' 1, 'zero' 1;
-    letter-spacing: -0.01em;
-  }
-
-  /* §8.4 visible focus everywhere, one treatment */
   :focus-visible,
   button:focus-visible,
   a:focus-visible,
@@ -184,162 +200,141 @@
       scroll-behavior: auto !important;
       transition-duration: 0.01ms !important;
     }
-    /* The stamp's angle is form, not motion — it stays. */
-    .ku-stamp-struck { transform: rotate(-3deg) !important; }
   }
 
   ::selection {
-    background: var(--accent);
-    color: var(--accent-ink);
+    background: #CFE0F6;
+    color: var(--ink);
   }
 }
 
 @layer components {
-  /* ==================================================================== */
-  /* §3 The instrument voice                                              */
-  /*                                                                      */
-  /* Every money value, date, ID, count and percentage is monospace with   */
-  /* tabular figures. Prose stays sans even when it sits beside a figure:  */
-  /* mono for everything looks like a terminal, mono for figures only      */
-  /* looks like an instrument. That distinction is the whole trick.        */
-  /* ==================================================================== */
-  .tnum { font-variant-numeric: tabular-nums; font-feature-settings: 'tnum' 1; }
+  .tnum { font-variant-numeric: tabular-nums; }
 
-  .ku-fig {
-    @apply font-mono tabular-nums;
-    font-feature-settings: 'tnum' 1, 'zero' 1;
-  }
+  /* A figure: sans, tabular. */
+  .ku-fig { @apply tabular-nums; }
 
-  /* The anchor figure on a page — a total. */
+  /* A key number. */
   .ku-total {
-    @apply ku-fig font-semibold text-ink;
-    letter-spacing: -0.04em;
+    @apply font-semibold tabular-nums text-ink;
+    letter-spacing: -0.02em;
   }
 
-  /* An identifier: PO-2026-0103, an invoice no, a SKU. */
+  /* A record number (PO-2026-0103, MAIL-2026-0065): the one monospace voice. */
   .ku-docket {
-    @apply font-mono text-caption font-medium uppercase text-meta;
-    letter-spacing: 0.06em;
+    @apply font-code text-[12.5px] font-normal text-meta;
   }
 
-  /* The stamped micro-label above a block. Never a sentence. */
+  /* A small label above a value. Sentence case, quiet. */
   .ku-eyebrow {
-    @apply font-mono text-micro font-semibold uppercase text-meta;
+    @apply text-caption font-medium text-meta;
   }
 
-  /* The width axis carries the display voice. */
-  .ku-wide   { font-variation-settings: 'wdth' 112; }
-  .ku-xwide  { font-variation-settings: 'wdth' 125; }
-  .ku-narrow { font-variation-settings: 'wdth' 88; }
+  .ku-wide, .ku-xwide, .ku-narrow { font-variation-settings: normal; }
 
-  /* ==================================================================== */
-  /* §4 Surfaces — depth from contrast, never shadow                      */
-  /* ==================================================================== */
+  /* ---------------------------------------------------------------------- */
+  /* Surfaces: white rounded groups held by a hairline. No shadow.           */
+  /* ---------------------------------------------------------------------- */
+  .ku-card,
+  .ku-sheet,
+  .panel,
+  .panel-lift {
+    @apply rounded-lg border border-hairline bg-white;
+    overflow: clip;
+  }
 
-  /* Ordinary flat panel. */
-  .ku-card { @apply border border-hairline bg-white; }
+  .ku-rule-accent { @apply border-l-2 border-hairline-strong pl-4; }
 
-  /* The PRIMARY artifact on a page — a 3px structure rule across the top.
-     Use once per page, on the thing the page is actually about. */
-  .ku-sheet { @apply border border-hairline border-t-3 border-t-structure bg-white; }
+  /* A row of related numbers inside one group. */
+  .ku-ledger {
+    @apply grid rounded-lg border border-hairline bg-white;
+    overflow: clip;
+  }
+  @media (min-width: 768px) { .ku-ledger > * + * { border-left: 1px solid #EEEEF1; } }
+  @media (max-width: 767px) { .ku-ledger > * + * { border-top: 1px solid #EEEEF1; } }
 
-  /* A pulled-out note or quote. */
-  .ku-rule-accent { @apply border-l-6 border-accent pl-4; }
+  .ku-ruled > * + * { border-top: 1px solid #EEEEF1; }
 
-  /* The ledger band: N related numbers are ONE ruled row, not N cards.
-     A `gap-4` grid of stat cards is the single most template-looking thing
-     you can put on a page. */
-  .ku-ledger { @apply grid border border-hairline bg-white; }
-  @media (min-width: 768px) { .ku-ledger > * + * { border-left-width: 1px; border-color: #D2D9DF; } }
-  @media (max-width: 767px) { .ku-ledger > * + * { border-top-width: 1px; border-color: #D2D9DF; } }
-
-  /* Ruled rows — a hairline under every entry. No zebra striping, ever. */
-  .ku-ruled > * + * { @apply border-t border-hairline; }
-
-  /* The ledger cursor: an accent rule that follows the pointer down the page
-     like a finger on a ledger line. This replaces zebra striping entirely. */
   .ku-row {
-    @apply border-l-3 border-l-transparent bg-white transition-colors duration-150;
+    @apply rounded-none bg-white transition-colors duration-150;
   }
-  .ku-row:hover { @apply border-l-accent bg-canvas; }
+  .ku-row:hover { @apply bg-canvas; }
 
-  /* ==================================================================== */
-  /* §5.4 The stamp — status as an office stamp, not a pastel pill        */
-  /*                                                                      */
-  /* Outline and letters are the same ink, which is how a rubber stamp     */
-  /* actually prints, and keeps the mark legible in greyscale and on       */
-  /* tinted rows where a wash would vanish.                                */
-  /* ==================================================================== */
+  /* ---------------------------------------------------------------------- */
+  /* Status pill: 24px, 6px radius, tinted ground, dot + word.               */
+  /* The tint is derived from the text colour, so any tone class works.      */
+  /* ---------------------------------------------------------------------- */
   .ku-stamp {
-    @apply inline-flex items-center gap-1.5 whitespace-nowrap border-2 bg-transparent px-2 py-0.5;
-    @apply font-mono text-micro font-semibold uppercase leading-none;
-    letter-spacing: 0.12em;
+    @apply inline-flex h-6 items-center gap-1.5 whitespace-nowrap rounded-sm px-2 text-[12.5px] font-medium leading-none;
+    border: 0;
+    background-color: #EFEFF2;
+    background-color: color-mix(in srgb, currentColor 11%, white);
   }
+  .ku-stamp::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    flex: none;
+    border-radius: 9999px;
+    background: currentColor;
+  }
+  .ku-stamp > svg { display: none; }
   .ku-stamp-lg {
-    @apply gap-2 border-3 px-3 py-1.5 text-caption;
-    letter-spacing: 0.14em;
+    @apply h-7 px-2.5 text-caption;
   }
   .ku-stamp-struck {
-    @apply inline-flex items-center justify-center border-3 px-5 py-2;
-    @apply font-mono text-lead font-bold uppercase;
-    letter-spacing: 0.18em;
-    transform: rotate(-3deg);
+    @apply inline-flex h-8 items-center justify-center rounded-md px-3 text-body-s font-semibold;
+    border: 0;
+    background-color: color-mix(in srgb, currentColor 11%, white);
   }
 
-  /* ==================================================================== */
-  /* Signature marks. Each does real work; none is decoration.            */
-  /* ==================================================================== */
-  .ku-notch    { clip-path: polygon(0 0, calc(100% - 52px) 0, 100% 52px, 100% 100%, 0 100%); }
-  .ku-notch-sm { clip-path: polygon(0 0, calc(100% - 28px) 0, 100% 28px, 100% 100%, 0 100%); }
-  .ku-dots     { background-image: radial-gradient(currentColor 1.5px, transparent 1.6px);
-                 background-size: 24px 24px; }
-  /* The drawing-office mark for "void". Rejected/failed records only. */
-  .ku-hatch    { background-image: repeating-linear-gradient(-45deg,
-                   currentColor 0, currentColor 1px, transparent 1px, transparent 7px); }
+  /* ---------------------------------------------------------------------- */
+  /* Buttons (for raw <button> call sites; <Button> carries the same spec)   */
+  /* ---------------------------------------------------------------------- */
+  .btn-primary {
+    @apply inline-flex h-11 items-center justify-center gap-2 whitespace-nowrap rounded-[10px] bg-accent px-5 text-[15px] font-semibold text-white transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-secondary {
+    @apply inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-md border border-hairline-strong bg-white px-3.5 text-body-s font-medium text-ink transition-colors hover:bg-canvas disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-icon {
+    @apply inline-flex h-9 w-9 items-center justify-center rounded-md text-faint transition-colors hover:bg-black/5 hover:text-ink;
+  }
+  .field {
+    @apply h-10 w-full rounded-md border border-hairline-strong bg-white px-3 text-body-s text-ink placeholder:text-faint;
+  }
 
-  .ku-scrollbar { scrollbar-width: thin; scrollbar-color: #A7B3BE transparent; }
+  /* Retired decorations: kept as names so old markup stays valid. */
+  .ku-notch, .ku-notch-sm { clip-path: none; }
+  .ku-dots, .ku-hatch { background-image: none; }
+
+  .ku-scrollbar { scrollbar-width: thin; scrollbar-color: #D8D8DE transparent; }
   .ku-scrollbar::-webkit-scrollbar       { height: 10px; width: 10px; }
-  .ku-scrollbar::-webkit-scrollbar-thumb { background: #A7B3BE; }
+  .ku-scrollbar::-webkit-scrollbar-thumb { background: #D8D8DE; border-radius: 9999px; }
   .ku-scrollbar::-webkit-scrollbar-track { background: transparent; }
 
-  /* Staggered list entries; the index is set inline as `--i`. */
   .ku-stagger > * {
-    animation: page-in 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
-    animation-delay: calc(var(--stagger-step, 40ms) * var(--i, 0));
+    animation: page-in 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(var(--stagger-step, 30ms) * var(--i, 0));
   }
-
-  /* ==================================================================== */
-  /* Console primitives, re-cut on the ledger                             */
-  /*                                                                      */
-  /* `.panel` is the surface every page already composes from, so it is    */
-  /* the same thing as `.ku-card` — that is what carries the system into   */
-  /* pages this port never opened.                                        */
-  /* ==================================================================== */
-  .panel { @apply border border-hairline bg-white; }
 
   .panel-header {
-    @apply flex items-center justify-between gap-3 border-b border-hairline px-5 py-3.5;
+    @apply flex items-center justify-between gap-3 border-b border-hairline px-5 py-4;
   }
-
-  /* The primary artifact on a page. No gradient "milled edge" — the 3px
-     structure cap is what says "this is the thing". */
-  .panel-lift { @apply border border-hairline border-t-3 border-t-structure bg-white; }
 
   .label-eyebrow { @apply ku-eyebrow; }
 
-  /* A 2px structure rule under the whole head — not a grey border-b. Drawn
-     as an ::after inside the cell, because under border-collapse a sticky
-     th's own bottom border scrolls away in Chromium. */
+  /* Table head: quiet fill, sentence case, hairline under. */
   .grid-head {
-    @apply sticky top-0 z-10 bg-white font-mono text-micro font-semibold uppercase text-meta;
-    box-shadow: inset 0 -2px 0 var(--structure);
+    @apply sticky top-0 z-10 bg-surface-2 text-caption font-medium text-meta;
+    box-shadow: inset 0 -1px 0 var(--hairline);
   }
 
-  .industrial-rule   { border-top: 3px solid var(--structure); }
-  .industrial-accent { border-left: 3px solid var(--accent); }
+  .industrial-rule   { border-top: 1px solid var(--hairline); }
+  .industrial-accent { border-left: 0; }
 }
 
-/* Scrollbars, everywhere: a square thumb in hairline-strong, no track. */
+/* Scrollbars: a quiet rounded thumb, no track. */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -348,11 +343,11 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #A7B3BE;
-  border-radius: 0;
+  background: #D8D8DE;
+  border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #5C6975;
+  background: #9A9AA2;
 }
 ::-webkit-scrollbar-corner {
   background: transparent;
@@ -416,12 +411,14 @@
 
 .glass {
   background: var(--surface);
-  border: 1px solid var(--hairline-strong);
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
 }
 
 .ai-card {
   background: var(--ai-tint);
-  border: 1px solid rgba(74, 63, 160, 0.24);
+  border: 1px solid rgba(74, 63, 160, 0.18);
+  border-radius: 12px;
 }
 
 .workspace-shell {
@@ -438,7 +435,7 @@
 .conversation-rail [aria-current="true"] {
   background: var(--rail-active);
   border-color: var(--rail-active-border);
-  box-shadow: inset 3px 0 0 var(--accent);
+  border-radius: 8px;
 }
 
 .chat-header {
@@ -459,13 +456,13 @@
   background: var(--bubble-mine);
   color: var(--bubble-mine-foreground);
   border: 1px solid var(--bubble-mine-border);
-  border-left: 3px solid var(--bubble-mine-accent);
+  border-radius: 12px;
 }
 
 .message-bubble-other {
   background: var(--bubble-other);
   border: 1px solid var(--bubble-other-border);
-  border-left: 3px solid var(--bubble-other-accent);
+  border-radius: 12px;
 }
 
 .composer-shell {
@@ -499,22 +496,22 @@
 .md-body a { color: var(--accent-link); text-decoration: underline; text-underline-offset: 2px; }
 .md-body strong { font-weight: 600; color: var(--ink); }
 .md-body blockquote {
-  border-left: 3px solid var(--accent);
+  border-left: 2px solid var(--hairline-strong);
   padding-left: 0.75em;
   color: var(--meta);
 }
 .md-body code {
-  font-family: 'IBM Plex Mono', monospace;
+  font-family: 'Geist Mono', ui-monospace, monospace;
   font-size: 0.88em;
   background: var(--line-2);
   border: 1px solid var(--hairline);
-  border-radius: 0;
+  border-radius: 4px;
   padding: 0.08em 0.32em;
 }
 .md-body pre {
   background: var(--ink);
-  color: #E9EDF0;
-  border-radius: 0;
+  color: #F4F4F6;
+  border-radius: 8px;
   padding: 0.75em 0.9em;
   overflow-x: auto;
 }
@@ -532,16 +529,11 @@
 }
 .md-body th {
   background: var(--line-2);
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 500;
   color: var(--meta);
 }
 .md-body h1, .md-body h2, .md-body h3 {
-  font-family: 'Archivo', sans-serif;
-  font-variation-settings: 'wdth' 112;
   font-weight: 600;
   font-size: 1em;
   margin-top: 1em;

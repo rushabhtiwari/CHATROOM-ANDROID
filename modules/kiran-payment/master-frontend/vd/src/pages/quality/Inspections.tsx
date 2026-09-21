@@ -48,35 +48,39 @@ export const Inspections: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-fadeIn">
-      <PageHeader
-        title="Inspections"
-        description="Incoming material, in-process checks and final release, with the sample size, the defects found and the decision."
-      />
+      <PageHeader title="Inspections" />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {[
-          { label: 'Awaiting inspection', value: inspections.length - decided.length, tone: 'text-ai' },
-          { label: 'Accepted', value: accepted, tone: 'text-strand-green' },
-          { label: 'Rejected', value: decided.length - accepted, tone: 'text-strand-red' },
-          { label: 'Acceptance rate', value: `${decided.length ? Math.round((accepted / decided.length) * 100) : 0}%`, tone: 'text-ink' },
-        ].map((card) => (
-          <div key={card.label} className="p-4 bg-surface border border-line rounded-md shadow-card">
-            <div className="text-[11px] font-semibold uppercase tracking-wider text-muted">{card.label}</div>
-            <div className={`text-2xl font-display font-bold mt-1 ${card.tone}`}>{card.value}</div>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="kpi">
+          <div className="kpi-label">To inspect</div>
+          <div className="kpi-value">{inspections.length - decided.length}</div>
+        </div>
+        <div className="kpi">
+          <div className="kpi-label">Accepted</div>
+          <div className="kpi-value">{accepted}</div>
+        </div>
+        <div className="kpi">
+          <div className="kpi-label">Rejected</div>
+          <div className={`kpi-value ${decided.length - accepted > 0 ? 'text-strand-red' : ''}`}>
+            {decided.length - accepted}
           </div>
-        ))}
+        </div>
+        <div className="kpi">
+          <div className="kpi-label">Acceptance rate</div>
+          <div className="kpi-value">
+            {decided.length ? Math.round((accepted / decided.length) * 100) : 0}%
+          </div>
+        </div>
       </div>
 
-      <div className="space-y-3">
-        <div className="flex flex-wrap items-center gap-1.5">
+      <div className="space-y-4">
+        <div className="inline-flex flex-wrap items-center gap-0.5 p-0.5 rounded-lg bg-[#EBEBEF]">
           {KINDS.map((entry) => (
             <button
               key={entry}
               onClick={() => setKind(entry)}
-              className={`px-2.5 py-1 rounded-md text-xs font-medium border transition-colors ${
-                kind === entry
-                  ? 'bg-kiran text-white border-kiran'
-                  : 'bg-surface text-slate-700 border-line hover:border-kiran/40'
+              className={`h-7 px-3 rounded-md text-[13px] font-medium transition-colors ${
+                kind === entry ? 'bg-white text-ink' : 'text-muted hover:text-ink'
               }`}
             >
               {entry}
@@ -84,59 +88,56 @@ export const Inspections: React.FC = () => {
           ))}
         </div>
 
-        <div className="bg-surface border border-line rounded-lg shadow-card overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-canvas text-muted text-[10px] uppercase border-b border-line">
+        <div className="bg-surface border border-line rounded-lg overflow-x-auto">
+          <table className="w-full text-left text-[14px]">
+            <thead className="bg-surface-2 text-[13px] font-medium text-muted border-b border-line">
               <tr>
-                <th className="p-3 font-semibold">Inspection</th>
-                <th className="p-3 font-semibold">Type</th>
-                <th className="p-3 font-semibold">Item</th>
-                <th className="p-3 font-semibold">Checks</th>
-                <th className="p-3 font-semibold text-right">Sample</th>
-                <th className="p-3 font-semibold text-right">Defects</th>
-                <th className="p-3 font-semibold">Result</th>
-                <th className="p-3 font-semibold text-right">Decision</th>
+                <th className="px-4 py-3 font-medium">Inspection</th>
+                <th className="px-4 py-3 font-medium">Type</th>
+                <th className="px-4 py-3 font-medium">Item</th>
+                <th className="px-4 py-3 font-medium">Checks</th>
+                <th className="px-4 py-3 font-medium text-right">Sample</th>
+                <th className="px-4 py-3 font-medium text-right">Defects</th>
+                <th className="px-4 py-3 font-medium">Result</th>
+                <th className="px-4 py-3 font-medium" />
               </tr>
             </thead>
-            <tbody className="divide-y divide-line">
+            <tbody className="divide-y divide-line-2">
               {rows.map((entry) => (
-                <tr key={entry.id}>
-                  <td className="p-3">
-                    <div className="font-mono font-semibold text-kiran">{entry.id}</div>
-                    <div className="text-[11px] font-mono text-muted">{entry.reference}</div>
+                <tr key={entry.id} className="h-[52px] hover:bg-canvas">
+                  <td className="px-4 py-3 whitespace-nowrap">
+                    <div className="font-code text-[13px] text-ink">{entry.id}</div>
+                    <div className="font-code text-[13px] text-muted">{entry.reference}</div>
                   </td>
-                  <td className="p-3">{entry.kind}</td>
-                  <td className="p-3">
-                    <div className="font-semibold text-ink">{entry.item}</div>
-                    <div className="text-[11px] text-muted">{entry.source}</div>
+                  <td className="px-4 py-3 whitespace-nowrap">{entry.kind}</td>
+                  <td className="px-4 py-3">
+                    <div className="font-medium text-ink">{entry.item}</div>
+                    <div className="text-[13px] text-muted">{entry.source}</div>
                   </td>
-                  <td className="p-3 text-slate-600 max-w-[240px]">{entry.checks}</td>
-                  <td className="p-3 text-right font-mono">{entry.sampleSize}</td>
+                  <td className="px-4 py-3 text-slate-600 max-w-[240px]">{entry.checks}</td>
+                  <td className="px-4 py-3 text-right tabular-nums">{entry.sampleSize}</td>
                   <td
-                    className={`p-3 text-right font-mono ${
-                      entry.defects > 0 ? 'text-strand-red font-semibold' : 'text-slate-700'
+                    className={`px-4 py-3 text-right tabular-nums ${
+                      entry.defects > 0 ? 'text-strand-red' : ''
                     }`}
                   >
                     {entry.defects}
                   </td>
-                  <td className="p-3">
+                  <td className="px-4 py-3 whitespace-nowrap">
                     <StatusPill status={entry.result} />
                   </td>
-                  <td className="p-3">
+                  <td className="px-4 py-3">
                     {entry.result === 'Pending' && (
-                      <div className="flex items-center justify-end gap-1.5">
-                        <button
-                          onClick={() => decide(entry.id, 'Accepted')}
-                          className="px-2 py-1 rounded bg-strand-green text-white text-[11px] font-semibold hover:opacity-90 flex items-center gap-1"
-                        >
-                          <Check className="w-3 h-3" />
+                      <div className="flex items-center justify-end gap-2">
+                        <button onClick={() => decide(entry.id, 'Accepted')} className="btn-secondary">
+                          <Check className="w-4 h-4 text-slate-500" />
                           Accept
                         </button>
                         <button
                           onClick={() => decide(entry.id, 'Rejected')}
-                          className="px-2 py-1 rounded border border-line text-slate-700 text-[11px] font-semibold hover:border-strand-red hover:text-strand-red flex items-center gap-1"
+                          className="btn-secondary text-strand-red"
                         >
-                          <X className="w-3 h-3" />
+                          <X className="w-4 h-4" />
                           Reject
                         </button>
                       </div>

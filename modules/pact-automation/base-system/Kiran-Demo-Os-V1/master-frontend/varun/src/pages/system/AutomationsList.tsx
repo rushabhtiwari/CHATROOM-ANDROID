@@ -76,7 +76,7 @@ export const AutomationsList: React.FC = () => {
                   <h3 className="font-display font-semibold text-sm text-ink">
                     {rule.name}
                   </h3>
-                  <div className="text-[10px] text-muted font-mono mt-0.5">
+                  <div className="text-[12px] text-muted font-mono mt-0.5">
                     {rule.id} · Category: <strong className="text-slate-700 font-sans">{rule.department}</strong>
                   </div>
                 </div>
@@ -86,7 +86,7 @@ export const AutomationsList: React.FC = () => {
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => handleRunNow(rule.name)}
-                  className="px-2.5 py-1 bg-canvas hover:bg-slate-200 border border-line text-[11px] font-mono text-slate-700 rounded flex items-center gap-1"
+                  className="px-2.5 py-1 bg-canvas hover:bg-slate-200 border border-line text-[12px] font-mono text-slate-700 rounded flex items-center gap-1"
                 >
                   <Play className="w-3 h-3 text-kiran" />
                   <span>Test Run</span>

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Banknote, CalendarCheck, ClipboardCheck, Users2 } from 'lucide-react';
 import { PageHeader } from '@/components/shell/PageHeader';
 import { useRts } from '@/modules/rts/store';
 import { actionOwner } from '@/modules/rts/status';
@@ -33,81 +32,61 @@ export const HrOverview: React.FC = () => {
   ).sort((a, b) => b[1] - a[1]);
 
   const cards = [
-    { to: '/people/employees', label: 'Headcount', value: employees.length, note: `${headcount.length} departments`, icon: Users2, tone: 'text-ink' },
-    { to: '/people/attendance', label: 'On leave today', value: awayToday.length, note: awayToday.map((e) => e.name.split(' ')[0]).join(', ') || 'Everyone is in', icon: CalendarCheck, tone: 'text-strand-amber' },
-    { to: '/people/leave', label: 'Leave to decide', value: pendingLeave.length, note: 'Awaiting HR', icon: CalendarCheck, tone: 'text-ai' },
-    { to: '/hr', label: 'Claims with HR', value: withHr.length, note: formatCurrency(withHr.reduce((sum, r) => sum + r.amount, 0)), icon: ClipboardCheck, tone: 'text-kiran' },
+    { to: '/people/employees', label: 'Headcount', value: employees.length },
+    { to: '/people/attendance', label: 'On leave today', value: awayToday.length },
+    { to: '/people/leave', label: 'Leave to decide', value: pendingLeave.length },
+    { to: '/hr', label: 'Claims with HR', value: withHr.length },
   ];
 
   return (
     <div className="space-y-6 animate-fadeIn">
-      <PageHeader
-        title="HR Overview"
-        description="People, leave and attendance, and the expense claims HR reviews before Accounts pays them."
-      />
+      <PageHeader title="HR" />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {cards.map((card) => (
-          <Link
-            key={card.label}
-            to={card.to}
-            className="p-4 bg-surface border border-line hover:border-kiran rounded-md shadow-card transition-all"
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] font-semibold uppercase tracking-wider text-muted">
-                {card.label}
-              </span>
-              <card.icon className="w-4 h-4 text-muted" />
-            </div>
-            <div className={`text-2xl font-display font-bold mt-1 ${card.tone}`}>{card.value}</div>
-            <div className="text-[11px] text-muted mt-1 truncate">{card.note}</div>
+          <Link key={card.label} to={card.to} className="kpi block hover:border-slate-300 transition-colors">
+            <div className="kpi-label">{card.label}</div>
+            <div className="kpi-value">{card.value}</div>
           </Link>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
-        {/* What Accounts did with HR-approved claims */}
-        <div className="bg-surface border border-line rounded-lg p-5 shadow-card space-y-3">
-          <div className="flex items-center justify-between border-b border-line pb-3">
-            <div>
-              <h3 className="font-display font-semibold text-sm text-ink flex items-center gap-2">
-                <Banknote className="w-4 h-4 text-strand-green" />
-                Disbursed by Accounts
-              </h3>
-              <p className="text-xs text-muted">Claims HR approved that have now been paid</p>
-            </div>
-            <Link to="/reimbursements" className="text-xs font-semibold text-kiran hover:underline">
-              Claims ledger
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        <div className="bg-surface border border-line rounded-lg p-5">
+          <div className="flex items-center justify-between pb-3">
+            <h3 className="text-[16px] font-semibold text-ink">Paid claims</h3>
+            <Link to="/reimbursements" className="text-[13px] font-medium text-kiran hover:underline">
+              All claims
             </Link>
           </div>
           {settled.length === 0 ? (
-            <p className="text-xs text-muted py-4">Nothing has been paid out yet.</p>
+            <p className="text-[14px] text-muted py-4">Nothing paid yet.</p>
           ) : (
-            <table className="w-full text-left text-xs">
-              <thead className="text-[10px] uppercase text-muted">
-                <tr>
-                  <th className="py-1.5 font-semibold">Employee</th>
-                  <th className="py-1.5 font-semibold">Claim</th>
-                  <th className="py-1.5 font-semibold text-right">Amount</th>
-                  <th className="py-1.5 font-semibold text-right">Settled</th>
+            <table className="w-full text-left text-[14px]">
+              <thead className="text-[13px] text-muted">
+                <tr className="border-b border-line-2">
+                  <th className="py-2.5 pr-4 font-medium">Employee</th>
+                  <th className="py-2.5 px-4 font-medium">Claim</th>
+                  <th className="py-2.5 px-4 font-medium text-right">Amount</th>
+                  <th className="py-2.5 pl-4 font-medium text-right">Paid</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-line">
+              <tbody className="divide-y divide-line-2">
                 {settled.slice(0, 7).map((payout) => (
-                  <tr key={payout.id}>
-                    <td className="py-2 font-semibold text-ink">
+                  <tr key={payout.id} className="h-[52px]">
+                    <td className="pr-4 font-medium text-ink">
                       {employeeById(payout.employeeId)?.name ?? payout.employeeId}
                     </td>
-                    <td className="py-2">
+                    <td className="px-4 whitespace-nowrap">
                       <Link
                         to={`/reimbursements/${payout.requestId}`}
-                        className="font-mono text-kiran hover:underline"
+                        className="font-code text-[13px] text-kiran hover:underline"
                       >
                         {payout.requestId}
                       </Link>
                     </td>
-                    <td className="py-2 text-right font-mono">{formatCurrency(payout.amount)}</td>
-                    <td className="py-2 text-right font-mono text-muted">
+                    <td className="px-4 text-right tabular-nums whitespace-nowrap">{formatCurrency(payout.amount)}</td>
+                    <td className="pl-4 text-right text-muted whitespace-nowrap">
                       {payout.settledOn ? formatDateTime(payout.settledOn) : payout.method}
                     </td>
                   </tr>
@@ -117,32 +96,28 @@ export const HrOverview: React.FC = () => {
           )}
         </div>
 
-        {/* Sent to HR by other departments */}
-        <div className="bg-surface border border-line rounded-lg p-5 shadow-card space-y-3">
-          <div className="flex items-center justify-between border-b border-line pb-3">
-            <div>
-              <h3 className="font-display font-semibold text-sm text-ink">From other departments</h3>
-              <p className="text-xs text-muted">Employees filing claims, Accounts deciding and paying them</p>
-            </div>
-            <Link to="/activity" className="text-xs font-semibold text-kiran hover:underline">
+        <div className="bg-surface border border-line rounded-lg p-5">
+          <div className="flex items-center justify-between pb-3">
+            <h3 className="text-[16px] font-semibold text-ink">Updates</h3>
+            <Link to="/activity" className="text-[13px] font-medium text-kiran hover:underline">
               All activity
             </Link>
           </div>
           {forHr.length === 0 ? (
-            <p className="text-xs text-muted py-4">Nothing addressed to HR yet.</p>
+            <p className="text-[14px] text-muted py-4">Nothing new.</p>
           ) : (
-            <ul className="divide-y divide-line">
+            <ul className="divide-y divide-line-2">
               {forHr.map((notification) => (
-                <li key={notification.id} className="py-2.5 flex items-start gap-2.5">
+                <li key={notification.id} className="py-3 flex items-start gap-3">
                   <span
                     aria-hidden
-                    className={`mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 ${
+                    className={`mt-2 w-1.5 h-1.5 rounded-full shrink-0 ${
                       notification.read ? 'bg-line' : 'bg-strand-red'
                     }`}
                   />
                   <div className="min-w-0">
-                    <p className="text-xs font-semibold text-ink">{notification.title}</p>
-                    <p className="text-[11px] text-muted leading-relaxed">{notification.body}</p>
+                    <p className="text-[14px] font-medium text-ink">{notification.title}</p>
+                    <p className="text-[13px] text-muted">{notification.body}</p>
                   </div>
                 </li>
               ))}
@@ -151,18 +126,13 @@ export const HrOverview: React.FC = () => {
         </div>
       </div>
 
-      {/* Headcount by department */}
-      <div className="bg-surface border border-line rounded-lg p-5 shadow-card">
-        <h3 className="font-display font-semibold text-sm text-ink border-b border-line pb-3">
-          Headcount by department
-        </h3>
-        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 mt-4">
+      <div className="space-y-3">
+        <h3 className="text-[16px] font-semibold text-ink">Departments</h3>
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
           {headcount.map(([department, count]) => (
-            <div key={department} className="bg-canvas border border-line rounded-md px-3 py-2.5">
-              <div className="text-[10px] font-semibold uppercase tracking-wider text-muted truncate">
-                {department}
-              </div>
-              <div className="text-xl font-display font-bold text-ink">{count}</div>
+            <div key={department} className="kpi">
+              <div className="kpi-label truncate">{department}</div>
+              <div className="kpi-value">{count}</div>
             </div>
           ))}
         </div>

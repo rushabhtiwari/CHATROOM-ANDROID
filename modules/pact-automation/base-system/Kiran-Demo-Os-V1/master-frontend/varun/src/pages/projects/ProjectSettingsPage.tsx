@@ -30,7 +30,7 @@ const Section: React.FC<{ title: string; hint?: string; children: React.ReactNod
 }) => (
   <section className="rounded-lg border border-line bg-white p-4 shadow-card">
     <h2 className="font-display text-[13.5px] font-semibold text-ink">{title}</h2>
-    {hint && <p className="mt-0.5 text-[11.5px] text-muted">{hint}</p>}
+    {hint && <p className="mt-0.5 text-[12px] text-muted">{hint}</p>}
     <div className="mt-3">{children}</div>
   </section>
 );
@@ -108,10 +108,10 @@ export const ProjectSettingsPage: React.FC = () => {
                     }
                     className="min-w-0 flex-1 rounded border border-transparent bg-transparent px-1 py-0.5 text-[12.5px] text-ink hover:border-line focus:border-kiran/40 focus:bg-white focus:outline-none"
                   />
-                  <span className="shrink-0 rounded border border-line bg-canvas px-1.5 text-[10px] uppercase tracking-wide text-muted">
+                  <span className="shrink-0 rounded border border-line bg-canvas px-1.5 text-[12px] text-muted">
                     {entry.group}
                   </span>
-                  <span className="w-10 shrink-0 text-right font-mono text-[11px] text-muted">
+                  <span className="w-10 shrink-0 text-right font-mono text-[12px] text-muted">
                     {count}
                   </span>
 
@@ -132,7 +132,7 @@ export const ProjectSettingsPage: React.FC = () => {
                     >
                       {(close) => (
                         <>
-                          <p className="px-2.5 py-1.5 text-[11.5px] text-muted">
+                          <p className="px-2.5 py-1.5 text-[12px] text-muted">
                             {count > 0
                               ? `Move ${count} item${count === 1 ? '' : 's'} to…`
                               : 'Delete this state?'}
@@ -232,7 +232,7 @@ export const ProjectSettingsPage: React.FC = () => {
                     }
                     className="min-w-0 flex-1 rounded border border-transparent bg-transparent px-1 py-0.5 text-[12.5px] text-ink hover:border-line focus:border-kiran/40 focus:bg-white focus:outline-none"
                   />
-                  <span className="w-10 shrink-0 text-right font-mono text-[11px] text-muted">
+                  <span className="w-10 shrink-0 text-right font-mono text-[12px] text-muted">
                     {count}
                   </span>
                   <button
@@ -282,7 +282,7 @@ export const ProjectSettingsPage: React.FC = () => {
         >
           <table className="w-full text-[12px]">
             <thead>
-              <tr className="border-b border-line text-[10.5px] uppercase tracking-[0.07em] text-muted">
+              <tr className="border-b border-line text-[12px] text-muted">
                 <th className="py-1.5 text-left font-semibold">Member</th>
                 <th className="py-1.5 text-right font-semibold">Assigned</th>
                 <th className="py-1.5 text-right font-semibold">Done</th>
@@ -307,7 +307,7 @@ export const ProjectSettingsPage: React.FC = () => {
                         />
                         <span className="text-ink">{person.name}</span>
                         {person.id === project?.leadId && (
-                          <span className="rounded border border-line bg-canvas px-1 text-[9.5px] uppercase text-muted">
+                          <span className="rounded border border-line bg-canvas px-1 text-[12px] text-muted">
                             lead
                           </span>
                         )}
@@ -336,7 +336,7 @@ export const ProjectSettingsPage: React.FC = () => {
                         {person.complianceScore}
                       </span>
                       {person.warningsCount > 0 && (
-                        <span className="ml-1.5 rounded border border-red-200 bg-red-50 px-1 text-[9.5px] text-strand-red">
+                        <span className="ml-1.5 rounded border border-red-200 bg-red-50 px-1 text-[12px] text-strand-red">
                           {person.warningsCount}w
                         </span>
                       )}

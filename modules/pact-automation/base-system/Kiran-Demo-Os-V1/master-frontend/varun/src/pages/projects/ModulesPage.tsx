@@ -74,7 +74,7 @@ export const ModulesPage: React.FC = () => {
               </div>
 
               <div className="mt-3">
-                <div className="mb-1 flex items-center justify-between text-[11.5px]">
+                <div className="mb-1 flex items-center justify-between text-[12px]">
                   <span className="text-muted">
                     {rollup.done} of {rollup.total} done
                     {overdue > 0 && (
@@ -93,7 +93,7 @@ export const ModulesPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="mt-3 flex items-center justify-between border-t border-line pt-2.5 text-[11.5px]">
+              <div className="mt-3 flex items-center justify-between border-t border-line pt-2.5 text-[12px]">
                 <span className="flex items-center gap-1.5 text-muted">
                   Lead
                   {lead ? (
@@ -122,7 +122,7 @@ export const ModulesPage: React.FC = () => {
 
         {/* Work outside every module is easy to lose, so it is stated. */}
         {unassigned > 0 && (
-          <p className="px-1 text-[11.5px] text-muted">
+          <p className="px-1 text-[12px] text-muted">
             {unassigned} work item{unassigned === 1 ? '' : 's'} in this project belong to no module.
           </p>
         )}

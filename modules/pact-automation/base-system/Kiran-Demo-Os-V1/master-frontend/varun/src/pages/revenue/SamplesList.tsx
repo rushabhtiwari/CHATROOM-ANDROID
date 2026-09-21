@@ -127,7 +127,7 @@ export const SamplesList: React.FC = () => {
       cell: (row) => (
         <div className="text-xs text-slate-600 truncate max-w-[220px]">
           {row.courierTracking && (
-            <span className="font-mono text-[10px] text-muted mr-1.5 bg-canvas px-1 rounded border border-line">
+            <span className="font-mono text-[12px] text-muted mr-1.5 bg-canvas px-1 rounded border border-line">
               {row.courierTracking}
             </span>
           )}
@@ -184,7 +184,7 @@ export const SamplesList: React.FC = () => {
             </div>
 
             <form onSubmit={handleCreateSample} className="space-y-3 text-xs">
-              <div className="p-2.5 bg-amber-50 border border-amber-200 rounded text-amber-900 text-[11px] flex items-center gap-1.5">
+              <div className="p-2.5 bg-amber-50 border border-amber-200 rounded text-amber-900 text-[12px] flex items-center gap-1.5">
                 <AlertCircle className="w-4 h-4 text-strand-amber shrink-0" />
                 <span>Samples must mandatorily link to an existing RFQ reference.</span>
               </div>

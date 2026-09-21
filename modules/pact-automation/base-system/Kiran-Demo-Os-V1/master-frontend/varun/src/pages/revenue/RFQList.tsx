@@ -69,7 +69,7 @@ export const RFQList: React.FC = () => {
       cell: (row) => (
         <div>
           <div className="font-semibold text-ink">{row.customerName}</div>
-          <div className="text-[10px] text-muted font-mono">{row.region} Zone</div>
+          <div className="text-[12px] text-muted font-mono">{row.region} Zone</div>
         </div>
       )
     },
@@ -112,7 +112,7 @@ export const RFQList: React.FC = () => {
       width: '140px',
       cell: (row) => (
         <div className="flex items-center gap-1.5">
-          <div className="w-5 h-5 rounded-full bg-ink text-white font-mono text-[9px] flex items-center justify-center">
+          <div className="w-5 h-5 rounded-full bg-ink text-white font-mono text-[12px] flex items-center justify-center">
             {row.ownerName.split(' ').map(n => n[0]).join('')}
           </div>
           <span className="text-xs text-slate-700">{row.ownerName}</span>
@@ -277,10 +277,10 @@ export const RFQList: React.FC = () => {
                 >
                   {/* Column Header */}
                   <div className="p-3 border-b border-line bg-canvas/60 flex items-center justify-between">
-                    <span className="font-semibold text-xs text-ink font-mono uppercase tracking-wider">
+                    <span className="font-semibold text-xs text-ink font-mono ">
                       {stage}
                     </span>
-                    <span className="font-mono text-[11px] px-1.5 py-0.2 rounded bg-slate-200 text-slate-700 font-semibold">
+                    <span className="font-mono text-[12px] px-1.5 py-0.2 rounded bg-slate-200 text-slate-700 font-semibold">
                       {stageRFQs.length}
                     </span>
                   </div>
@@ -288,7 +288,7 @@ export const RFQList: React.FC = () => {
                   {/* Column Cards */}
                   <div className="p-2.5 space-y-2.5 overflow-y-auto flex-1">
                     {stageRFQs.length === 0 ? (
-                      <div className="py-8 text-center text-muted text-[11px] border border-dashed border-line rounded">
+                      <div className="py-8 text-center text-muted text-[12px] border border-dashed border-line rounded">
                         No tickets in {stage}
                       </div>
                     ) : (
@@ -309,19 +309,19 @@ export const RFQList: React.FC = () => {
                             <h4 className="font-semibold text-xs text-ink leading-tight">
                               {rfq.customerName}
                             </h4>
-                            <div className="font-mono text-[11px] text-slate-600 mt-0.5">
+                            <div className="font-mono text-[12px] text-slate-600 mt-0.5">
                               {rfq.partNumber}
                             </div>
                           </div>
 
-                          <div className="flex items-center justify-between text-[11px] text-muted font-mono pt-1 border-t border-line/60">
+                          <div className="flex items-center justify-between text-[12px] text-muted font-mono pt-1 border-t border-line/60">
                             <span>{rfq.quantity.toLocaleString('en-IN')}m</span>
                             <span className="text-slate-800 font-semibold font-mono">
                               {formatINR(rfq.estimatedValue)}
                             </span>
                           </div>
 
-                          <div className="flex items-center justify-between pt-1 text-[10px] text-muted">
+                          <div className="flex items-center justify-between pt-1 text-[12px] text-muted">
                             <div className="flex items-center gap-1">
                               <div className="w-4 h-4 rounded-full bg-ink text-white font-mono text-[8px] flex items-center justify-center">
                                 {rfq.ownerName.split(' ').map(n => n[0]).join('')}
@@ -333,12 +333,12 @@ export const RFQList: React.FC = () => {
 
                           {/* Quick Stage Mover */}
                           <div className="pt-2 border-t border-line/40 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-opacity">
-                            <span className="text-[10px] text-muted">Move to:</span>
+                            <span className="text-[12px] text-muted">Move to:</span>
                             <select
                               onClick={(e) => e.stopPropagation()}
                               onChange={(e) => handleDragStageChange(rfq.id, e.target.value as any)}
                               value={rfq.stage}
-                              className="text-[10px] bg-canvas border border-line rounded px-1 py-0.5 focus:outline-none"
+                              className="text-[12px] bg-canvas border border-line rounded px-1 py-0.5 focus:outline-none"
                             >
                               {boardStages.map(st => (
                                 <option key={st} value={st}>{st}</option>

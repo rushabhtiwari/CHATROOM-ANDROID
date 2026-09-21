@@ -481,7 +481,7 @@ export function Composer({
   return (
     <div
       className={cn(
-        "composer-shell border-t border-border bg-surface px-4 py-4",
+        "composer-shell bg-surface px-4 py-4",
         !threadRootId && "md:px-8",
       )}
       onClick={(event) => {
@@ -495,7 +495,7 @@ export function Composer({
             {queued.map((message) => (
               <div
                 key={message.id}
-                className="flex items-center gap-2 rounded-lg border border-primary/25 bg-primary/5 px-3 py-1.5 text-[11px]"
+                className="flex items-center gap-2 rounded-lg border border-primary/25 bg-primary/5 px-3 py-1.5 text-[12px]"
               >
                 <Clock className="h-3.5 w-3.5 shrink-0 text-primary" />
                 <span className="min-w-0 flex-1 truncate">{message.content}</span>
@@ -520,7 +520,7 @@ export function Composer({
             aria-label="Mention suggestions"
             className="absolute bottom-full z-40 mb-2 w-80 animate-msg-in overflow-hidden rounded-xl border border-border bg-popover shadow-[var(--shadow-float)]"
           >
-            <li className="px-3 pt-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+            <li className="px-3 pt-2 text-[12px] font-semibold text-muted-foreground">
               Mention
             </li>
             {mentionOptions.map((option, index) => (
@@ -550,7 +550,7 @@ export function Composer({
                     >
                       {option.label}
                     </span>
-                    <span className="block truncate text-[11px] text-muted-foreground">
+                    <span className="block truncate text-[12px] text-muted-foreground">
                       {option.detail}
                     </span>
                   </span>
@@ -566,7 +566,7 @@ export function Composer({
             aria-label="Slash commands"
             className="absolute bottom-full z-40 mb-2 w-80 animate-msg-in overflow-hidden rounded-xl border border-border bg-popover shadow-[var(--shadow-float)]"
           >
-            <li className="px-3 pt-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+            <li className="px-3 pt-2 text-[12px] font-semibold text-muted-foreground">
               Commands
             </li>
             {slashOptions.map((command, index) => (
@@ -585,7 +585,7 @@ export function Composer({
                     <span className="block truncate text-sm font-medium">
                       /{command.name} <span className="opacity-60">{command.hint}</span>
                     </span>
-                    <span className="block truncate text-[11px] text-muted-foreground">
+                    <span className="block truncate text-[12px] text-muted-foreground">
                       {command.description}
                     </span>
                   </span>
@@ -612,7 +612,7 @@ export function Composer({
         )}
 
         {!online && (
-          <p className="mb-2 rounded-lg bg-amber-500/10 px-3 py-1.5 text-[11px] text-amber-700 dark:text-amber-300">
+          <p className="mb-2 rounded-lg bg-amber-500/10 px-3 py-1.5 text-[12px] text-amber-700 dark:text-amber-300">
             Offline — messages are queued and will send automatically.
           </p>
         )}
@@ -636,7 +636,7 @@ export function Composer({
                 ) : (
                   <div className="flex h-full flex-col items-center justify-center gap-1 p-2 text-center text-muted-foreground">
                     <Paperclip className="h-5 w-5" />
-                    <span className="line-clamp-2 text-[10px]">{file.name}</span>
+                    <span className="line-clamp-2 text-[12px]">{file.name}</span>
                   </div>
                 )}
                 <button
@@ -657,7 +657,7 @@ export function Composer({
               <p className="text-xs font-semibold">
                 {pendingFiles.length === 1 ? "Ready to send" : `${pendingFiles.length} items ready`}
               </p>
-              <p className="mt-0.5 text-[11px] text-muted-foreground">
+              <p className="mt-0.5 text-[12px] text-muted-foreground">
                 Add a caption below, then press Send.
               </p>
             </div>
@@ -680,8 +680,8 @@ export function Composer({
 
         <div
           className={cn(
-            "composer-field flex items-end gap-2 rounded-xl border bg-surface p-2 transition-[border-color,box-shadow]",
-            isAgent ? "border-ai/40 ring-2 ring-ai/10" : "border-border shadow-sm",
+            "composer-field flex min-h-12 items-end gap-1 rounded-lg border bg-surface p-[3px] pl-2 transition-[border-color,box-shadow] focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/15",
+            isAgent ? "border-primary ring-2 ring-primary/15" : "",
           )}
         >
           {isAgent && (
@@ -709,7 +709,7 @@ export function Composer({
                   ? t("composer.agentPlaceholder")
                   : t("composer.placeholder")
             }
-            className="max-h-32 min-h-10 flex-1 resize-none bg-transparent px-2 py-2 text-sm outline-none placeholder:text-muted-foreground"
+            className="max-h-32 min-h-10 flex-1 resize-none bg-transparent px-2 py-2.5 text-[14px] leading-5 outline-none placeholder:text-[#6E6E76]"
           />
           <input
             ref={fileRef}
@@ -800,21 +800,16 @@ export function Composer({
             disabled={!value.trim() && pendingFiles.length === 0}
             aria-label="Send message"
             className={cn(
-              "flex h-10 w-10 items-center justify-center rounded-lg text-primary-foreground shadow-sm transition-colors active:translate-y-px disabled:opacity-40",
-              isAgent ? "bg-ai hover:bg-ai/90" : "bg-primary hover:bg-primary/90",
+              "flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground transition-colors hover:bg-[#0855AD] disabled:bg-[#B9D2F0]",
             )}
           >
             <Send className="h-4 w-4" />
           </button>
         </div>
 
-        <p className="mt-1.5 px-1 text-[11px] text-muted-foreground">
-          {isAgent ? (
-            <span className="text-ai">{t("composer.agentHint")}</span>
-          ) : (
-            t("composer.hint")
-          )}
-        </p>
+        {isAgent && (
+          <p className="mt-1.5 px-1 text-[12px] text-muted-foreground">{t("composer.agentHint")}</p>
+        )}
       </div>
 
       <ScheduleDialog
@@ -855,7 +850,7 @@ function AgentOnlyInput({
     setValue("");
   };
   return (
-    <div className="flex items-center gap-2 rounded-xl border border-ai/35 bg-surface p-2 shadow-sm">
+    <div className="flex items-center gap-2 rounded-lg border border-input bg-surface p-1 pl-2">
       <Sparkles className="ml-2 h-4 w-4 animate-ai-glow text-ai" />
       <input
         value={value}
@@ -864,13 +859,13 @@ function AgentOnlyInput({
           if (event.key === "Enter") send();
         }}
         aria-label="Ask the private AI assistant"
-        placeholder="Ask the private AI assistant..."
+        placeholder="Ask the assistant"
         className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
       />
       <button
         onClick={send}
         aria-label="Send to AI assistant"
-        className="flex h-9 w-9 items-center justify-center rounded-lg bg-ai text-ai-foreground shadow-sm active:translate-y-px"
+        className="flex h-9 w-9 items-center justify-center rounded-md bg-primary text-primary-foreground hover:bg-[#0855AD]"
       >
         <Send className="h-4 w-4" />
       </button>

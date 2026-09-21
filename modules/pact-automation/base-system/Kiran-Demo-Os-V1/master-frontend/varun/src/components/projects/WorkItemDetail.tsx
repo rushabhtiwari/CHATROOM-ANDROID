@@ -34,7 +34,7 @@ import { PriorityIcon, StateIcon } from './Glyphs';
 /** One label/value row in the right rail. */
 const Field: React.FC<{ label: string; children: React.ReactNode }> = ({ label, children }) => (
   <div className="flex items-center justify-between py-1.5 border-b border-outline-variant text-xs">
-    <span className="w-20 shrink-0 text-[11.5px] font-medium text-outline">{label}</span>
+    <span className="w-20 shrink-0 text-[12px] font-medium text-outline">{label}</span>
     <div className="min-w-0 flex-1 flex justify-end">{children}</div>
   </div>
 );
@@ -114,9 +114,9 @@ export const WorkItemDetail: React.FC<{ item: WorkItem; onClose?: () => void }> 
       {/* ---------------- left column ---------------- */}
       <div className="min-w-0 flex-1 overflow-y-auto px-5 py-4">
         <div className="mb-1 flex items-center gap-2">
-          <span className="font-mono text-[11.5px] text-muted">{displayId(state, item)}</span>
+          <span className="font-mono text-[12px] text-muted">{displayId(state, item)}</span>
           {item.parentId && state.workItems.byId[item.parentId] && (
-            <span className="truncate text-[11.5px] text-muted">
+            <span className="truncate text-[12px] text-muted">
               · sub-item of{' '}
               <Link
                 to={`/projects/${item.projectId}/items/${item.parentId}`}
@@ -202,11 +202,11 @@ export const WorkItemDetail: React.FC<{ item: WorkItem; onClose?: () => void }> 
           <section className="mt-6">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <h3 className="text-[11px] font-semibold uppercase tracking-wider text-outline font-mono">
+                <h3 className="text-[12px] font-semibold text-outline font-mono">
                   Sub-items
                 </h3>
                 {children.length > 0 && (
-                  <span className="font-mono text-[11px] text-outline bg-surface-container px-1.5 py-0.2 rounded border border-outline-variant">
+                  <span className="font-mono text-[12px] text-outline bg-surface-container px-1.5 py-0.2 rounded border border-outline-variant">
                     {children.filter((c) => state.states.byId[c.stateId]?.group === 'completed').length}/{children.length}
                   </span>
                 )}
@@ -225,7 +225,7 @@ export const WorkItemDetail: React.FC<{ item: WorkItem; onClose?: () => void }> 
                         color={childState?.color}
                         className="h-3.5 w-3.5 shrink-0"
                       />
-                      <span className="shrink-0 font-mono text-[11px] text-outline">
+                      <span className="shrink-0 font-mono text-[12px] text-outline">
                         {displayId(state, child)}
                       </span>
                       <Link
@@ -277,7 +277,7 @@ export const WorkItemDetail: React.FC<{ item: WorkItem; onClose?: () => void }> 
 
       {/* ---------------- right rail ---------------- */}
       <aside className="w-64 shrink-0 overflow-y-auto border-l border-outline-variant bg-surface-container-low/40 p-4 text-xs select-none">
-        <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-outline font-mono">
+        <h3 className="mb-2 text-[12px] font-semibold text-outline font-mono">
           Attributes
         </h3>
 

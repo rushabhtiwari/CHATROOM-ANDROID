@@ -36,12 +36,12 @@ export const PipelinePanel: React.FC<{ jobId: string }> = ({ jobId }) => {
   return (
     <section className="border-b border-hairline px-5 py-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="ku-eyebrow">Order automation</p>
+        <p className="ku-eyebrow">Order progress</p>
         <Link
           to={`/admin/automation/orders/${jobId}`}
-          className="inline-flex h-8 items-center gap-1.5 border-2 border-hairline-strong bg-white px-3 text-body-s font-semibold leading-none text-ink transition-all duration-150 hover:border-ink hover:bg-canvas active:translate-y-px"
+          className="inline-flex h-8 items-center gap-1.5 rounded-md border border-hairline-strong bg-white px-3 text-body-s font-medium leading-none text-ink transition-colors duration-150 hover:bg-canvas"
         >
-          Open the full flow <ArrowUpRight aria-hidden size={13} />
+          Open order <ArrowUpRight aria-hidden size={13} />
         </Link>
       </div>
 
@@ -76,24 +76,21 @@ export const PipelinePanel: React.FC<{ jobId: string }> = ({ jobId }) => {
       <p className="mt-3 text-body-s text-meta">
         {view.status === 'AWAITING_ADMIN_APPROVAL' && (
           <>
-            Waiting for an admin to approve. The customer has a receipt and nothing else, and
-            nothing runs on a timer.
+            Waiting for admin approval.
           </>
         )}
         {view.status === 'AWAITING_ACCOUNTS_APPROVAL' && (
           <>
-            Approved by an admin, {openTasks} team task(s) open. Waiting for Accounts to
-            release it into PACT — nothing is committed until they do.
+            Waiting for Accounts. {openTasks} task(s) open.
           </>
         )}
         {pushed && (
           <>
             PACT draft{' '}
-            <span className="ku-fig font-semibold text-ink">{pushed.documentNo}</span>, saved
-            with Save Draft and never posted.
+            <span className="font-code text-[12.5px] text-ink">{pushed.documentNo}</span> saved.
           </>
         )}
-        {view.status === 'DISCARDED' && <>Closed by an operator. Nothing was raised.</>}
+        {view.status === 'DISCARDED' && <>Closed.</>}
       </p>
     </section>
   );

@@ -18,11 +18,11 @@ import {
 } from "react";
 
 export const en = {
-  "composer.placeholder": "Type a message, or @agent for private AI…",
-  "composer.agentPlaceholder": "Ask anything — only you will see the reply…",
+  "composer.placeholder": "Message, or @agent for help",
+  "composer.agentPlaceholder": "Ask anything",
   "composer.hint":
     "Enter to send · Shift+Enter for a new line · Paste text, photos or videos · / for commands",
-  "composer.agentHint": "✦ This reply is private to you.",
+  "composer.agentHint": "Only you will see the reply.",
   "composer.editing": "Editing message",
   "composer.draftSaved": "Draft saved",
   "message.edited": "edited",
@@ -39,7 +39,7 @@ export const en = {
   "unread.divider": "{count, plural, one {# new message} other {# new messages}}",
   "room.archived": "This conversation is archived. Unarchive it to send messages.",
   "room.leave": "Leave conversation",
-  "search.placeholder": "Search messages, people and channels",
+  "search.placeholder": "Search",
   "palette.placeholder": "Type a command or search…",
   "saved.empty": "Nothing saved yet.",
   "pinned.empty": "No pinned messages in this conversation.",

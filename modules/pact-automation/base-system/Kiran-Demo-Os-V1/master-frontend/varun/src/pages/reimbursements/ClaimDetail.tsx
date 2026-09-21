@@ -137,7 +137,7 @@ export const ClaimDetail: React.FC = () => {
                   <Sparkles className="h-3.5 w-3.5 text-ai" /> What the receipt said
                 </h2>
                 {amountEdited && (
-                  <span className="inline-flex items-center gap-1 rounded-badge border border-strand-amber/30 bg-strand-amber/10 px-2 py-0.5 text-[10.5px] font-semibold text-strand-amber">
+                  <span className="inline-flex items-center gap-1 rounded-badge border border-strand-amber/30 bg-strand-amber/10 px-2 py-0.5 text-[12px] font-semibold text-strand-amber">
                     <Pencil className="h-2.5 w-2.5" /> Amount edited
                   </span>
                 )}
@@ -180,7 +180,7 @@ export const ClaimDetail: React.FC = () => {
           <section className="panel">
             <div className="panel-header">
               <h2 className="text-[13px] font-semibold text-ink">Receipts</h2>
-              <span className="font-mono text-[11px] text-muted">{claim.receipts.length}</span>
+              <span className="font-mono text-[12px] text-muted">{claim.receipts.length}</span>
             </div>
             {claim.receipts.length === 0 ? (
               <p className="px-5 py-6 text-center text-[12.5px] text-muted">
@@ -197,7 +197,7 @@ export const ClaimDetail: React.FC = () => {
                       <span className="block truncate text-[12.5px] font-medium text-ink">
                         {receipt.fileName}
                       </span>
-                      <span className="block font-mono text-[10.5px] text-muted">
+                      <span className="block font-mono text-[12px] text-muted">
                         {formatFileSize(receipt.sizeKb)} · {formatDate(receipt.uploadedOn)}
                       </span>
                     </span>
@@ -206,7 +206,7 @@ export const ClaimDetail: React.FC = () => {
                         href={receipt.url}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex shrink-0 items-center gap-1 rounded-md border border-line px-2.5 py-1 text-[11px] font-medium text-slate-700 transition-colors hover:bg-line-2"
+                        className="inline-flex shrink-0 items-center gap-1 rounded-md border border-line px-2.5 py-1 text-[12px] font-medium text-slate-700 transition-colors hover:bg-line-2"
                       >
                         Open <ExternalLink className="h-3 w-3" />
                       </a>
@@ -242,7 +242,7 @@ export const ClaimDetail: React.FC = () => {
                         {event.comment}
                       </p>
                     )}
-                    <p className="mt-0.5 font-mono text-[10.5px] text-muted">
+                    <p className="mt-0.5 font-mono text-[12px] text-muted">
                       {formatDateTime(event.at)}
                     </p>
                   </div>
@@ -262,7 +262,7 @@ export const ClaimDetail: React.FC = () => {
               <div className="space-y-3 px-5 py-4">
                 <div>
                   <p className="text-[13px] font-semibold text-ink">{employee.name}</p>
-                  <p className="font-mono text-[11px] text-muted">
+                  <p className="font-mono text-[12px] text-muted">
                     {employee.employeeCode} · {employee.department}
                   </p>
                 </div>
@@ -278,11 +278,11 @@ export const ClaimDetail: React.FC = () => {
                     {employee.bankAccount.bankName} · {employee.bankAccount.accountNumberMasked}
                   </span>
                   {employee.bankAccount.verified ? (
-                    <span className="ml-2 inline-flex items-center gap-1 rounded-badge bg-strand-green/10 px-1.5 py-0.5 text-[10px] font-semibold text-strand-green">
+                    <span className="ml-2 inline-flex items-center gap-1 rounded-badge bg-strand-green/10 px-1.5 py-0.5 text-[12px] font-semibold text-strand-green">
                       <Check className="h-2.5 w-2.5" /> Verified
                     </span>
                   ) : (
-                    <span className="ml-2 rounded-badge bg-strand-amber/10 px-1.5 py-0.5 text-[10px] font-semibold text-strand-amber">
+                    <span className="ml-2 rounded-badge bg-strand-amber/10 px-1.5 py-0.5 text-[12px] font-semibold text-strand-amber">
                       Unverified
                     </span>
                   )}
@@ -305,7 +305,7 @@ export const ClaimDetail: React.FC = () => {
                   </Field>
                 )}
                 {payout.failureReason && (
-                  <p className="rounded-md bg-strand-red/8 px-2.5 py-1.5 text-[11.5px] text-strand-red">
+                  <p className="rounded-md bg-strand-red/8 px-2.5 py-1.5 text-[12px] text-strand-red">
                     {payout.failureReason}
                   </p>
                 )}
@@ -322,7 +322,7 @@ export const ClaimDetail: React.FC = () => {
             </div>
             <div className="space-y-3 px-5 py-4">
               {blocked && (
-                <p className="rounded-md bg-canvas px-2.5 py-2 text-[11.5px] leading-relaxed text-muted">
+                <p className="rounded-md bg-canvas px-2.5 py-2 text-[12px] leading-relaxed text-muted">
                   {blocked}
                 </p>
               )}
@@ -346,7 +346,7 @@ export const ClaimDetail: React.FC = () => {
                         )
                       }
                       disabled={Boolean(busy)}
-                        className="flex flex-1 items-center justify-center gap-1.5 rounded-md border-2 border-ink bg-accent active:translate-y-px px-3 py-2 text-xs font-semibold text-accent-ink shadow-xs transition-colors hover:brightness-95 disabled:opacity-50"
+                        className="flex flex-1 items-center justify-center gap-1.5 rounded-md rounded-md border border-transparent bg-accent px-3 py-2 text-xs font-semibold text-white shadow-xs transition-colors hover:bg-accent-hover disabled:opacity-50"
                     >
                       {busy === 'approve' ? (
                         <Loader2 className="h-3.5 w-3.5 animate-spin" />
@@ -383,7 +383,7 @@ export const ClaimDetail: React.FC = () => {
                       )
                     }
                     disabled={Boolean(busy)}
-                    className="w-full rounded-md border border-line px-3 py-1.5 text-[11.5px] font-medium text-slate-700 transition-colors hover:bg-line-2 disabled:opacity-50"
+                    className="w-full rounded-md border border-line px-3 py-1.5 text-[12px] font-medium text-slate-700 transition-colors hover:bg-line-2 disabled:opacity-50"
                   >
                     Ask for more information
                   </button>
@@ -398,7 +398,7 @@ export const ClaimDetail: React.FC = () => {
 
               <Link
                 to="/chat"
-                className="flex items-center justify-center gap-1.5 rounded-md border border-line px-3 py-1.5 text-[11.5px] font-medium text-slate-700 transition-colors hover:bg-line-2"
+                className="flex items-center justify-center gap-1.5 rounded-md border border-line px-3 py-1.5 text-[12px] font-medium text-slate-700 transition-colors hover:bg-line-2"
               >
                 <MessageSquareText className="h-3.5 w-3.5" /> Discuss in chat
               </Link>

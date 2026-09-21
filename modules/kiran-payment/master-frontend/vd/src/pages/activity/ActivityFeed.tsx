@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, BellRing, CheckCheck, Workflow } from 'lucide-react';
+import { ArrowUpRight, BellRing, CheckCheck } from 'lucide-react';
 import { PageHeader } from '@/components/shell/PageHeader';
 import { useChat } from '@/lib/chat-store';
 import { useRts } from '@/modules/rts/store';
@@ -23,14 +23,6 @@ const ROLE_LABEL: Record<Role, string> = {
   ACCOUNTS: 'Accounts',
   PAYMENTS: 'Payments',
   ADMIN: 'Admin',
-};
-
-const ROLE_CLASS: Record<Role, string> = {
-  EMPLOYEE: 'bg-teal-50 text-teal-800 border-teal-200',
-  HR: 'bg-blue-50 text-kiran border-blue-200',
-  ACCOUNTS: 'bg-emerald-50 text-emerald-800 border-emerald-200',
-  PAYMENTS: 'bg-amber-50 text-amber-800 border-amber-200',
-  ADMIN: 'bg-slate-100 text-slate-700 border-slate-200',
 };
 
 type Filter = 'ALL' | 'MINE' | Role;
@@ -97,7 +89,7 @@ export const ActivityFeed: React.FC = () => {
   const mineCount = notifications.filter(isMine).length;
 
   const filters: { key: Filter; label: string; count?: number }[] = [
-    { key: 'ALL', label: 'All departments', count: notifications.length },
+    { key: 'ALL', label: 'All', count: notifications.length },
     { key: 'MINE', label: `For ${currentUser.name.split(' ')[0]}`, count: mineCount },
     { key: 'HR', label: 'HR' },
     { key: 'ACCOUNTS', label: 'Accounts' },
@@ -111,17 +103,16 @@ export const ActivityFeed: React.FC = () => {
       : ROLE_LABEL[notification.toRole];
 
   return (
-    <div className="space-y-5 animate-fadeIn">
+    <div className="space-y-6 animate-fadeIn">
       <PageHeader
         title="Activity"
-        description="What each department has done that another department needs to know. Claims move from the conversation to HR, to Accounts, to the bank, and every hand-off lands here."
         actions={
           <button
             onClick={markAllNotificationsRead}
             disabled={unread === 0}
-            className="px-3 py-1.5 bg-surface border border-line hover:border-kiran rounded text-xs font-semibold text-ink flex items-center gap-1.5 disabled:opacity-50 disabled:hover:border-line"
+            className="btn-secondary"
           >
-            <CheckCheck className="w-3.5 h-3.5" />
+            <CheckCheck className="w-4 h-4 text-slate-500" />
             Mark all read
           </button>
         }
@@ -132,50 +123,35 @@ export const ActivityFeed: React.FC = () => {
         href={`${PACT_CONSOLE}/admin/automation/orders`}
         target="_blank"
         rel="noopener noreferrer"
-        className="block bg-surface border border-line hover:border-kiran rounded-lg p-4 shadow-card transition-colors"
+        className="block group"
       >
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2 min-w-0">
-            <Workflow className="w-4 h-4 text-kiran shrink-0" />
-            <h3 className="font-display font-semibold text-sm text-ink">Order pipeline</h3>
-            <span className="text-xs text-muted truncate">
-              Customer POs from the monitored inbox, on their way into PACT
-            </span>
-          </div>
-          <ArrowUpRight className="w-4 h-4 text-muted shrink-0" />
+        <div className="flex items-center gap-1.5 mb-3">
+          <h3 className="text-[16px] font-semibold text-ink group-hover:text-kiran transition-colors">
+            Orders
+          </h3>
+          <ArrowUpRight className="w-4 h-4 text-slate-500 shrink-0" />
         </div>
 
         {pipeline === undefined ? (
-          <p className="text-xs text-muted mt-3">Checking the PACT console…</p>
+          <p className="text-[13px] text-muted">Loading…</p>
         ) : pipeline === null ? (
-          <p className="text-xs text-strand-amber mt-3">
-            The PACT console is not running, so order figures are unavailable.
-          </p>
+          <p className="text-[13px] text-muted">Order figures are unavailable.</p>
         ) : (
-          <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 mt-3 font-mono">
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
             {[
-              { label: 'Awaiting approval', value: pipeline.awaitingAdmin },
+              { label: 'To approve', value: pipeline.awaitingAdmin },
               { label: 'With Accounts', value: pipeline.awaitingAccounts },
-              { label: 'PACT drafts', value: pipeline.pactDrafts },
+              { label: 'Drafts', value: pipeline.pactDrafts },
               { label: 'Completed', value: pipeline.completed },
             ].map((figure) => (
-              <div key={figure.label} className="bg-canvas border border-line rounded-md px-3 py-2">
-                <div className="text-[10px] font-sans font-semibold uppercase tracking-wider text-muted">
-                  {figure.label}
-                </div>
-                <div className="text-xl font-display font-bold text-ink">{figure.value}</div>
+              <div key={figure.label} className="kpi">
+                <div className="kpi-label">{figure.label}</div>
+                <div className="kpi-value">{figure.value}</div>
               </div>
             ))}
-            <div className="bg-canvas border border-line rounded-md px-3 py-2 col-span-2 lg:col-span-1">
-              <div className="text-[10px] font-sans font-semibold uppercase tracking-wider text-muted">
-                PACT robot
-              </div>
-              <div
-                className={`text-xs font-sans font-semibold mt-1 ${
-                  pipeline.kpac?.reachable ? 'text-strand-green' : 'text-strand-red'
-                }`}
-                title={pipeline.kpac?.detail}
-              >
+            <div className="kpi col-span-2 lg:col-span-1" title={pipeline.kpac?.detail}>
+              <div className="kpi-label">PACT</div>
+              <div className={`kpi-value ${pipeline.kpac?.reachable ? '' : 'text-strand-red'}`}>
                 {pipeline.kpac?.reachable ? 'Online' : 'Offline'}
               </div>
             </div>
@@ -184,70 +160,73 @@ export const ActivityFeed: React.FC = () => {
       </a>
 
       {/* Filters */}
-      <div className="flex flex-wrap items-center gap-1.5">
+      <div className="flex flex-wrap items-center gap-2">
         {filters.map((entry) => (
           <button
             key={entry.key}
             onClick={() => setFilter(entry.key)}
-            className={`px-2.5 py-1 rounded-md text-xs font-medium border transition-colors ${
+            className={`h-8 px-3 rounded-md text-[13px] font-medium transition-colors ${
               filter === entry.key
-                ? 'bg-kiran text-white border-kiran'
-                : 'bg-surface text-slate-700 border-line hover:border-kiran/40'
+                ? 'bg-kiran-tint text-[#0B4F9C]'
+                : 'text-muted hover:bg-black/5 hover:text-ink'
             }`}
           >
             {entry.label}
             {entry.count !== undefined && (
-              <span className="font-mono text-[10px] ml-1.5 opacity-75">{entry.count}</span>
+              <span className="text-[12px] ml-1.5 opacity-75 tabular-nums">{entry.count}</span>
             )}
           </button>
         ))}
       </div>
 
       {/* Feed */}
-      <div className="bg-surface border border-line rounded-lg shadow-card divide-y divide-line">
+      <div className="bg-surface border border-line rounded-lg divide-y divide-line-2">
         {visible.length === 0 ? (
-          <div className="p-10 text-center">
-            <BellRing className="w-6 h-6 text-muted mx-auto" />
-            <p className="text-sm font-semibold text-ink mt-2">Nothing here yet</p>
-            <p className="text-xs text-muted mt-1">
-              File a claim from a conversation, or approve one, and it will appear for the next team.
-            </p>
+          <div className="p-12 text-center">
+            <BellRing className="w-6 h-6 text-slate-500 mx-auto" />
+            <p className="text-[14px] text-muted mt-3">Nothing here yet.</p>
           </div>
         ) : (
           visible.map((notification) => (
             <div
               key={notification.id}
               onClick={() => !notification.read && markNotificationRead(notification.id)}
-              className={`p-4 flex items-start gap-3 ${notification.read ? '' : 'bg-kiran-tint/40 cursor-pointer'}`}
+              className={`px-5 py-4 flex items-start gap-3 ${notification.read ? '' : 'cursor-pointer hover:bg-canvas'}`}
             >
               <span
                 aria-hidden
-                className={`mt-1.5 w-2 h-2 rounded-full shrink-0 ${
-                  notification.read ? 'bg-transparent' : 'bg-strand-red'
+                className={`mt-2 w-2 h-2 rounded-full shrink-0 ${
+                  notification.read ? 'bg-transparent' : 'bg-kiran'
                 }`}
               />
               <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-center gap-2">
+                <div className="flex items-baseline justify-between gap-4">
                   <span
-                    className={`text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded border ${ROLE_CLASS[notification.toRole]}`}
+                    className={`text-[14px] text-ink truncate ${notification.read ? 'font-medium' : 'font-semibold'}`}
                   >
-                    To {recipient(notification)}
+                    {notification.title}
                   </span>
-                  <span className="text-[13px] font-semibold text-ink">{notification.title}</span>
+                  <span className="text-[13px] text-muted whitespace-nowrap shrink-0">
+                    {formatDateTime(notification.at)}
+                  </span>
                 </div>
-                <p className="text-xs text-slate-600 mt-1 leading-relaxed">{notification.body}</p>
-                <div className="flex items-center gap-3 mt-1.5 text-[11px] text-muted font-mono">
-                  <span>{formatDateTime(notification.at)}</span>
+                <p className="text-[13px] text-muted mt-0.5 truncate" title={notification.body}>
+                  {recipient(notification)}
                   {notification.requestId && (
-                    <Link
-                      to={`/reimbursements/${notification.requestId}`}
-                      onClick={(event) => event.stopPropagation()}
-                      className="text-kiran hover:underline font-semibold"
-                    >
-                      {notification.requestId}
-                    </Link>
+                    <>
+                      {' · '}
+                      <Link
+                        to={`/reimbursements/${notification.requestId}`}
+                        onClick={(event) => event.stopPropagation()}
+                        className="font-code text-kiran hover:underline"
+                      >
+                        {notification.requestId}
+                      </Link>
+                    </>
                   )}
-                </div>
+                  {' · '}
+                  {notification.body}
+                </p>
               </div>
             </div>
           ))

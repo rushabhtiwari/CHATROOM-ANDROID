@@ -81,7 +81,7 @@ export function ScheduleDialog({ open, onOpenChange, onConfirm, timeZone }: Sche
                 )}
               >
                 <span className="block font-medium">{preset.label}</span>
-                <span suppressHydrationWarning className="block text-[10px] text-muted-foreground">
+                <span suppressHydrationWarning className="block text-[12px] text-muted-foreground">
                   {formatDateTime(preset.value, { timeZone })}
                 </span>
               </button>
@@ -91,7 +91,7 @@ export function ScheduleDialog({ open, onOpenChange, onConfirm, timeZone }: Sche
           <div>
             <label
               htmlFor="schedule-custom"
-              className="text-[11px] font-medium text-muted-foreground"
+              className="text-[12px] font-medium text-muted-foreground"
             >
               Or pick a time
             </label>
@@ -110,7 +110,7 @@ export function ScheduleDialog({ open, onOpenChange, onConfirm, timeZone }: Sche
           {effective !== null && (
             <p
               suppressHydrationWarning
-              className={cn("text-[11px]", isPast ? "text-destructive" : "text-muted-foreground")}
+              className={cn("text-[12px]", isPast ? "text-destructive" : "text-muted-foreground")}
             >
               {isPast
                 ? "Pick a time in the future."

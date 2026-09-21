@@ -100,7 +100,7 @@ export function SharedContentDialog({
                       <span className="block truncate text-sm font-medium">
                         {message.attachment!.name}
                       </span>
-                      <span className="text-[11px] text-muted-foreground">
+                      <span className="text-[12px] text-muted-foreground">
                         {Math.max(1, Math.round(message.attachment!.size / 1024))} KB
                       </span>
                     </span>
@@ -128,7 +128,7 @@ export function SharedContentDialog({
                       </span>
                       <span className="min-w-0 flex-1">
                         <span className="block truncate text-sm font-medium">{preview.title}</span>
-                        <span className="block truncate text-[11px] text-muted-foreground">
+                        <span className="block truncate text-[12px] text-muted-foreground">
                           {preview.url}
                         </span>
                       </span>

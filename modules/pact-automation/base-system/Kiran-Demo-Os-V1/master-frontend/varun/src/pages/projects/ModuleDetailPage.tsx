@@ -34,20 +34,20 @@ export const ModuleDetailPage: React.FC = () => {
             className="h-full rounded-full bg-kiran"
           />
         </div>
-        <span className="font-mono text-[11px] text-muted">
+        <span className="font-mono text-[12px] text-muted">
           {rollup.done}/{rollup.total}
         </span>
       </div>
 
       {lead && (
-        <span className="flex items-center gap-1.5 text-[11.5px] text-muted">
+        <span className="flex items-center gap-1.5 text-[12px] text-muted">
           <Avatar name={lead.name} initials={lead.initials} color={lead.color} size="xs" />
           {lead.name}
         </span>
       )}
 
       {module.targetDate && (
-        <span className="font-mono text-[11px] text-muted">
+        <span className="font-mono text-[12px] text-muted">
           target {format(parseISO(module.targetDate), 'd MMM yyyy')}
         </span>
       )}

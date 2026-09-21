@@ -4,10 +4,10 @@ import { useRts } from '@/modules/rts/store';
 import { attendanceFor, useLeave, type AttendanceStatus } from '@/modules/hr/leave';
 
 const STATUS_CLASS: Record<AttendanceStatus, string> = {
-  Present: 'bg-emerald-50 text-emerald-800 border-emerald-200',
-  Remote: 'bg-teal-50 text-teal-800 border-teal-200',
-  Late: 'bg-amber-50 text-amber-800 border-amber-200',
-  'On Leave': 'bg-slate-100 text-slate-700 border-slate-200',
+  Present: 'bg-[#E7F3EB] text-[#17723F]',
+  Remote: 'bg-kiran-tint text-[#0B4F9C]',
+  Late: 'bg-[#FBEFDC] text-[#8A4F00]',
+  'On Leave': 'bg-[#EFEFF2] text-[#48484F]',
 };
 
 /** Today's register. "On Leave" is whatever the leave screen has approved. */
@@ -28,60 +28,60 @@ export const Attendance: React.FC = () => {
   });
 
   return (
-    <div className="space-y-5 animate-fadeIn">
+    <div className="space-y-6 animate-fadeIn">
       <PageHeader
         title="Attendance"
-        description={`Register for ${today}. Anyone on approved leave is marked from the leave record.`}
+        actions={<span className="text-[14px] text-muted whitespace-nowrap">{today}</span>}
       />
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {(['Present', 'Remote', 'Late', 'On Leave'] as AttendanceStatus[]).map((status) => (
-          <div key={status} className="p-4 bg-surface border border-line rounded-md shadow-card">
-            <div className="text-[11px] font-semibold uppercase tracking-wider text-muted">{status}</div>
-            <div className="text-2xl font-display font-bold text-ink mt-1">{count(status)}</div>
+          <div key={status} className="kpi">
+            <div className="kpi-label">{status === 'On Leave' ? 'On leave' : status}</div>
+            <div className="kpi-value">{count(status)}</div>
           </div>
         ))}
       </div>
 
-      <div className="bg-surface border border-line rounded-lg shadow-card overflow-x-auto">
-        <table className="w-full text-left text-xs">
-          <thead className="bg-canvas text-muted text-[10px] uppercase border-b border-line">
+      <div className="bg-surface border border-line rounded-lg overflow-x-auto">
+        <table className="w-full text-left text-[14px]">
+          <thead className="bg-surface-2 text-[13px] font-medium text-muted border-b border-line">
             <tr>
-              <th className="p-3 font-semibold">Employee</th>
-              <th className="p-3 font-semibold">Department</th>
-              <th className="p-3 font-semibold">Today</th>
-              <th className="p-3 font-semibold text-right">Check-in</th>
-              <th className="p-3 font-semibold text-right">This month</th>
-              <th className="p-3 font-semibold w-[180px]">Attendance</th>
+              <th className="px-4 py-3 font-medium">Employee</th>
+              <th className="px-4 py-3 font-medium">Department</th>
+              <th className="px-4 py-3 font-medium">Today</th>
+              <th className="px-4 py-3 font-medium text-right">Check-in</th>
+              <th className="px-4 py-3 font-medium text-right">This month</th>
+              <th className="px-4 py-3 font-medium w-[160px]" />
             </tr>
           </thead>
-          <tbody className="divide-y divide-line">
+          <tbody className="divide-y divide-line-2">
             {rows.map((row, index) => {
               const employee = employees[index];
               const ratio = row.presentDays / row.workingDays;
 
               return (
-                <tr key={row.employeeId}>
-                  <td className="p-3">
-                    <div className="font-semibold text-ink">{employee.name}</div>
-                    <div className="text-[11px] text-muted font-mono">{employee.employeeCode}</div>
+                <tr key={row.employeeId} className="h-[52px] hover:bg-canvas">
+                  <td className="px-4 py-3">
+                    <div className="font-medium text-ink whitespace-nowrap">{employee.name}</div>
+                    <div className="font-code text-[13px] text-muted">{employee.employeeCode}</div>
                   </td>
-                  <td className="p-3">{employee.department}</td>
-                  <td className="p-3">
+                  <td className="px-4 py-3 text-slate-700">{employee.department}</td>
+                  <td className="px-4 py-3">
                     <span
-                      className={`text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded border ${STATUS_CLASS[row.status]}`}
+                      className={`inline-flex items-center h-6 px-2 rounded-md text-[13px] font-medium whitespace-nowrap ${STATUS_CLASS[row.status]}`}
                     >
-                      {row.status}
+                      {row.status === 'On Leave' ? 'On leave' : row.status}
                     </span>
                   </td>
-                  <td className="p-3 text-right font-mono">{row.checkIn ?? '-'}</td>
-                  <td className="p-3 text-right font-mono">
+                  <td className="px-4 py-3 text-right tabular-nums whitespace-nowrap">{row.checkIn ?? '–'}</td>
+                  <td className="px-4 py-3 text-right tabular-nums whitespace-nowrap">
                     {row.presentDays}/{row.workingDays}
                   </td>
-                  <td className="p-3">
-                    <div className="h-1.5 rounded-full bg-canvas border border-line overflow-hidden">
+                  <td className="px-4 py-3">
+                    <div className="h-1.5 rounded-full bg-[#EBEBEF] overflow-hidden">
                       <div
-                        className={`h-full ${ratio < 0.85 ? 'bg-strand-amber' : 'bg-strand-green'}`}
+                        className={`h-full ${ratio < 0.85 ? 'bg-strand-red' : 'bg-kiran'}`}
                         style={{ width: `${Math.round(ratio * 100)}%` }}
                       />
                     </div>

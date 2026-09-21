@@ -32,7 +32,7 @@ export const AIGuardrails: React.FC = () => {
     <div className="space-y-6 animate-fadeIn pb-12">
       {/* Toast Alert */}
       {toastMessage && (
-        <div className="fixed top-16 right-8 z-50 bg-ink text-white px-4 py-3 rounded-md shadow-popover border border-strand-green flex items-center gap-2.5 text-xs animate-fadeIn">
+        <div className="fixed top-16 right-8 z-50 bg-ink text-white px-4 py-3 rounded-md shadow-popover border border-strand-green flex items-center gap-2.5 text-[13px] animate-fadeIn">
           <CheckCircle2 className="w-4 h-4 text-strand-green" />
           <span>{toastMessage}</span>
         </div>
@@ -44,17 +44,17 @@ export const AIGuardrails: React.FC = () => {
       />
 
       {/* Active Policies Table */}
-      <div className="bg-surface border border-line rounded-lg shadow-card overflow-hidden">
+      <div className="bg-surface border border-line rounded-lg overflow-hidden">
         <div className="p-4 border-b border-line bg-canvas/40 flex items-center justify-between">
-          <h3 className="font-display font-semibold text-sm text-ink">
+          <h3 className="font-semibold text-sm text-ink">
             Active Safety Policies ({guardrails.filter(g => g.isEnabled).length} Enabled)
           </h3>
-          <span className="font-mono text-xs text-strand-green font-semibold">100% Policy Enforcement</span>
+          <span className="font-mono text-[13px] text-strand-green font-semibold">100% Policy Enforcement</span>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs font-mono">
-            <thead className="bg-canvas text-muted text-[10px] uppercase border-b border-line">
+          <table className="w-full text-left text-[13px] font-mono">
+            <thead className="bg-canvas text-muted text-[12px] border-b border-line">
               <tr>
                 <th className="p-3 font-sans">Policy Name</th>
                 <th className="p-3 font-sans">Operational Scope</th>
@@ -68,14 +68,14 @@ export const AIGuardrails: React.FC = () => {
               {guardrails.map((g) => (
                 <tr key={g.id} className="hover:bg-canvas/60">
                   <td className="p-3">
-                    <div className="font-bold text-ink font-sans text-xs">{g.name}</div>
-                    <div className="text-[10px] text-muted font-sans mt-0.5">{g.description}</div>
+                    <div className="font-semibold text-ink font-sans text-[13px]">{g.name}</div>
+                    <div className="text-[12px] text-muted font-sans mt-0.5">{g.description}</div>
                   </td>
                   <td className="p-3 font-sans text-slate-700">{g.scope}</td>
                   <td className="p-3 text-ai font-semibold">{g.threshold}</td>
                   <td className="p-3 font-sans text-slate-800">{g.action}</td>
                   <td className="p-3 text-center">
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
+                    <span className={`px-2 py-0.5 rounded text-[12px] font-semibold ${
                       g.isEnabled ? 'bg-emerald-50 text-strand-green border border-emerald-200' : 'bg-canvas text-muted'
                     }`}>
                       {g.isEnabled ? 'Enforcing' : 'Disabled'}
@@ -103,20 +103,20 @@ export const AIGuardrails: React.FC = () => {
       </div>
 
       {/* Blocked Actions & Intercepts Audit Log */}
-      <div className="bg-surface border border-line rounded-lg shadow-card overflow-hidden">
+      <div className="bg-surface border border-line rounded-lg overflow-hidden">
         <div className="p-4 border-b border-line bg-canvas/40 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <AlertTriangle className="w-4 h-4 text-strand-amber" />
-            <h3 className="font-display font-semibold text-sm text-ink">
+            <h3 className="font-semibold text-sm text-ink">
               Recent Intercepted Violations & Blocked Actions
             </h3>
           </div>
-          <span className="font-mono text-xs text-muted">Immutable Audit Stream</span>
+          <span className="font-mono text-[13px] text-muted">Immutable Audit Stream</span>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs font-mono">
-            <thead className="bg-canvas text-muted text-[10px] uppercase border-b border-line">
+          <table className="w-full text-left text-[13px] font-mono">
+            <thead className="bg-canvas text-muted text-[12px] border-b border-line">
               <tr>
                 <th className="p-3">Timestamp</th>
                 <th className="p-3 font-sans">Feature Context</th>
@@ -133,7 +133,7 @@ export const AIGuardrails: React.FC = () => {
                   <td className="p-3 text-strand-red font-semibold">{b.reason}</td>
                   <td className="p-3 font-sans text-slate-700 max-w-xs truncate">{b.interceptedPayload}</td>
                   <td className="p-3 font-sans">
-                    <span className="px-2 py-0.5 rounded bg-canvas border border-line text-[11px] text-slate-800 font-medium">
+                    <span className="px-2 py-0.5 rounded bg-canvas border border-line text-[12px] text-slate-800 font-medium">
                       {b.actionTaken}
                     </span>
                   </td>

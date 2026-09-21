@@ -13,24 +13,24 @@ export const AgeIndicator: React.FC<AgeIndicatorProps> = ({
 }) => {
   const percentage = Math.min(100, Math.round((daysInStage / slaLimitDays) * 100));
 
-  // Determine segment color based on consumption
-  let segmentColor = 'bg-strand-green';
-  let textColor = 'text-slate';
+  // Neutral until the age becomes a problem
+  let segmentColor = 'bg-slate-400';
+  let textColor = 'text-muted';
 
   if (percentage >= 100) {
     segmentColor = 'bg-strand-red';
-    textColor = 'text-strand-red font-semibold';
+    textColor = 'text-strand-red font-medium';
   } else if (percentage >= 70) {
     segmentColor = 'bg-strand-amber';
-    textColor = 'text-strand-amber font-semibold';
+    textColor = 'text-[#8A4F00] font-medium';
   }
 
   // 4 segments
   const activeSegments = Math.min(4, Math.ceil((percentage / 100) * 4));
 
   return (
-    <div className={`inline-flex items-center gap-1.5 ${className}`} title={`${daysInStage} of ${slaLimitDays} days SLA consumed (${percentage}%)`}>
-      <span className={`font-mono text-xs ${textColor}`}>
+    <div className={`inline-flex items-center gap-1.5 whitespace-nowrap ${className}`} title={`${daysInStage} of ${slaLimitDays} days`}>
+      <span className={`text-[13px] tabular-nums ${textColor}`}>
         {daysInStage}d
       </span>
       <div className="flex items-center gap-0.5">

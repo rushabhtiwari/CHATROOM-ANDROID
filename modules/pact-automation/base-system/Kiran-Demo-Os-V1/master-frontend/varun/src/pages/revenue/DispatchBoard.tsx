@@ -83,10 +83,10 @@ export const DispatchBoard: React.FC = () => {
               >
                 {/* Stage Header */}
                 <div className="p-3 border-b border-line bg-canvas/60 flex items-center justify-between">
-                  <span className="font-semibold text-xs text-ink font-mono uppercase tracking-wider">
+                  <span className="font-semibold text-xs text-ink font-mono ">
                     {stage}
                   </span>
-                  <span className="font-mono text-[11px] px-1.5 py-0.2 rounded bg-slate-200 text-slate-700 font-semibold">
+                  <span className="font-mono text-[12px] px-1.5 py-0.2 rounded bg-slate-200 text-slate-700 font-semibold">
                     {stageItems.length}
                   </span>
                 </div>
@@ -94,7 +94,7 @@ export const DispatchBoard: React.FC = () => {
                 {/* Cards List */}
                 <div className="p-2.5 space-y-2.5 overflow-y-auto flex-1">
                   {stageItems.length === 0 ? (
-                    <div className="py-8 text-center text-muted text-[11px] border border-dashed border-line rounded">
+                    <div className="py-8 text-center text-muted text-[12px] border border-dashed border-line rounded">
                       No dispatches in {stage}
                     </div>
                   ) : (
@@ -119,12 +119,12 @@ export const DispatchBoard: React.FC = () => {
                           <h4 className="font-semibold text-xs text-ink leading-tight">
                             {dsp.customerName}
                           </h4>
-                          <div className="font-mono text-[11px] text-slate-600 mt-0.5">
+                          <div className="font-mono text-[12px] text-slate-600 mt-0.5">
                             {dsp.product}
                           </div>
                         </div>
 
-                        <div className="flex items-center justify-between text-[11px] text-muted font-mono pt-1 border-t border-line/60">
+                        <div className="flex items-center justify-between text-[12px] text-muted font-mono pt-1 border-t border-line/60">
                           <span>{dsp.quantity.toLocaleString('en-IN')}m</span>
                           <span className="text-slate-800 font-semibold">
                             {formatINR(dsp.value)}
@@ -132,14 +132,14 @@ export const DispatchBoard: React.FC = () => {
                         </div>
 
                         {/* Vehicle & Carrier */}
-                        <div className="flex items-center justify-between pt-1 text-[10px] text-muted font-mono">
+                        <div className="flex items-center justify-between pt-1 text-[12px] text-muted font-mono">
                           <span>{dsp.carrier}</span>
                           <span className="font-semibold text-ink">{dsp.vehicleNumber}</span>
                         </div>
 
                         {/* ASN Confidence Chip (if ASN linked) */}
                         {dsp.asnNumber && (
-                          <div className="pt-1.5 border-t border-line/60 flex items-center justify-between text-[10px] font-mono">
+                          <div className="pt-1.5 border-t border-line/60 flex items-center justify-between text-[12px] font-mono">
                             <span className="text-slate-600 truncate">{dsp.asnNumber}</span>
                             {dsp.asnConfidence && <ConfidenceChip confidence={dsp.asnConfidence} />}
                           </div>
@@ -147,7 +147,7 @@ export const DispatchBoard: React.FC = () => {
 
                         {/* Stop Dispatch Alert */}
                         {dsp.stopDispatchBlocked && (
-                          <div className="p-1.5 bg-red-100/70 border border-red-300 rounded text-[10px] text-strand-red font-bold flex items-center justify-between">
+                          <div className="p-1.5 bg-red-100/70 border border-red-300 rounded text-[12px] text-strand-red font-bold flex items-center justify-between">
                             <span>STOP DISPATCH HOLD</span>
                             <span>₹{(dsp.overdueAmountCustomer / 100000).toFixed(2)}L Overdue</span>
                           </div>
@@ -188,7 +188,7 @@ export const DispatchBoard: React.FC = () => {
                   <ShieldAlert className="w-4 h-4" />
                   Dispatch stopped — overdue ₹8,42,150 beyond 60 days.
                 </div>
-                <p className="text-[11px] text-red-800">
+                <p className="text-[12px] text-red-800">
                   Released only by <strong>Meera Iyer (Accounts Head)</strong> following formal payment confirmation or RTGS receipt.
                 </p>
                 <div className="pt-1">
@@ -204,24 +204,24 @@ export const DispatchBoard: React.FC = () => {
 
             {/* Customer Credit Panel */}
             <div className="bg-canvas p-4 rounded border border-line space-y-2 font-mono text-xs">
-              <div className="text-[11px] font-sans font-semibold uppercase tracking-wider text-muted border-b border-line pb-1.5">
+              <div className="text-[12px] font-sans font-semibold text-muted border-b border-line pb-1.5">
                 Financial Credit Parameters (PACT ERP)
               </div>
               <div className="grid grid-cols-2 gap-2 pt-1">
                 <div>
-                  <span className="text-muted text-[10px]">Customer: </span>
+                  <span className="text-muted text-[12px]">Customer: </span>
                   <div className="font-bold text-ink font-sans">{selectedDispatch.customerName}</div>
                 </div>
                 <div>
-                  <span className="text-muted text-[10px]">Credit Limit: </span>
+                  <span className="text-muted text-[12px]">Credit Limit: </span>
                   <div className="font-semibold text-ink">₹2,50,00,000</div>
                 </div>
                 <div>
-                  <span className="text-muted text-[10px]">Available Credit Balance: </span>
+                  <span className="text-muted text-[12px]">Available Credit Balance: </span>
                   <div className="font-semibold text-strand-green">₹85,40,000</div>
                 </div>
                 <div>
-                  <span className="text-muted text-[10px]">Total Outstanding: </span>
+                  <span className="text-muted text-[12px]">Total Outstanding: </span>
                   <div className="font-semibold text-ink">₹1,64,60,000</div>
                 </div>
                 <div className="col-span-2 pt-1 border-t border-line/60 flex items-center justify-between">

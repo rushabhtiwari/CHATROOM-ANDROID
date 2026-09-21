@@ -93,14 +93,14 @@ export const PaymentReceipt: React.FC = () => {
                 <p className="font-display text-[15px] font-bold leading-none tracking-tight text-ink">
                   Kiran Cable Protection
                 </p>
-                <p className="mt-1 text-[10px] uppercase tracking-[0.14em] text-muted">
+                <p className="mt-1 text-[12px] text-muted">
                   Products Private Limited
                 </p>
               </div>
             </div>
             <div className="text-right">
               <p className="label-eyebrow">Payment advice</p>
-              <p className="mt-1 font-mono text-[11px] text-muted">
+              <p className="mt-1 font-mono text-[12px] text-muted">
                 {settledOn ? formatDate(settledOn) : formatDate(new Date())}
               </p>
             </div>
@@ -141,10 +141,10 @@ export const PaymentReceipt: React.FC = () => {
             <div className="border-b border-line px-8 py-5">
               <p className="label-eyebrow">Paid to</p>
               <p className="mt-1.5 text-[14px] font-semibold text-ink">{employee.name}</p>
-              <p className="mt-0.5 font-mono text-[11.5px] text-muted">
+              <p className="mt-0.5 font-mono text-[12px] text-muted">
                 {employee.employeeCode} · {employee.department}
               </p>
-              <p className="mt-2 font-mono text-[11.5px] text-slate-700">
+              <p className="mt-2 font-mono text-[12px] text-slate-700">
                 {employee.bankAccount.bankName} · {employee.bankAccount.accountNumberMasked} ·{' '}
                 {employee.bankAccount.ifsc}
               </p>
@@ -165,7 +165,7 @@ export const PaymentReceipt: React.FC = () => {
               <tbody className="divide-y divide-line-2">
                 {requests.map((request) => (
                   <tr key={request.id}>
-                    <td className="py-2 font-mono text-[11.5px] text-slate-600">{request.id}</td>
+                    <td className="py-2 font-mono text-[12px] text-slate-600">{request.id}</td>
                     <td className="py-2 pr-3 text-slate-700">{request.title}</td>
                     <td className="py-2 text-right font-mono font-semibold text-ink">
                       {formatCurrency(request.amount)}
@@ -187,7 +187,7 @@ export const PaymentReceipt: React.FC = () => {
           </div>
 
           <footer className="border-t border-line bg-surface-2 px-8 py-4">
-            <p className="text-[10.5px] leading-relaxed text-muted">
+            <p className="text-[12px] leading-relaxed text-muted">
               Computer-generated advice; no signature is required. If the credit has not appeared
               within two working days, quote the UTR above to your bank.
             </p>

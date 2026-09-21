@@ -12,6 +12,13 @@ launcher. All of them run on the operator's machine beside the platform, each on
 | Chat | `kiran-payment` | `http://localhost:5174/chat` | `open-departments.sql` |
 | Projects | `kiran-mgmt` | `http://localhost:3020` | `open-departments.sql` |
 
+## One look
+
+Central, the workspaces, PACT and KCMS share one design language: `docs/design-language.md`
+(palette, type, control sizes, and the rules about how little text a screen carries). Each app
+self-hosts the same Geist font files and maps its own theme tokens to that palette, so a change
+of colour is a change of token values, not of components.
+
 ## Starting everything
 
 ```powershell
@@ -190,6 +197,23 @@ at Valkey (`redis://127.0.0.1:6379/1`) removes the service without touching the 
 
 All state is in the `kcms_kcms-data` volume (`/data`: `postgres/`, `minio/`, `valkey/`, and
 `kcms.env`, the secrets generated on first boot). `docker logs kcms` shows every process.
+
+### One sign-in
+
+Nobody signs in to KCMS. Its front page hands straight to the Central identity service
+(OpenID Connect, authorization code + PKCE), which already knows the person, and they land in the
+`kiran` workspace. The first visit creates their KCMS account from their Central name and email,
+skips onboarding, and adds them to the workspace and its projects: as an admin if their Central
+role on the Projects app is Manager, as a member otherwise. Signing out returns to the launcher.
+
+`start-modules.ps1 -Kcms` does the pairing: it generates `CENTRAL_CLIENT_SECRET` into
+`kiran-mgmt/kcms.env` once, and pipes `pair-kcms.py` into the identity container to set that
+secret and the callback (`http://localhost:3020/auth/central/callback/`) on the `projects` app.
+The code is `apps/api/plane/authentication/views/app/central.py` and
+`apps/web/core/components/auth-screens/central-sign-in.tsx`.
+
+The built-in password form is still there for an administrator at `http://localhost:3020/?local=1`,
+and is what anyone sees if Central sign-in is not configured or fails. It no longer offers sign-up.
 
 ### Settings
 

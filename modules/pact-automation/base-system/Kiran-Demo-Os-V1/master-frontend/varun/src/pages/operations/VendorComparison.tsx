@@ -60,11 +60,11 @@ export const VendorComparisonPage: React.FC = () => {
       {/* AI Recommendation Banner */}
       <div className="p-4 bg-ai-tint/40 border border-ai/30 rounded-md space-y-2">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs font-semibold text-ai font-mono uppercase tracking-wider">
+          <div className="flex items-center gap-2 text-xs font-semibold text-ai font-mono ">
             <Sparkles className="w-4 h-4 text-ai" />
             AI Recommended Supplier: <strong className="text-ink font-sans text-sm ml-1">{selectedComp.recommendedVendor}</strong>
           </div>
-          <span className="font-mono text-[10px] text-muted">Model: claude-opus-5</span>
+          <span className="font-mono text-[12px] text-muted">Model: claude-opus-5</span>
         </div>
         <p className="text-xs text-slate-800 leading-relaxed font-sans bg-white/70 p-2.5 rounded border border-ai/20">
           {selectedComp.aiRecommendationReason}
@@ -88,7 +88,7 @@ export const VendorComparisonPage: React.FC = () => {
           <table className="w-full text-left text-xs">
             <thead className="bg-canvas border-b border-line">
               <tr>
-                <th className="p-3 font-semibold text-muted text-[11px] uppercase w-48 font-mono">
+                <th className="p-3 font-semibold text-muted text-[12px] w-48 font-mono">
                   Evaluation Metric
                 </th>
                 {selectedComp.vendors.map((v, i) => {
@@ -99,14 +99,14 @@ export const VendorComparisonPage: React.FC = () => {
                       key={i}
                       className={`p-3 font-sans text-xs ${
                         isRec
-                          ? 'border-2 border-ai bg-ai-tint/20 rounded-t'
+                          ? 'border border-ai bg-ai-tint/20 rounded-t'
                           : 'border-b border-line text-ink'
                       }`}
                     >
                       <div className="flex items-center justify-between">
                         <span className="font-bold text-ink">{v.vendorName}</span>
                         {isRec && (
-                          <span className="font-mono text-[9px] font-bold px-1.5 py-0.2 rounded bg-ai text-white">
+                          <span className="font-mono text-[12px] font-bold px-1.5 py-0.2 rounded bg-ai text-white">
                             AI Choice
                           </span>
                         )}
@@ -130,7 +130,7 @@ export const VendorComparisonPage: React.FC = () => {
                     <div className="flex items-center justify-between">
                       <span>₹{v.price.toFixed(2)}</span>
                       {v.isBestPrice && (
-                        <span className="font-mono text-[9px] px-1 py-0.2 rounded bg-emerald-200 text-emerald-900">
+                        <span className="font-mono text-[12px] px-1 py-0.2 rounded bg-emerald-200 text-emerald-900">
                           Best
                         </span>
                       )}
@@ -182,7 +182,7 @@ export const VendorComparisonPage: React.FC = () => {
                     <div className="flex items-center justify-between">
                       <span>{v.deliveryWeeks} Weeks</span>
                       {v.isBestDelivery && (
-                        <span className="font-mono text-[9px] px-1 py-0.2 rounded bg-emerald-200 text-emerald-900">
+                        <span className="font-mono text-[12px] px-1 py-0.2 rounded bg-emerald-200 text-emerald-900">
                           Fastest
                         </span>
                       )}

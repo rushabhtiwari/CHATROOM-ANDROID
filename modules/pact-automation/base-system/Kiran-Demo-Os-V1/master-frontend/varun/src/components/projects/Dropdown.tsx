@@ -179,7 +179,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
 /* ------------------------------------------------------------------ */
 
 export const DropdownLabel: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div className="px-2.5 pb-1 pt-1.5 text-[10px] font-semibold uppercase tracking-[0.09em] text-muted">
+  <div className="px-2.5 pb-1 pt-1.5 text-[12px] font-semibold text-muted">
     {children}
   </div>
 );

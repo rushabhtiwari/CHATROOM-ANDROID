@@ -48,7 +48,7 @@ export function ShortcutsDialog({
         <div className="space-y-4 py-1">
           {SHORTCUTS.map((section) => (
             <section key={section.group}>
-              <h3 className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+              <h3 className="mb-1.5 text-[12px] font-semibold text-muted-foreground">
                 {section.group}
               </h3>
               <dl className="space-y-1">
@@ -56,7 +56,7 @@ export function ShortcutsDialog({
                   <div key={keys} className="flex items-center justify-between gap-4 text-xs">
                     <dt className="text-muted-foreground">{description}</dt>
                     <dd>
-                      <kbd className="rounded-md border border-border bg-surface-2 px-1.5 py-0.5 font-mono text-[10px]">
+                      <kbd className="rounded-md border border-border bg-surface-2 px-1.5 py-0.5 font-mono text-[12px]">
                         {keys}
                       </kbd>
                     </dd>

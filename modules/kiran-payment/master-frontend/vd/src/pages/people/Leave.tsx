@@ -42,51 +42,46 @@ export const Leave: React.FC = () => {
   };
 
   return (
-    <div className="space-y-4 animate-fadeIn">
-      <PageHeader
-        title="Leave"
-        description="Requests waiting on HR and the record of what was decided. The employee is told through the activity feed."
-      />
+    <div className="space-y-6 animate-fadeIn">
+      <PageHeader title="Leave" />
 
-      <div className="flex items-center gap-1.5">
+      <div className="inline-flex items-center gap-0.5 p-0.5 rounded-lg bg-[#EBEBEF]">
         {(['Pending', 'All'] as View[]).map((entry) => (
           <button
             key={entry}
             onClick={() => setView(entry)}
-            className={`px-2.5 py-1 rounded-md text-xs font-medium border transition-colors ${
-              view === entry
-                ? 'bg-kiran text-white border-kiran'
-                : 'bg-surface text-slate-700 border-line hover:border-kiran/40'
+            className={`h-7 px-3 rounded-md text-[13px] font-medium transition-colors ${
+              view === entry ? 'bg-white text-ink' : 'text-muted hover:text-ink'
             }`}
           >
-            {entry === 'Pending' ? 'Awaiting decision' : 'All requests'}
-            <span className="font-mono text-[10px] ml-1.5 opacity-75">
+            {entry === 'Pending' ? 'To decide' : 'All'}
+            <span className="ml-1.5 text-muted tabular-nums">
               {entry === 'Pending' ? pending.length : requests.length}
             </span>
           </button>
         ))}
       </div>
 
-      <div className="bg-surface border border-line rounded-lg shadow-card overflow-x-auto">
-        <table className="w-full text-left text-xs">
-          <thead className="bg-canvas text-muted text-[10px] uppercase border-b border-line">
+      <div className="bg-surface border border-line rounded-lg overflow-x-auto">
+        <table className="w-full text-left text-[14px]">
+          <thead className="bg-surface-2 text-[13px] font-medium text-muted border-b border-line">
             <tr>
-              <th className="p-3 font-semibold">Request</th>
-              <th className="p-3 font-semibold">Employee</th>
-              <th className="p-3 font-semibold">Type</th>
-              <th className="p-3 font-semibold">Dates</th>
-              <th className="p-3 font-semibold text-right">Days</th>
-              <th className="p-3 font-semibold text-right">Balance</th>
-              <th className="p-3 font-semibold">Reason</th>
-              <th className="p-3 font-semibold">Status</th>
-              <th className="p-3 font-semibold text-right">Decision</th>
+              <th className="px-4 py-3 font-medium">Request</th>
+              <th className="px-4 py-3 font-medium">Employee</th>
+              <th className="px-4 py-3 font-medium">Type</th>
+              <th className="px-4 py-3 font-medium">Dates</th>
+              <th className="px-4 py-3 font-medium text-right">Days</th>
+              <th className="px-4 py-3 font-medium text-right">Balance</th>
+              <th className="px-4 py-3 font-medium">Reason</th>
+              <th className="px-4 py-3 font-medium">Status</th>
+              <th className="px-4 py-3 font-medium" />
             </tr>
           </thead>
-          <tbody className="divide-y divide-line">
+          <tbody className="divide-y divide-line-2">
             {rows.length === 0 ? (
               <tr>
-                <td colSpan={9} className="p-8 text-center text-muted">
-                  No leave requests are waiting on HR.
+                <td colSpan={9} className="px-4 py-10 text-center text-muted">
+                  No leave requests.
                 </td>
               </tr>
             ) : (
@@ -95,52 +90,52 @@ export const Leave: React.FC = () => {
                 const balance = LEAVE_ENTITLEMENT[request.type] - taken(request.employeeId, request.type);
 
                 return (
-                  <tr key={request.id}>
-                    <td className="p-3 font-mono font-semibold text-kiran">{request.id}</td>
-                    <td className="p-3">
-                      <div className="font-semibold text-ink">{employee?.name ?? request.employeeId}</div>
-                      <div className="text-[11px] text-muted">{employee?.department}</div>
+                  <tr key={request.id} className="h-[52px] hover:bg-canvas">
+                    <td className="px-4 py-3 font-code text-[13px] text-ink whitespace-nowrap">{request.id}</td>
+                    <td className="px-4 py-3">
+                      <div className="font-medium text-ink whitespace-nowrap">{employee?.name ?? request.employeeId}</div>
+                      <div className="text-[13px] text-muted">{employee?.department}</div>
                     </td>
-                    <td className="p-3">{request.type}</td>
-                    <td className="p-3 font-mono whitespace-nowrap">
+                    <td className="px-4 py-3">{request.type}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">
                       {formatDateShort(request.from)}
                       {request.to !== request.from && ` to ${formatDateShort(request.to)}`}
                     </td>
-                    <td className="p-3 text-right font-mono">{request.days}</td>
+                    <td className="px-4 py-3 text-right tabular-nums">{request.days}</td>
                     <td
-                      className={`p-3 text-right font-mono ${
+                      className={`px-4 py-3 text-right tabular-nums ${
                         balance < request.days && request.status === 'Pending'
-                          ? 'text-strand-red font-semibold'
-                          : 'text-slate-700'
+                          ? 'text-strand-red font-medium'
+                          : ''
                       }`}
                       title={`${request.type} leave remaining this year`}
                     >
                       {balance}d
                     </td>
-                    <td className="p-3 text-slate-600 max-w-[260px] truncate" title={request.reason}>
+                    <td className="px-4 py-3 text-slate-600 max-w-[260px] truncate" title={request.reason}>
                       {request.reason}
                     </td>
-                    <td className="p-3">
+                    <td className="px-4 py-3">
                       <StatusPill status={request.status} />
                       {request.decidedBy && (
-                        <div className="text-[10px] text-muted mt-1">by {request.decidedBy}</div>
+                        <div className="text-[13px] text-muted mt-1 whitespace-nowrap">{request.decidedBy}</div>
                       )}
                     </td>
-                    <td className="p-3">
+                    <td className="px-4 py-3">
                       {request.status === 'Pending' && (
-                        <div className="flex items-center justify-end gap-1.5">
+                        <div className="flex items-center justify-end gap-2">
                           <button
                             onClick={() => handleDecision(request, 'Approved')}
-                            className="px-2 py-1 rounded bg-strand-green text-white text-[11px] font-semibold hover:opacity-90 flex items-center gap-1"
+                            className="btn-secondary"
                           >
-                            <Check className="w-3 h-3" />
+                            <Check className="w-4 h-4 text-slate-500" />
                             Approve
                           </button>
                           <button
                             onClick={() => handleDecision(request, 'Rejected')}
-                            className="px-2 py-1 rounded border border-line text-slate-700 text-[11px] font-semibold hover:border-strand-red hover:text-strand-red flex items-center gap-1"
+                            className="btn-secondary text-strand-red"
                           >
-                            <X className="w-3 h-3" />
+                            <X className="w-4 h-4" />
                             Reject
                           </button>
                         </div>

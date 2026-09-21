@@ -36,15 +36,15 @@ const Row: React.FC<{ icon: React.ReactNode; label: string; value: number; max: 
 }) => (
   <div className="flex items-center gap-2 py-1">
     <span className="flex w-4 shrink-0 items-center justify-center">{icon}</span>
-    <span className="w-[6.5rem] shrink-0 truncate text-[11.5px] text-slate-700">{label}</span>
+    <span className="w-[6.5rem] shrink-0 truncate text-[12px] text-slate-700">{label}</span>
     <Bar value={value} max={max} color={color} />
-    <span className="w-6 shrink-0 text-right font-mono text-[11px] text-slate-600">{value}</span>
+    <span className="w-6 shrink-0 text-right font-mono text-[12px] text-slate-600">{value}</span>
   </div>
 );
 
 const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
   <section className="border-t border-line-2 px-4 py-3">
-    <h3 className="mb-1 text-[10.5px] font-semibold uppercase tracking-[0.08em] text-muted">{title}</h3>
+    <h3 className="mb-1 text-[12px] font-semibold text-muted">{title}</h3>
     {children}
   </section>
 );
@@ -112,7 +112,7 @@ export const AnalyticsPanel: React.FC<{
       <header className="flex h-11 shrink-0 items-center justify-between border-b border-line px-4">
         <div>
           <span className="text-[13px] font-semibold text-ink">Analytics</span>
-          <span className="ml-2 text-[11px] text-muted">for the issues in view</span>
+          <span className="ml-2 text-[12px] text-muted">for the issues in view</span>
         </div>
         <button
           type="button"
@@ -129,7 +129,7 @@ export const AnalyticsPanel: React.FC<{
           {tiles.map((tile) => (
             <div key={tile.label} className="bg-white px-3 py-2.5">
               <div className={`font-mono text-[18px] font-semibold leading-none ${tile.tone}`}>{tile.value}</div>
-              <div className="mt-1 text-[10.5px] text-muted">{tile.label}</div>
+              <div className="mt-1 text-[12px] text-muted">{tile.label}</div>
             </div>
           ))}
         </div>
@@ -183,18 +183,18 @@ export const AnalyticsPanel: React.FC<{
             />
           )}
           {figures.byAssignee.length === 0 && figures.unassigned === 0 && (
-            <p className="py-1 text-[11.5px] text-muted">Nothing in view.</p>
+            <p className="py-1 text-[12px] text-muted">Nothing in view.</p>
           )}
         </Section>
 
         <Section title="Estimate">
           <div className="flex items-center gap-2 py-1">
             <Bar value={figures.donePoints} max={figures.points} color="#06477F" />
-            <span className="shrink-0 font-mono text-[11px] text-slate-600">
+            <span className="shrink-0 font-mono text-[12px] text-slate-600">
               {figures.donePoints} / {figures.points} pts
             </span>
           </div>
-          <p className="text-[11px] text-muted">Story points completed, over points on issues that were not cancelled.</p>
+          <p className="text-[12px] text-muted">Story points completed, over points on issues that were not cancelled.</p>
         </Section>
       </div>
     </aside>

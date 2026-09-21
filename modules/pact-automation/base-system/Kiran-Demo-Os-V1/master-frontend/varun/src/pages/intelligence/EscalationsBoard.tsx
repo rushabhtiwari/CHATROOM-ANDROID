@@ -64,7 +64,7 @@ export const EscalationsBoard: React.FC = () => {
                         <span className="font-mono text-xs font-bold text-ink">
                           {esc.recordId} ({esc.recordType})
                         </span>
-                        <span className="font-mono text-[10px] px-1.5 py-0.2 rounded bg-ink text-white font-semibold">
+                        <span className="font-mono text-[12px] px-1.5 py-0.2 rounded bg-ink text-white font-semibold">
                           {esc.currentLevel}
                         </span>
                       </div>
@@ -73,7 +73,7 @@ export const EscalationsBoard: React.FC = () => {
                         {esc.recordTitle}
                       </h4>
 
-                      <div className="p-2 bg-canvas rounded border border-line space-y-1 font-mono text-[11px]">
+                      <div className="p-2 bg-canvas rounded border border-line space-y-1 font-mono text-[12px]">
                         <div className="flex justify-between text-muted">
                           <span>Current Role:</span>
                           <strong className="text-ink font-sans">{esc.currentRole}</strong>
@@ -82,14 +82,14 @@ export const EscalationsBoard: React.FC = () => {
                           <span>Time at Level:</span>
                           <strong className="text-strand-red">{esc.timeAtLevel}</strong>
                         </div>
-                        <div className="pt-1 border-t border-line/60 text-[10px] text-strand-amber font-sans">
+                        <div className="pt-1 border-t border-line/60 text-[12px] text-strand-amber font-sans">
                           Next climb: {esc.nextAutoEscalateAt}
                         </div>
                       </div>
 
                       {/* Escalation Trail */}
-                      <div className="space-y-1 text-[10px] text-muted font-mono pt-1">
-                        <div className="uppercase tracking-wider font-sans font-semibold text-[9px]">
+                      <div className="space-y-1 text-[12px] text-muted font-mono pt-1">
+                        <div className="font-sans font-semibold text-[12px]">
                           Escalation History
                         </div>
                         {esc.history.map((h, i) => (

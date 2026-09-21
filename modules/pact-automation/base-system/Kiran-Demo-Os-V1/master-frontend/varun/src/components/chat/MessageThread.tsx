@@ -234,7 +234,7 @@ export function MessageThread({
             <div className="mb-4 flex justify-center">
               <button
                 onClick={loadOlder}
-                className="flex items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1.5 text-[11px] font-medium shadow-sm transition-colors hover:bg-secondary"
+                className="flex items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1.5 text-[12px] font-medium shadow-sm transition-colors hover:bg-secondary"
               >
                 <ChevronUp className="h-3.5 w-3.5" /> Load earlier messages
               </button>
@@ -258,7 +258,7 @@ export function MessageThread({
                   >
                     {row.kind === "day" && (
                       <div className="flex justify-center py-1">
-                        <span className="rounded-full border border-border bg-surface px-3 py-1 text-[11px] font-medium text-muted-foreground shadow-sm">
+                        <span className="rounded-full border border-border bg-surface px-3 py-1 text-[12px] font-medium text-muted-foreground shadow-sm">
                           {formatDayLabel(row.timestamp, { timeZone })}
                         </span>
                       </div>
@@ -266,7 +266,7 @@ export function MessageThread({
                     {row.kind === "unread" && (
                       <div className="flex items-center gap-2 py-1" role="separator">
                         <span className="h-px flex-1 bg-destructive/40" />
-                        <span className="rounded-full bg-destructive/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-destructive">
+                        <span className="rounded-full bg-destructive/10 px-2.5 py-0.5 text-[12px] font-semibold text-destructive">
                           {t("unread.divider", { count: row.count })}
                         </span>
                         <span className="h-px flex-1 bg-destructive/40" />
@@ -275,7 +275,7 @@ export function MessageThread({
                     {row.kind === "mention-divider" && (
                       <div className="flex items-center gap-2 py-1" role="separator">
                         <span className="h-px flex-1 bg-ai/40" />
-                        <span className="flex items-center gap-1 rounded-full bg-ai/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-ai">
+                        <span className="flex items-center gap-1 rounded-full bg-ai/10 px-2.5 py-0.5 text-[12px] font-semibold text-ai">
                           <AtSign className="h-2.5 w-2.5" /> New mentions since you were away
                         </span>
                         <span className="h-px flex-1 bg-ai/40" />
@@ -310,7 +310,7 @@ export function MessageThread({
             window.getSelection()?.removeAllRanges();
             setSelection(null);
           }}
-          className="fixed z-40 flex -translate-x-1/2 -translate-y-full items-center gap-1.5 rounded-full border border-primary/25 bg-surface px-3 py-1.5 text-[11px] font-semibold text-ai shadow-[var(--shadow-float)] transition-transform hover:scale-105"
+          className="fixed z-40 flex -translate-x-1/2 -translate-y-full items-center gap-1.5 rounded-full border border-primary/25 bg-surface px-3 py-1.5 text-[12px] font-semibold text-ai shadow-[var(--shadow-float)] transition-transform hover:scale-105"
         >
           <Sparkles className="h-3 w-3" /> Ask AI
         </button>
@@ -322,7 +322,7 @@ export function MessageThread({
             scrollToBottom();
             markRoomRead(activeRoom.id);
           }}
-          className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1.5 text-[11px] font-medium shadow-[var(--shadow-float)] transition-colors hover:bg-secondary"
+          className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1.5 text-[12px] font-medium shadow-[var(--shadow-float)] transition-colors hover:bg-secondary"
         >
           <ArrowDown className="h-3.5 w-3.5" /> Jump to latest
         </button>

@@ -125,10 +125,8 @@ export function ConversationSidebar({
         }}
         aria-current={active ? "true" : undefined}
         className={cn(
-          "group flex w-full items-center gap-3 rounded-lg border px-3 py-2 text-left transition-colors duration-150",
-          active
-            ? "border-primary/20 bg-primary/10 text-accent-foreground"
-            : "border-transparent hover:bg-secondary",
+          "group flex w-full items-center gap-3 rounded-md border border-transparent px-2.5 py-2 text-left transition-colors duration-150",
+          active ? "bg-[#DCE6F4]" : "hover:bg-black/[0.05]",
         )}
       >
         {room.type === "direct" ? (
@@ -139,7 +137,7 @@ export function ConversationSidebar({
         <span className="min-w-0 flex-1">
           <span className="flex items-center gap-1.5">
             <span
-              className={cn("truncate text-sm", unread.total > 0 ? "font-bold" : "font-semibold")}
+              className={cn("truncate text-[14px] text-ink", unread.total > 0 ? "font-semibold" : "font-medium")}
             >
               {roomTitle(room)}
             </span>
@@ -147,15 +145,15 @@ export function ConversationSidebar({
             {level === "none" && <BellOff className="h-3 w-3 shrink-0 text-muted-foreground" />}
             <span
               suppressHydrationWarning
-              className="ml-auto shrink-0 text-[10px] text-muted-foreground"
+              className="ml-auto shrink-0 text-[12px] text-muted-foreground"
             >
               {last ? formatTime(last.timestamp, { timeZone: currentUser.timeZone }) : ""}
             </span>
           </span>
           <span className="flex items-center gap-2">
-            <span className="min-w-0 flex-1 truncate text-xs text-muted-foreground">
+            <span className="min-w-0 flex-1 truncate text-[13px] text-muted-foreground">
               {draft ? (
-                <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400">
+                <span className="flex items-center gap-1 text-[#8A4F00]">
                   <Pencil className="h-3 w-3 shrink-0" />
                   <span className="truncate">{draft.text}</span>
                 </span>
@@ -168,7 +166,7 @@ export function ConversationSidebar({
             {mentions > 0 && (
               <span
                 aria-label={`${mentions} unread mentions`}
-                className="flex shrink-0 items-center gap-0.5 rounded-full bg-ai px-1.5 py-0.5 text-[10px] font-semibold text-ai-foreground"
+                className="flex h-[18px] shrink-0 items-center gap-0.5 rounded-full bg-[#D93A2F] px-1.5 text-[11px] font-semibold leading-none text-white"
               >
                 <AtSign className="h-2.5 w-2.5" />
                 {mentions}
@@ -177,7 +175,7 @@ export function ConversationSidebar({
             {unread.total > 0 && (
               <span
                 aria-label={`${unread.total} unread messages`}
-                className="min-w-5 shrink-0 rounded-full bg-primary px-1.5 py-0.5 text-center text-[10px] font-semibold text-primary-foreground"
+                className="inline-flex h-[18px] min-w-[18px] shrink-0 items-center justify-center rounded-full bg-primary px-1.5 text-[11px] font-semibold leading-none tabular-nums text-primary-foreground"
               >
                 {unread.total}
               </span>
@@ -198,7 +196,7 @@ export function ConversationSidebar({
             <div className="min-w-0">
               <p className="truncate text-sm font-semibold">{roomTitle(room)}</p>
               {room.topic && (
-                <p className="truncate text-[11px] text-primary-foreground/85">{room.topic}</p>
+                <p className="truncate text-[12px] text-primary-foreground/85">{room.topic}</p>
               )}
             </div>
           </div>
@@ -207,7 +205,7 @@ export function ConversationSidebar({
               {room.description}
             </p>
           )}
-          <p className="mt-2 text-[11px] text-primary-foreground/80">
+          <p className="mt-2 text-[12px] text-primary-foreground/80">
             {memberCount} members · {onlineCount} online
           </p>
         </TooltipContent>
@@ -219,45 +217,41 @@ export function ConversationSidebar({
     <TooltipProvider delayDuration={250}>
       <aside
         aria-label="Conversations"
-        className="conversation-rail flex h-full w-full flex-col border-r border-border bg-surface"
+        className="conversation-rail flex h-full w-full flex-col border-r border-border"
       >
-        <div className="flex h-[68px] items-center gap-2 border-b border-border px-5">
-          <UserAvatar user={currentUser} size={36} showStatus />
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-semibold">{currentUser.name}</p>
-            <p className="truncate text-[11px] text-muted-foreground">{currentUser.role}</p>
-          </div>
+        <div className="flex h-14 items-center gap-2 pl-5 pr-3">
+          <h1 className="min-w-0 flex-1 truncate text-[18px] font-semibold text-ink">Chat</h1>
           {onClose && (
             <button
               type="button"
               onClick={onClose}
               aria-label="Close conversation sidebar"
               title="Close conversations"
-              className="rounded-lg p-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-md text-[#6E6E76] transition-colors hover:bg-black/[0.05] hover:text-foreground"
             >
               <PanelLeftClose className="h-4 w-4" />
             </button>
           )}
         </div>
 
-        <div className="relative px-4 pt-4">
-          <Search className="absolute left-7 top-[calc(50%+0.5rem)] h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        <div className="relative px-4">
+          <Search className="absolute left-7 top-1/2 h-4 w-4 -translate-y-1/2 text-[#6E6E76]" />
           <Input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder={t("search.placeholder")}
             aria-label={t("search.placeholder")}
-            className="h-10 border-border bg-surface-2 pl-9 text-sm shadow-none"
+            className="h-10 border-input bg-white pl-9 text-sm shadow-none"
           />
         </div>
 
         <div className="flex gap-2 px-4 py-3">
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-border bg-surface py-2 text-xs font-medium text-secondary-foreground shadow-sm transition-colors hover:bg-secondary">
-              <MessageSquarePlus className="h-3.5 w-3.5" /> New Chat
+            <DropdownMenuTrigger className="flex h-9 flex-1 items-center justify-center gap-1.5 rounded-md border border-input bg-white text-[14px] font-medium text-ink transition-colors hover:bg-[#F4F4F6]">
+              <MessageSquarePlus className="h-4 w-4 text-[#6E6E76]" /> New chat
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="w-56">
-              <DropdownMenuLabel>Start a direct message</DropdownMenuLabel>
+              <DropdownMenuLabel>Message</DropdownMenuLabel>
               {users
                 .filter((user) => user.id !== currentUserId)
                 .map((user) => (
@@ -277,9 +271,9 @@ export function ConversationSidebar({
           </DropdownMenu>
           <button
             onClick={onCreateGroup}
-            className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-primary py-2 text-xs font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 active:translate-y-px"
+            className="flex h-9 flex-1 items-center justify-center gap-1.5 rounded-md border border-input bg-white text-[14px] font-medium text-ink transition-colors hover:bg-[#F4F4F6]"
           >
-            <Users className="h-3.5 w-3.5" /> Create Group
+            <Users className="h-4 w-4 text-[#6E6E76]" /> New group
           </button>
         </div>
 
@@ -313,7 +307,7 @@ export function ConversationSidebar({
 
           {people.length > 0 && (
             <section>
-              <p className="px-4 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+              <p className="px-4 pb-1.5 text-[12px] font-semibold text-muted-foreground">
                 People
               </p>
               <div className="space-y-1 px-2">
@@ -321,7 +315,7 @@ export function ConversationSidebar({
                   <button
                     key={user.id}
                     onClick={() => openDirect(user.id)}
-                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-secondary"
+                    className="flex w-full items-center gap-3 rounded-md px-2.5 py-2 text-left hover:bg-black/[0.05]"
                   >
                     <UserAvatar user={user} size={34} showStatus />
                     <span className="text-sm font-medium">{user.name}</span>
@@ -336,7 +330,7 @@ export function ConversationSidebar({
               <button
                 onClick={() => setShowArchived((open) => !open)}
                 aria-expanded={showArchived}
-                className="flex w-full items-center gap-1.5 px-4 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground"
+                className="flex w-full items-center gap-1.5 px-4 pb-1.5 text-[12px] font-semibold text-muted-foreground hover:text-foreground"
               >
                 <Archive className="h-3 w-3" /> Archived · {archivedRooms.length}
               </button>
@@ -379,16 +373,14 @@ function RailSection({
         type="button"
         onClick={onToggle}
         aria-expanded={!collapsed}
-        className="flex w-full items-center gap-1.5 px-4 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground transition-colors hover:text-foreground"
+        className="flex w-full items-center gap-1.5 px-4 pb-1.5 text-[12px] font-semibold text-muted-foreground transition-colors hover:text-foreground"
       >
         <ChevronDown
           className={cn("h-3 w-3 shrink-0 transition-transform", collapsed && "-rotate-90")}
         />
-        <Icon className="h-3 w-3 shrink-0" />
         <span>{label}</span>
-        <span className="ml-auto font-medium tabular-nums text-muted-foreground/70">{count}</span>
-      </button>
-      {!collapsed && <div className="space-y-1 px-2">{children}</div>}
+              </button>
+      {!collapsed && <div className="space-y-0.5 px-2">{children}</div>}
     </section>
   );
 }

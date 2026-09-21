@@ -2,18 +2,7 @@ import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { mockQuotations } from '../../data/quotations';
 import { Quotation, QuotationLineItem } from '../../types';
-import {
-  ArrowLeft,
-  Send,
-  Save,
-  Copy,
-  Download,
-  Sparkles,
-  AlertTriangle,
-  CheckCircle2,
-  FileText,
-  ShieldCheck
-} from 'lucide-react';
+import { ArrowLeft, Send, Copy, Download, CheckCircle2 } from 'lucide-react';
 import { ApprovalBar } from '../../components/common/ApprovalBar';
 import { StatusPill } from '../../components/common/StatusPill';
 import { IndianRupee } from '../../components/common/IndianRupee';
@@ -47,12 +36,12 @@ export const QuotationBuilder: React.FC = () => {
 5. Payment: 60 days credit, subject to clearance of overdue ledger balance.
 6. Validity: 15 days from date of quotation.`
     );
-    setToastMessage('Commercial terms regenerated via claude-sonnet-4-6.');
+    setToastMessage('Terms drafted.');
     setTimeout(() => setToastMessage(null), 3000);
   };
 
   const handleApprove = () => {
-    setToastMessage('Price increase approved. Status updated to Sent.');
+    setToastMessage('Price increase approved.');
     setQuote(prev => ({ ...prev, status: 'Sent' }));
     setTimeout(() => setToastMessage(null), 4000);
   };
@@ -64,134 +53,113 @@ export const QuotationBuilder: React.FC = () => {
 
   return (
     <div className="space-y-6 pb-20 animate-fadeIn">
-      {/* Toast Alert */}
       {toastMessage && (
-        <div className="fixed top-16 right-8 z-50 bg-ink text-white px-4 py-3 rounded-md shadow-popover border border-kiran flex items-center gap-2.5 text-xs animate-fadeIn">
-          <CheckCircle2 className="w-4 h-4 text-strand-green" />
+        <div className="fixed top-16 right-8 z-50 bg-ink text-white px-4 py-3 rounded-lg shadow-popover flex items-center gap-2.5 text-[14px] animate-fadeIn">
+          <CheckCircle2 className="w-4 h-4" />
           <span>{toastMessage}</span>
         </div>
       )}
 
-      {/* Back and Header */}
+      <Link
+        to="/quotations"
+        className="inline-flex items-center gap-1.5 text-[14px] font-medium text-muted hover:text-ink"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        <span>Quotations</span>
+      </Link>
+
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <Link
-            to="/quotations"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-kiran"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Quotations List</span>
-          </Link>
-          <span className="text-muted">/</span>
-          <span className="font-mono font-bold text-ink">{quote.quoteNumber}</span>
-          <StatusPill status={quote.status} />
+        <div>
+          <div className="flex items-center gap-3">
+            <h1 className="font-code font-semibold text-[24px] leading-[1.2] text-ink">{quote.quoteNumber}</h1>
+            <StatusPill status={quote.status} />
+          </div>
+          <div className="text-[13px] text-muted mt-1">
+            {quote.customerName} · <span className="font-code">{quote.rfqNumber}</span>
+          </div>
         </div>
 
-        {/* Top-Right Actions */}
         <div className="flex items-center gap-2">
           <button
-            onClick={() => setToastMessage('Quotation duplicated as new revision.')}
-            className="px-2.5 py-1.5 bg-white hover:bg-canvas border border-line text-xs font-medium text-slate rounded flex items-center gap-1 shadow-2xs"
+            onClick={() => setToastMessage('Quotation duplicated.')}
+            className="btn-icon"
+            title="Duplicate"
+            aria-label="Duplicate"
           >
-            <Copy className="w-3.5 h-3.5" />
-            Duplicate
+            <Copy className="w-4 h-4" />
           </button>
           <button
             onClick={() => window.print()}
-            className="px-2.5 py-1.5 bg-white hover:bg-canvas border border-line text-xs font-medium text-slate rounded flex items-center gap-1 shadow-2xs"
+            className="btn-icon"
+            title="Download PDF"
+            aria-label="Download PDF"
           >
-            <Download className="w-3.5 h-3.5" />
-            Download PDF
+            <Download className="w-4 h-4" />
           </button>
-          <button
-            onClick={() => setToastMessage('Draft saved successfully in PACT.')}
-            className="px-3 py-1.5 bg-white hover:bg-canvas border border-line text-xs font-semibold text-slate-800 rounded flex items-center gap-1"
-          >
-            <Save className="w-3.5 h-3.5" />
-            Save as draft
+          <button onClick={() => setToastMessage('Draft saved.')} className="btn-secondary">
+            Save draft
           </button>
           <button
             onClick={() => {
-              setToastMessage('Quotation dispatched to Vivek Sharma (Motherson).');
+              setToastMessage('Quotation sent to Vivek Sharma.');
               setQuote(prev => ({ ...prev, status: 'Sent' }));
             }}
-            className="px-4 py-1.5 bg-kiran hover:bg-blue-700 text-white text-xs font-semibold rounded shadow-xs flex items-center gap-1.5"
+            className="btn-primary"
           >
-            <Send className="w-3.5 h-3.5" />
-            Send quotation
+            <Send className="w-4 h-4" />
+            Send
           </button>
         </div>
       </div>
 
-      {/* Two-Panel Builder Grid */}
       <div className="grid grid-cols-12 gap-6 items-start">
-        
-        {/* Left Panel (6 cols): Line Items & Commercials */}
-        <div className="col-span-12 lg:col-span-6 space-y-4">
-          <div className="bg-surface border border-line rounded-lg p-5 shadow-card space-y-4">
-            <div className="flex items-center justify-between border-b border-line pb-3">
-              <div>
-                <h3 className="font-display font-semibold text-sm text-ink">
-                  Quotation Line Items
-                </h3>
-                <p className="text-xs text-muted">
-                  Standard prices pre-filled from master. Deviations require HOD approval.
-                </p>
-              </div>
-              <span className="font-mono text-xs text-muted">
-                RFQ Ref: <strong className="text-ink">{quote.rfqNumber}</strong>
-              </span>
-            </div>
+        {/* Editor */}
+        <div className="col-span-12 lg:col-span-6 space-y-6">
+          <div className="bg-surface border border-line rounded-lg overflow-hidden">
+            <h3 className="px-5 py-4 text-[16px] font-semibold text-ink">Items</h3>
 
-            {/* Line Items Table */}
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-canvas text-muted text-[10px] uppercase font-semibold border-b border-line">
+              <table className="w-full text-left text-[14px]">
+                <thead className="bg-surface-2 text-[13px] font-medium text-muted border-y border-line">
                   <tr>
-                    <th className="p-2">Part No / Description</th>
-                    <th className="p-2 text-right">Qty</th>
-                    <th className="p-2 text-right">Std Rate</th>
-                    <th className="p-2 text-right">Offered Rate</th>
-                    <th className="p-2 text-right">Amount (₹)</th>
+                    <th className="px-4 pl-5 h-11 font-medium">Part</th>
+                    <th className="px-4 h-11 font-medium text-right">Qty</th>
+                    <th className="px-4 h-11 font-medium text-right whitespace-nowrap">Std rate</th>
+                    <th className="px-4 h-11 font-medium text-right">Rate</th>
+                    <th className="px-4 pr-5 h-11 font-medium text-right">Amount</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-line font-mono">
+                <tbody>
                   {items.map((item, idx) => (
-                    <tr key={item.id} className="hover:bg-canvas/60">
-                      <td className="p-2">
-                        <div className="font-semibold text-ink">{item.partNumber}</div>
-                        <div className="text-[10px] text-muted font-sans line-clamp-1">
-                          {item.description}
-                        </div>
-                        <div className="text-[10px] text-muted">
-                          HSN: {item.hsnCode} · GST: {item.gstRate}%
-                        </div>
+                    <tr key={item.id} className="border-b border-line-2 hover:bg-canvas">
+                      <td className="px-4 pl-5 py-3.5">
+                        <div className="font-medium text-ink whitespace-nowrap">{item.partNumber}</div>
+                        <div className="text-[13px] text-muted line-clamp-1">{item.description}</div>
                       </td>
-                      <td className="p-2 text-right">
+                      <td className="px-4 py-3.5 text-right tabular-nums whitespace-nowrap">
                         {item.quantity.toLocaleString('en-IN')} {item.uom}
                       </td>
-                      <td className="p-2 text-right text-slate-500">
+                      <td className="px-4 py-3.5 text-right tabular-nums whitespace-nowrap text-muted">
                         ₹{item.standardPrice.toFixed(2)}
                       </td>
-                      <td className="p-2 text-right">
+                      <td className="px-4 py-3.5 text-right">
                         <input
                           type="number"
                           step="0.05"
+                          aria-label="Offered rate"
                           value={item.offeredPrice}
                           onChange={(e) => handlePriceChange(idx, parseFloat(e.target.value) || 0)}
-                          className={`w-20 text-right px-1.5 py-1 rounded border text-xs font-mono font-semibold focus:outline-none ${
-                            item.isPriceAboveStandard
-                              ? 'bg-amber-50 border-strand-amber text-amber-900 ring-1 ring-strand-amber'
-                              : 'bg-canvas border-line text-ink'
+                          className={`field w-24 text-right tabular-nums ml-auto ${
+                            item.isPriceAboveStandard ? 'border-[#C77700]' : ''
                           }`}
                         />
                         {item.isPriceAboveStandard && (
-                          <div className="text-[9px] text-strand-amber font-semibold mt-0.5">
-                            +{(((item.offeredPrice - item.standardPrice) / item.standardPrice) * 100).toFixed(1)}% vs Std
+                          <div className="text-[12px] text-[#8A4F00] mt-1 tabular-nums whitespace-nowrap">
+                            +{(((item.offeredPrice - item.standardPrice) / item.standardPrice) * 100).toFixed(1)}%
                           </div>
                         )}
                       </td>
-                      <td className="p-2 text-right font-semibold text-ink">
+                      <td className="px-4 pr-5 py-3.5 text-right tabular-nums whitespace-nowrap text-ink">
                         ₹{(item.offeredPrice * item.quantity).toLocaleString('en-IN')}
                       </td>
                     </tr>
@@ -200,66 +168,56 @@ export const QuotationBuilder: React.FC = () => {
               </table>
             </div>
 
-            {/* Calculations Summary */}
-            <div className="p-3 bg-canvas border border-line rounded space-y-1.5 font-mono text-xs">
-              <div className="flex items-center justify-between text-slate-600">
-                <span>Taxable Amount:</span>
-                <span>{formatINR(subtotal)}</span>
+            <div className="px-5 py-4 space-y-2 text-[14px]">
+              <div className="flex items-center justify-between text-muted">
+                <span>Subtotal</span>
+                <span className="tabular-nums">{formatINR(subtotal)}</span>
               </div>
-              <div className="flex items-center justify-between text-slate-600">
-                <span>GST (18% Integrated):</span>
-                <span>{formatINR(gstTotal)}</span>
+              <div className="flex items-center justify-between text-muted">
+                <span>GST 18%</span>
+                <span className="tabular-nums">{formatINR(gstTotal)}</span>
               </div>
-              <div className="flex items-center justify-between text-ink font-bold text-sm pt-1.5 border-t border-line">
-                <span>Grand Total (INR):</span>
-                <span className="text-kiran">{formatINR(grandTotal)}</span>
+              <div className="flex items-center justify-between text-ink font-semibold text-[16px] pt-2 border-t border-line-2">
+                <span>Total</span>
+                <span className="tabular-nums">{formatINR(grandTotal)}</span>
               </div>
             </div>
+          </div>
 
-            {/* AI Commercial Terms Generator */}
-            <div className="space-y-2 pt-2 border-t border-line">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-ink font-mono uppercase tracking-wider">
-                  Commercial Terms & Conditions
-                </span>
-                <button
-                  onClick={handleAIDraftTerms}
-                  className="px-2.5 py-1 rounded bg-ai-tint text-ai hover:bg-ai-tint/80 border border-ai/30 text-xs font-semibold flex items-center gap-1"
-                >
-                  <Sparkles className="w-3.5 h-3.5" />
-                  Draft with AI
-                </button>
-              </div>
-
-              <textarea
-                rows={6}
-                value={commercialTerms}
-                onChange={(e) => setCommercialTerms(e.target.value)}
-                className="w-full text-xs font-mono p-3 rounded bg-canvas border border-line text-slate-800 focus:outline-none focus:ring-1 focus:ring-kiran"
-              />
+          <div className="bg-surface border border-line rounded-lg p-5 space-y-3">
+            <div className="flex items-center justify-between">
+              <h3 className="text-[16px] font-semibold text-ink">Terms</h3>
+              <button onClick={handleAIDraftTerms} className="btn-secondary">
+                Draft terms
+              </button>
             </div>
+
+            <textarea
+              rows={7}
+              aria-label="Terms"
+              value={commercialTerms}
+              onChange={(e) => setCommercialTerms(e.target.value)}
+              className="field h-auto py-2 leading-relaxed"
+            />
           </div>
         </div>
 
-        {/* Right Panel (6 cols): Live A4 Letterhead Preview */}
-        <div className="col-span-12 lg:col-span-6 bg-white border border-line rounded-md p-8 shadow-card space-y-6 text-slate-800 font-sans text-xs">
-          
-          {/* Kiran Header Letterhead */}
-          <div className="border-b-2 border-ink pb-4 flex items-start justify-between">
+        {/* Letterhead preview */}
+        <div className="col-span-12 lg:col-span-6 bg-white border border-line rounded-lg p-8 space-y-6 text-ink-2 text-[13px]">
+          <div className="border-b border-line pb-4 flex items-start justify-between gap-4">
             <div className="space-y-0.5">
-              <div className="font-display font-bold text-lg text-ink tracking-tight">
-                KIRAN CABLE PROTECTION PRODUCTS PVT. LTD.
+              <div className="font-semibold text-[16px] text-ink">
+                Kiran Cable Protection Products Pvt. Ltd.
               </div>
-              <div className="text-[11px] text-muted">
+              <div className="text-[12px] text-muted">
                 Plot 14/B, Industrial Development Area, Nacharam, Secunderabad - 500076, Telangana
               </div>
-              <div className="text-[11px] text-muted font-mono">
-                GSTIN: 36AAACK4921K1Z8 · CIN: U31300TG1976PTC002014
+              <div className="text-[12px] text-muted">
+                GSTIN 36AAACK4921K1Z8 · CIN U31300TG1976PTC002014
               </div>
             </div>
 
-            {/* Signature Fan Mark */}
-            <div className="w-10 h-10 rounded bg-ink flex items-center justify-center shrink-0">
+            <div className="w-10 h-10 rounded-md bg-[#02223C] flex items-center justify-center shrink-0">
               <svg viewBox="0 0 32 32" className="w-8 h-8">
                 <path d="M4 28 C 8 20, 16 12, 28 4" stroke="#B5070E" strokeWidth="3" fill="none" />
                 <path d="M4 28 C 12 20, 20 14, 28 10" stroke="#E9991B" strokeWidth="3" fill="none" />
@@ -269,43 +227,44 @@ export const QuotationBuilder: React.FC = () => {
             </div>
           </div>
 
-          {/* Quotation Metadata Bar */}
-          <div className="grid grid-cols-2 gap-4 font-mono text-xs border-b border-line pb-4">
+          <div className="grid grid-cols-2 gap-4 border-b border-line pb-4">
             <div>
-              <div className="text-muted text-[10px] uppercase font-sans">Quotation To:</div>
-              <div className="font-bold text-ink">{quote.customerName}</div>
-              <div className="text-slate-600">{quote.contactPerson}</div>
-              <div className="text-slate-500 text-[11px]">{quote.contactEmail}</div>
+              <div className="text-muted text-[12px]">To</div>
+              <div className="font-medium text-ink">{quote.customerName}</div>
+              <div>{quote.contactPerson}</div>
+              <div className="text-muted text-[12px]">{quote.contactEmail}</div>
             </div>
             <div className="text-right space-y-0.5">
-              <div>Quote Ref: <strong className="text-ink">{quote.quoteNumber}</strong></div>
-              <div>Date: {formatDate(quote.createdAt)}</div>
-              <div>Valid Till: <strong className="text-strand-amber">{formatDate(quote.validTill)}</strong></div>
-              <div>RFQ Ref: {quote.rfqNumber}</div>
+              <div className="font-code text-ink">{quote.quoteNumber}</div>
+              <div>{formatDate(quote.createdAt)}</div>
+              <div>Valid till {formatDate(quote.validTill)}</div>
+              <div className="font-code text-muted">{quote.rfqNumber}</div>
             </div>
           </div>
 
-          {/* Letterhead Items Table */}
           <div className="space-y-2">
-            <table className="w-full text-left border border-line">
-              <thead className="bg-canvas text-ink text-[11px] font-semibold uppercase border-b border-line">
+            <table className="w-full text-left">
+              <thead className="text-muted text-[12px] font-medium border-b border-line">
                 <tr>
-                  <th className="p-2">Item</th>
-                  <th className="p-2 text-right">Qty</th>
-                  <th className="p-2 text-right">Rate (₹)</th>
-                  <th className="p-2 text-right">Amount (₹)</th>
+                  <th className="py-2 pr-2 font-medium">Item</th>
+                  <th className="py-2 px-2 font-medium text-right">Qty</th>
+                  <th className="py-2 px-2 font-medium text-right">Rate</th>
+                  <th className="py-2 pl-2 font-medium text-right">Amount</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-line font-mono text-xs">
+              <tbody className="divide-y divide-line-2">
                 {items.map((it, idx) => (
                   <tr key={idx}>
-                    <td className="p-2">
-                      <div className="font-semibold text-ink">{it.partNumber}</div>
-                      <div className="text-[10px] text-muted font-sans">{it.description}</div>
+                    <td className="py-2.5 pr-2">
+                      <div className="font-medium text-ink">{it.partNumber}</div>
+                      <div className="text-[12px] text-muted">{it.description}</div>
+                      <div className="text-[12px] text-muted">
+                        HSN {it.hsnCode} · GST {it.gstRate}%
+                      </div>
                     </td>
-                    <td className="p-2 text-right">{it.quantity.toLocaleString('en-IN')} {it.uom}</td>
-                    <td className="p-2 text-right">₹{it.offeredPrice.toFixed(2)}</td>
-                    <td className="p-2 text-right font-semibold">
+                    <td className="py-2.5 px-2 text-right tabular-nums whitespace-nowrap">{it.quantity.toLocaleString('en-IN')} {it.uom}</td>
+                    <td className="py-2.5 px-2 text-right tabular-nums whitespace-nowrap">₹{it.offeredPrice.toFixed(2)}</td>
+                    <td className="py-2.5 pl-2 text-right tabular-nums whitespace-nowrap text-ink">
                       ₹{(it.offeredPrice * it.quantity).toLocaleString('en-IN')}
                     </td>
                   </tr>
@@ -313,70 +272,52 @@ export const QuotationBuilder: React.FC = () => {
               </tbody>
             </table>
 
-            {/* Total Block */}
             <div className="flex justify-end pt-2">
-              <div className="w-64 font-mono text-xs space-y-1">
-                <div className="flex justify-between text-slate-600">
-                  <span>Subtotal:</span>
-                  <span>{formatINR(subtotal)}</span>
+              <div className="w-64 space-y-1">
+                <div className="flex justify-between text-muted">
+                  <span>Subtotal</span>
+                  <span className="tabular-nums">{formatINR(subtotal)}</span>
                 </div>
-                <div className="flex justify-between text-slate-600">
-                  <span>GST 18%:</span>
-                  <span>{formatINR(gstTotal)}</span>
+                <div className="flex justify-between text-muted">
+                  <span>GST 18%</span>
+                  <span className="tabular-nums">{formatINR(gstTotal)}</span>
                 </div>
-                <div className="flex justify-between font-bold text-sm text-ink border-t border-line pt-1">
-                  <span>Grand Total:</span>
-                  <span>{formatINR(grandTotal)}</span>
+                <div className="flex justify-between font-semibold text-[14px] text-ink border-t border-line pt-1.5">
+                  <span>Total</span>
+                  <span className="tabular-nums">{formatINR(grandTotal)}</span>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Terms & Bank Details */}
-          <div className="border-t border-line pt-4 space-y-3">
+          <div className="border-t border-line pt-4 space-y-4">
             <div>
-              <div className="font-semibold text-ink text-[11px] uppercase tracking-wider mb-1">
-                Terms & Conditions
-              </div>
-              <div className="whitespace-pre-line text-[11px] text-slate-600 font-mono leading-relaxed bg-canvas/40 p-3 rounded">
+              <div className="font-medium text-ink text-[12px] mb-1">Terms</div>
+              <div className="whitespace-pre-line text-[12px] text-ink-2 leading-relaxed">
                 {commercialTerms}
               </div>
             </div>
 
-            <div className="p-3 rounded border border-line bg-canvas/30 text-[11px] font-mono flex items-center justify-between">
-              <div>
-                <span className="text-muted">Bank Name: </span><strong>HDFC Bank Ltd</strong>
-                <span className="mx-2">·</span>
-                <span className="text-muted">IFSC: </span><strong>HDFC0000045</strong>
-              </div>
-              <div>
-                <span className="text-muted">A/C No: </span><strong>50200012984511</strong>
-              </div>
+            <div className="text-[12px] flex flex-wrap items-center gap-x-4 gap-y-1">
+              <span><span className="text-muted">Bank </span>HDFC Bank Ltd</span>
+              <span><span className="text-muted">IFSC </span>HDFC0000045</span>
+              <span><span className="text-muted">A/C </span>50200012984511</span>
             </div>
           </div>
 
-          {/* Letterhead Footer Sign-off */}
-          <div className="pt-6 flex items-end justify-between text-xs">
-            <div>
-              <span className="text-muted text-[10px]">Prepared by:</span>
-              <div className="font-semibold text-ink font-mono">KiranOS Automated Quotation Desk</div>
-            </div>
-            <div className="text-right">
-              <span className="text-muted text-[10px]">Authorized Signatory:</span>
-              <div className="font-semibold text-ink">Rajesh Kumar (Head of Sales)</div>
-              <div className="text-[10px] text-muted">Kiran Cable Protection Products Pvt. Ltd.</div>
-            </div>
+          <div className="pt-6 text-right">
+            <div className="text-muted text-[12px]">Authorised signatory</div>
+            <div className="font-medium text-ink">Rajesh Kumar, Head of Sales</div>
           </div>
         </div>
       </div>
 
-      {/* Sticky Bottom Approval Bar if Price Increase > Standard */}
       {hasPriceIncrease && quote.status === 'Awaiting HOD' && (
         <ApprovalBar
-          title="Price increase of 8.4% over standard on 2 lines"
-          nextSignee="Rajesh Kumar (HOD Sales)"
+          title="Price 8.4% above standard on 2 lines"
+          nextSignee="Rajesh Kumar"
           onApprove={handleApprove}
-          onRequestChanges={() => setToastMessage('Changes requested from estimating desk.')}
+          onRequestChanges={() => setToastMessage('Changes requested.')}
           onReject={() => {
             setQuote(prev => ({ ...prev, status: 'Draft' }));
             setToastMessage('Price increase rejected.');

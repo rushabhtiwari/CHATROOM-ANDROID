@@ -44,7 +44,7 @@ export const RequisitionsList: React.FC = () => {
       cell: (row) => (
         <div>
           <div className="font-semibold text-ink">{row.raisedByName}</div>
-          <div className="text-[10px] text-muted font-mono">{row.department}</div>
+          <div className="text-[12px] text-muted font-mono">{row.department}</div>
         </div>
       )
     },
@@ -71,11 +71,11 @@ export const RequisitionsList: React.FC = () => {
       cell: (row) => (
         <div>
           {row.hasMissingBill ? (
-            <span className="px-2 py-0.5 rounded bg-red-100 text-strand-red font-semibold text-[10px] border border-red-200">
+            <span className="px-2 py-0.5 rounded bg-red-100 text-strand-red font-semibold text-[12px] border border-red-200">
               Bill copy missing
             </span>
           ) : (
-            <span className="text-[11px] font-mono text-slate-600 flex items-center gap-1">
+            <span className="text-[12px] font-mono text-slate-600 flex items-center gap-1">
               <Paperclip className="w-3 h-3 text-muted" />
               {row.attachmentsCount} vouchers attached
             </span>
@@ -88,7 +88,7 @@ export const RequisitionsList: React.FC = () => {
       header: 'PACT ERP Status',
       width: '180px',
       cell: (row) => (
-        <span className={`text-[10px] font-mono px-2 py-0.5 rounded ${
+        <span className={`text-[12px] font-mono px-2 py-0.5 rounded ${
           row.pactSyncStatus === 'Posted to PACT'
             ? 'bg-emerald-50 text-strand-green border border-emerald-200 font-semibold'
             : 'bg-amber-50 text-strand-amber border border-amber-200 font-medium'
@@ -115,7 +115,7 @@ export const RequisitionsList: React.FC = () => {
               {step}
             </div>
           ))}
-          <span className="ml-1 text-[11px] text-muted font-sans">L{row.approvalLevel}/4</span>
+          <span className="ml-1 text-[12px] text-muted font-sans">L{row.approvalLevel}/4</span>
         </div>
       )
     },
@@ -160,7 +160,7 @@ export const RequisitionsList: React.FC = () => {
             <div className="font-bold text-strand-red">
               Cannot raise a new requisition — ₹24,000 from REQ-2026-0188 pending bill submission since 28 July
             </div>
-            <p className="text-[11px] text-red-800 mt-0.5">
+            <p className="text-[12px] text-red-800 mt-0.5">
               Policy rule: Prior advances must have certified GST invoices submitted before next advance disbursement.
             </p>
           </div>
@@ -186,7 +186,7 @@ export const RequisitionsList: React.FC = () => {
         </div>
         <button
           onClick={() => handleResendBillEmail('REQ-2026-0214', 'Priya Nair')}
-          className="px-2.5 py-1 bg-white hover:bg-canvas border border-amber-300 text-amber-900 rounded font-semibold text-[11px] shadow-2xs flex items-center gap-1"
+          className="px-2.5 py-1 bg-white hover:bg-canvas border border-amber-300 text-amber-900 rounded font-semibold text-[12px] shadow-2xs flex items-center gap-1"
         >
           <Send className="w-3 h-3 text-strand-amber" />
           Resend Request Email

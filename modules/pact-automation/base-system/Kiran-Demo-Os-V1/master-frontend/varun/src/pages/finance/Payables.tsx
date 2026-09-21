@@ -67,7 +67,7 @@ export const Payables: React.FC = () => {
       cell: (row) => (
         <div className="flex items-center gap-2 max-w-[240px] truncate">
           <span className="font-semibold text-xs text-on-surface truncate">{row.vendorName}</span>
-          <span className="text-[10px] font-mono text-outline shrink-0 bg-surface-container px-1 py-0.5 rounded border border-outline-variant">
+          <span className="text-[12px] font-mono text-outline shrink-0 bg-surface-container px-1 py-0.5 rounded border border-outline-variant">
             {row.billsCount} bills
           </span>
         </div>
@@ -131,17 +131,17 @@ export const Payables: React.FC = () => {
               <span className="font-mono text-xs font-semibold text-emerald-700 bg-emerald-500/10 border border-emerald-500/30 px-1.5 py-0.5 rounded shrink-0">
                 {row.utrNumber}
               </span>
-              <span className="text-[10px] text-outline font-mono truncate" title={row.utrMailSentAt}>
+              <span className="text-[12px] text-outline font-mono truncate" title={row.utrMailSentAt}>
                 Sent
               </span>
             </div>
           ) : row.utrStatus === 'Queued' ? (
-            <span className="inline-flex items-center gap-1 font-mono text-[10px] font-semibold text-amber-800 bg-amber-500/10 border border-amber-500/30 px-1.5 py-0.5 rounded">
+            <span className="inline-flex items-center gap-1 font-mono text-[12px] font-semibold text-amber-800 bg-amber-500/10 border border-amber-500/30 px-1.5 py-0.5 rounded">
               <Clock className="w-3 h-3 text-strand-amber shrink-0" />
               <span>QUEUED (THU RUN)</span>
             </span>
           ) : (
-            <span className="inline-flex items-center gap-1 font-mono text-[10px] font-medium text-on-surface-variant bg-surface-container px-1.5 py-0.5 rounded border border-outline-variant">
+            <span className="inline-flex items-center gap-1 font-mono text-[12px] font-medium text-on-surface-variant bg-surface-container px-1.5 py-0.5 rounded border border-outline-variant">
               {row.utrStatus}
             </span>
           )}
@@ -157,14 +157,14 @@ export const Payables: React.FC = () => {
         <div className="flex items-center gap-1 justify-end" onClick={(e) => e.stopPropagation()}>
           <button
             onClick={() => handlePayVendor(row)}
-            className="px-2 py-0.5 text-[11px] font-mono font-medium rounded border border-primary/40 bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors"
+            className="px-2 py-0.5 text-[12px] font-mono font-medium rounded border border-primary/40 bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors"
             title="Queue disbursement"
           >
             Pay
           </button>
           <button
             onClick={() => handleViewLedger(row)}
-            className="px-2 py-0.5 text-[11px] font-mono font-medium rounded border border-outline-variant bg-surface-container-low text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors"
+            className="px-2 py-0.5 text-[12px] font-mono font-medium rounded border border-outline-variant bg-surface-container-low text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors"
             title="Open Vendor Subledger"
           >
             Ledger
@@ -172,7 +172,7 @@ export const Payables: React.FC = () => {
           <button
             onClick={() => handleSendAdvice(row)}
             disabled={!row.utrNumber}
-            className={`px-2 py-0.5 text-[11px] font-mono font-medium rounded border transition-colors ${
+            className={`px-2 py-0.5 text-[12px] font-mono font-medium rounded border transition-colors ${
               row.utrNumber
                 ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-700 hover:bg-emerald-600 hover:text-white'
                 : 'border-outline-variant bg-surface-container-lowest text-outline/40 cursor-not-allowed'
@@ -253,7 +253,7 @@ export const Payables: React.FC = () => {
           <div>
             <div className="flex items-center gap-2 mb-0.5">
               <span className="w-2 h-2 rounded-full bg-strand-amber animate-pulse" />
-              <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-amber-800">
+              <span className="font-mono text-[12px] font-bold text-amber-800">
                 MSME Section 43B(h) Statutory Compliance Alert
               </span>
             </div>

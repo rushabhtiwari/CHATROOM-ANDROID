@@ -54,11 +54,11 @@ export const OrderDetail: React.FC = () => {
 
         <div className="flex items-center gap-4 font-mono text-right">
           <div>
-            <div className="text-[10px] text-muted uppercase">Total PO Value</div>
+            <div className="text-[12px] text-muted ">Total PO Value</div>
             <div className="text-lg font-bold text-ink">{formatINR(order.poValue)}</div>
           </div>
           <div className="pl-4 border-l border-line">
-            <div className="text-[10px] text-muted uppercase">Pending Balance</div>
+            <div className="text-[12px] text-muted ">Pending Balance</div>
             <div className="text-lg font-bold text-strand-amber">{formatINR(order.balanceValue)}</div>
           </div>
         </div>
@@ -82,7 +82,7 @@ export const OrderDetail: React.FC = () => {
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs font-mono">
-                <thead className="bg-canvas text-muted text-[10px] uppercase border-b border-line">
+                <thead className="bg-canvas text-muted text-[12px] border-b border-line">
                   <tr>
                     <th className="p-2">Tranche / Week</th>
                     <th className="p-2 text-right">Scheduled Qty</th>
@@ -132,7 +132,7 @@ export const OrderDetail: React.FC = () => {
                   >
                     <div>
                       <div className="font-semibold text-ink">{wo.id}</div>
-                      <div className="text-[11px] text-muted mt-0.5">
+                      <div className="text-[12px] text-muted mt-0.5">
                         Cut: {wo.cutLength} · {wo.machine}
                       </div>
                     </div>
@@ -165,7 +165,7 @@ export const OrderDetail: React.FC = () => {
                 >
                   <div>
                     <span className="font-semibold text-kiran">{d.invoiceNo}</span>
-                    <div className="text-[10px] text-muted">{formatDate(d.date)}</div>
+                    <div className="text-[12px] text-muted">{formatDate(d.date)}</div>
                   </div>
                   <div className="text-right">
                     <div className="font-semibold">{d.qty.toLocaleString('en-IN')}m</div>

@@ -83,7 +83,7 @@ export const CycleDetailPage: React.FC = () => {
           </div>
 
           <span
-            className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider ${
+            className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[12px] font-semibold ${
               phase === 'active'
                 ? 'bg-emerald-50 text-emerald-800 border border-emerald-300'
                 : 'bg-surface-container text-on-surface-variant border border-outline-variant'
@@ -109,7 +109,7 @@ export const CycleDetailPage: React.FC = () => {
               <span className="text-on-surface-variant font-medium">Cycle Completion</span>
               <span className="text-primary font-bold">
                 {completionPct}%{' '}
-                <span className="text-outline font-normal font-mono text-[11px]">
+                <span className="text-outline font-normal font-mono text-[12px]">
                   ({completedItems.length}/{totalItems} items)
                 </span>
               </span>
@@ -129,11 +129,11 @@ export const CycleDetailPage: React.FC = () => {
       </div>
 
       {/* KPI Tiles Grid (4-Across) */}
-      <div className="ku-ledger border-t-3 border-t-structure grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 px-6 py-4 bg-surface-container-low/40">
+      <div className="ku-ledger grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 px-6 py-4 bg-surface-container-low/40">
         {/* KPI 1: Total Workload */}
         <div className="bg-white p-3.5 rounded-xl flex flex-col justify-between">
           <div className="flex items-center justify-between text-xs">
-            <span className="font-semibold uppercase tracking-wider text-outline text-[11px] font-mono">
+            <span className="font-semibold text-outline text-[12px] font-mono">
               Total Workload
             </span>
             <CheckCircle2 className="h-4 w-4 text-outline" />
@@ -145,7 +145,7 @@ export const CycleDetailPage: React.FC = () => {
               <span className="font-mono text-xs text-outline ml-auto">{totalPts} pts</span>
             )}
           </div>
-          <div className="mt-2.5 pt-2 flex items-center justify-between text-[11px] border-t border-outline-variant text-outline">
+          <div className="mt-2.5 pt-2 flex items-center justify-between text-[12px] border-t border-outline-variant text-outline">
             <span className="text-primary font-medium">100% In Scope</span>
             <span className="font-mono">{uniqueAssignees} assignees</span>
           </div>
@@ -154,7 +154,7 @@ export const CycleDetailPage: React.FC = () => {
         {/* KPI 2: Completed */}
         <div className="bg-white p-3.5 rounded-xl flex flex-col justify-between">
           <div className="flex items-center justify-between text-xs">
-            <span className="font-semibold uppercase tracking-wider text-outline text-[11px] font-mono">
+            <span className="font-semibold text-outline text-[12px] font-mono">
               Completed
             </span>
             <span className="h-2 w-2 rounded-full bg-st-green-ink" />
@@ -168,7 +168,7 @@ export const CycleDetailPage: React.FC = () => {
               {completionPct}%
             </span>
           </div>
-          <div className="mt-2.5 pt-2 flex items-center justify-between text-[11px] border-t border-outline-variant text-outline">
+          <div className="mt-2.5 pt-2 flex items-center justify-between text-[12px] border-t border-outline-variant text-outline">
             <span className="text-emerald-800 font-medium flex items-center gap-1">
               <TrendingUp className="h-3 w-3" /> {donePts} pts finished
             </span>
@@ -179,7 +179,7 @@ export const CycleDetailPage: React.FC = () => {
         {/* KPI 3: In Progress */}
         <div className="bg-white p-3.5 rounded-xl flex flex-col justify-between">
           <div className="flex items-center justify-between text-xs">
-            <span className="font-semibold uppercase tracking-wider text-outline text-[11px] font-mono">
+            <span className="font-semibold text-outline text-[12px] font-mono">
               In Progress
             </span>
             <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
@@ -193,7 +193,7 @@ export const CycleDetailPage: React.FC = () => {
               {inProgressPct}%
             </span>
           </div>
-          <div className="mt-2.5 pt-2 flex items-center justify-between text-[11px] border-t border-outline-variant text-outline">
+          <div className="mt-2.5 pt-2 flex items-center justify-between text-[12px] border-t border-outline-variant text-outline">
             <span className="text-primary font-medium flex items-center gap-1">
               <Hourglass className="h-3 w-3" /> {inProgressPts} pts active
             </span>
@@ -204,7 +204,7 @@ export const CycleDetailPage: React.FC = () => {
         {/* KPI 4: Pending / Todo */}
         <div className="bg-white p-3.5 rounded-xl flex flex-col justify-between">
           <div className="flex items-center justify-between text-xs">
-            <span className="font-semibold uppercase tracking-wider text-outline text-[11px] font-mono">
+            <span className="font-semibold text-outline text-[12px] font-mono">
               Pending / Todo
             </span>
             <span className="h-2 w-2 rounded-full bg-outline" />
@@ -220,7 +220,7 @@ export const CycleDetailPage: React.FC = () => {
               </span>
             )}
           </div>
-          <div className="mt-2.5 pt-2 flex items-center justify-between text-[11px] border-t border-outline-variant text-outline">
+          <div className="mt-2.5 pt-2 flex items-center justify-between text-[12px] border-t border-outline-variant text-outline">
             <span>{totalPts - donePts - inProgressPts} pts remaining</span>
             <span className="font-mono">{remaining >= 0 ? `${remaining} days` : 'Past due'}</span>
           </div>
@@ -239,7 +239,7 @@ export const CycleDetailPage: React.FC = () => {
             <span className="text-xs font-semibold text-on-surface group-hover:text-primary transition-colors">
               Cycle Burndown Chart
             </span>
-            <span className="font-mono text-[11px] text-outline">
+            <span className="font-mono text-[12px] text-outline">
               Ideal vs Actual completion model
             </span>
           </div>

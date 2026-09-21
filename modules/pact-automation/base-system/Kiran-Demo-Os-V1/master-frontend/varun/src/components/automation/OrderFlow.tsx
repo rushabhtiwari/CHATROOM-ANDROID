@@ -14,7 +14,7 @@ import {
 import { pipelineApi } from '../../modules/pipeline/api';
 import { usePipelineView } from '../../modules/pipeline/usePipeline';
 import type { PipelineStep } from '../../modules/pipeline/types';
-import { TONE, Tone } from '../../lib/tone';
+import { TONE, sentenceCase, Tone } from '../../lib/tone';
 
 /**
  * One purchase order's whole journey.
@@ -126,17 +126,17 @@ export const OrderFlow: React.FC<{ jobId: string }> = ({ jobId }) => {
         <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-2">
           <div className="min-w-0">
             <p className="ku-docket">{view.jobId}</p>
-            <h3 className="ku-wide mt-1.5 font-display text-h3 font-semibold text-ink">
+            <h3 className="mt-1.5 font-display text-h3 font-semibold text-ink">
               {view.poNumber || '(no PO number)'}
             </h3>
           </div>
           <div className="flex items-center gap-2">
-            <span className={`ku-stamp ${TONE[view.tone as Tone].stamp}`}>{view.statusLabel}</span>
+            <span className={`ku-stamp ${TONE[view.tone as Tone].stamp}`}>{sentenceCase(view.statusLabel)}</span>
             <button
               type="button"
               onClick={() => void refresh()}
               aria-label="Refresh"
-              className="inline-flex h-8 items-center gap-1.5 border-2 border-hairline-strong bg-white px-3 text-body-s font-semibold leading-none text-ink transition-all duration-150 hover:border-ink hover:bg-canvas active:translate-y-px"
+              className="inline-flex h-8 items-center gap-1.5 rounded-md border border-hairline-strong bg-white px-3 text-body-s font-medium leading-none text-ink transition-colors duration-150 hover:bg-canvas"
             >
               <RefreshCw aria-hidden size={13} />
             </button>
@@ -190,7 +190,7 @@ export const OrderFlow: React.FC<{ jobId: string }> = ({ jobId }) => {
 
         {/* ---- Gate 1: the admin ------------------------------------------ */}
         <section className="border-b border-hairline px-5 py-4">
-          <div className="border-2 border-hairline-strong">
+          <div className="border border-hairline-strong">
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-hairline px-3 py-2">
               <p className="ku-eyebrow">Gate 1 — an admin approves the order</p>
               <span className={`ku-stamp ${TONE[(adminApproved ? 'green' : 'amber') as Tone].stamp}`}>
@@ -226,7 +226,7 @@ export const OrderFlow: React.FC<{ jobId: string }> = ({ jobId }) => {
 
         {/* ---- Gate 2: Accounts -------------------------------------------- */}
         <section className="border-b border-hairline px-5 py-4">
-          <div className="border-2 border-hairline-strong">
+          <div className="border border-hairline-strong">
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-hairline px-3 py-2">
               <p className="ku-eyebrow">
                 {autoRelease
@@ -398,7 +398,7 @@ export const OrderFlow: React.FC<{ jobId: string }> = ({ jobId }) => {
               type="button"
               disabled={busy}
               onClick={() => void act('approve')}
-              className="inline-flex h-9 items-center gap-1.5 border-2 border-ink bg-ink px-3 text-body-s font-semibold leading-none text-white transition-all duration-150 hover:bg-ink/90 active:translate-y-px disabled:opacity-40"
+              className="inline-flex h-9 items-center gap-1.5 border border-ink bg-ink px-3 text-body-s font-semibold leading-none text-white transition-colors duration-150 hover:bg-ink/90 disabled:opacity-40"
             >
               <CheckCircle2 aria-hidden size={13} />{' '}
               {autoRelease ? 'Approve and fill PACT' : 'Approve as admin'}
@@ -414,7 +414,7 @@ export const OrderFlow: React.FC<{ jobId: string }> = ({ jobId }) => {
                   : 'An admin has to approve this first. The server refuses the request without it.'
               }
               onClick={() => void act('run')}
-              className="inline-flex h-9 items-center gap-1.5 border-2 border-ink bg-ink px-3 text-body-s font-semibold leading-none text-white transition-all duration-150 hover:bg-ink/90 active:translate-y-px disabled:cursor-not-allowed disabled:opacity-30"
+              className="inline-flex h-9 items-center gap-1.5 border border-ink bg-ink px-3 text-body-s font-semibold leading-none text-white transition-colors duration-150 hover:bg-ink/90 disabled:cursor-not-allowed disabled:opacity-30"
             >
               <CheckCircle2 aria-hidden size={13} />{' '}
               {autoRelease ? 'Retry PACT' : 'Release to PACT as Accounts'}

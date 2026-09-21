@@ -17,11 +17,8 @@ export function UserAvatar({
   return (
     <div className={cn("relative shrink-0", className)} style={{ width: size, height: size }}>
       <div
-        className="flex h-full w-full items-center justify-center overflow-hidden rounded-full border border-white/80 font-semibold text-white"
-        style={{
-          background: user.color,
-          fontSize: size * 0.36,
-        }}
+        className="flex h-full w-full items-center justify-center overflow-hidden rounded-full bg-[#E9E9EE] font-semibold text-[#3A3A40]"
+        style={{ fontSize: Math.max(10, size * 0.36) }}
       >
         {photo ? (
           <img
@@ -41,7 +38,7 @@ export function UserAvatar({
         <span
           className={cn(
             "absolute -bottom-0.5 -right-0.5 rounded-full border-2 border-surface",
-            user.online ? "bg-online animate-pulse-ring" : "bg-muted-foreground",
+            user.online ? "bg-online" : "bg-[#C4C4CC]",
           )}
           style={{ width: size * 0.28, height: size * 0.28 }}
         />
@@ -61,16 +58,16 @@ export function GroupAvatar({
   photo?: Room["photo"] | undefined;
   size?: number;
 }) {
-  const c = color ?? "#4cc9f0";
+  // Rooms are neutral tiles: colour is reserved for status, not decoration.
+  void color;
   return (
     <div
-      className="flex shrink-0 items-center justify-center overflow-hidden border border-white/80 font-semibold text-white"
+      className="flex shrink-0 items-center justify-center overflow-hidden bg-[#F0F0F3] font-semibold text-[#3A3A40]"
       style={{
         width: size,
         height: size,
-        background: c,
-        fontSize: size * 0.36,
-        clipPath: "polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 0 100%)",
+        borderRadius: Math.round(size * 0.24),
+        fontSize: Math.max(10, size * 0.34),
       }}
     >
       {photo ? (

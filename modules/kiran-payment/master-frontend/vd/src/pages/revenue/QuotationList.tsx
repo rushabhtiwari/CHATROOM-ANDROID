@@ -7,7 +7,7 @@ import { StatusPill } from '../../components/common/StatusPill';
 import { IndianRupee } from '../../components/common/IndianRupee';
 import { PageHeader } from '../../components/shell/PageHeader';
 import { formatDate, formatINR } from '../../utils/formatters';
-import { FileCheck2, Plus, AlertCircle } from 'lucide-react';
+import { Plus } from 'lucide-react';
 
 export const QuotationList: React.FC = () => {
   const navigate = useNavigate();
@@ -23,29 +23,23 @@ export const QuotationList: React.FC = () => {
   const columns: ColumnDef<Quotation>[] = [
     {
       id: 'quoteNumber',
-      header: 'Quote No.',
+      header: 'Quote no.',
       accessorKey: 'quoteNumber',
       isMono: true,
-      width: '140px',
       cell: (row) => (
-        <Link
-          to={`/quotations/${row.id}`}
-          className="text-kiran hover:underline font-mono font-semibold"
-        >
+        <Link to={`/quotations/${row.id}`} className="text-kiran hover:underline whitespace-nowrap">
           {row.quoteNumber}
         </Link>
       )
     },
     {
       id: 'rfqNumber',
-      header: 'RFQ Ref',
+      header: 'RFQ',
       accessorKey: 'rfqNumber',
-      isMono: true,
-      width: '130px',
       cell: (row) => (
         <Link
           to={`/rfq/${row.rfqId}`}
-          className="font-mono text-xs text-slate-600 hover:text-ink"
+          className="font-code text-[13px] text-ink-2 hover:text-ink hover:underline whitespace-nowrap"
         >
           {row.rfqNumber}
         </Link>
@@ -55,56 +49,51 @@ export const QuotationList: React.FC = () => {
       id: 'customerName',
       header: 'Customer',
       accessorKey: 'customerName',
-      width: '220px',
       cell: (row) => (
-        <div>
-          <div className="font-semibold text-ink">{row.customerName}</div>
-          <div className="text-[10px] text-muted truncate">{row.contactPerson}</div>
+        <div className="whitespace-nowrap">
+          <div className="font-medium text-ink">{row.customerName}</div>
+          <div className="text-[12px] text-muted">{row.contactPerson}</div>
         </div>
       )
     },
     {
       id: 'items',
       header: 'Items',
-      width: '140px',
-      cell: (row) => `${row.items.length} Product Line(s)`
+      isNumeric: true,
+      cell: (row) => <span className="tabular-nums">{row.items.length}</span>
     },
     {
       id: 'grandTotal',
-      header: 'Total Value (incl GST)',
+      header: 'Total',
       accessorKey: 'grandTotal',
       isNumeric: true,
-      isMono: true,
-      width: '150px',
       cell: (row) => <IndianRupee amount={row.grandTotal} />
     },
     {
       id: 'marginPct',
-      header: 'Margin %',
+      header: 'Margin',
       accessorKey: 'marginPct',
       isNumeric: true,
-      isMono: true,
-      width: '100px',
-      cell: (row) => `${row.marginPct}%`
+      cell: (row) => <span className="tabular-nums">{row.marginPct}%</span>
     },
     {
       id: 'status',
       header: 'Status',
       accessorKey: 'status',
-      width: '140px',
-      cell: (row) => <StatusPill status={row.status} />
+      cell: (row) => (
+        <span className="whitespace-nowrap inline-block">
+          <StatusPill status={row.status} />
+        </span>
+      )
     },
     {
       id: 'validTill',
-      header: 'Valid Till',
+      header: 'Valid till',
       accessorKey: 'validTill',
-      isMono: true,
-      width: '130px',
       cell: (row) => (
-        <div className={row.isExpiringSoon ? 'text-strand-amber font-semibold flex items-center gap-1' : ''}>
-          {row.isExpiringSoon && <AlertCircle className="w-3.5 h-3.5" />}
-          <span>{formatDate(row.validTill)}</span>
-        </div>
+        <span className={`whitespace-nowrap ${row.isExpiringSoon ? 'text-[#8A4F00] font-medium' : ''}`}>
+          {formatDate(row.validTill)}
+        </span>
       )
     },
     {
@@ -112,23 +101,18 @@ export const QuotationList: React.FC = () => {
       header: 'Follow-ups',
       accessorKey: 'followUpsSent',
       isNumeric: true,
-      isMono: true,
-      width: '100px',
-      cell: (row) => `${row.followUpsSent} sent`
+      cell: (row) => <span className="tabular-nums">{row.followUpsSent}</span>
     }
   ];
 
   return (
-    <div className="space-y-4 animate-fadeIn">
+    <div className="space-y-6 animate-fadeIn">
       <PageHeader
-        title="Commercial Quotations"
+        title="Quotations"
         actions={
-          <button
-            onClick={() => navigate('/quotations/QTE-2026-0812')}
-            className="px-3 py-1.5 bg-kiran hover:bg-blue-700 text-white rounded text-xs font-semibold shadow-xs flex items-center gap-1.5"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            Create Quotation
+          <button onClick={() => navigate('/quotations/QTE-2026-0812')} className="btn-primary">
+            <Plus className="w-4 h-4" />
+            New quotation
           </button>
         }
       />
@@ -138,12 +122,12 @@ export const QuotationList: React.FC = () => {
         columns={columns}
         keyExtractor={(item) => item.id}
         onRowClick={(item) => navigate(`/quotations/${item.id}`)}
-        searchPlaceholder="Search quotation number, customer name, RFQ ref..."
+        searchPlaceholder="Search quotations"
         savedViews={[
-          { label: 'All Quotations', count: mockQuotations.length, active: activeTab === 'all', onClick: () => setActiveTab('all') },
+          { label: 'All', count: mockQuotations.length, active: activeTab === 'all', onClick: () => setActiveTab('all') },
           { label: 'Awaiting HOD', count: 1, active: activeTab === 'Awaiting HOD', onClick: () => setActiveTab('Awaiting HOD') },
-          { label: 'Sent to Customer', count: 3, active: activeTab === 'Sent', onClick: () => setActiveTab('Sent') },
-          { label: 'Expiring Soon (<5d)', count: 2, active: activeTab === 'Expiring', onClick: () => setActiveTab('Expiring') },
+          { label: 'Sent', count: 3, active: activeTab === 'Sent', onClick: () => setActiveTab('Sent') },
+          { label: 'Expiring', count: 2, active: activeTab === 'Expiring', onClick: () => setActiveTab('Expiring') },
         ]}
       />
     </div>

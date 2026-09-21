@@ -141,14 +141,14 @@ export const Settings: React.FC = () => {
               <label className="block text-muted font-sans mb-1 font-semibold">Anthropic API Key Status</label>
               <div className="p-2 bg-canvas border border-line rounded text-strand-green font-semibold flex items-center justify-between">
                 <span>sk-ant-api03-live-prod••••••••••••</span>
-                <span className="text-[10px] px-1.5 py-0.2 bg-emerald-100 rounded text-emerald-900 font-sans">Active</span>
+                <span className="text-[12px] px-1.5 py-0.2 bg-emerald-100 rounded text-emerald-900 font-sans">Active</span>
               </div>
             </div>
             <div>
               <label className="block text-muted font-sans mb-1 font-semibold">PACT ERP Host Connection</label>
               <div className="p-2 bg-canvas border border-line rounded text-ink font-semibold flex items-center justify-between">
                 <span>pact-sql-srv.internal.kiranudyog.com:1433</span>
-                <span className="text-[10px] px-1.5 py-0.2 bg-blue-100 text-kiran rounded font-sans">Port 1433 OK</span>
+                <span className="text-[12px] px-1.5 py-0.2 bg-blue-100 text-kiran rounded font-sans">Port 1433 OK</span>
               </div>
             </div>
           </div>

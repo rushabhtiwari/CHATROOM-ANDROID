@@ -130,16 +130,16 @@ export const Disbursement: React.FC = () => {
         <>
           <div className="bg-surface-container-lowest border border-outline-variant rounded-xl mb-4 p-4 shadow-xs flex flex-wrap items-center justify-between gap-4">
             <div>
-              <p className="text-[10px] font-mono uppercase tracking-wider text-outline">Ready to disburse</p>
+              <p className="text-[12px] font-mono text-outline">Ready to disburse</p>
               <p className="mt-1 font-mono text-2xl font-bold leading-none tracking-tight text-on-surface tabular-nums">
                 {formatCurrency(totalPayable)}
               </p>
-              <p className="mt-1 text-[11px] font-mono text-outline">
+              <p className="mt-1 text-[12px] font-mono text-outline">
                 across {payees.length} employee{payees.length === 1 ? '' : 's'}
               </p>
             </div>
             <div>
-              <p className="text-[10px] font-mono uppercase tracking-wider text-outline mb-1.5">Payment Method</p>
+              <p className="text-[12px] font-mono text-outline mb-1.5">Payment Method</p>
               <div className="flex gap-1.5">
                 {METHODS.map((value) => (
                   <button
@@ -169,7 +169,7 @@ export const Disbursement: React.FC = () => {
             <div className="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-xs">
               <div className="w-full overflow-x-auto">
                 <table className="w-full text-left border-collapse text-xs">
-                  <thead className="font-mono uppercase tracking-wider text-outline text-[10px] bg-surface-container-low border-b border-outline-variant sticky top-0 z-10 select-none">
+                  <thead className="font-mono text-outline text-[12px] bg-surface-container-low border-b border-outline-variant sticky top-0 z-10 select-none">
                     <tr>
                       <th className="px-4 py-2 w-48">Employee</th>
                       <th className="px-3 py-2">Bank & Account Details</th>
@@ -190,19 +190,19 @@ export const Disbursement: React.FC = () => {
                         >
                           <td className="px-4 py-1.5 whitespace-nowrap">
                             <span className="font-semibold text-xs text-on-surface">{employee.name}</span>
-                            <span className="ml-1.5 font-mono text-[10px] text-outline">({employee.employeeCode})</span>
+                            <span className="ml-1.5 font-mono text-[12px] text-outline">({employee.employeeCode})</span>
                           </td>
-                          <td className="px-3 py-1.5 font-mono text-[11px] text-on-surface-variant truncate whitespace-nowrap">
+                          <td className="px-3 py-1.5 font-mono text-[12px] text-on-surface-variant truncate whitespace-nowrap">
                             <span>{bank.bankName}</span>
                             <span className="text-outline mx-1">·</span>
                             <span>{bank.accountNumberMasked}</span>
                             <span className="text-outline mx-1">·</span>
-                            <span className="text-outline text-[10px]">{bank.ifsc}</span>
+                            <span className="text-outline text-[12px]">{bank.ifsc}</span>
                           </td>
                           <td className="px-3 py-1.5 whitespace-nowrap">
                             <span
                               title={row.claimIds.join(', ')}
-                              className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono bg-surface-container text-on-surface-variant border border-outline-variant"
+                              className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[12px] font-mono bg-surface-container text-on-surface-variant border border-outline-variant"
                             >
                               <strong>{row.claimIds.length}</strong> claim{row.claimIds.length === 1 ? '' : 's'}
                             </span>
@@ -212,12 +212,12 @@ export const Disbursement: React.FC = () => {
                           </td>
                           <td className="px-3 py-1.5 text-center whitespace-nowrap">
                             {bank.verified ? (
-                              <span className="inline-flex items-center gap-1 pl-1.5 pr-2 py-[2px] rounded-badge text-[10px] font-medium font-mono border border-emerald-200 bg-emerald-50 text-emerald-800">
+                              <span className="inline-flex items-center gap-1 pl-1.5 pr-2 py-[2px] rounded-badge text-[12px] font-medium font-mono border border-emerald-200 bg-emerald-50 text-emerald-800">
             <span className="w-1.5 h-1.5 rounded-full bg-st-green-ink shrink-0" />
                                 VERIFIED
                               </span>
                             ) : (
-                              <span className="inline-flex items-center gap-1 pl-1.5 pr-2 py-[2px] rounded-badge text-[10px] font-medium font-mono border border-amber-200 bg-amber-50 text-amber-800">
+                              <span className="inline-flex items-center gap-1 pl-1.5 pr-2 py-[2px] rounded-badge text-[12px] font-medium font-mono border border-amber-200 bg-amber-50 text-amber-800">
                                 <span className="w-1.5 h-1.5 rounded-full bg-strand-amber shrink-0" />
                                 UNVERIFIED
                               </span>
@@ -228,7 +228,7 @@ export const Disbursement: React.FC = () => {
                               <button
                                 onClick={() => pay(employee.id)}
                                 disabled={busy === employee.id}
-                                  className="inline-flex items-center gap-1 h-6.5 px-2.5 py-0.5 rounded text-[11px] font-semibold font-mono border-2 border-ink bg-accent active:translate-y-px text-accent-ink hover:brightness-95 disabled:opacity-50 transition-colors shadow-2xs"
+                                  className="inline-flex items-center gap-1 h-6.5 px-2.5 py-0.5 rounded text-[12px] font-semibold font-mono rounded-md border border-transparent bg-accent text-white hover:bg-accent-hover disabled:opacity-50 transition-colors shadow-2xs"
                               >
                                 {busy === employee.id ? (
                                   <Loader2 className="w-3 h-3 animate-spin" />
@@ -240,7 +240,7 @@ export const Disbursement: React.FC = () => {
                             ) : (
                               <button
                                 onClick={() => verifyBankAccount(employee.id)}
-                                className="inline-flex items-center gap-1 h-6.5 px-2 py-0.5 rounded text-[10.5px] font-semibold font-mono bg-surface-container text-on-surface-variant hover:bg-surface-container-high border border-outline-variant transition-colors shadow-2xs"
+                                className="inline-flex items-center gap-1 h-6.5 px-2 py-0.5 rounded text-[12px] font-semibold font-mono bg-surface-container text-on-surface-variant hover:bg-surface-container-high border border-outline-variant transition-colors shadow-2xs"
                               >
                                 <ShieldCheck className="w-3 h-3 text-primary" />
                                 Verify
@@ -267,7 +267,7 @@ export const Disbursement: React.FC = () => {
           ) : (
             <div className="w-full overflow-x-auto">
               <table className="w-full text-left border-collapse text-xs">
-                <thead className="font-mono uppercase tracking-wider text-outline text-[10px] bg-surface-container-low border-b border-outline-variant sticky top-0 z-10 select-none">
+                <thead className="font-mono text-outline text-[12px] bg-surface-container-low border-b border-outline-variant sticky top-0 z-10 select-none">
                   <tr>
                     <th className="px-4 py-2 w-48">UTR Reference</th>
                     <th className="px-3 py-2 w-44">Employee</th>
@@ -290,32 +290,32 @@ export const Disbursement: React.FC = () => {
                           {payout.utr ? (
                             <Link
                               to={`/receipt/${payout.utr}`}
-                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-mono font-semibold bg-surface-container-low border border-outline-variant text-primary hover:bg-primary/10 transition-colors"
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[12px] font-mono font-semibold bg-surface-container-low border border-outline-variant text-primary hover:bg-primary/10 transition-colors"
                             >
                               <Banknote className="w-3 h-3 text-primary" />
                               {payout.utr}
                             </Link>
                           ) : (
-                            <span className="font-mono text-outline text-[11px]">—</span>
+                            <span className="font-mono text-outline text-[12px]">—</span>
                           )}
                         </td>
                         <td className="px-3 py-1.5 text-on-surface font-medium text-xs whitespace-nowrap">
                           {employeeById(payout.employeeId)?.name ?? '—'}
                         </td>
                         <td className="px-3 py-1.5 whitespace-nowrap">
-                          <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant border border-outline-variant">
+                          <span className="font-mono text-[12px] px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant border border-outline-variant">
                             {payout.method}
                           </span>
                         </td>
                         <td className="px-3 py-1.5 text-right font-mono tabular-nums font-semibold text-xs text-on-surface whitespace-nowrap">
                           {formatCurrency(payout.amount)}
                         </td>
-                        <td className="px-3 py-1.5 font-mono text-[11px] text-outline whitespace-nowrap">
+                        <td className="px-3 py-1.5 font-mono text-[12px] text-outline whitespace-nowrap">
                           {formatDateTime(payout.initiatedOn)}
                         </td>
                         <td className="px-4 py-1.5 text-center whitespace-nowrap">
                           <span
-                            className={`inline-flex items-center gap-1.5 rounded-badge border px-2 py-0.5 text-[10px] font-mono font-semibold ${
+                            className={`inline-flex items-center gap-1.5 rounded-badge border px-2 py-0.5 text-[12px] font-mono font-semibold ${
                               meta.tone === 'green'
                                 ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
                                 : meta.tone === 'red'
@@ -344,7 +344,7 @@ export const Disbursement: React.FC = () => {
                           {payout.status === 'FAILED' ? (
                             <button
                               onClick={() => retryPayout(payout.id)}
-                              className="inline-flex items-center gap-1 h-6.5 px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-primary text-white hover:bg-primary/90 transition-colors shadow-2xs"
+                              className="inline-flex items-center gap-1 h-6.5 px-2 py-0.5 rounded text-[12px] font-mono font-semibold bg-primary text-white hover:bg-primary/90 transition-colors shadow-2xs"
                             >
                               <RefreshCw className="w-2.5 h-2.5" />
                               Retry
@@ -352,12 +352,12 @@ export const Disbursement: React.FC = () => {
                           ) : payout.utr ? (
                             <Link
                               to={`/receipt/${payout.utr}`}
-                              className="font-mono text-[10px] text-primary hover:underline"
+                              className="font-mono text-[12px] text-primary hover:underline"
                             >
                               Advice →
                             </Link>
                           ) : (
-                            <span className="font-mono text-[10px] text-outline">Processed</span>
+                            <span className="font-mono text-[12px] text-outline">Processed</span>
                           )}
                         </td>
                       </tr>

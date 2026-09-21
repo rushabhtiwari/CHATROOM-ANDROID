@@ -219,7 +219,7 @@ export const TimelineLayout: React.FC<Props> = ({ groups, onOpen, activeItemId }
         <div className="sticky top-0 z-20 flex border-b border-line bg-canvas">
           <div
             style={{ width: LABEL_WIDTH }}
-            className="sticky left-0 z-10 shrink-0 border-r border-line bg-canvas px-3 py-1.5 text-[10.5px] font-semibold uppercase tracking-[0.07em] text-muted"
+            className="sticky left-0 z-10 shrink-0 border-r border-line bg-canvas px-3 py-1.5 text-[12px] font-semibold text-muted"
           >
             Work item
           </div>
@@ -233,11 +233,11 @@ export const TimelineLayout: React.FC<Props> = ({ groups, onOpen, activeItemId }
                 } ${isFirstDayOfMonth(day) ? 'border-slate-300' : 'border-line-2'}`}
               >
                 {isFirstDayOfMonth(day) && (
-                  <div className="whitespace-nowrap text-[9.5px] font-semibold text-slate-600">
+                  <div className="whitespace-nowrap text-[12px] font-semibold text-slate-600">
                     {format(day, 'MMM')}
                   </div>
                 )}
-                <div className="text-[9.5px] text-muted">{format(day, 'd')}</div>
+                <div className="text-[12px] text-muted">{format(day, 'd')}</div>
               </div>
             ))}
           </div>
@@ -259,10 +259,10 @@ export const TimelineLayout: React.FC<Props> = ({ groups, onOpen, activeItemId }
               <div className="flex border-b border-line bg-canvas/70">
                 <div
                   style={{ width: LABEL_WIDTH }}
-                  className="sticky left-0 z-10 shrink-0 bg-canvas/95 px-3 py-1.5 text-[11.5px] font-semibold text-ink"
+                  className="sticky left-0 z-10 shrink-0 bg-canvas/95 px-3 py-1.5 text-[12px] font-semibold text-ink"
                 >
                   {group.label}
-                  <span className="ml-1.5 font-mono text-[10.5px] text-muted">{bars.length}</span>
+                  <span className="ml-1.5 font-mono text-[12px] text-muted">{bars.length}</span>
                 </div>
                 <div style={{ width: axisWidth }} />
               </div>
@@ -288,7 +288,7 @@ export const TimelineLayout: React.FC<Props> = ({ groups, onOpen, activeItemId }
                       className="sticky left-0 z-10 flex shrink-0 items-center gap-1.5 border-r border-line bg-inherit px-3"
                     >
                       <PriorityIcon priority={item.priority} />
-                      <span className="shrink-0 font-mono text-[10.5px] text-muted">
+                      <span className="shrink-0 font-mono text-[12px] text-muted">
                         {displayId(state, item)}
                       </span>
                       <button
@@ -334,7 +334,7 @@ export const TimelineLayout: React.FC<Props> = ({ groups, onOpen, activeItemId }
                           }
                           className="absolute left-0 top-0 h-full w-1.5 cursor-ew-resize rounded-l bg-black/15"
                         />
-                        <span className="truncate text-[10px] font-medium">
+                        <span className="truncate text-[12px] font-medium">
                           {width > 64 ? item.title : ''}
                         </span>
                         <span

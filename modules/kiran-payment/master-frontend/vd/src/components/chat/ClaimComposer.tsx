@@ -203,7 +203,7 @@ export const ClaimComposer: React.FC<ClaimComposerProps> = ({ onClose, onFiled }
                 choose a file
               </button>
             </p>
-            <p className="mt-0.5 text-[11px] text-muted">
+            <p className="mt-0.5 text-[12px] text-muted">
               Photographs and PDFs. Up to {MAX_FILES}.
             </p>
             <input
@@ -227,10 +227,10 @@ export const ClaimComposer: React.FC<ClaimComposerProps> = ({ onClose, onFiled }
                   className="flex items-center gap-2 rounded-md border border-line bg-surface-2 px-2 py-1.5"
                 >
                   <FileText className="h-3.5 w-3.5 shrink-0 text-muted" />
-                  <span className="min-w-0 flex-1 truncate text-[11.5px] text-ink">
+                  <span className="min-w-0 flex-1 truncate text-[12px] text-ink">
                     {entry.name}
                   </span>
-                  <span className="shrink-0 font-mono text-[10px] text-muted">
+                  <span className="shrink-0 font-mono text-[12px] text-muted">
                     {Math.round(entry.size / 1024)} KB
                   </span>
                   <button
@@ -250,7 +250,7 @@ export const ClaimComposer: React.FC<ClaimComposerProps> = ({ onClose, onFiled }
             <button
               type="button"
               onClick={() => setPhase('confirm')}
-              className="text-[11px] font-medium text-muted transition-colors hover:text-ink"
+              className="text-[12px] font-medium text-muted transition-colors hover:text-ink"
             >
               Enter it manually
             </button>
@@ -258,7 +258,7 @@ export const ClaimComposer: React.FC<ClaimComposerProps> = ({ onClose, onFiled }
               type="button"
               onClick={read}
               disabled={files.length === 0}
-              className="inline-flex items-center gap-1.5 rounded-md bg-kiran px-3 py-1.5 text-[11.5px] font-semibold text-white shadow-xs transition-colors hover:bg-kiran-600 disabled:opacity-40"
+              className="inline-flex items-center gap-1.5 rounded-md bg-kiran px-3 py-1.5 text-[12px] font-semibold text-white shadow-xs transition-colors hover:bg-kiran-600 disabled:opacity-40"
             >
               <Sparkles className="h-3.5 w-3.5" /> Read the receipt
             </button>
@@ -272,7 +272,7 @@ export const ClaimComposer: React.FC<ClaimComposerProps> = ({ onClose, onFiled }
           <Loader2 className="h-4 w-4 shrink-0 animate-spin text-ai" />
           <div>
             <p className="text-[12.5px] font-medium text-ink">Reading the receipt</p>
-            <p className="text-[11px] text-muted">
+            <p className="text-[12px] text-muted">
               Pulling out the vendor, the date and the amount.
             </p>
           </div>
@@ -285,7 +285,7 @@ export const ClaimComposer: React.FC<ClaimComposerProps> = ({ onClose, onFiled }
           {extraction && (
             <div className="flex items-start gap-2 rounded-md border border-ai/20 bg-ai-tint px-2.5 py-2">
               <Sparkles className="mt-px h-3 w-3 shrink-0 text-ai" />
-              <p className="text-[11px] leading-relaxed text-ai">
+              <p className="text-[12px] leading-relaxed text-ai">
                 This is what the receipt says. Correct anything that is wrong — your version is
                 what gets filed.
               </p>
@@ -357,7 +357,7 @@ export const ClaimComposer: React.FC<ClaimComposerProps> = ({ onClose, onFiled }
               {extraction.policyFindings.map((finding, index) => (
                 <p
                   key={index}
-                  className="flex items-start gap-1.5 rounded-md bg-strand-amber/10 px-2 py-1.5 text-[10.5px] leading-relaxed text-strand-amber"
+                  className="flex items-start gap-1.5 rounded-md bg-strand-amber/10 px-2 py-1.5 text-[12px] leading-relaxed text-strand-amber"
                 >
                   <AlertTriangle className="mt-px h-3 w-3 shrink-0" />
                   {finding.message}
@@ -367,20 +367,20 @@ export const ClaimComposer: React.FC<ClaimComposerProps> = ({ onClose, onFiled }
           )}
 
           {changedFromReading && (
-            <p className="text-[10.5px] text-muted">
+            <p className="text-[12px] text-muted">
               Your figures differ from the receipt. Both are kept, so the reviewer can see the
               change.
             </p>
           )}
 
           {files.length > 0 && (
-            <p className="flex items-center gap-1.5 text-[10.5px] text-muted">
+            <p className="flex items-center gap-1.5 text-[12px] text-muted">
               <Paperclip className="h-3 w-3" />
               {files.length} receipt{files.length === 1 ? '' : 's'} attached
             </p>
           )}
 
-          {error && <p className="text-[11px] text-strand-red">{error}</p>}
+          {error && <p className="text-[12px] text-strand-red">{error}</p>}
 
           <div className="flex items-center justify-between pt-0.5">
             <span className="font-mono text-[13px] font-semibold text-ink">
@@ -390,7 +390,7 @@ export const ClaimComposer: React.FC<ClaimComposerProps> = ({ onClose, onFiled }
               type="button"
               onClick={file}
               disabled={phase === 'filing' || !title.trim() || !(Number(amount) > 0)}
-              className="inline-flex items-center gap-1.5 rounded-md bg-kiran px-3 py-1.5 text-[11.5px] font-semibold text-white shadow-xs transition-colors hover:bg-kiran-600 disabled:opacity-40"
+              className="inline-flex items-center gap-1.5 rounded-md bg-kiran px-3 py-1.5 text-[12px] font-semibold text-white shadow-xs transition-colors hover:bg-kiran-600 disabled:opacity-40"
             >
               {phase === 'filing' ? (
                 <Loader2 className="h-3.5 w-3.5 animate-spin" />

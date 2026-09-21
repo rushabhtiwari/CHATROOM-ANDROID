@@ -85,13 +85,13 @@ export function UserProfileDialog({
                     onClick={() => setPhotoEditorOpen(true)}
                     aria-label="Edit my profile photo"
                     title="Edit profile photo"
-                    className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full border-2 border-background bg-primary text-primary-foreground shadow-md transition-transform hover:scale-105"
+                    className="absolute bottom-0 right-0 flex h-8 w-8 items-center justify-center rounded-full border border-background bg-primary text-primary-foreground shadow-md transition-transform hover:scale-105"
                   >
                     <Camera className="h-4 w-4" />
                   </button>
                 )}
               </div>
-              <span className="mb-1 rounded-full bg-secondary px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
+              <span className="mb-1 rounded-full bg-secondary px-2.5 py-1 text-[12px] font-medium text-muted-foreground">
                 {user.online ? "Online now" : "Offline"}
               </span>
             </div>
@@ -168,7 +168,7 @@ export function UserProfileDialog({
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block text-sm font-semibold">Media, links and docs</span>
-                <span className="block text-[11px] text-muted-foreground">
+                <span className="block text-[12px] text-muted-foreground">
                   {sharedItemCount} shared {sharedItemCount === 1 ? "item" : "items"}
                 </span>
               </span>

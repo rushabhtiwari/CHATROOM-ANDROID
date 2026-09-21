@@ -154,7 +154,7 @@ function MessageItemImpl({
   if (message.system && !meeting) {
     return (
       <div className="animate-msg-in self-center py-1" role="status">
-        <span className="rounded-full border border-border bg-surface px-3 py-1 text-[11px] text-muted-foreground shadow-sm">
+        <span className="rounded-full border border-border bg-surface px-3 py-1 text-[12px] text-muted-foreground shadow-sm">
           {message.content}
         </span>
       </div>
@@ -186,7 +186,7 @@ function MessageItemImpl({
         {!mine && (
           <button
             onClick={() => setProfileUser(sender)}
-            className="mb-1 pl-1 text-[11px] font-semibold text-muted-foreground hover:text-primary hover:underline"
+            className="mb-1 pl-1 text-[12px] font-semibold text-muted-foreground hover:text-primary hover:underline"
           >
             {sender.name}
           </button>
@@ -205,7 +205,7 @@ function MessageItemImpl({
           {message.pinnedBy && !deleted && (
             <p
               className={cn(
-                "mb-1 flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wide",
+                "mb-1 flex items-center gap-1 text-[12px] font-semibold ",
                 mine ? "text-primary-foreground/75" : "text-muted-foreground",
               )}
             >
@@ -217,7 +217,7 @@ function MessageItemImpl({
           {message.forwardedFrom && (
             <p
               className={cn(
-                "mb-1 flex items-center gap-1 text-[10px] italic",
+                "mb-1 flex items-center gap-1 text-[12px] italic",
                 mine ? "text-primary-foreground/75" : "text-muted-foreground",
               )}
             >
@@ -234,7 +234,7 @@ function MessageItemImpl({
                   ?.scrollIntoView({ behavior: "smooth", block: "center" });
               }}
               className={cn(
-                "mb-1.5 block w-full truncate rounded-lg border-l-2 px-2 py-1 text-left text-[11px]",
+                "mb-1.5 block w-full truncate rounded-lg border-l-2 px-2 py-1 text-left text-[12px]",
                 mine
                   ? "border-background/50 bg-background/15"
                   : "border-primary/60 bg-background/25 text-muted-foreground",
@@ -248,7 +248,7 @@ function MessageItemImpl({
           {message.sharedFromAi && (
             <p
               className={cn(
-                "mb-1 flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wide",
+                "mb-1 flex items-center gap-1 text-[12px] font-semibold ",
                 mine ? "text-primary-foreground/70" : "text-ai",
               )}
             >
@@ -285,7 +285,7 @@ function MessageItemImpl({
                     : "border-border bg-surface-2",
                 )}
               />
-              <div className="mt-1.5 flex items-center gap-2 text-[11px]">
+              <div className="mt-1.5 flex items-center gap-2 text-[12px]">
                 <button
                   onClick={commitEdit}
                   className={cn(
@@ -340,11 +340,11 @@ function MessageItemImpl({
             >
               <UserAvatar user={sharedProfile} size={42} showStatus />
               <span className="min-w-0 flex-1">
-                <span className="block text-[10px] font-semibold uppercase tracking-wide opacity-70">
+                <span className="block text-[12px] font-semibold opacity-70">
                   Shared contact
                 </span>
                 <span className="block truncate text-sm font-semibold">{sharedProfile.name}</span>
-                <span className="block truncate text-[11px] opacity-75">{sharedProfile.role}</span>
+                <span className="block truncate text-[12px] opacity-75">{sharedProfile.role}</span>
               </span>
               <ChevronRight className="h-4 w-4 shrink-0 opacity-70" />
             </button>
@@ -418,12 +418,12 @@ function MessageItemImpl({
                       : "border-primary/50 bg-surface-2",
                   )}
                 >
-                  <span className="block text-[10px] uppercase tracking-wide opacity-70">
+                  <span className="block text-[12px] opacity-70">
                     {preview.siteName}
                   </span>
                   <span className="block truncate text-xs font-semibold">{preview.title}</span>
                   {preview.description && (
-                    <span className="mt-0.5 block truncate text-[11px] opacity-75">
+                    <span className="mt-0.5 block truncate text-[12px] opacity-75">
                       {preview.description}
                     </span>
                   )}
@@ -434,7 +434,7 @@ function MessageItemImpl({
           <p
             suppressHydrationWarning
             className={cn(
-              "mt-1 flex items-center justify-end gap-1 text-[10px]",
+              "mt-1 flex items-center justify-end gap-1 text-[12px]",
               mine ? "text-primary-foreground/70" : "text-muted-foreground",
             )}
           >
@@ -445,7 +445,7 @@ function MessageItemImpl({
         </div>
 
         {message.delivery === "failed" && mine && (
-          <div className="mt-1 flex items-center gap-2 text-[11px] text-destructive">
+          <div className="mt-1 flex items-center gap-2 text-[12px] text-destructive">
             <AlertCircle className="h-3.5 w-3.5" />
             <span>{message.failureReason ?? t("message.failed")}</span>
             <button onClick={() => retryMessage(message.id)} className="font-semibold underline">
@@ -464,7 +464,7 @@ function MessageItemImpl({
           <button
             onClick={() => onOpenThread(message.id)}
             className={cn(
-              "mt-1 flex items-center gap-1.5 rounded-lg border border-border bg-surface px-2 py-1 text-[11px] font-medium text-primary shadow-sm transition-colors hover:bg-secondary",
+              "mt-1 flex items-center gap-1.5 rounded-lg border border-border bg-surface px-2 py-1 text-[12px] font-medium text-primary shadow-sm transition-colors hover:bg-secondary",
               mine && "ml-auto",
             )}
           >
@@ -488,7 +488,7 @@ function MessageItemImpl({
               aria-pressed={list.includes(currentUserId)}
               aria-label={`${emoji} reaction, ${list.length}`}
               className={cn(
-                "rounded-full border px-2 py-0.5 text-[11px] shadow-sm transition-colors",
+                "rounded-full border px-2 py-0.5 text-[12px] shadow-sm transition-colors",
                 list.includes(currentUserId)
                   ? "border-primary/40 bg-primary/10 text-primary"
                   : "border-border bg-surface hover:bg-secondary",
@@ -589,7 +589,7 @@ function MessageItemImpl({
         </div>
 
         {mine && readers.length > 0 && !compact && (
-          <p className={cn("mt-0.5 text-[10px] text-muted-foreground", mine && "text-right")}>
+          <p className={cn("mt-0.5 text-[12px] text-muted-foreground", mine && "text-right")}>
             Seen by {readers.map((user) => user.name.split(" ")[0]).join(", ")}
           </p>
         )}
@@ -695,7 +695,7 @@ function MeetingCard({
     >
       <div
         className={cn(
-          "flex items-center gap-2 border-b px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.12em]",
+          "flex items-center gap-2 border-b px-3 py-2 text-[12px] font-semibold ",
           mine
             ? "border-primary-foreground/20 text-primary-foreground/80"
             : starting
@@ -718,13 +718,13 @@ function MeetingCard({
         <div>
           <h3 className="line-clamp-2 text-sm font-semibold leading-snug">{meeting.title}</h3>
           {meeting.description && (
-            <p className="mt-1 line-clamp-2 text-[11px] leading-relaxed opacity-75">
+            <p className="mt-1 line-clamp-2 text-[12px] leading-relaxed opacity-75">
               {meeting.description}
             </p>
           )}
         </div>
 
-        <div className="space-y-1 text-[11px] opacity-80">
+        <div className="space-y-1 text-[12px] opacity-80">
           <p className="flex items-center gap-1.5">
             <CalendarDays className="h-3.5 w-3.5 shrink-0" />
             <span suppressHydrationWarning>

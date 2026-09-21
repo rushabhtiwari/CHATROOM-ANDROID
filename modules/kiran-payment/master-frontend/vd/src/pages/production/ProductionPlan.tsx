@@ -53,63 +53,64 @@ export const ProductionPlan: React.FC = () => {
   const planned = open.reduce((sum, order) => sum + order.plannedMetres, 0);
   const produced = open.reduce((sum, order) => sum + order.producedMetres, 0);
 
+  const onHold = open.filter((o) => o.stage === 'QC Hold').length;
+
   return (
     <div className="space-y-6 animate-fadeIn">
       <PageHeader
-        title="Production Plan"
-        description="Work orders against open sales orders, and what each line is running. A run on QC hold is waiting on the Quality team."
+        title="Production"
+        actions={
+          <Link to="/projects" className="btn-secondary">
+            Projects
+          </Link>
+        }
       />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {[
-          { label: 'Open work orders', value: String(open.length), note: `${WORK_ORDERS.length - open.length} completed this month` },
-          { label: 'Metres planned', value: planned.toLocaleString('en-IN'), note: 'Across open work orders' },
-          { label: 'Metres produced', value: produced.toLocaleString('en-IN'), note: `${Math.round((produced / planned) * 100)}% of plan` },
-          { label: 'On QC hold', value: String(open.filter((o) => o.stage === 'QC Hold').length), note: 'Waiting on Quality' },
-        ].map((card) => (
-          <div key={card.label} className="p-4 bg-surface border border-line rounded-md shadow-card">
-            <div className="text-[11px] font-semibold uppercase tracking-wider text-muted">{card.label}</div>
-            <div className="text-2xl font-display font-bold text-ink mt-1 font-mono">{card.value}</div>
-            <div className="text-[11px] text-muted mt-1">{card.note}</div>
-          </div>
-        ))}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="kpi">
+          <div className="kpi-label">Open work orders</div>
+          <div className="kpi-value">{open.length}</div>
+        </div>
+        <div className="kpi">
+          <div className="kpi-label">Metres planned</div>
+          <div className="kpi-value">{planned.toLocaleString('en-IN')}</div>
+        </div>
+        <div className="kpi">
+          <div className="kpi-label">Metres produced</div>
+          <div className="kpi-value">{produced.toLocaleString('en-IN')}</div>
+        </div>
+        <div className="kpi">
+          <div className="kpi-label">On QC hold</div>
+          <div className={`kpi-value ${onHold > 0 ? 'text-strand-red' : ''}`}>{onHold}</div>
+        </div>
       </div>
 
-      {/* Line loading */}
-      <div className="bg-surface border border-line rounded-lg p-5 shadow-card">
-        <h3 className="font-display font-semibold text-sm text-ink border-b border-line pb-3">
-          Line loading today
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4 mt-4">
+      <div className="bg-surface border border-line rounded-lg p-5">
+        <h3 className="text-[16px] font-semibold text-ink">Lines today</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6 mt-4">
           {LINES.map((line) => (
             <div key={line.name}>
-              <div className="flex items-center justify-between text-xs">
-                <span className="font-semibold text-ink">{line.name}</span>
-                <span className="font-mono text-muted">{line.load}%</span>
+              <div className="flex items-center justify-between text-[14px]">
+                <span className="font-medium text-ink">{line.name}</span>
+                <span className="text-muted tabular-nums">{line.load}%</span>
               </div>
-              <div className="h-1.5 rounded-full bg-canvas border border-line overflow-hidden mt-1.5">
-                <div
-                  className={`h-full ${line.load > 80 ? 'bg-strand-amber' : 'bg-strand-green'}`}
-                  style={{ width: `${line.load}%` }}
-                />
+              <div className="h-1.5 rounded-full bg-[#EBEBEF] overflow-hidden mt-2">
+                <div className="h-full bg-kiran" style={{ width: `${line.load}%` }} />
               </div>
-              <div className="text-[11px] text-muted mt-1 truncate">{line.job}</div>
+              <div className="text-[13px] text-muted mt-1.5 truncate">{line.job}</div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Work orders */}
-      <div className="space-y-3">
-        <div className="flex flex-wrap items-center gap-1.5">
+      <div className="space-y-4">
+        <div className="inline-flex flex-wrap items-center gap-0.5 p-0.5 rounded-lg bg-[#EBEBEF]">
           {STAGES.map((entry) => (
             <button
               key={entry}
               onClick={() => setStage(entry)}
-              className={`px-2.5 py-1 rounded-md text-xs font-medium border transition-colors ${
-                stage === entry
-                  ? 'bg-kiran text-white border-kiran'
-                  : 'bg-surface text-slate-700 border-line hover:border-kiran/40'
+              className={`h-7 px-3 rounded-md text-[13px] font-medium transition-colors ${
+                stage === entry ? 'bg-white text-ink' : 'text-muted hover:text-ink'
               }`}
             >
               {entry}
@@ -117,41 +118,41 @@ export const ProductionPlan: React.FC = () => {
           ))}
         </div>
 
-        <div className="bg-surface border border-line rounded-lg shadow-card overflow-x-auto">
-          <table className="w-full text-left text-xs">
-            <thead className="bg-canvas text-muted text-[10px] uppercase border-b border-line">
+        <div className="bg-surface border border-line rounded-lg overflow-x-auto">
+          <table className="w-full text-left text-[14px]">
+            <thead className="bg-surface-2 text-[13px] font-medium text-muted border-b border-line">
               <tr>
-                <th className="p-3 font-semibold">Work order</th>
-                <th className="p-3 font-semibold">Customer PO</th>
-                <th className="p-3 font-semibold">Product</th>
-                <th className="p-3 font-semibold">Line</th>
-                <th className="p-3 font-semibold w-[200px]">Progress</th>
-                <th className="p-3 font-semibold text-right">Due</th>
-                <th className="p-3 font-semibold">Stage</th>
+                <th className="px-4 py-3 font-medium">Work order</th>
+                <th className="px-4 py-3 font-medium">Customer</th>
+                <th className="px-4 py-3 font-medium">Product</th>
+                <th className="px-4 py-3 font-medium">Line</th>
+                <th className="px-4 py-3 font-medium">Progress</th>
+                <th className="px-4 py-3 font-medium text-right">Due</th>
+                <th className="px-4 py-3 font-medium">Stage</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-line">
+            <tbody className="divide-y divide-line-2">
               {rows.map((order) => {
                 const ratio = order.producedMetres / order.plannedMetres;
                 return (
-                  <tr key={order.id}>
-                    <td className="p-3 font-mono font-semibold text-kiran">{order.id}</td>
-                    <td className="p-3">
-                      <div className="font-mono text-ink">{order.poNumber}</div>
-                      <div className="text-[11px] text-muted">{order.customer}</div>
+                  <tr key={order.id} className="h-[52px] hover:bg-canvas">
+                    <td className="px-4 py-3 font-code text-[13px] text-ink whitespace-nowrap">{order.id}</td>
+                    <td className="px-4 py-3">
+                      <div className="font-medium text-ink">{order.customer}</div>
+                      <div className="font-code text-[13px] text-muted whitespace-nowrap">{order.poNumber}</div>
                     </td>
-                    <td className="p-3 text-slate-700">{order.product}</td>
-                    <td className="p-3">{order.line}</td>
-                    <td className="p-3">
-                      <div className="h-1.5 rounded-full bg-canvas border border-line overflow-hidden">
+                    <td className="px-4 py-3 text-slate-700">{order.product}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">{order.line}</td>
+                    <td className="px-4 py-3 min-w-[180px]">
+                      <div className="h-1.5 rounded-full bg-[#EBEBEF] overflow-hidden">
                         <div className="h-full bg-kiran" style={{ width: `${Math.round(ratio * 100)}%` }} />
                       </div>
-                      <div className="text-[10px] font-mono text-muted mt-1">
+                      <div className="text-[13px] text-muted mt-1 tabular-nums whitespace-nowrap">
                         {order.producedMetres.toLocaleString('en-IN')} / {order.plannedMetres.toLocaleString('en-IN')} m
                       </div>
                     </td>
-                    <td className="p-3 text-right font-mono">{order.due}</td>
-                    <td className="p-3">
+                    <td className="px-4 py-3 text-right whitespace-nowrap">{order.due}</td>
+                    <td className="px-4 py-3 whitespace-nowrap">
                       <StatusPill status={PILL[order.stage]} />
                     </td>
                   </tr>
@@ -160,13 +161,6 @@ export const ProductionPlan: React.FC = () => {
             </tbody>
           </table>
         </div>
-        <p className="text-[11px] text-muted">
-          Tasks, cycles and ownership for each run are tracked in{' '}
-          <Link to="/projects" className="text-kiran hover:underline font-semibold">
-            Projects
-          </Link>{' '}
-          and in Project Management on the rail.
-        </p>
       </div>
     </div>
   );

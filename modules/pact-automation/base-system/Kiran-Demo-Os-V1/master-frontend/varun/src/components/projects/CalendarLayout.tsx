@@ -109,7 +109,7 @@ export const CalendarLayout: React.FC<Props> = ({ items, onOpen, activeItemId })
         <button
           type="button"
           onClick={() => setCursor(new Date())}
-          className="ml-1 rounded-md border border-line bg-white px-2.5 py-1 text-[11.5px] font-medium text-slate-600 transition-colors hover:bg-canvas"
+          className="ml-1 rounded-md border border-line bg-white px-2.5 py-1 text-[12px] font-medium text-slate-600 transition-colors hover:bg-canvas"
         >
           Today
         </button>
@@ -120,7 +120,7 @@ export const CalendarLayout: React.FC<Props> = ({ items, onOpen, activeItemId })
         {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((label) => (
           <div
             key={label}
-            className="px-2 py-1.5 text-[10.5px] font-semibold uppercase tracking-[0.07em] text-muted"
+            className="px-2 py-1.5 text-[12px] font-semibold text-muted"
           >
             {label}
           </div>
@@ -160,7 +160,7 @@ export const CalendarLayout: React.FC<Props> = ({ items, onOpen, activeItemId })
             >
               <div className="mb-1 flex items-center justify-between px-1">
                 <span
-                  className={`text-[11px] ${
+                  className={`text-[12px] ${
                     today
                       ? 'flex h-[18px] w-[18px] items-center justify-center rounded-full bg-kiran font-bold text-white'
                       : inMonth
@@ -171,7 +171,7 @@ export const CalendarLayout: React.FC<Props> = ({ items, onOpen, activeItemId })
                   {format(day, 'd')}
                 </span>
                 {dayItems.length > 3 && (
-                  <span className="font-mono text-[9.5px] text-muted">{dayItems.length}</span>
+                  <span className="font-mono text-[12px] text-muted">{dayItems.length}</span>
                 )}
               </div>
 
@@ -210,7 +210,7 @@ export const CalendarLayout: React.FC<Props> = ({ items, onOpen, activeItemId })
                         color={itemState?.color}
                         className="h-2.5 w-2.5"
                       />
-                      <span className="min-w-0 flex-1 truncate text-[10.5px] text-ink">
+                      <span className="min-w-0 flex-1 truncate text-[12px] text-ink">
                         {item.title}
                       </span>
                     </button>
@@ -218,7 +218,7 @@ export const CalendarLayout: React.FC<Props> = ({ items, onOpen, activeItemId })
                 })}
 
                 {dayItems.length > 4 && (
-                  <p className="px-1 text-[9.5px] text-muted">+{dayItems.length - 4} more</p>
+                  <p className="px-1 text-[12px] text-muted">+{dayItems.length - 4} more</p>
                 )}
               </div>
             </div>

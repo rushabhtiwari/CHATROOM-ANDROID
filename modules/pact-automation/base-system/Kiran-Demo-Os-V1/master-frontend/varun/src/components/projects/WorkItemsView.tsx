@@ -292,29 +292,29 @@ export const WorkItemsView: React.FC<Props> = ({ scope, banner, available }) => 
       </div>
 
       {/* Bottom Workspace Status & Shortcut Footer */}
-      <div className="flex h-8 shrink-0 items-center justify-between border-t border-outline-variant bg-surface-container-lowest px-4 text-outline select-none text-[11.5px]">
+      <div className="flex h-8 shrink-0 items-center justify-between border-t border-outline-variant bg-surface-container-lowest px-4 text-outline select-none text-[12px]">
         <div className="flex items-center gap-2.5">
           <span className="flex items-center gap-1.5 font-medium text-on-surface-variant">
             <span className="h-1.5 w-1.5 rounded-full bg-st-green-ink animate-pulse" />
             All workstreams synced
           </span>
           <span className="text-outline-variant">•</span>
-          <span className="text-slate-500 font-mono text-[11px]">{view.items.length} work items active</span>
+          <span className="text-slate-500 font-mono text-[12px]">{view.items.length} work items active</span>
         </div>
-        <div className="hidden sm:flex items-center gap-2 font-mono text-[11px] text-slate-500">
+        <div className="hidden sm:flex items-center gap-2 font-mono text-[12px] text-slate-500">
           <span className="flex items-center gap-1">
-            <kbd className="rounded border border-outline-variant bg-surface-container-low px-1 py-0.5 text-[10px] text-on-surface">J</kbd>
-            <kbd className="rounded border border-outline-variant bg-surface-container-low px-1 py-0.5 text-[10px] text-on-surface">K</kbd>
+            <kbd className="rounded border border-outline-variant bg-surface-container-low px-1 py-0.5 text-[12px] text-on-surface">J</kbd>
+            <kbd className="rounded border border-outline-variant bg-surface-container-low px-1 py-0.5 text-[12px] text-on-surface">K</kbd>
             <span>Navigate</span>
           </span>
           <span>•</span>
           <span className="flex items-center gap-1">
-            <kbd className="rounded border border-outline-variant bg-surface-container-low px-1 py-0.5 text-[10px] text-on-surface">X</kbd>
+            <kbd className="rounded border border-outline-variant bg-surface-container-low px-1 py-0.5 text-[12px] text-on-surface">X</kbd>
             <span>Select</span>
           </span>
           <span>•</span>
           <span className="flex items-center gap-1">
-            <kbd className="rounded border border-outline-variant bg-surface-container-low px-1 py-0.5 text-[10px] text-on-surface">Space</kbd>
+            <kbd className="rounded border border-outline-variant bg-surface-container-low px-1 py-0.5 text-[12px] text-on-surface">Space</kbd>
             <span>Preview</span>
           </span>
         </div>

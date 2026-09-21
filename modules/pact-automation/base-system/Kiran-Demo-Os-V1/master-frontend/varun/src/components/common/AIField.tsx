@@ -63,7 +63,7 @@ export const AIField: React.FC<AIFieldProps> = ({
       onMouseLeave={handleMouseLeave}
     >
       <div className="flex items-center justify-between mb-1">
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-muted flex items-center gap-1">
+        <span className="text-[12px] font-semibold text-muted flex items-center gap-1">
           {isExtracted && <Sparkles className="w-3 h-3 text-ai" />}
           {label}
         </span>
@@ -106,7 +106,7 @@ export const AIField: React.FC<AIFieldProps> = ({
               type="button"
               onClick={() => setIsEditing(true)}
               aria-label={`Ask customer for ${label}`}
-              className="text-[11px] text-ai hover:underline flex items-center gap-0.5 ml-2 shrink-0"
+              className="text-[12px] text-ai hover:underline flex items-center gap-0.5 ml-2 shrink-0"
             >
               Ask customer
             </button>
@@ -115,7 +115,7 @@ export const AIField: React.FC<AIFieldProps> = ({
               type="button"
               onClick={() => setIsEditing(true)}
               aria-label={`Edit ${label}`}
-              className="text-[11px] text-muted hover:text-ai transition-colors flex items-center gap-0.5"
+              className="text-[12px] text-muted hover:text-ai transition-colors flex items-center gap-0.5"
             >
               <Edit2 className="w-2.5 h-2.5" />
             </button>
@@ -125,13 +125,13 @@ export const AIField: React.FC<AIFieldProps> = ({
 
       {/* Popover on Hover */}
       {isHovered && isExtracted && !isEditing && (
-        <div className="absolute left-0 bottom-full mb-1 z-50 w-72 p-2.5 bg-ink text-white rounded-md shadow-popover border border-line/20 text-[11px]">
+        <div className="absolute left-0 bottom-full mb-1 z-50 w-72 p-2.5 bg-ink text-white rounded-md shadow-popover border border-line/20 text-[12px]">
           <div className="flex items-center justify-between border-b border-white/10 pb-1.5 mb-1.5">
             <span className="font-semibold text-ai-tint flex items-center gap-1">
               <Sparkles className="w-3 h-3 text-ai" />
               AI Extracted Field
             </span>
-            <span className="font-mono text-[10px] text-slate-300">{modelUsed}</span>
+            <span className="font-mono text-[12px] text-slate-300">{modelUsed}</span>
           </div>
 
           <div className="space-y-1 text-slate-300">
@@ -140,11 +140,11 @@ export const AIField: React.FC<AIFieldProps> = ({
               <span className="text-white">{sourceEmailSubject}</span>
             </div>
             {sourceText && (
-              <div className="bg-white/5 p-1 rounded font-mono text-[10px] text-ai-tint/90 border border-ai/30">
+              <div className="bg-white/5 p-1 rounded font-mono text-[12px] text-ai-tint/90 border border-ai/30">
                 "{sourceText}"
               </div>
             )}
-            <div className="text-[10px] text-slate-400">
+            <div className="text-[12px] text-slate-400">
               Confidence: {confidence}% · {timestamp}
             </div>
           </div>
@@ -154,11 +154,11 @@ export const AIField: React.FC<AIFieldProps> = ({
               type="button"
               onClick={() => setIsEditing(true)}
               aria-label={`Correct ${label}`}
-              className="text-ai-tint hover:text-white font-medium flex items-center gap-1 text-[10px]"
+              className="text-ai-tint hover:text-white font-medium flex items-center gap-1 text-[12px]"
             >
               <Edit2 className="w-2.5 h-2.5" /> Correct this value
             </button>
-            <span className="text-[10px] text-slate-400">Hover links to text</span>
+            <span className="text-[12px] text-slate-400">Hover links to text</span>
           </div>
         </div>
       )}

@@ -1,9 +1,21 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import localFont from "next/font/local";
 
 import "./globals.css";
 
-const sans = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-sans" });
+// Geist, self-hosted: the same files every Kiran app loads (docs/design-language.md).
+const sans = localFont({
+  src: [
+    { path: "./fonts/geist-latin.woff2", weight: "100 900", style: "normal" },
+  ],
+  variable: "--font-sans",
+  display: "swap",
+});
+const mono = localFont({
+  src: [{ path: "./fonts/geist-mono-latin.woff2", weight: "100 900", style: "normal" }],
+  variable: "--font-mono",
+  display: "swap",
+});
 
 // Every page depends on the signed-in person, so nothing is prerendered at build time.
 export const dynamic = "force-dynamic";
@@ -15,7 +27,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={sans.variable}>
+    <html lang="en" className={`${sans.variable} ${mono.variable}`}>
       <body>{children}</body>
     </html>
   );

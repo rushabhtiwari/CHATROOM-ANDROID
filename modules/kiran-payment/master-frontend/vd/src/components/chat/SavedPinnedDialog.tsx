@@ -71,13 +71,13 @@ export function SavedPinnedDialog({
                       {userById(message.senderId).name}
                     </b>
                     {room && mode === "saved" && (
-                      <span className="truncate rounded-md bg-secondary px-1.5 py-0.5 text-[10px] text-muted-foreground">
+                      <span className="truncate rounded-md bg-secondary px-1.5 py-0.5 text-[12px] text-muted-foreground">
                         {roomTitle(room)}
                       </span>
                     )}
                     <span
                       suppressHydrationWarning
-                      className="ml-auto shrink-0 text-[10px] text-muted-foreground"
+                      className="ml-auto shrink-0 text-[12px] text-muted-foreground"
                     >
                       {formatRelative(message.timestamp)}
                     </span>

@@ -207,10 +207,10 @@ const GroupHeader: React.FC<{
       <span className="flex h-3.5 w-3.5 items-center justify-center">
         <GroupGlyph groupBy={groupBy} group={group} />
       </span>
-      <span className="truncate text-[11px] font-semibold uppercase tracking-wider text-on-surface-variant font-mono">
+      <span className="truncate text-[12px] font-semibold text-on-surface-variant font-mono">
         {group.label}
       </span>
-      <span className="font-mono text-[11px] text-outline bg-surface-container-lowest px-1.5 py-0.5 rounded border border-outline-variant">
+      <span className="font-mono text-[12px] text-outline bg-surface-container-lowest px-1.5 py-0.5 rounded border border-outline-variant">
         {group.items.length}
       </span>
     </button>
@@ -275,7 +275,7 @@ const Row: React.FC<RowProps> = ({
         </span>
 
         {display.itemId && (
-          <span className="shrink-0 font-mono text-[11px] font-medium text-outline select-none">
+          <span className="shrink-0 font-mono text-[12px] font-medium text-outline select-none">
             {displayId(state, item)}
           </span>
         )}

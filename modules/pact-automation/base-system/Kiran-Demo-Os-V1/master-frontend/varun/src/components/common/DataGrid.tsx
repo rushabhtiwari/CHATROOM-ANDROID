@@ -185,17 +185,17 @@ export function DataGrid<T>({
                 type="button"
                 key={idx}
                 onClick={sv.onClick}
-                className={`flex shrink-0 items-center gap-1.5 border-2 px-2.5 py-1 text-caption font-semibold leading-none transition-all duration-150 active:translate-y-px ${
+                className={`flex shrink-0 items-center gap-1.5 border px-2.5 py-1 text-caption font-semibold leading-none transition-colors duration-150 ${
                   sv.active
-                    ? 'border-ink bg-accent text-accent-ink'
-                    : 'border-hairline-strong bg-white text-ink hover:border-ink hover:bg-canvas'
+                    ? 'border-ink bg-accent text-white'
+                    : 'border-hairline-strong bg-white text-ink hover:bg-canvas'
                 }`}
               >
                 <span>{sv.label}</span>
                 {sv.count !== undefined && (
                   <span
                     className={`ku-fig px-1 text-micro ${
-                      sv.active ? 'bg-ink/10 text-accent-ink' : 'bg-canvas text-meta'
+                      sv.active ? 'bg-ink/10 text-white' : 'bg-canvas text-meta'
                     }`}
                   >
                     {sv.count}
@@ -220,7 +220,7 @@ export function DataGrid<T>({
                   setSearchTerm(e.target.value);
                   setCurrentPage(1);
                 }}
-                className="w-full min-w-0 border border-b-2 border-hairline-strong border-b-meta bg-white py-2 pl-8 pr-3 text-body-s text-ink transition-colors duration-150 placeholder:text-meta hover:border-b-ink focus:border-b-ink"
+                className="w-full min-w-0 rounded-md border border-hairline-strong bg-white py-2 pl-8 pr-3 text-body-s text-ink transition-colors duration-150 placeholder:text-meta focus:border-accent"
               />
             </div>
           </div>
@@ -234,7 +234,7 @@ export function DataGrid<T>({
               aria-label={isCompact ? 'Switch to comfortable row spacing' : 'Switch to compact row spacing'}
               aria-pressed={isCompact}
               title={isCompact ? 'Switch to comfortable row spacing' : 'Switch to compact row spacing'}
-              className="flex h-9 w-9 items-center justify-center border-2 border-hairline-strong bg-white text-ink transition-all duration-150 hover:border-ink hover:bg-canvas active:translate-y-px"
+              className="flex h-9 w-9 items-center justify-center border border-hairline-strong bg-white text-ink transition-colors duration-150 hover:bg-canvas"
             >
               <SlidersHorizontal aria-hidden className="h-3.5 w-3.5" />
             </button>
@@ -242,7 +242,7 @@ export function DataGrid<T>({
             <button
               type="button"
               onClick={handleExportCSV}
-              className="flex h-9 items-center gap-1.5 border-2 border-hairline-strong bg-white px-3 text-body-s font-semibold leading-none text-ink transition-all duration-150 hover:border-ink hover:bg-canvas active:translate-y-px"
+              className="flex h-9 items-center gap-1.5 rounded-md border border-hairline-strong bg-white px-3 text-body-s font-medium leading-none text-ink transition-colors duration-150 hover:bg-canvas"
             >
               <Download aria-hidden className="h-3.5 w-3.5" />
               <span>Export CSV</span>
@@ -252,7 +252,7 @@ export function DataGrid<T>({
 
         {/* Bulk Action Bar (appears when items selected) */}
         {selectedIds.size > 0 && (
-          <div className="animate-fadeIn flex items-center justify-between gap-3 border border-l-3 border-hairline border-l-accent bg-canvas p-2.5 text-body-s text-ink">
+          <div className="animate-fadeIn flex items-center justify-between gap-3 rounded-md border-l-accent bg-canvas p-2.5 text-body-s text-ink">
             <span className="flex items-center gap-2">
               <CheckSquare aria-hidden className="h-4 w-4 text-meta" />
               <span>
@@ -266,10 +266,10 @@ export function DataGrid<T>({
                   type="button"
                   key={idx}
                   onClick={() => ba.action(selectedItems)}
-                  className={`border-2 px-3 py-1.5 text-body-s font-semibold leading-none transition-all duration-150 active:translate-y-px ${
+                  className={`border px-3 py-1.5 text-body-s font-semibold leading-none transition-colors duration-150 ${
                     ba.variant === 'danger'
                       ? 'border-danger bg-danger text-white hover:brightness-95'
-                      : 'border-ink bg-accent text-accent-ink hover:brightness-95'
+                      : 'border-ink bg-accent text-white hover:bg-accent-hover'
                   }`}
                 >
                   {ba.label}
@@ -297,7 +297,7 @@ export function DataGrid<T>({
             border grid, so it scrolls away from a sticky <th> in Chromium.
           */}
           <thead className="select-none">
-            <tr className="border-l-3 border-l-transparent">
+            <tr className="">
               <th
                 scope="col"
                 className="sticky top-0 z-10 w-10 bg-white px-3 py-2.5 text-center after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-structure after:content-['']"
@@ -322,7 +322,7 @@ export function DataGrid<T>({
                   scope="col"
                   aria-sort={sortKey === col.id ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}
                   style={{ width: col.width }}
-                  className={`ku-narrow sticky top-0 z-10 whitespace-nowrap bg-white px-3 py-2.5 align-bottom text-micro font-semibold uppercase text-meta after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-structure after:content-[''] ${
+                  className={`ku-narrow sticky top-0 z-10 whitespace-nowrap bg-white px-3 py-2.5 align-bottom text-micro font-semibold text-meta after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-structure after:content-[''] ${
                     col.isNumeric ? 'text-right' : 'text-left'
                   } ${col.sortable !== false ? 'cursor-pointer hover:text-ink' : ''}`}
                 >
@@ -367,7 +367,7 @@ export function DataGrid<T>({
                       <Search aria-hidden size={13} className="shrink-0 text-hairline-strong" />
                       <span className="ku-eyebrow">Nothing on file</span>
                     </div>
-                    <p className="ku-wide mt-2 font-display text-h3 font-semibold text-ink">
+                    <p className="mt-2 font-display text-h3 font-semibold text-ink">
                       No records match this view
                     </p>
                     <p className="mt-2 max-w-[54ch] text-body-s leading-relaxed text-meta">
@@ -398,7 +398,7 @@ export function DataGrid<T>({
                     } ${
                       isSelected
                         ? 'border-l-accent bg-canvas'
-                        : 'border-l-transparent hover:border-l-accent hover:bg-canvas'
+                        : 'border-l-transparent hover:bg-canvas'
                     } ${isCompact ? 'h-9' : 'h-11'}`}
                   >
                     <td
@@ -457,7 +457,7 @@ export function DataGrid<T>({
             disabled={currentPage === 1}
             aria-label="Previous page"
             title="Previous page"
-            className="flex h-8 w-8 items-center justify-center border-2 border-hairline-strong bg-white text-ink transition-all duration-150 hover:border-ink hover:bg-canvas active:translate-y-px disabled:cursor-not-allowed disabled:opacity-40 disabled:active:translate-y-0"
+            className="flex h-8 w-8 items-center justify-center border border-hairline-strong bg-white text-ink transition-colors duration-150 hover:bg-canvas disabled:cursor-not-allowed disabled:opacity-40"
           >
             <ChevronLeft aria-hidden className="h-4 w-4" />
           </button>
@@ -469,7 +469,7 @@ export function DataGrid<T>({
             disabled={currentPage === totalPages}
             aria-label="Next page"
             title="Next page"
-            className="flex h-8 w-8 items-center justify-center border-2 border-hairline-strong bg-white text-ink transition-all duration-150 hover:border-ink hover:bg-canvas active:translate-y-px disabled:cursor-not-allowed disabled:opacity-40 disabled:active:translate-y-0"
+            className="flex h-8 w-8 items-center justify-center border border-hairline-strong bg-white text-ink transition-colors duration-150 hover:bg-canvas disabled:cursor-not-allowed disabled:opacity-40"
           >
             <ChevronRight aria-hidden className="h-4 w-4" />
           </button>

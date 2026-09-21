@@ -65,7 +65,7 @@ export const QuickAddRow: React.FC<{
           onMouseDown={(event) => event.preventDefault()}
           onClick={submit}
           disabled={!title.trim()}
-          className="rounded bg-primary px-2 py-0.5 text-[11px] font-semibold text-white disabled:opacity-40"
+          className="rounded bg-primary px-2 py-0.5 text-[12px] font-semibold text-white disabled:opacity-40"
         >
           Add
         </button>

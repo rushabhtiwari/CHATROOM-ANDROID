@@ -46,7 +46,7 @@ export const OrdersList: React.FC = () => {
       cell: (row) => (
         <div>
           <div className="font-semibold text-ink">{row.customerName}</div>
-          <div className="text-[10px] text-muted font-mono">Linked: {row.linkedRfqNumber}</div>
+          <div className="text-[12px] text-muted font-mono">Linked: {row.linkedRfqNumber}</div>
         </div>
       )
     },
@@ -58,7 +58,7 @@ export const OrdersList: React.FC = () => {
       cell: (row) => (
         <div>
           <div className="font-medium text-ink text-xs">{row.product}</div>
-          <div className="text-[10px] font-mono text-muted">{row.partNumber}</div>
+          <div className="text-[12px] font-mono text-muted">{row.partNumber}</div>
         </div>
       )
     },
@@ -108,7 +108,7 @@ export const OrdersList: React.FC = () => {
       accessorKey: 'scheduleType',
       width: '130px',
       cell: (row) => (
-        <span className="text-[11px] px-1.5 py-0.5 rounded bg-canvas border border-line text-slate-700">
+        <span className="text-[12px] px-1.5 py-0.5 rounded bg-canvas border border-line text-slate-700">
           {row.scheduleType}
         </span>
       )
@@ -152,7 +152,7 @@ export const OrdersList: React.FC = () => {
         actions={
           <button
             onClick={() => setIsEmailModalOpen(true)}
-            className="inline-flex h-10 items-center gap-2 border-2 border-structure bg-structure px-4 text-body-s font-semibold leading-none text-white transition-all duration-150 hover:bg-structure-600 active:translate-y-px"
+            className="inline-flex h-10 items-center gap-2 rounded-md border border-hairline-strong bg-white px-4 text-body-s font-medium leading-none text-ink transition-colors duration-150 hover:bg-canvas"
           >
             <Mail aria-hidden className="h-4 w-4" />
             Send Pending SO Mail to Production
@@ -239,7 +239,7 @@ export const OrdersList: React.FC = () => {
                   Below is the daily digest of priority pending sales order commitments requiring active production scheduling for the upcoming 7-day window:
                 </p>
 
-                <table className="w-full text-left font-mono text-[11px] border border-line">
+                <table className="w-full text-left font-mono text-[12px] border border-line">
                   <thead className="bg-canvas text-muted border-b border-line">
                     <tr>
                       <th className="p-1.5">Customer</th>
@@ -262,7 +262,7 @@ export const OrdersList: React.FC = () => {
                   </tbody>
                 </table>
 
-                <p className="text-slate-600 text-[11px]">
+                <p className="text-slate-600 text-[12px]">
                   Generated automatically by KiranOS Revenue & Planning Engine.
                 </p>
               </div>

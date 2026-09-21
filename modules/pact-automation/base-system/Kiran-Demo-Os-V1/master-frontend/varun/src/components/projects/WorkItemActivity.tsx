@@ -42,7 +42,7 @@ export const CommentThread: React.FC<{ workItemId: string }> = ({ workItemId }) 
         <MessageSquare className="h-3.5 w-3.5 text-slate-400" />
         Comments
         {comments.length > 0 && (
-          <span className="font-mono text-[11px] text-muted">{comments.length}</span>
+          <span className="font-mono text-[12px] text-muted">{comments.length}</span>
         )}
       </h3>
 
@@ -66,7 +66,7 @@ export const CommentThread: React.FC<{ workItemId: string }> = ({ workItemId }) 
                   <span className="text-[12.5px] font-semibold text-ink">
                     {author?.name ?? 'Unknown'}
                   </span>
-                  <span className="text-[11px] text-muted">{ago(comment.createdAt)}</span>
+                  <span className="text-[12px] text-muted">{ago(comment.createdAt)}</span>
                 </div>
                 <div className="mt-0.5 rounded-md border border-line bg-canvas px-2.5 py-2">
                   <Markdown content={comment.body} />
@@ -99,7 +99,7 @@ export const CommentThread: React.FC<{ workItemId: string }> = ({ workItemId }) 
             className="w-full resize-y rounded-md border border-line bg-white px-2.5 py-2 text-[12.5px] text-ink placeholder:text-muted focus:border-kiran/40 focus:outline-none"
           />
           <div className="mt-1.5 flex items-center justify-between">
-            <span className="text-[10.5px] text-muted">⌘/Ctrl + Enter to post</span>
+            <span className="text-[12px] text-muted">⌘/Ctrl + Enter to post</span>
             <button
               type="button"
               onClick={submit}
@@ -235,7 +235,7 @@ export const ActivityFeed: React.FC<{ workItemId: string }> = ({ workItemId }) =
       <h3 className="mb-2 flex items-center gap-1.5 text-[12px] font-semibold text-slate-700">
         <History className="h-3.5 w-3.5 text-slate-400" />
         Activity
-        <span className="font-mono text-[11px] text-muted">{entries.length}</span>
+        <span className="font-mono text-[12px] text-muted">{entries.length}</span>
       </h3>
 
       <ol className="space-y-2 border-l border-line pl-3.5">
@@ -248,7 +248,7 @@ export const ActivityFeed: React.FC<{ workItemId: string }> = ({ workItemId }) =
                 className="absolute -left-[18px] top-1.5 h-1.5 w-1.5 rounded-full bg-slate-300"
               />
               <Strong>{actor?.name ?? 'Someone'}</Strong> {describe(entry)}
-              <span className="ml-1 text-[11px] text-slate-400">{ago(entry.at)}</span>
+              <span className="ml-1 text-[12px] text-slate-400">{ago(entry.at)}</span>
             </li>
           );
         })}
@@ -299,7 +299,7 @@ export const TimeLog: React.FC<{ workItemId: string }> = ({ workItemId }) => {
         <Timer className="h-3.5 w-3.5 text-slate-400" />
         Time
         {total > 0 && (
-          <span className="font-mono text-[11px] text-muted">
+          <span className="font-mono text-[12px] text-muted">
             {Math.round(total * 10) / 10}h · {formatINR(Math.round(total * BLENDED_HOURLY_RATE_INR))}
           </span>
         )}
@@ -311,7 +311,7 @@ export const TimeLog: React.FC<{ workItemId: string }> = ({ workItemId }) => {
             const who = personById(entry.userId);
             return (
               <li key={entry.id} className="flex items-center gap-2 px-2.5 py-1.5 text-[12px]">
-                <span className="w-16 shrink-0 font-mono text-[11px] text-muted">
+                <span className="w-16 shrink-0 font-mono text-[12px] text-muted">
                   {format(parseISO(entry.date), 'd MMM')}
                 </span>
                 <span className="w-11 shrink-0 font-mono font-semibold text-ink">
@@ -320,7 +320,7 @@ export const TimeLog: React.FC<{ workItemId: string }> = ({ workItemId }) => {
                 <span className="min-w-0 flex-1 truncate text-slate-600">
                   {entry.note || '—'}
                 </span>
-                <span className="shrink-0 text-[11px] text-muted">{who?.name ?? ''}</span>
+                <span className="shrink-0 text-[12px] text-muted">{who?.name ?? ''}</span>
                 <button
                   type="button"
                   onClick={() => dispatch({ type: 'timeEntry/delete', id: entry.id })}

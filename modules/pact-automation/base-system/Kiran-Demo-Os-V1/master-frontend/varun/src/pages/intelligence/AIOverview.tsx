@@ -94,7 +94,7 @@ export const AIOverview: React.FC = () => {
 
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs font-mono">
-            <thead className="bg-surface-container-low border-b border-outline-variant text-[10px] uppercase tracking-wider text-outline select-none">
+            <thead className="bg-surface-container-low border-b border-outline-variant text-[12px] text-outline select-none">
               <tr className="h-9">
                 <th className="px-3.5 py-0 align-middle font-mono font-semibold">Operational Feature</th>
                 <th className="px-3.5 py-0 align-middle font-mono font-semibold">Model Engine</th>
@@ -123,7 +123,7 @@ export const AIOverview: React.FC = () => {
       </div>
 
       {/* Sub-Module Navigation Cards */}
-      <div className="ku-ledger border-t-3 border-t-structure grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="ku-ledger grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <Link
           to="/ai/runs"
           className="p-4.5 bg-white hover:border-ai rounded-xl transition-all group flex flex-col justify-between"
@@ -133,7 +133,7 @@ export const AIOverview: React.FC = () => {
               <Activity className="w-4 h-4" />
             </div>
             <h4 className="font-semibold text-xs text-on-surface group-hover:text-ai transition-colors">Observability Run Logs</h4>
-            <p className="text-[11px] text-on-surface-variant leading-tight">Inspect live execution traces, tool calls, and prompt tokens.</p>
+            <p className="text-[12px] text-on-surface-variant leading-tight">Inspect live execution traces, tool calls, and prompt tokens.</p>
           </div>
           <span className="text-xs font-semibold font-mono text-ai mt-3 flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
             <span>View traces</span> &rarr;
@@ -149,7 +149,7 @@ export const AIOverview: React.FC = () => {
               <DollarSign className="w-4 h-4" />
             </div>
             <h4 className="font-semibold text-xs text-on-surface group-hover:text-ai transition-colors">Inference Economics</h4>
-            <p className="text-[11px] text-on-surface-variant leading-tight">90-day spend trajectories, token breakdowns, and budget caps.</p>
+            <p className="text-[12px] text-on-surface-variant leading-tight">90-day spend trajectories, token breakdowns, and budget caps.</p>
           </div>
           <span className="text-xs font-semibold font-mono text-ai mt-3 flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
             <span>Cost analytics</span> &rarr;
@@ -165,7 +165,7 @@ export const AIOverview: React.FC = () => {
               <ShieldCheck className="w-4 h-4" />
             </div>
             <h4 className="font-semibold text-xs text-on-surface group-hover:text-ai transition-colors">Guardrail Policies</h4>
-            <p className="text-[11px] text-on-surface-variant leading-tight">Confidence threshold gates, PII scrubbers, and blocked actions.</p>
+            <p className="text-[12px] text-on-surface-variant leading-tight">Confidence threshold gates, PII scrubbers, and blocked actions.</p>
           </div>
           <span className="text-xs font-semibold font-mono text-ai mt-3 flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
             <span>Safety gates</span> &rarr;
@@ -181,7 +181,7 @@ export const AIOverview: React.FC = () => {
               <FileCode2 className="w-4 h-4" />
             </div>
             <h4 className="font-semibold text-xs text-on-surface group-hover:text-ai transition-colors">Prompt Registry & Diffs</h4>
-            <p className="text-[11px] text-on-surface-variant leading-tight">Version-controlled prompt templates with side-by-side diffs.</p>
+            <p className="text-[12px] text-on-surface-variant leading-tight">Version-controlled prompt templates with side-by-side diffs.</p>
           </div>
           <span className="text-xs font-semibold font-mono text-ai mt-3 flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
             <span>Prompt studio</span> &rarr;

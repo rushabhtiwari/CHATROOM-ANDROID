@@ -41,7 +41,7 @@ export function MediaAttachment({
         onClick={() => setOpen(true)}
         aria-label={`Open ${kind} ${attachment.name}`}
         className={cn(
-          "group/media relative block overflow-hidden border text-left shadow-sm",
+          "group/media relative block overflow-hidden border text-left",
           display === "gallery" ? "aspect-square w-full rounded-lg" : "mt-2 max-w-sm rounded-xl",
           mine ? "border-primary-foreground/20 bg-black/15" : "border-border bg-black/5",
         )}
@@ -72,7 +72,7 @@ export function MediaAttachment({
             </span>
           </>
         )}
-        <span className="absolute inset-x-0 bottom-0 truncate bg-gradient-to-t from-black/70 to-transparent px-3 pb-2 pt-8 text-[11px] font-medium text-white opacity-0 transition-opacity group-hover/media:opacity-100">
+        <span className="absolute inset-x-0 bottom-0 truncate bg-gradient-to-t from-black/70 to-transparent px-3 pb-2 pt-8 text-[12px] font-medium text-white opacity-0 transition-opacity group-hover/media:opacity-100">
           {attachment.name}
         </span>
       </button>

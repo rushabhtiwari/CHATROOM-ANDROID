@@ -93,7 +93,7 @@ export const ReimbursementsList: React.FC = () => {
       accessorKey: 'category',
       width: '120px',
       cell: (row) => (
-        <span className="font-mono text-[10.5px] uppercase tracking-wider text-outline px-1.5 py-0.5 rounded bg-surface-container border border-outline-variant">
+        <span className="font-mono text-[12px] text-outline px-1.5 py-0.5 rounded bg-surface-container border border-outline-variant">
           {CATEGORY_LABEL[row.category]}
         </span>
       ),
@@ -119,7 +119,7 @@ export const ReimbursementsList: React.FC = () => {
       sortable: true,
       accessorKey: 'submittedOn',
       width: '105px',
-      cell: (row) => <span className="font-mono text-[11px] text-outline">{formatDate(row.submittedOn)}</span>,
+      cell: (row) => <span className="font-mono text-[12px] text-outline">{formatDate(row.submittedOn)}</span>,
     },
     {
       id: 'status',
@@ -137,7 +137,7 @@ export const ReimbursementsList: React.FC = () => {
         title="Reimbursements"
         badge={
           !connected && !loading ? (
-            <span className="inline-flex items-center gap-1.5 rounded-badge border border-strand-amber/30 bg-strand-amber/10 px-2 py-0.5 text-[10.5px] font-medium text-strand-amber">
+            <span className="inline-flex items-center gap-1.5 rounded-badge border border-strand-amber/30 bg-strand-amber/10 px-2 py-0.5 text-[12px] font-medium text-strand-amber">
               <WifiOff className="h-3 w-3" /> Live updates off
             </span>
           ) : undefined

@@ -15,12 +15,12 @@ export const AdminUsers: React.FC = () => {
       width: '240px',
       cell: (row) => (
         <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-full bg-ink text-white font-mono text-[10px] flex items-center justify-center font-bold">
+          <div className="w-7 h-7 rounded-full bg-ink text-white font-mono text-[12px] flex items-center justify-center font-semibold">
             {row.avatar}
           </div>
           <div>
-            <div className="font-semibold text-ink text-xs">{row.name}</div>
-            <div className="text-[10px] text-muted">{row.role}</div>
+            <div className="font-semibold text-ink text-[13px]">{row.name}</div>
+            <div className="text-[12px] text-muted">{row.role}</div>
           </div>
         </div>
       )
@@ -31,7 +31,7 @@ export const AdminUsers: React.FC = () => {
       accessorKey: 'department',
       width: '160px',
       cell: (row) => (
-        <span className="font-mono text-xs px-2 py-0.5 rounded bg-canvas border border-line text-slate-800">
+        <span className="font-mono text-[13px] px-2 py-0.5 rounded bg-canvas border border-line text-slate-800">
           {row.department}
         </span>
       )
@@ -42,7 +42,7 @@ export const AdminUsers: React.FC = () => {
       accessorKey: 'email',
       isMono: true,
       width: '240px',
-      cell: (row) => <span className="text-slate-700 text-xs">{row.email}</span>
+      cell: (row) => <span className="text-slate-700 text-[13px]">{row.email}</span>
     },
     {
       id: 'accessTier',
@@ -50,7 +50,7 @@ export const AdminUsers: React.FC = () => {
       accessorKey: 'accessTier',
       width: '140px',
       cell: (row) => (
-        <span className={`text-[10px] font-mono px-2 py-0.5 rounded font-semibold ${
+        <span className={`text-[12px] font-mono px-2 py-0.5 rounded font-semibold ${
           row.accessTier === 'Superadmin'
             ? 'bg-purple-100 text-ai border border-purple-200'
             : row.accessTier === 'HOD Approver'
@@ -90,7 +90,7 @@ export const AdminUsers: React.FC = () => {
         actions={
           <button
             onClick={() => alert('New user provisioning modal')}
-            className="px-3 py-1.5 bg-kiran hover:bg-blue-700 text-white rounded text-xs font-semibold shadow-xs flex items-center gap-1.5"
+            className="px-3 py-1.5 bg-kiran hover:bg-kiran-600 text-white rounded text-[13px] font-semibold flex items-center gap-1.5"
           >
             <Plus className="w-3.5 h-3.5" />
             Provision Employee Access

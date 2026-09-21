@@ -1410,12 +1410,10 @@ export function ChatProvider({ children }: { children: ReactNode }) {
       // same conversation needlessly fiddly.
       const current = rooms.find((room) => room.id === activeRoomId);
       if (current && !current.archived && current.participantIds.includes(id)) {
-        toast.success(`Now viewing as ${userById(id).name}`);
         return;
       }
       const first = rooms.find((room) => room.participantIds.includes(id) && !room.archived);
       if (first) setActiveRoomId(first.id);
-      toast.success(`Now viewing as ${userById(id).name}`);
     },
     [rooms, activeRoomId, userById],
   );

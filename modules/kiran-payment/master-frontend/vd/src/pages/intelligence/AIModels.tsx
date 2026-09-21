@@ -37,7 +37,7 @@ export const AIModels: React.FC = () => {
     <div className="space-y-6 animate-fadeIn">
       {/* Toast Alert */}
       {toastMessage && (
-        <div className="fixed top-16 right-8 z-50 bg-ink text-white px-4 py-3 rounded-md shadow-popover border border-ai flex items-center gap-2.5 text-xs animate-fadeIn">
+        <div className="fixed top-16 right-8 z-50 bg-ink text-white px-4 py-3 rounded-md shadow-popover border border-ai flex items-center gap-2.5 text-[13px] animate-fadeIn">
           <Sparkles className="w-4 h-4 text-ai" />
           <span>{toastMessage}</span>
         </div>
@@ -49,10 +49,10 @@ export const AIModels: React.FC = () => {
       />
 
       {/* Model Registry Table */}
-      <div className="bg-surface border border-line rounded-lg shadow-card overflow-hidden">
+      <div className="bg-surface border border-line rounded-lg overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs font-mono">
-            <thead className="bg-canvas text-muted text-[10px] uppercase border-b border-line">
+          <table className="w-full text-left text-[13px] font-mono">
+            <thead className="bg-canvas text-muted text-[12px] border-b border-line">
               <tr>
                 <th className="p-3 font-sans">Model Engine</th>
                 <th className="p-3 font-sans">Provider</th>
@@ -73,11 +73,11 @@ export const AIModels: React.FC = () => {
                   <React.Fragment key={m.id}>
                     <tr className="hover:bg-canvas/60 transition-colors">
                       <td className="p-3">
-                        <div className="font-bold text-ink text-sm font-sans flex items-center gap-1.5">
+                        <div className="font-semibold text-ink text-sm font-sans flex items-center gap-1.5">
                           <Cpu className="w-4 h-4 text-ai" />
                           <span>{m.name}</span>
                         </div>
-                        <div className="text-[10px] text-muted font-sans mt-0.5">
+                        <div className="text-[12px] text-muted font-sans mt-0.5">
                           {m.assignedFeatures.join(', ')}
                         </div>
                       </td>
@@ -86,11 +86,11 @@ export const AIModels: React.FC = () => {
                       <td className="p-3 text-right">
                         ${m.inputRateUSD} / ${m.outputRateUSD}
                       </td>
-                      <td className="p-3 text-right font-bold text-ink">
+                      <td className="p-3 text-right font-semibold text-ink">
                         {formatINR(m.monthlySpendINR)}
                       </td>
                       <td className="p-3 text-right">{m.avgLatencySec}s</td>
-                      <td className="p-3 text-right font-bold text-strand-green">
+                      <td className="p-3 text-right font-semibold text-strand-green">
                         {m.successRatePct}%
                       </td>
                       <td className="p-3 text-slate-600">{m.fallbackModel || 'None (Primary)'}</td>
@@ -98,7 +98,7 @@ export const AIModels: React.FC = () => {
                         <div className="flex items-center justify-center gap-1.5">
                           <button
                             onClick={() => setSelectedChangeModel(m)}
-                            className="px-2 py-1 bg-ai-tint text-ai hover:bg-ai-tint/80 border border-ai/30 rounded text-[11px] font-sans font-semibold shadow-2xs"
+                            className="px-2 py-1 bg-ai-tint text-ai hover:bg-ai-tint/80 border border-ai/30 rounded text-[12px] font-sans font-semibold shadow-2xs"
                           >
                             Route
                           </button>
@@ -117,26 +117,26 @@ export const AIModels: React.FC = () => {
                     {isExpanded && (
                       <tr className="bg-canvas/40 border-b border-line">
                         <td colSpan={9} className="p-4">
-                          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-xs font-mono">
+                          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 text-[13px] font-mono">
                             <div className="p-3 bg-white rounded border border-line space-y-1">
-                              <span className="text-muted text-[10px] uppercase font-sans">Sampling Temperature</span>
-                              <div className="text-sm font-bold text-ink">{m.config.temperature}</div>
-                              <div className="text-[10px] text-muted font-sans">Deterministic parsing</div>
+                              <span className="text-muted text-[12px] font-sans">Sampling Temperature</span>
+                              <div className="text-sm font-semibold text-ink">{m.config.temperature}</div>
+                              <div className="text-[12px] text-muted font-sans">Deterministic parsing</div>
                             </div>
                             <div className="p-3 bg-white rounded border border-line space-y-1">
-                              <span className="text-muted text-[10px] uppercase font-sans">Max Generation Limit</span>
-                              <div className="text-sm font-bold text-ink">{m.config.maxTokens} tokens</div>
-                              <div className="text-[10px] text-muted font-sans">Safety ceiling per turn</div>
+                              <span className="text-muted text-[12px] font-sans">Max Generation Limit</span>
+                              <div className="text-sm font-semibold text-ink">{m.config.maxTokens} tokens</div>
+                              <div className="text-[12px] text-muted font-sans">Safety ceiling per turn</div>
                             </div>
                             <div className="p-3 bg-white rounded border border-line space-y-1">
-                              <span className="text-muted text-[10px] uppercase font-sans">Network Timeout</span>
-                              <div className="text-sm font-bold text-ink">{m.config.timeoutSec}s</div>
-                              <div className="text-[10px] text-muted font-sans">Circuit-breaker trigger</div>
+                              <span className="text-muted text-[12px] font-sans">Network Timeout</span>
+                              <div className="text-sm font-semibold text-ink">{m.config.timeoutSec}s</div>
+                              <div className="text-[12px] text-muted font-sans">Circuit-breaker trigger</div>
                             </div>
                             <div className="p-3 bg-white rounded border border-line space-y-1">
-                              <span className="text-muted text-[10px] uppercase font-sans">Rate Limiting</span>
-                              <div className="text-sm font-bold text-ink">{m.config.rateLimit}</div>
-                              <div className="text-[10px] text-muted font-sans">Provider tier quota</div>
+                              <span className="text-muted text-[12px] font-sans">Rate Limiting</span>
+                              <div className="text-sm font-semibold text-ink">{m.config.rateLimit}</div>
+                              <div className="text-[12px] text-muted font-sans">Provider tier quota</div>
                             </div>
                           </div>
                         </td>
@@ -157,37 +157,37 @@ export const AIModels: React.FC = () => {
             <div className="flex items-center justify-between border-b border-line pb-3">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-ai" />
-                <h3 className="font-display font-semibold text-sm text-ink">
+                <h3 className="font-semibold text-sm text-ink">
                   Model Switch & Impact Projection
                 </h3>
               </div>
               <button
                 onClick={() => setSelectedChangeModel(null)}
-                className="text-xs text-muted hover:text-ink"
+                className="text-[13px] text-muted hover:text-ink"
               >
                 Close
               </button>
             </div>
 
-            <div className="space-y-3 text-xs">
+            <div className="space-y-3 text-[13px]">
               <div className="p-3 bg-canvas rounded border border-line space-y-1 font-mono">
-                <div className="text-muted text-[10px] uppercase font-sans">Target Engine:</div>
-                <div className="font-bold text-ink text-sm font-sans">{selectedChangeModel.name}</div>
-                <div className="text-slate-600 text-xs">Provider: {selectedChangeModel.provider}</div>
+                <div className="text-muted text-[12px] font-sans">Target Engine:</div>
+                <div className="font-semibold text-ink text-sm font-sans">{selectedChangeModel.name}</div>
+                <div className="text-slate-600 text-[13px]">Provider: {selectedChangeModel.provider}</div>
               </div>
 
               {/* Impact Delta Table */}
-              <div className="p-3 bg-ai-tint/30 border border-ai/30 rounded space-y-2 font-mono text-xs">
-                <div className="text-ai font-semibold font-sans uppercase tracking-wider text-[11px]">
+              <div className="p-3 bg-ai-tint/30 border border-ai/30 rounded space-y-2 font-mono text-[13px]">
+                <div className="text-ai font-semibold font-sans text-[12px]">
                   Projected Monthly Delta:
                 </div>
                 <div className="flex justify-between text-slate-800">
                   <span>Unit Cost / Run:</span>
-                  <span className="text-strand-green font-bold">-₹1.40 (-35%)</span>
+                  <span className="text-strand-green font-semibold">-₹1.40 (-35%)</span>
                 </div>
                 <div className="flex justify-between text-slate-800">
                   <span>Inference Latency:</span>
-                  <span className="text-strand-green font-bold">-620ms (Faster)</span>
+                  <span className="text-strand-green font-semibold">-620ms (Faster)</span>
                 </div>
                 <div className="flex justify-between text-slate-800">
                   <span>Extraction Accuracy:</span>
@@ -198,13 +198,13 @@ export const AIModels: React.FC = () => {
               <div className="pt-3 border-t border-line flex items-center justify-end gap-2">
                 <button
                   onClick={() => setSelectedChangeModel(null)}
-                  className="px-3 py-1.5 bg-canvas hover:bg-slate-200 border border-line text-xs font-medium text-slate rounded"
+                  className="px-3 py-1.5 bg-canvas hover:bg-slate-200 border border-line text-[13px] font-medium text-slate rounded"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleApplyModelChange}
-                  className="px-4 py-1.5 bg-ai hover:bg-ai/90 text-white text-xs font-semibold rounded shadow-xs"
+                  className="px-4 py-1.5 bg-ai hover:bg-ai/90 text-white text-[13px] font-semibold rounded "
                 >
                   Apply Routing Policy
                 </button>

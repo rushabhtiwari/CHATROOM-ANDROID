@@ -2,21 +2,7 @@ import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { mockRFQs } from '../../data/rfqs';
 import { mockCustomers } from '../../data/customers';
-import {
-  ArrowLeft,
-  FileCheck2,
-  PackageCheck,
-  UserCheck,
-  AlertTriangle,
-  Clock,
-  Sparkles,
-  Paperclip,
-  CheckCircle2,
-  ExternalLink,
-  ChevronRight,
-  ShieldAlert,
-  ArrowRight
-} from 'lucide-react';
+import { ArrowLeft, Paperclip, CheckCircle2 } from 'lucide-react';
 import { StatusPill } from '../../components/common/StatusPill';
 import { AgeIndicator } from '../../components/common/AgeIndicator';
 import { AIField } from '../../components/common/AIField';
@@ -43,110 +29,78 @@ export const RFQDetail: React.FC = () => {
   };
 
   const handleEscalate = () => {
-    setToastMessage(`RFQ escalated to L2 (Rajesh Kumar - HOD Sales). Notification dispatched.`);
+    setToastMessage('Escalated to Rajesh Kumar.');
     setTimeout(() => setToastMessage(null), 4000);
   };
 
   const tabs = [
     { id: 'details', label: 'Details' },
-    { id: 'costing', label: 'Costing & BOM' },
+    { id: 'costing', label: 'Costing' },
     { id: 'quotations', label: 'Quotations', count: rfq.quotations.length },
     { id: 'samples', label: 'Samples', count: rfq.samples.length },
     { id: 'documents', label: 'Documents', count: rfq.documents.length },
-    { id: 'activity', label: 'Activity Timeline', count: rfq.timeline.length }
+    { id: 'activity', label: 'Activity', count: rfq.timeline.length }
   ];
 
   return (
     <div className="space-y-6 animate-fadeIn">
-      {/* Toast */}
       {toastMessage && (
-        <div className="fixed top-16 right-8 z-50 bg-ink text-white px-4 py-3 rounded-md shadow-popover border border-strand-amber flex items-center gap-2.5 text-xs animate-fadeIn">
-          <AlertTriangle className="w-4 h-4 text-strand-amber" />
+        <div className="fixed top-16 right-8 z-50 bg-ink text-white px-4 py-3 rounded-lg shadow-popover flex items-center gap-2.5 text-[14px] animate-fadeIn">
+          <CheckCircle2 className="w-4 h-4" />
           <span>{toastMessage}</span>
         </div>
       )}
 
-      {/* Back to list */}
-      <div className="flex items-center justify-between">
-        <Link
-          to="/rfq"
-          className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-kiran"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Back to RFQs & Tickets</span>
-        </Link>
-        <span className="text-xs font-mono text-muted">
-          Created on {formatDate(rfq.createdDate)}
-        </span>
-      </div>
+      <Link
+        to="/rfq"
+        className="inline-flex items-center gap-1.5 text-[14px] font-medium text-muted hover:text-ink"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        <span>RFQs</span>
+      </Link>
 
-      {/* Page Header Split */}
-      <div className="bg-surface border border-line rounded-lg p-6 shadow-card flex flex-wrap items-start justify-between gap-4">
+      <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <div className="flex items-center gap-3">
-            <h1 className="font-display font-semibold text-2xl text-ink font-mono">
-              {rfq.rfqNumber}
-            </h1>
+          <div className="flex flex-wrap items-center gap-3">
+            <h1 className="font-code font-semibold text-[24px] leading-[1.2] text-ink">{rfq.rfqNumber}</h1>
             <StatusPill status={rfq.status} />
             <AgeIndicator daysInStage={rfq.daysInStage} slaLimitDays={rfq.slaLimitDays} />
           </div>
-          <div className="text-sm font-semibold text-slate-800 mt-1">
-            {rfq.customerName} · <span className="font-mono text-slate-600 font-normal">{rfq.partNumber}</span>
+          <div className="text-[14px] text-ink-2 mt-1.5">
+            <span className="font-medium text-ink">{rfq.customerName}</span> · {rfq.partNumber}
           </div>
-          <p className="text-xs text-muted mt-0.5">{rfq.description}</p>
+          <div className="text-[13px] text-muted mt-0.5">
+            {rfq.description} · {formatDate(rfq.createdDate)}
+          </div>
         </div>
 
-        {/* Action Buttons */}
         <div className="flex items-center gap-2">
-          <button
-            onClick={handleEscalate}
-            className="px-3 py-1.5 bg-canvas hover:bg-slate-100 border border-line text-xs font-medium text-strand-red rounded transition-colors"
-          >
-            Escalate SLA
+          <button onClick={handleEscalate} className="btn-secondary text-strand-red">
+            Escalate
           </button>
-          <button
-            onClick={handleRequestSample}
-            className="px-3 py-1.5 bg-canvas hover:bg-slate-100 border border-line text-xs font-medium text-slate-700 rounded transition-colors"
-          >
-            Request Sample
+          <button onClick={handleRequestSample} className="btn-secondary">
+            Request sample
           </button>
-          <button
-            onClick={handleGenerateQuote}
-            className="px-4 py-1.5 bg-kiran hover:bg-blue-700 text-white text-xs font-semibold rounded shadow-xs flex items-center gap-1.5 transition-colors"
-          >
-            <FileCheck2 className="w-3.5 h-3.5" />
-            Generate Quotation
+          <button onClick={handleGenerateQuote} className="btn-primary">
+            Create quotation
           </button>
         </div>
       </div>
 
-      {/* Mandatory Missing Fields Bar (if any) */}
       {rfq.missingMandatoryFields && rfq.missingMandatoryFields.length > 0 && (
-        <div className="p-3 bg-red-50 border border-red-200 rounded-md text-xs text-red-900 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <ShieldAlert className="w-4 h-4 text-strand-red" />
-            <span>
-              <strong>{rfq.missingMandatoryFields.length} mandatory fields missing:</strong>{' '}
-              {rfq.missingMandatoryFields.join(', ')}
-            </span>
-          </div>
-          <button
-            onClick={() => setActiveTab('details')}
-            className="text-xs font-semibold text-strand-red hover:underline"
-          >
-            Jump to complete &rarr;
+        <div className="px-4 py-3 bg-[#FBE9E7] rounded-lg text-[14px] text-[#B3302A] flex flex-wrap items-center justify-between gap-3">
+          <span>
+            <span className="font-medium">Missing:</span> {rfq.missingMandatoryFields.join(', ')}
+          </span>
+          <button onClick={() => setActiveTab('details')} className="btn-secondary">
+            Fill in
           </button>
         </div>
       )}
 
-      {/* 2/3 + 1/3 Main Grid Layout */}
       <div className="grid grid-cols-12 gap-6">
-        
-        {/* Main Column (8 cols) */}
-        <div className="col-span-12 lg:col-span-8 space-y-4">
-          <div className="bg-surface border border-line rounded-lg p-5 shadow-card space-y-6">
-            
-            {/* Tabs */}
+        <div className="col-span-12 lg:col-span-8">
+          <div className="bg-surface border border-line rounded-lg p-5 space-y-5">
             <PageTabs
               tabs={tabs}
               activeTab={activeTab}
@@ -154,270 +108,207 @@ export const RFQDetail: React.FC = () => {
               departmentColor="#B5070E"
             />
 
-            {/* Tab 1: Details */}
             {activeTab === 'details' && (
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                  <AIField label="Customer Name" value={rfq.customerName} />
-                  <AIField label="Customer Region" value={`${rfq.region} Zone`} />
-                  <AIField label="Part Number" value={rfq.partNumber} />
-                  <AIField label="Quantity" value={`${rfq.quantity.toLocaleString('en-IN')} ${rfq.uom}`} />
-                  <AIField label="Target Price" value={rfq.targetPrice ? formatINR(rfq.targetPrice) : 'Not specified'} />
-                  <AIField label="SOP Date" value={formatDate(rfq.sopDate)} />
-                  <AIField label="Estimated Total Value" value={formatINR(rfq.estimatedValue)} />
-                  <AIField label="Ticket Owner" value={rfq.ownerName} />
-                </div>
-
-                <div className="pt-3 border-t border-line text-xs text-slate-500 bg-canvas/40 p-3 rounded">
-                  <div className="font-semibold text-ink mb-1 flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-ai" />
-                    Extraction & Modification Audit Note
-                  </div>
-                  <p>
-                    Record created from inbound email via <strong>claude-sonnet-4-6</strong> on {formatDate(rfq.createdDate)}. Part specification validated by <strong>Vikram Shetty</strong> on 18 Aug 2026.
-                  </p>
-                </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[14px]">
+                <AIField label="Customer" value={rfq.customerName} />
+                <AIField label="Region" value={rfq.region} />
+                <AIField label="Part no." value={rfq.partNumber} />
+                <AIField label="Quantity" value={`${rfq.quantity.toLocaleString('en-IN')} ${rfq.uom}`} />
+                <AIField label="Target price" value={rfq.targetPrice ? formatINR(rfq.targetPrice) : 'Not specified'} />
+                <AIField label="SOP date" value={formatDate(rfq.sopDate)} />
+                <AIField label="Value" value={formatINR(rfq.estimatedValue)} />
+                <AIField label="Owner" value={rfq.ownerName} />
               </div>
             )}
 
-            {/* Tab 2: Costing & BOM */}
             {activeTab === 'costing' && (
-              <div className="space-y-4">
-                <div className="p-4 rounded border border-line bg-canvas/30 space-y-3">
-                  <h3 className="text-xs font-semibold uppercase tracking-wider text-ink font-mono">
-                    Production Costing Breakdown
-                  </h3>
-                  {rfq.costing ? (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs font-mono">
-                      <div className="p-2.5 bg-white border border-line rounded">
-                        <div className="text-[10px] text-muted uppercase">Raw Material</div>
-                        <div className="font-semibold text-ink mt-0.5">{rfq.costing.material}</div>
-                      </div>
-                      <div className="p-2.5 bg-white border border-line rounded">
-                        <div className="text-[10px] text-muted uppercase">Cut Length Packaging</div>
-                        <div className="font-semibold text-ink mt-0.5">{rfq.costing.cutLength}</div>
-                      </div>
-                      <div className="p-2.5 bg-white border border-line rounded">
-                        <div className="text-[10px] text-muted uppercase">Calculated Unit Rate</div>
-                        <div className="font-bold text-strand-green mt-0.5">{formatINR(rfq.costing.rate)} / m</div>
-                      </div>
-                      <div className="p-2.5 bg-white border border-line rounded">
-                        <div className="text-[10px] text-muted uppercase">Gross Margin</div>
-                        <div className="font-bold text-strand-amber mt-0.5">{rfq.costing.marginPct}%</div>
-                      </div>
-                      <div className="p-2.5 bg-white border border-line rounded">
-                        <div className="text-[10px] text-muted uppercase">Labor & Machine Cost</div>
-                        <div className="font-semibold text-slate-700 mt-0.5">₹{rfq.costing.laborCost} / m</div>
-                      </div>
-                      <div className="p-2.5 bg-white border border-line rounded">
-                        <div className="text-[10px] text-muted uppercase">Packaging & Spooling</div>
-                        <div className="font-semibold text-slate-700 mt-0.5">₹{rfq.costing.packagingCost} / m</div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="py-6 text-center text-xs text-muted">
-                      Costing has not been locked by Planning yet.
-                    </div>
-                  )}
+              rfq.costing ? (
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-5 text-[14px]">
+                  <div>
+                    <div className="text-[13px] text-muted">Material</div>
+                    <div className="text-ink mt-0.5">{rfq.costing.material}</div>
+                  </div>
+                  <div>
+                    <div className="text-[13px] text-muted">Cut length</div>
+                    <div className="text-ink mt-0.5">{rfq.costing.cutLength}</div>
+                  </div>
+                  <div>
+                    <div className="text-[13px] text-muted">Rate</div>
+                    <div className="text-ink mt-0.5 tabular-nums">{formatINR(rfq.costing.rate)} / m</div>
+                  </div>
+                  <div>
+                    <div className="text-[13px] text-muted">Margin</div>
+                    <div className="text-ink mt-0.5 tabular-nums">{rfq.costing.marginPct}%</div>
+                  </div>
+                  <div>
+                    <div className="text-[13px] text-muted">Labour</div>
+                    <div className="text-ink mt-0.5 tabular-nums">₹{rfq.costing.laborCost} / m</div>
+                  </div>
+                  <div>
+                    <div className="text-[13px] text-muted">Packaging</div>
+                    <div className="text-ink mt-0.5 tabular-nums">₹{rfq.costing.packagingCost} / m</div>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="py-8 text-center text-[14px] text-muted">No costing yet.</div>
+              )
             )}
 
-            {/* Tab 3: Quotations */}
             {activeTab === 'quotations' && (
-              <div className="space-y-3">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-semibold text-ink font-mono uppercase">
-                    Linked Commercial Quotations ({rfq.quotations.length})
-                  </span>
-                  <button
-                    onClick={handleGenerateQuote}
-                    className="px-2.5 py-1 bg-kiran text-white rounded text-xs font-semibold"
-                  >
-                    + Create Quote Version
+              <div>
+                <div className="flex justify-end mb-1">
+                  <button onClick={handleGenerateQuote} className="btn-secondary">
+                    New version
                   </button>
                 </div>
-                {rfq.quotations.map((q, idx) => (
-                  <div
-                    key={idx}
-                    className="p-3 rounded border border-line bg-canvas/30 flex items-center justify-between text-xs"
-                  >
-                    <div>
-                      <Link
-                        to={`/quotations/${q.quoteNumber}`}
-                        className="font-mono font-semibold text-kiran hover:underline"
-                      >
-                        {q.quoteNumber} ({q.version})
-                      </Link>
-                      <div className="text-[11px] text-muted font-mono mt-0.5">
-                        Generated on {formatDate(q.date)} · Value: {formatINR(q.value)}
+                {rfq.quotations.length === 0 && (
+                  <div className="py-8 text-center text-[14px] text-muted">No quotations yet.</div>
+                )}
+                <div className="divide-y divide-line-2">
+                  {rfq.quotations.map((q, idx) => (
+                    <div key={idx} className="py-3.5 flex items-center justify-between gap-3 text-[14px]">
+                      <div>
+                        <Link
+                          to={`/quotations/${q.quoteNumber}`}
+                          className="font-code text-[13px] text-kiran hover:underline"
+                        >
+                          {q.quoteNumber} ({q.version})
+                        </Link>
+                        <div className="text-[13px] text-muted mt-0.5">
+                          {formatDate(q.date)} · <span className="tabular-nums">{formatINR(q.value)}</span>
+                        </div>
                       </div>
+                      <StatusPill status={q.status} />
                     </div>
-                    <StatusPill status={q.status} />
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             )}
 
-            {/* Tab 4: Samples */}
             {activeTab === 'samples' && (
-              <div className="space-y-3">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-semibold text-ink font-mono uppercase">
-                    Linked Sample Qualification Requests ({rfq.samples.length})
-                  </span>
-                  <button
-                    onClick={handleRequestSample}
-                    className="px-2.5 py-1 bg-white border border-line text-slate-800 rounded text-xs font-medium"
-                  >
-                    + Request Sample
+              <div>
+                <div className="flex justify-end mb-1">
+                  <button onClick={handleRequestSample} className="btn-secondary">
+                    Request sample
                   </button>
                 </div>
-                {rfq.samples.map((s, idx) => (
-                  <div
-                    key={idx}
-                    className="p-3 rounded border border-line bg-canvas/30 flex items-center justify-between text-xs font-mono"
-                  >
-                    <div>
-                      <Link to="/samples" className="font-semibold text-kiran hover:underline">
-                        {s.sampleNumber}
-                      </Link>
-                      <div className="text-[11px] text-muted mt-0.5">
-                        Linked to {rfq.rfqNumber} · Logged {formatDate(s.date)}
+                {rfq.samples.length === 0 && (
+                  <div className="py-8 text-center text-[14px] text-muted">No samples yet.</div>
+                )}
+                <div className="divide-y divide-line-2">
+                  {rfq.samples.map((s, idx) => (
+                    <div key={idx} className="py-3.5 flex items-center justify-between gap-3 text-[14px]">
+                      <div>
+                        <Link to="/samples" className="font-code text-[13px] text-kiran hover:underline">
+                          {s.sampleNumber}
+                        </Link>
+                        <div className="text-[13px] text-muted mt-0.5">{formatDate(s.date)}</div>
                       </div>
+                      <StatusPill status={s.status} />
                     </div>
-                    <StatusPill status={s.status} />
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             )}
 
-            {/* Tab 5: Documents */}
             {activeTab === 'documents' && (
-              <div className="space-y-3">
-                <span className="text-xs font-semibold text-ink font-mono uppercase">
-                  Technical Drawings & Client Specifications ({rfq.documents.length})
-                </span>
+              <div className="divide-y divide-line-2">
+                {rfq.documents.length === 0 && (
+                  <div className="py-8 text-center text-[14px] text-muted">No documents yet.</div>
+                )}
                 {rfq.documents.map((doc, idx) => (
                   <div
                     key={idx}
-                    className="p-3 rounded border border-line bg-white flex items-center justify-between text-xs font-mono shadow-2xs hover:border-kiran cursor-pointer"
+                    className="py-3.5 flex items-center justify-between gap-3 text-[14px] hover:bg-canvas cursor-pointer"
                   >
-                    <div className="flex items-center gap-2">
-                      <Paperclip className="w-4 h-4 text-kiran" />
-                      <span className="font-semibold text-ink">{doc.name}</span>
-                      <span className="text-muted">({doc.size})</span>
+                    <div className="flex items-center gap-2 min-w-0">
+                      <Paperclip className="w-4 h-4 text-slate-500 shrink-0" />
+                      <span className="text-ink truncate">{doc.name}</span>
+                      <span className="text-[13px] text-muted whitespace-nowrap">{doc.size}</span>
                     </div>
-                    <span className="text-[10px] text-muted">{doc.uploadedAt}</span>
+                    <span className="text-[13px] text-muted whitespace-nowrap">{doc.uploadedAt}</span>
                   </div>
                 ))}
               </div>
             )}
 
-            {/* Tab 6: Activity Timeline */}
-            {activeTab === 'activity' && (
-              <div className="space-y-4">
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-ink font-mono mb-2">
-                  Complete Department & AI Execution Log
-                </h3>
-                <Timeline events={rfq.timeline} />
-              </div>
-            )}
+            {activeTab === 'activity' && <Timeline events={rfq.timeline} />}
           </div>
         </div>
 
-        {/* Right Rail (4 cols) */}
         <div className="col-span-12 lg:col-span-4 space-y-6">
-          
-          {/* Customer Financial & Credit Card */}
-          <div className="bg-surface border border-line rounded-lg p-4 shadow-card space-y-3 font-mono text-xs">
-            <div className="flex items-center justify-between border-b border-line pb-2">
-              <span className="font-semibold text-ink uppercase tracking-wider text-[11px]">
-                Customer Account Card
-              </span>
-              <span className="text-kiran text-[11px] font-sans font-medium">{customer.code}</span>
+          <div className="bg-surface border border-line rounded-lg p-5 space-y-3 text-[14px]">
+            <div className="flex items-center justify-between">
+              <h3 className="text-[16px] font-semibold text-ink">Customer</h3>
+              <span className="font-code text-[13px] text-muted">{customer.code}</span>
             </div>
 
-            <div className="space-y-1.5">
+            <div className="space-y-2.5">
               <div className="flex items-center justify-between">
-                <span className="text-muted">Credit Limit:</span>
-                <span className="font-semibold text-ink">{formatINR(customer.creditLimit)}</span>
+                <span className="text-muted">Credit limit</span>
+                <span className="text-ink tabular-nums">{formatINR(customer.creditLimit)}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-muted">Total Outstanding:</span>
-                <span className="font-semibold text-ink">{formatINR(customer.outstanding)}</span>
+                <span className="text-muted">Outstanding</span>
+                <span className="text-ink tabular-nums">{formatINR(customer.outstanding)}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-muted">Available Balance:</span>
-                <span className="font-semibold text-strand-green">{formatINR(customer.availableBalance)}</span>
+                <span className="text-muted">Available</span>
+                <span className="text-ink tabular-nums">{formatINR(customer.availableBalance)}</span>
               </div>
-              <div className="flex items-center justify-between pt-1 border-t border-line/60">
-                <span className="text-muted">Overdue &gt;60d:</span>
-                <span className={`font-bold ${customer.overdueAmount > 0 ? 'text-strand-red animate-pulse' : 'text-strand-green'}`}>
+              <div className="flex items-center justify-between">
+                <span className="text-muted">Overdue 60+ days</span>
+                <span className={`tabular-nums ${customer.overdueAmount > 0 ? 'text-strand-red' : 'text-ink'}`}>
                   {formatINR(customer.overdueAmount)}
                 </span>
               </div>
             </div>
 
             {customer.stopDispatch && (
-              <div className="p-2.5 rounded bg-red-50 border border-red-300 text-[11px] text-red-900 font-sans space-y-1">
-                <div className="font-bold flex items-center gap-1 text-strand-red">
-                  <ShieldAlert className="w-3.5 h-3.5" /> STOP DISPATCH ACTIVE
-                </div>
-                <p>{customer.stopDispatchReason}</p>
+              <div className="px-3 py-2.5 rounded-md bg-[#FBE9E7] text-[13px] text-[#B3302A]">
+                <div className="font-medium">Dispatch stopped</div>
+                <div className="mt-0.5">{customer.stopDispatchReason}</div>
               </div>
             )}
           </div>
 
-          {/* Department Routing Chain */}
-          <div className="bg-surface border border-line rounded-lg p-4 shadow-card space-y-3 text-xs">
-            <div className="flex items-center justify-between border-b border-line pb-2">
-              <span className="font-semibold text-ink uppercase tracking-wider text-[11px] font-mono">
-                Department Routing Chain
-              </span>
-              <span className="text-[10px] text-muted">Hop deadlines</span>
-            </div>
+          <div className="bg-surface border border-line rounded-lg p-5">
+            <h3 className="text-[16px] font-semibold text-ink mb-2">Routing</h3>
 
-            <div className="space-y-3">
+            <div className="divide-y divide-line-2">
               {rfq.routingHops.map((hop, idx) => (
-                <div
-                  key={idx}
-                  className={`p-2.5 rounded border transition-colors ${
-                    hop.isCurrent
-                      ? 'bg-kiran-tint/60 border-kiran text-kiran font-medium'
-                      : hop.status === 'completed'
-                      ? 'bg-emerald-50/40 border-emerald-200 text-slate-700'
-                      : 'bg-canvas border-line text-slate-500'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold flex items-center gap-1.5">
-                      {hop.status === 'completed' && <CheckCircle2 className="w-3.5 h-3.5 text-strand-green" />}
-                      {hop.department}
-                    </span>
-                    <span className="font-mono text-[10px]">{hop.deadline}</span>
+                <div key={idx} className="py-3 flex items-center justify-between gap-3 text-[14px]">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <span
+                      className={`w-2 h-2 rounded-full shrink-0 ${
+                        hop.isCurrent
+                          ? 'bg-kiran'
+                          : hop.status === 'completed'
+                          ? 'bg-strand-green'
+                          : 'bg-slate-300'
+                      }`}
+                    />
+                    <div className="min-w-0">
+                      <div className={hop.isCurrent ? 'font-medium text-ink' : 'text-ink-2'}>{hop.department}</div>
+                      <div className="text-[13px] text-muted truncate">{hop.owner}</div>
+                    </div>
                   </div>
-                  <div className="text-[11px] text-muted mt-0.5">
-                    Assignee: <strong>{hop.owner}</strong>
-                  </div>
+                  <span className="text-[13px] text-muted whitespace-nowrap">{hop.deadline}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Linked Sales Orders & Reminders */}
-          <div className="bg-surface border border-line rounded-lg p-4 shadow-card space-y-2 text-xs">
-            <div className="text-[11px] font-semibold uppercase tracking-wider text-muted font-mono border-b border-line pb-2">
-              Scheduled AI Reminders
-            </div>
-            <div className="space-y-2 text-[11px] text-slate-700">
-              <div className="flex items-center justify-between font-mono bg-canvas p-2 rounded">
-                <span>Planning costing auto-chase</span>
-                <span className="text-strand-amber">22 Aug, 10 AM</span>
+          <div className="bg-surface border border-line rounded-lg p-5">
+            <h3 className="text-[16px] font-semibold text-ink mb-2">Reminders</h3>
+            <div className="divide-y divide-line-2 text-[14px]">
+              <div className="py-3 flex items-center justify-between gap-3">
+                <span className="text-ink-2">Costing chase</span>
+                <span className="text-[13px] text-muted whitespace-nowrap">22 Aug, 10 AM</span>
               </div>
-              <div className="flex items-center justify-between font-mono bg-canvas p-2 rounded">
-                <span>Customer quote follow-up #1</span>
-                <span className="text-muted">26 Aug, 03 PM</span>
+              <div className="py-3 flex items-center justify-between gap-3">
+                <span className="text-ink-2">Quote follow-up</span>
+                <span className="text-[13px] text-muted whitespace-nowrap">26 Aug, 03 PM</span>
               </div>
             </div>
           </div>

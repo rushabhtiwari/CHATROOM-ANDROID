@@ -47,7 +47,7 @@ export function ThreadPanel({ rootId, onClose, onForward }: ThreadPanelProps) {
       <header className="flex h-16 shrink-0 items-center gap-2 border-b border-border px-4">
         <div className="min-w-0 flex-1">
           <h2 className="text-sm font-semibold">{t("thread.title")}</h2>
-          <p className="truncate text-[11px] text-muted-foreground">
+          <p className="truncate text-[12px] text-muted-foreground">
             {t("thread.replies", { count: threadCount(rootId) })}
           </p>
         </div>
@@ -55,7 +55,7 @@ export function ThreadPanel({ rootId, onClose, onForward }: ThreadPanelProps) {
           onClick={() => toggleFollowThread(rootId)}
           aria-pressed={following}
           className={cn(
-            "flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-[11px] font-medium transition-colors",
+            "flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-[12px] font-medium transition-colors",
             following
               ? "border-primary/30 bg-primary/10 text-primary"
               : "border-border bg-surface hover:bg-secondary",
@@ -83,7 +83,7 @@ export function ThreadPanel({ rootId, onClose, onForward }: ThreadPanelProps) {
         />
         <div className="flex items-center gap-2">
           <span className="h-px flex-1 bg-border" />
-          <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
+          <span className="text-[12px] text-muted-foreground">
             {replies.length === 0
               ? t("thread.empty")
               : t("thread.replies", { count: replies.length })}

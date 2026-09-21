@@ -31,10 +31,7 @@ import { isStaleAssetError, recoverFromStaleAsset } from "@/lib/stale-asset-erro
 import { CustomErrorComponent } from "./error";
 import { AppProvider } from "./provider";
 // fonts
-import "@fontsource-variable/inter";
-import interVariableWoff2 from "@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url";
 import "@fontsource/material-symbols-rounded";
-import "@fontsource/ibm-plex-mono";
 
 const APP_TITLE = "KCMS | Kiran Cable Management System";
 
@@ -48,19 +45,13 @@ export const links: LinksFunction = () => [
   { rel: "apple-touch-icon", sizes: "512x512", href: icon512 },
   { rel: "manifest", href: "/manifest.json" },
   { rel: "stylesheet", href: globalStyles },
+  // Geist is declared in @plane/tailwind-config and served from /fonts.
   {
     rel: "preload",
-    href: interVariableWoff2,
+    href: "/fonts/geist-latin.woff2",
     as: "font",
     type: "font/woff2",
     crossOrigin: "anonymous",
-  },
-  // Display face for headings; falls back to Inter when offline.
-  { rel: "preconnect", href: "https://fonts.googleapis.com" },
-  { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-  {
-    rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap",
   },
 ];
 

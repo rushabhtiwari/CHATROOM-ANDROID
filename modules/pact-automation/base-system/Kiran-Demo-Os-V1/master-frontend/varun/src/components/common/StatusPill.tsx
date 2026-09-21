@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatusVariant } from '../../types';
-import { TONE, toneForStatus } from '../../lib/tone';
+import { TONE, sentenceCase, toneForStatus } from '../../lib/tone';
 
 interface StatusPillProps {
   status: StatusVariant | string;
@@ -38,7 +38,7 @@ export const StatusPill: React.FC<StatusPillProps> = ({
       {showDot && (
         <span aria-hidden="true" className={`h-1.5 w-1.5 shrink-0 rounded-full ${tone.solid}`} />
       )}
-      <span className="whitespace-nowrap">{status}</span>
+      <span className="whitespace-nowrap">{sentenceCase(status)}</span>
     </span>
   );
 };

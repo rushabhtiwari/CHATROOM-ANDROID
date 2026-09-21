@@ -225,11 +225,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen = false, onMobileCl
    */
   const navGroups: NavGroup[] = [
     {
-      label: 'Mail Monitoring',
+      label: 'Intake',
       groupColor: '#B5070E',
       items: [
         {
-          name: 'Mailing',
+          name: 'Mail',
           path: '/admin/mailing',
           landing: '/admin/mailing/inbox',
           icon: Inbox,
@@ -237,7 +237,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen = false, onMobileCl
           children: [
             { name: 'Emails', path: '/admin/mailing/inbox' },
             {
-              name: 'On Hold',
+              name: 'On hold',
               path: '/admin/mailing/on-hold',
               ...(mailingOnHold ? { badge: mailingOnHold } : {}),
             },
@@ -247,11 +247,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen = false, onMobileCl
       ]
     },
     {
-      label: 'PACT Entry',
+      label: 'PACT',
       groupColor: '#E9991B',
       items: [
         {
-          name: 'Order Automation',
+          name: 'Order automation',
           path: '/admin/automation',
           landing: '/admin/automation/orders',
           icon: Workflow,
@@ -266,7 +266,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen = false, onMobileCl
             { name: 'Rules', path: '/admin/automation/rules' },
           ],
         },
-        { name: 'PACT Automation', path: '/pact', icon: Bot },
+        { name: 'PACT automation', path: '/pact', icon: Bot },
       ]
     }
   ];
@@ -293,52 +293,35 @@ export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen = false, onMobileCl
     .map((item) => item.path)
     .sort((a, b) => b.length - a.length)[0];
 
+  const ROW =
+    'group relative flex h-9 items-center rounded-md text-[14px] font-medium transition-colors duration-150';
+  const ROW_ACTIVE = 'bg-[#DCE6F4] text-[#0B4F9C]';
+  const ROW_IDLE = 'text-ink-soft hover:bg-black/5';
+  const BADGE =
+    'tnum shrink-0 rounded-full bg-[#D93A2F] px-1.5 py-[3px] text-[12px] font-semibold leading-none text-white';
+
   return (
     <aside
-      style={{
-        backgroundImage:
-          'linear-gradient(168deg, #0A2547 0%, #072F58 55%, #04305A 100%)'
-      }}
-      className={`text-slate-300 transition-[width] duration-200 ease-out-refined flex flex-col select-none relative z-30 shrink-0 border-r border-outline-variant ${
-        collapsed ? 'w-[68px]' : 'w-[264px]'
+      className={`flex shrink-0 select-none flex-col border-r border-[#E1E1E6] bg-sidebar text-ink-soft transition-[width] duration-200 ease-out-refined relative z-30 ${
+        collapsed ? 'w-[68px]' : 'w-[248px]'
       } ${mobileOpen ? 'fixed inset-y-0 left-0 flex shadow-modal' : 'hidden md:flex'} md:relative md:inset-auto md:shadow-none`}
     >
-      {/* Hairline separating the rail from the workspace */}
-      <div className="absolute inset-y-0 right-0 w-px bg-white/10" />
-
-      {/* Brand lockup */}
+      {/* Brand */}
       <div
-        className={`h-16 flex items-center border-b border-white/[0.08] shrink-0 ${
-          collapsed ? 'justify-center px-0' : 'justify-between pl-4 pr-3'
+        className={`flex h-14 shrink-0 items-center ${
+          collapsed ? 'justify-center px-0' : 'justify-between pl-4 pr-2'
         }`}
       >
-        <NavLink to="/" className="flex items-center gap-3 overflow-hidden min-w-0">
-          <div className="w-9 h-9 rounded-none bg-white flex items-center justify-center shrink-0 shadow-none ring-1 ring-white/20">
+        <NavLink to="/" className="flex min-w-0 items-center gap-2.5 overflow-hidden">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-navy">
             <img
               src="/kiran-mark.png"
               alt="Kiran Cable Protection"
-              className="w-6 h-6 object-contain"
+              className="h-5 w-5 rounded-[3px] bg-white object-contain p-px"
             />
           </div>
           {!collapsed && (
-            <div className="flex flex-col min-w-0">
-              {/*
-                The wordmark is the one place the width axis is pushed to its
-                limit (LEDGERDESIGNSYSTEM.md §3.1): same face as everything
-                else, set expanded, so it reads as signage rather than as a
-                second typeface. The negative tracking the old lockup carried
-                fought that width — at this size the letters want air, not
-                compression.
-              */}
-              <span className="ku-xwide font-display text-[18px] font-bold uppercase leading-none tracking-[0.02em] text-white">
-                Kiran<span className="text-white/55"> PACT</span>
-              </span>
-              {/* The standfirst is a stamped label, like every group heading
-                  below it — mono, uppercase, widely tracked. */}
-              <span className="mt-1.5 truncate font-mono text-[9px] font-medium uppercase tracking-[0.18em] text-white/45">
-                Automation System
-              </span>
-            </div>
+            <span className="truncate text-[15px] font-semibold text-ink">Kiran PACT</span>
           )}
         </NavLink>
 
@@ -346,9 +329,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen = false, onMobileCl
           <button
             onClick={() => setCollapsed(true)}
             aria-label="Collapse sidebar"
-            className="p-1.5 rounded-none text-white/40 hover:text-white hover:bg-white/10 transition-colors shrink-0"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-faint transition-colors hover:bg-black/5 hover:text-ink"
           >
-            <PanelLeftClose className="w-4 h-4" />
+            <PanelLeftClose className="h-4 w-4" />
           </button>
         )}
       </div>
@@ -357,58 +340,51 @@ export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen = false, onMobileCl
         <button
           onClick={() => setCollapsed(false)}
           aria-label="Expand sidebar"
-          className="mx-auto mt-3 p-1.5 rounded-none text-white/40 hover:text-white hover:bg-white/10 transition-colors"
+          className="mx-auto mt-1 flex h-8 w-8 items-center justify-center rounded-md text-faint transition-colors hover:bg-black/5 hover:text-ink"
         >
-          <PanelLeftOpen className="w-4 h-4" />
+          <PanelLeftOpen className="h-4 w-4" />
         </button>
       )}
 
       {/* Navigation */}
-      <nav aria-label="Primary navigation" className="flex-1 overflow-y-auto overflow-x-hidden py-4 px-2.5 space-y-5">
+      <nav
+        aria-label="Primary navigation"
+        className="flex-1 space-y-5 overflow-y-auto overflow-x-hidden px-3 py-3"
+      >
         {navGroups.map((group) => (
-          <div key={group.label} className="space-y-px">
+          <div key={group.label} className="space-y-0.5">
             {!collapsed ? (
-              <div className="px-2.5 pb-1.5 font-mono tracking-widest text-[9px] uppercase text-white/40">
-                {group.label}
-              </div>
+              <div className="px-2.5 pb-1 text-[12px] font-semibold text-faint">{group.label}</div>
             ) : (
-              <div className="mx-2 border-t border-white/[0.08] my-2.5" />
+              <div className="mx-2 my-2 border-t border-[#E1E1E6]" />
             )}
 
             {group.items.map((item) => {
               const isActive = item.path === activePath;
               const Icon = item.icon;
 
-              // A project row with sub-pages: the row still navigates, but it
-              // also carries a chevron that opens its children in place.
+              // A section with sub-pages: the row still navigates, but it also
+              // carries a chevron that opens its children in place.
               const hasChildren = !collapsed && (item.children?.length ?? 0) > 0;
-              // The URL is somewhere inside this section — its own subtree, or
-              // one of its sub-sections. Drives both the highlight and whether
-              // the section opens itself.
               const inThisSubtree = ownsRoute(item);
               const isOpen = hasChildren && (expanded.has(item.path) || inThisSubtree);
 
               if (hasChildren) {
                 return (
                   <div key={item.path}>
-                    <div
-                      className={`group relative flex items-center gap-1 rounded-none pr-1 text-[12.5px] font-medium transition-colors duration-150 ${
-                        isActive || inThisSubtree
-                          ? 'bg-white/[0.10] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.07)]'
-                          : 'text-white/65 hover:bg-white/[0.055] hover:text-white'
-                      }`}
-                    >
-                      {(isActive || inThisSubtree) && (
-                        <span
-                          aria-hidden
-                          style={{
-                            background:
-                              group.groupColor === 'gradient'
-                                ? STRAND_GRADIENT
-                                : group.groupColor
-                          }}
-                          className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-full"
-                        />
+                    <div className={`${ROW} gap-1 pr-2 ${ROW_IDLE}`}>
+                      <NavLink
+                        to={item.landing ?? item.children?.[0]?.path ?? item.path}
+                        onClick={onMobileClose}
+                        title={item.name}
+                        className="flex h-full min-w-0 flex-1 items-center gap-2.5 pl-2.5"
+                      >
+                        <Icon className="h-[17px] w-[17px] shrink-0 text-faint" strokeWidth={1.8} />
+                        <span className="truncate">{item.name}</span>
+                      </NavLink>
+
+                      {item.badge !== undefined && !isOpen && (
+                        <span className={BADGE}>{item.badge}</span>
                       )}
 
                       <button
@@ -416,46 +392,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen = false, onMobileCl
                         onClick={() => toggleExpanded(item.path)}
                         aria-label={isOpen ? `Collapse ${item.name}` : `Expand ${item.name}`}
                         aria-expanded={isOpen}
-                        className="ml-1.5 rounded-none p-0.5 text-white/40 transition-colors hover:bg-white/10 hover:text-white"
+                        className="flex h-6 w-6 shrink-0 items-center justify-center rounded-sm text-faint transition-colors hover:bg-black/5 hover:text-ink"
                       >
                         <ChevronRight
-                          className={`h-3 w-3 transition-transform ${isOpen ? 'rotate-90' : ''}`}
+                          className={`h-3.5 w-3.5 transition-transform ${isOpen ? 'rotate-90' : ''}`}
                         />
                       </button>
-
-                        <NavLink
-                        to={item.landing ?? item.children?.[0]?.path ?? item.path}
-                          onClick={onMobileClose}
-                        title={item.name}
-                        className="flex min-w-0 flex-1 items-center gap-2 py-[7px]"
-                      >
-                        <Icon
-                          className={`h-[15px] w-[15px] shrink-0 transition-colors ${
-                            isActive || inThisSubtree ? '' : 'text-white/45'
-                          }`}
-                          style={
-                            isActive || inThisSubtree
-                              ? { color: groupInk(group.groupColor), filter: groupGlow(group.groupColor) }
-                              : undefined
-                          }
-                          strokeWidth={isActive || inThisSubtree ? 2.1 : 1.9}
-                        />
-                        <span className="truncate">{item.name}</span>
-                      </NavLink>
-
-                      {item.badge !== undefined && (
-                        <span
-                          className={`shrink-0 rounded-badge px-1.5 py-[3px] font-mono text-[9.5px] font-semibold leading-none text-white ${
-                            item.badgeColor || 'bg-white/15'
-                          }`}
-                        >
-                          {item.badge}
-                        </span>
-                      )}
                     </div>
 
                     {isOpen && (
-                      <div className="ml-[22px] mt-px space-y-px border-l border-white/[0.10] pl-2">
+                      <div className="mt-0.5 space-y-0.5">
                         {item.children!.map((child) => (
                           <NavLink
                             key={child.path}
@@ -463,18 +409,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen = false, onMobileCl
                             end
                             onClick={onMobileClose}
                             className={({ isActive: childActive }) =>
-                              `flex items-center gap-2 rounded-none px-2 py-[5px] text-[12px] transition-colors ${
-                                childActive
-                                  ? 'bg-white/[0.10] font-medium text-white'
-                                  : 'text-white/55 hover:bg-white/[0.05] hover:text-white/90'
-                              }`
+                              `${ROW} gap-2 pl-[37px] pr-2.5 ${childActive ? ROW_ACTIVE : ROW_IDLE}`
                             }
                           >
-                            <span className="truncate flex-1">{child.name}</span>
+                            <span className="flex-1 truncate">{child.name}</span>
                             {child.badge !== undefined && (
-                              <span className="shrink-0 bg-white/15 px-1.5 py-[2px] font-mono text-[9.5px] font-semibold leading-none text-white">
-                                {child.badge}
-                              </span>
+                              <span className={BADGE}>{child.badge}</span>
                             )}
                           </NavLink>
                         ))}
@@ -490,53 +430,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen = false, onMobileCl
                   to={item.path}
                   onClick={onMobileClose}
                   title={collapsed ? item.name : undefined}
-                  className={`group relative flex items-center gap-2.5 rounded-none text-[12.5px] font-medium transition-colors duration-150 ${
-                    collapsed ? 'justify-center px-0 py-2' : 'px-2.5 py-[7px]'
-                  } ${
-                    isActive
-                      ? 'bg-white/[0.10] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.07)]'
-                      : 'text-white/65 hover:bg-white/[0.055] hover:text-white'
+                  className={`${ROW} gap-2.5 ${collapsed ? 'justify-center px-0' : 'px-2.5'} ${
+                    isActive ? ROW_ACTIVE : ROW_IDLE
                   }`}
                 >
-                  {isActive && (
-                    <span
-                      aria-hidden
-                      style={{
-                        background:
-                          group.groupColor === 'gradient'
-                            ? STRAND_GRADIENT
-                            : group.groupColor
-                      }}
-                      className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-full"
-                    />
-                  )}
-
-                  {/* The glyph lights in its own section's strand and glows:
-                      Dispatch's truck goes Revenue red, Purchase's bag goes
-                      Operations amber. Colour is not the only carrier — the
-                      3px spine and the filled row still mark the position. */}
                   <Icon
-                    className={`w-[15px] h-[15px] shrink-0 transition-colors ${
-                      isActive ? '' : 'text-white/45 group-hover:text-white/85'
-                    }`}
-                    style={
-                      isActive
-                        ? { color: groupInk(group.groupColor), filter: groupGlow(group.groupColor) }
-                        : undefined
-                    }
-                    strokeWidth={isActive ? 2.1 : 1.9}
+                    className={`h-[17px] w-[17px] shrink-0 ${isActive ? '' : 'text-faint'}`}
+                    strokeWidth={1.8}
                   />
-
-                  {!collapsed && <span className="truncate flex-1">{item.name}</span>}
-
+                  {!collapsed && <span className="flex-1 truncate">{item.name}</span>}
                   {!collapsed && item.badge !== undefined && (
-                    <span
-                      className={`font-mono text-[9.5px] font-semibold leading-none px-1.5 py-[3px] rounded-badge text-white shrink-0 ${
-                        item.badgeColor || 'bg-white/15'
-                      }`}
-                    >
-                      {item.badge}
-                    </span>
+                    <span className={BADGE}>{item.badge}</span>
                   )}
                 </NavLink>
               );
@@ -549,33 +453,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ mobileOpen = false, onMobileCl
         The chat is shared by every department and runs in the workspace
         console, so it is a link out rather than a route of this one.
       */}
-      <a
-        href={`${WORKSPACE_CONSOLE}/chat`}
-        target="_blank"
-        rel="noopener noreferrer"
-        title="Team Chat (opens the department workspace)"
-        className={`mx-2.5 mb-3 flex items-center gap-2.5 rounded-md text-[12.5px] font-medium text-white/65 hover:bg-white/[0.055] hover:text-white transition-colors duration-150 ${
-          collapsed ? 'justify-center px-0 py-2' : 'px-2.5 py-[7px]'
-        }`}
-      >
-        <MessageSquareText className="w-[15px] h-[15px] shrink-0 text-white/45" strokeWidth={1.9} />
-        {!collapsed && <span className="truncate flex-1">Team Chat</span>}
-      </a>
-
-      {/* Footer — build stamp + the four strands */}
-      {!collapsed && (
-        <div className="px-4 py-3 border-t border-white/[0.08] flex items-center justify-between">
-          <span className="text-[10px] text-white/35 font-mono tracking-tight">
-            v2.4 · Enterprise
-          </span>
-          <span className="flex items-center gap-[3px]" aria-hidden>
-            <span className="w-1.5 h-1.5 rounded-full bg-strand-red" />
-            <span className="w-1.5 h-1.5 rounded-full bg-strand-amber" />
-            <span className="w-1.5 h-1.5 rounded-full bg-st-green-ink" />
-            <span className="w-1.5 h-1.5 rounded-full bg-strand-teal" />
-          </span>
-        </div>
-      )}
+      <div className="px-3 pb-3">
+        <a
+          href={`${WORKSPACE_CONSOLE}/chat`}
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Team Chat (opens the department workspace)"
+          className={`${ROW} gap-2.5 ${collapsed ? 'justify-center px-0' : 'px-2.5'} ${ROW_IDLE}`}
+        >
+          <MessageSquareText className="h-[17px] w-[17px] shrink-0 text-faint" strokeWidth={1.8} />
+          {!collapsed && <span className="flex-1 truncate">Team chat</span>}
+        </a>
+      </div>
     </aside>
   );
 };

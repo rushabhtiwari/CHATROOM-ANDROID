@@ -72,13 +72,13 @@ export function MediaAttachment({
             </span>
           </>
         )}
-        <span className="absolute inset-x-0 bottom-0 truncate bg-gradient-to-t from-black/70 to-transparent px-3 pb-2 pt-8 text-[11px] font-medium text-white opacity-0 transition-opacity group-hover/media:opacity-100">
+        <span className="absolute inset-x-0 bottom-0 truncate bg-gradient-to-t from-black/70 to-transparent px-3 pb-2 pt-8 text-[12px] font-medium text-white opacity-0 transition-opacity group-hover/media:opacity-100">
           {attachment.name}
         </span>
       </button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="h-[100dvh] w-screen max-w-none gap-0 overflow-hidden rounded-none border-0 bg-black p-0 text-white shadow-none sm:rounded-none [&>button]:z-20 [&>button]:text-white">
+        <DialogContent className="h-[100dvh] w-screen max-w-none gap-0 overflow-hidden border-0 bg-black p-0 text-white shadow-none sm:rounded-none [&>button]:z-20 [&>button]:text-white">
           <DialogTitle className="sr-only">Viewing {attachment.name}</DialogTitle>
           <div className="absolute inset-x-0 top-0 z-10 flex h-16 items-center bg-gradient-to-b from-black/75 to-transparent px-4 pr-14">
             <p className="min-w-0 flex-1 truncate text-sm font-medium">{attachment.name}</p>

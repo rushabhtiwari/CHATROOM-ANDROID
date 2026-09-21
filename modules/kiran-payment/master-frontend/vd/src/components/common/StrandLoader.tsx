@@ -31,7 +31,7 @@ export const StrandLoader: React.FC<StrandLoaderProps> = ({
         />
       </div>
       {label && (
-        <span className="text-xs font-mono text-muted tracking-tight animate-pulse">
+        <span className="text-[13px] font-mono text-muted animate-pulse">
           {label}
         </span>
       )}

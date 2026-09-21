@@ -84,7 +84,7 @@ export const ProjectsGrid: React.FC = () => {
             <div className="flex items-center gap-2">
               <FolderKanban className="h-5 w-5 text-primary" />
               <h1 className="text-base font-semibold text-on-surface">Projects</h1>
-              <span className="rounded-full bg-surface-container-low px-2 py-0.5 font-mono text-[11px] font-semibold text-primary">
+              <span className="rounded-full bg-surface-container-low px-2 py-0.5 font-mono text-[12px] font-semibold text-primary">
                 {rawProjects.length} active
               </span>
             </div>
@@ -103,7 +103,7 @@ export const ProjectsGrid: React.FC = () => {
                 }`}
               >
                 <span>Active</span>
-                <span className="font-mono text-[10px] opacity-70">{rawProjects.length}</span>
+                <span className="font-mono text-[12px] opacity-70">{rawProjects.length}</span>
               </button>
               <button
                 type="button"
@@ -115,7 +115,7 @@ export const ProjectsGrid: React.FC = () => {
                 }`}
               >
                 <span>Archived</span>
-                <span className="font-mono text-[10px] opacity-50">0</span>
+                <span className="font-mono text-[12px] opacity-50">0</span>
               </button>
               <button
                 type="button"
@@ -142,7 +142,7 @@ export const ProjectsGrid: React.FC = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="h-7 w-48 rounded-lg border border-outline-variant bg-surface-container-low pl-8 pr-8 text-xs text-on-surface placeholder:text-outline focus:border-primary focus:bg-surface-container-lowest focus:outline-none"
               />
-              <kbd className="absolute right-1.5 rounded border border-outline-variant bg-surface-container-lowest px-1 font-mono text-[9px] text-on-surface-variant">
+              <kbd className="absolute right-1.5 rounded border border-outline-variant bg-surface-container-lowest px-1 font-mono text-[12px] text-on-surface-variant">
                 /
               </kbd>
             </div>
@@ -167,13 +167,13 @@ export const ProjectsGrid: React.FC = () => {
         {/* Quick Filters Strip */}
         <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2 border-t border-outline-variant pt-2 text-xs">
           <div className="flex items-center gap-1.5">
-            <span className="text-outline text-[11.5px]">Quick filters:</span>
+            <span className="text-outline text-[12px]">Quick filters:</span>
 
             {/* Health Filter */}
             <select
               value={healthFilter}
               onChange={(e) => setHealthFilter(e.target.value as typeof healthFilter)}
-              className="h-6 rounded border border-outline-variant bg-surface-container-lowest px-2 text-[11px] font-medium text-on-surface focus:outline-none cursor-pointer"
+              className="h-6 rounded border border-outline-variant bg-surface-container-lowest px-2 text-[12px] font-medium text-on-surface focus:outline-none cursor-pointer"
             >
               <option value="all">Health: All</option>
               <option value="on-track">Health: On Track</option>
@@ -181,13 +181,13 @@ export const ProjectsGrid: React.FC = () => {
               <option value="stale">Health: Stale</option>
             </select>
 
-            <span className="inline-flex h-6 items-center gap-1 rounded border border-outline-variant bg-surface-container-lowest px-2 text-[11px] font-medium text-on-surface-variant">
+            <span className="inline-flex h-6 items-center gap-1 rounded border border-outline-variant bg-surface-container-lowest px-2 text-[12px] font-medium text-on-surface-variant">
               <span>Plant:</span>
               <span className="font-semibold text-on-surface">Plant 2 (Pune/BLR)</span>
             </span>
           </div>
 
-          <div className="flex items-center gap-1 text-[11px] text-outline">
+          <div className="flex items-center gap-1 text-[12px] text-outline">
             <SlidersHorizontal className="h-3 w-3" />
             <span>Sort:</span>
             <span className="font-medium text-on-surface">Target Date · Asc</span>
@@ -205,7 +205,7 @@ export const ProjectsGrid: React.FC = () => {
                 <div className="font-bold">
                   Update task logs before Friday 12:00 PM — the operational week closes automatically
                 </div>
-                <p className="mt-0.5 text-[11px] text-amber-800">
+                <p className="mt-0.5 text-[12px] text-amber-800">
                   Unlogged work orders and task hours affect plant performance and standing scorecards.
                 </p>
               </div>
@@ -244,23 +244,23 @@ export const ProjectsGrid: React.FC = () => {
                       <span className="rounded bg-surface-container-high px-2 py-0.5 font-mono text-xs font-bold text-primary">
                         {project.key}
                       </span>
-                      <span className="font-mono text-[11px] text-outline">
+                      <span className="font-mono text-[12px] text-outline">
                         PRJ-{project.id.slice(0, 4).toUpperCase()}
                       </span>
                     </div>
 
                     {stale ? (
-                      <span className="inline-flex items-center gap-1 rounded-full border border-red-200 bg-red-50 px-2 py-0.5 text-[10.5px] font-bold text-strand-red">
+                      <span className="inline-flex items-center gap-1 rounded-full border border-red-200 bg-red-50 px-2 py-0.5 text-[12px] font-bold text-strand-red">
                         <AlertTriangle className="h-3 w-3" />
                         Stale
                       </span>
                     ) : isAtRisk ? (
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[10.5px] font-semibold text-amber-800">
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-2 py-0.5 text-[12px] font-semibold text-amber-800">
                         <span className="h-1.5 w-1.5 rounded-full bg-amber-500 animate-pulse" />
                         At Risk
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[10.5px] font-semibold text-emerald-800">
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[12px] font-semibold text-emerald-800">
             <span className="h-1.5 w-1.5 rounded-full bg-st-green-ink animate-pulse" />
                         On Track
                       </span>
@@ -282,12 +282,12 @@ export const ProjectsGrid: React.FC = () => {
                     <div className="flex items-center gap-3">
                       <div className="relative shrink-0 flex items-center justify-center">
                         <ProgressRing value={rollup.progressPct} size={42} stroke={4} />
-                        <span className="absolute font-mono text-[10.5px] font-bold text-on-surface">
+                        <span className="absolute font-mono text-[12px] font-bold text-on-surface">
                           {rollup.progressPct}%
                         </span>
                       </div>
                       <div className="flex flex-col">
-                        <span className="text-[10.5px] text-outline">Target Date</span>
+                        <span className="text-[12px] text-outline">Target Date</span>
                         <span className="text-xs font-semibold text-on-surface">
                           {format(parseISO(project.targetDate), 'd MMM yyyy')}
                         </span>
@@ -295,7 +295,7 @@ export const ProjectsGrid: React.FC = () => {
                     </div>
 
                     <div className="flex flex-col items-end gap-1">
-                      <span className="text-[10.5px] text-outline">Lead & Members</span>
+                      <span className="text-[12px] text-outline">Lead & Members</span>
                       <AvatarStack people={members} max={3} />
                     </div>
                   </div>
@@ -304,20 +304,20 @@ export const ProjectsGrid: React.FC = () => {
                 {/* Bottom Metric Strip */}
                 <div className="grid grid-cols-3 gap-2 border-t border-outline-variant bg-surface-container-low px-4 py-2.5 text-xs">
                   <div className="flex flex-col min-w-0">
-                    <span className="text-[10.5px] text-outline truncate">Open Tasks</span>
+                    <span className="text-[12px] text-outline truncate">Open Tasks</span>
                     <span className="flex items-center gap-1 font-semibold text-on-surface truncate">
                       <CheckCircle2 className="h-3 w-3 text-primary" />
                       {rollup.total - rollup.done - rollup.cancelled}
                     </span>
                   </div>
                   <div className="flex flex-col min-w-0">
-                    <span className="text-[10.5px] text-outline truncate">Modules</span>
+                    <span className="text-[12px] text-outline truncate">Modules</span>
                     <span className="font-semibold text-on-surface truncate">
                       {modules.length} active
                     </span>
                   </div>
                   <div className="flex flex-col min-w-0">
-                    <span className="text-[10.5px] text-outline truncate">Active Sprint</span>
+                    <span className="text-[12px] text-outline truncate">Active Sprint</span>
                     <span className="font-semibold text-on-surface truncate text-primary">
                       {cycle ? cycle.name : 'Backlog'}
                     </span>

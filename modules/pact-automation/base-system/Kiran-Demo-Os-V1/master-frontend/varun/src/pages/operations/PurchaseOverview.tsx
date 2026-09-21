@@ -101,7 +101,7 @@ export const PurchaseOverview: React.FC = () => {
 
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse font-mono text-xs">
-            <thead className="bg-surface-container-low border-b border-outline-variant text-[10px] uppercase tracking-wider text-outline select-none">
+            <thead className="bg-surface-container-low border-b border-outline-variant text-[12px] text-outline select-none">
               <tr className="h-9">
                 <th className="px-3.5 py-0 align-middle font-mono font-semibold">Vendor Name</th>
                 <th className="px-3.5 py-0 align-middle text-right font-mono font-semibold">On-Time Delivery %</th>
@@ -128,7 +128,7 @@ export const PurchaseOverview: React.FC = () => {
                     {sup.leadTimeDays} Days
                   </td>
                   <td className="px-3.5 py-0 align-middle text-center">
-                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold border ${
+                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[12px] font-mono font-semibold border ${
                       sup.rating === 'Tier 1'
                         ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
                         : 'border-outline-variant bg-surface-container text-on-surface-variant'
@@ -144,7 +144,7 @@ export const PurchaseOverview: React.FC = () => {
       </div>
 
       {/* Direct Module Links */}
-      <div className="ku-ledger border-t-3 border-t-structure grid-cols-1 md:grid-cols-3">
+      <div className="ku-ledger grid-cols-1 md:grid-cols-3">
         <Link
           to="/purchase/rfq"
           className="p-4.5 bg-white hover:border-primary/60 rounded-xl transition-all group flex flex-col justify-between"

@@ -55,7 +55,7 @@ export const Integrations: React.FC = () => {
       />
 
       {/* SAP S/4HANA Migration Hub Card */}
-      <div className="bg-surface border-2 border-ai rounded-md p-6 shadow-card space-y-4">
+      <div className="bg-surface border border-ai rounded-md p-6 shadow-card space-y-4">
         <div className="flex flex-wrap items-start justify-between gap-4 border-b border-line pb-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded bg-ai text-white flex items-center justify-center font-bold font-mono text-sm">
@@ -78,7 +78,7 @@ export const Integrations: React.FC = () => {
 
           <div className="flex items-center gap-3">
             <div className="text-right font-mono">
-              <div className="text-[10px] text-muted uppercase font-sans">Readiness Score</div>
+              <div className="text-[12px] text-muted font-sans">Readiness Score</div>
               <div className="text-xl font-bold text-strand-green">78% Certified</div>
             </div>
             <button
@@ -104,7 +104,7 @@ export const Integrations: React.FC = () => {
                   <AlertTriangle className="w-3.5 h-3.5 text-strand-amber" />
                 )}
               </div>
-              <div className="text-[11px] text-muted font-sans">{item.status}</div>
+              <div className="text-[12px] text-muted font-sans">{item.status}</div>
             </div>
           ))}
         </div>
@@ -128,7 +128,7 @@ export const Integrations: React.FC = () => {
                 {integ.description}
               </p>
 
-              <div className="p-2.5 bg-canvas rounded border border-line space-y-1 font-mono text-[11px] mt-2">
+              <div className="p-2.5 bg-canvas rounded border border-line space-y-1 font-mono text-[12px] mt-2">
                 <div className="flex justify-between text-muted">
                   <span>Sync Frequency:</span>
                   <span className="text-ink font-semibold">{integ.status === 'Connected' ? 'Real-time' : 'On demand'}</span>
@@ -141,7 +141,7 @@ export const Integrations: React.FC = () => {
             </div>
 
             <div className="pt-3 border-t border-line flex items-center justify-between text-xs font-mono">
-              <span className="text-[11px] text-muted font-sans font-medium">
+              <span className="text-[12px] text-muted font-sans font-medium">
                 {(integ.recordsIn + integ.recordsOut).toLocaleString('en-IN')} Records Synced
               </span>
               <button
@@ -170,7 +170,7 @@ export const Integrations: React.FC = () => {
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs font-mono">
-            <thead className="bg-canvas text-muted text-[10px] uppercase border-b border-line">
+            <thead className="bg-canvas text-muted text-[12px] border-b border-line">
               <tr>
                 <th className="p-2.5">KiranOS Domain Attribute</th>
                 <th className="p-2.5">PACT SQL Column / Table</th>

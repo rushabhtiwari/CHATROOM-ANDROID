@@ -17,8 +17,6 @@ import {
   ClipboardCheck,
   FileText,
   Loader2,
-  Pencil,
-  Sparkles,
   X,
 } from 'lucide-react';
 import { PageHeader } from '@/components/shell/PageHeader';
@@ -67,16 +65,15 @@ export const HrReview: React.FC = () => {
         title="HR review"
       />
 
-      <ClaimSummaryBar className="mb-5" />
+      <ClaimSummaryBar className="mb-6" />
 
       {queue.length === 0 ? (
         <EmptyState
           icon={ClipboardCheck}
-          statement="The HR queue is clear"
-          instruction="New claims arrive here the moment an employee files one."
+          statement="Nothing to review"
         />
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-4">
           {queue.map((claim) => {
             const employee = employeeById(claim.employeeId);
             const amountEdited =
@@ -88,53 +85,48 @@ export const HrReview: React.FC = () => {
                 <div className="flex flex-wrap items-start gap-4 px-5 py-4">
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <h2 className="text-[14px] font-semibold text-ink">{claim.title}</h2>
+                      <h2 className="text-[16px] font-semibold text-ink">{claim.title}</h2>
                       {amountEdited && (
-                        <span className="inline-flex items-center gap-1 rounded-badge border border-strand-amber/30 bg-strand-amber/10 px-1.5 py-0.5 text-[10px] font-semibold text-strand-amber">
-                          <Pencil className="h-2.5 w-2.5" /> Amount edited
+                        <span className="inline-flex items-center rounded-badge bg-[#FBEFDC] px-2 py-0.5 text-[12px] font-medium text-[#8A4F00]">
+                          Amount edited
                         </span>
                       )}
                     </div>
-                    <p className="mt-0.5 font-mono text-[11px] text-muted">
-                      {claim.id} · {employee?.name ?? 'Unknown'} ·{' '}
+                    <p className="mt-1 text-[13px] text-muted">
+                      <span className="font-code">{claim.id}</span> · {employee?.name ?? 'Unknown'} ·{' '}
                       {employee?.department ?? '—'} · {CATEGORY_LABEL[claim.category]} ·{' '}
-                      filed {formatRelative(claim.submittedOn)}
+                      {formatRelative(claim.submittedOn)}
                     </p>
 
                     {claim.justification && (
-                      <p className="mt-2 max-w-2xl text-[12.5px] leading-relaxed text-slate-700">
+                      <p className="mt-2 max-w-2xl text-[14px] leading-relaxed text-slate-700">
                         {claim.justification}
                       </p>
                     )}
 
-                    <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
+                    <div className="mt-3 flex flex-wrap items-center gap-2">
                       {claim.receipts.map((receipt) => (
                         <a
                           key={receipt.id}
                           href={receipt.url ?? '#'}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex max-w-[200px] items-center gap-1.5 rounded-badge border border-line bg-surface-2 px-2 py-1 text-[10.5px] text-slate-700 transition-colors hover:bg-line-2"
+                          className="inline-flex max-w-[220px] items-center gap-1.5 rounded-badge border border-line bg-surface-2 px-2.5 py-1 text-[13px] text-slate-700 transition-colors hover:bg-line-2"
                         >
-                          <FileText className="h-3 w-3 shrink-0" />
+                          <FileText className="h-3.5 w-3.5 shrink-0 text-slate-500" />
                           <span className="truncate">{receipt.fileName}</span>
                         </a>
                       ))}
-                      {claim.extraction && (
-                        <span className="inline-flex items-center gap-1 rounded-badge bg-ai-tint px-2 py-1 text-[10.5px] font-medium text-ai">
-                          <Sparkles className="h-3 w-3" /> Read automatically
-                        </span>
-                      )}
                     </div>
 
                     {findings.length > 0 && (
-                      <div className="mt-2.5 space-y-1">
+                      <div className="mt-3 space-y-1">
                         {findings.map((finding, index) => (
                           <p
                             key={index}
-                            className="flex items-start gap-1.5 text-[11.5px] leading-relaxed text-strand-amber"
+                            className="flex items-start gap-1.5 text-[13px] leading-relaxed text-[#8A4F00]"
                           >
-                            <AlertTriangle className="mt-px h-3 w-3 shrink-0" />
+                            <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
                             {finding.message}
                           </p>
                         ))}
@@ -143,53 +135,53 @@ export const HrReview: React.FC = () => {
                   </div>
 
                   <div className="flex shrink-0 flex-col items-end gap-1">
-                    <span className="font-mono text-[22px] font-semibold leading-none tracking-tight text-ink">
+                    <span className="whitespace-nowrap text-[22px] font-semibold leading-none tabular-nums text-ink">
                       {formatCurrency(claim.amount)}
                     </span>
                     {amountEdited && (
-                      <span className="font-mono text-[11px] text-muted line-through">
+                      <span className="whitespace-nowrap text-[13px] tabular-nums text-muted line-through">
                         {formatCurrency(claim.extractedAmount as number)}
                       </span>
                     )}
                     <Link
                       to={`/reimbursements/${claim.id}`}
-                      className="mt-1 inline-flex items-center gap-1 text-[11px] font-medium text-kiran hover:underline"
+                      className="mt-1 inline-flex items-center gap-1 text-[13px] font-medium text-kiran hover:underline"
                     >
-                      Open in full <ArrowUpRight className="h-3 w-3" />
+                      Open <ArrowUpRight className="h-3.5 w-3.5" />
                     </Link>
                   </div>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-2 border-t border-line bg-surface-2 px-5 py-3">
+                <div className="flex flex-wrap items-center gap-2 border-t border-line-2 px-5 py-3">
                   <input
                     value={notes[claim.id] ?? ''}
                     onChange={(event) =>
                       setNotes((current) => ({ ...current, [claim.id]: event.target.value }))
                     }
-                    placeholder="Note for the record (optional)"
-                    className="min-w-0 flex-1 rounded-md border border-line bg-surface px-2.5 py-1.5 text-[12px] placeholder:text-muted focus:border-kiran focus:outline-none"
+                    placeholder="Add a note"
+                    className="field min-w-0 flex-1"
                   />
                   <button
                     onClick={() => act(claim, true)}
                     disabled={Boolean(busy)}
-                    className="inline-flex items-center gap-1.5 rounded-md bg-strand-green px-3 py-1.5 text-xs font-semibold text-white shadow-xs transition-colors hover:bg-emerald-700 disabled:opacity-50"
+                    className="btn-primary"
                   >
                     {busy === `${claim.id}-a` ? (
-                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
-                      <Check className="h-3.5 w-3.5" />
+                      <Check className="h-4 w-4" />
                     )}
                     Approve
                   </button>
                   <button
                     onClick={() => act(claim, false)}
                     disabled={Boolean(busy)}
-                    className="inline-flex items-center gap-1.5 rounded-md border border-line bg-surface px-3 py-1.5 text-xs font-semibold text-strand-red transition-colors hover:bg-strand-red/5 disabled:opacity-50"
+                    className="btn-secondary text-strand-red"
                   >
                     {busy === `${claim.id}-r` ? (
-                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
-                      <X className="h-3.5 w-3.5" />
+                      <X className="h-4 w-4" />
                     )}
                     Reject
                   </button>

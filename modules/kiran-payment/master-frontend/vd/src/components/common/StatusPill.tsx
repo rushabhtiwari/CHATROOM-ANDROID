@@ -8,7 +8,7 @@ interface StatusPillProps {
 
 export const StatusPill: React.FC<StatusPillProps> = ({ status, className = '' }) => {
   let dotClass = 'bg-slate-400';
-  let bgClass = 'bg-slate-100 text-slate-700 border-slate-200';
+  let bgClass = 'bg-[#EFEFF2] text-[#48484F]';
 
   switch (status?.toLowerCase()) {
     case 'on track':
@@ -22,7 +22,7 @@ export const StatusPill: React.FC<StatusPillProps> = ({ status, className = '' }
     case 'approved':
     case 'posted to pact':
       dotClass = 'bg-strand-green';
-      bgClass = 'bg-emerald-50 text-emerald-800 border-emerald-200';
+      bgClass = 'bg-[#E7F3EB] text-[#17723F]';
       break;
 
     case 'at risk':
@@ -36,8 +36,8 @@ export const StatusPill: React.FC<StatusPillProps> = ({ status, className = '' }
     case 'asn linked':
     case 'feedback awaited':
     case 'costing':
-      dotClass = 'bg-strand-amber';
-      bgClass = 'bg-amber-50 text-amber-800 border-amber-200';
+      dotClass = 'bg-[#C77700]';
+      bgClass = 'bg-[#FBEFDC] text-[#8A4F00]';
       break;
 
     case 'overdue':
@@ -48,13 +48,13 @@ export const StatusPill: React.FC<StatusPillProps> = ({ status, className = '' }
     case 'exception':
     case 'failed':
       dotClass = 'bg-strand-red';
-      bgClass = 'bg-red-50 text-red-800 border-red-200';
+      bgClass = 'bg-[#FBE9E7] text-[#B3302A]';
       break;
 
     case 'blocked':
     case 'stop dispatch blocked':
-      dotClass = 'bg-strand-red animate-pulse';
-      bgClass = 'bg-red-50 text-red-900 border-red-300 font-semibold';
+      dotClass = 'bg-strand-red';
+      bgClass = 'bg-[#FBE9E7] text-[#B3302A]';
       break;
 
     case 'awaiting approval':
@@ -62,28 +62,28 @@ export const StatusPill: React.FC<StatusPillProps> = ({ status, className = '' }
     case 'pending hod':
     case 'needs review':
     case 'pending':
-      dotClass = 'bg-ai';
-      bgClass = 'bg-ai-tint text-ai border-ai/20';
+      dotClass = 'bg-kiran';
+      bgClass = 'bg-[#E7EFFA] text-[#0B4F9C]';
       break;
 
     case 'closed':
     case 'draft':
     case 'queued':
-      dotClass = 'bg-muted';
-      bgClass = 'bg-gray-100 text-muted border-line';
+      dotClass = 'bg-[#9A9AA2]';
+      bgClass = 'bg-[#EFEFF2] text-[#48484F]';
       break;
 
     default:
-      dotClass = 'bg-strand-teal';
-      bgClass = 'bg-teal-50 text-teal-800 border-teal-200';
+      dotClass = 'bg-[#9A9AA2]';
+      bgClass = 'bg-[#EFEFF2] text-[#48484F]';
       break;
   }
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 pl-1.5 pr-2 py-[3px] rounded-badge text-[10.5px] font-medium leading-none border ${bgClass} ${className}`}
+      className={`inline-flex items-center gap-1.5 h-6 px-2 rounded-badge text-[12.5px] font-medium leading-none ${bgClass} ${className}`}
     >
-      <span className={`w-[5px] h-[5px] rounded-full ${dotClass} shrink-0`} />
+      <span className={`w-1.5 h-1.5 rounded-full ${dotClass} shrink-0`} />
       <span className="whitespace-nowrap">{status}</span>
     </span>
   );

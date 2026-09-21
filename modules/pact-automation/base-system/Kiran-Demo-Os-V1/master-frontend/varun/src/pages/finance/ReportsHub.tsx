@@ -35,7 +35,7 @@ export const ReportsHub: React.FC = () => {
     <div className="space-y-6 animate-fadeIn">
       {/* Toast Alert */}
       {toastMessage && (
-        <div className="animate-fadeIn fixed right-8 top-16 z-50 flex items-center gap-2.5 border-2 border-ink border-l-6 border-l-accent bg-structure px-4 py-3 text-body-s text-white">
+        <div className="animate-fadeIn fixed right-8 top-16 z-50 flex items-center gap-2.5 border border-ink border-l-6 border-l-accent bg-structure px-4 py-3 text-body-s text-white">
           <CheckCircle2 aria-hidden className="h-4 w-4 shrink-0 text-accent" />
           <span>{toastMessage}</span>
         </div>
@@ -81,7 +81,7 @@ export const ReportsHub: React.FC = () => {
         <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4 border-b border-hairline px-5 py-4">
           <div className="min-w-0">
             <p className="ku-eyebrow">Report shelf</p>
-            <h2 className="ku-wide mt-1.5 font-display text-h3 font-semibold text-ink">
+            <h2 className="mt-1.5 font-display text-h3 font-semibold text-ink">
               {selectedCat === 'All'
                 ? 'Everything scheduled against the ledger'
                 : `Everything the ${selectedCat.toLowerCase()} module reports on`}
@@ -105,7 +105,7 @@ export const ReportsHub: React.FC = () => {
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1.5">
                     <span className="ku-docket">{report.category} Module</span>
-                    <span className="ku-wide font-display text-body font-semibold text-ink">
+                    <span className="font-display text-body font-semibold text-ink">
                       {report.name}
                     </span>
                     <span className="ku-stamp border-st-grey-ink text-st-grey-ink">
@@ -140,7 +140,7 @@ export const ReportsHub: React.FC = () => {
                     <button
                       type="button"
                       onClick={(e) => handleRunNow(report.name, e)}
-                      className="inline-flex h-8 items-center gap-1.5 border-2 border-hairline-strong bg-white px-3 text-body-s font-semibold leading-none text-ink transition-all duration-150 hover:border-ink hover:bg-canvas active:translate-y-px"
+                      className="inline-flex h-8 items-center gap-1.5 rounded-md border border-hairline-strong bg-white px-3 text-body-s font-medium leading-none text-ink transition-colors duration-150 hover:bg-canvas"
                     >
                       <Play aria-hidden className="h-3 w-3" />
                       Run now

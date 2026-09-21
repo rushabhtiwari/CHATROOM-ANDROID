@@ -98,16 +98,16 @@ export const GRNThreeWayMatch: React.FC = () => {
       />
 
       {/* Operational Summary 3-Across KPI Strip */}
-      <div className="ku-ledger border-t-3 border-t-structure grid-cols-1 sm:grid-cols-3">
+      <div className="ku-ledger grid-cols-1 sm:grid-cols-3">
         <div className="bg-white rounded-xl p-3.5 flex items-center justify-between">
           <div>
-            <span className="font-mono uppercase text-[10px] tracking-wider text-outline font-semibold">
+            <span className="font-mono text-[12px] text-outline font-semibold">
               Total Audited Value
             </span>
             <div className="mt-1 font-mono text-xl font-bold text-on-surface tabular-nums">
               {formatINR(1338400)}
             </div>
-            <span className="text-[11px] font-mono text-outline">Across 3 GRN batches</span>
+            <span className="text-[12px] font-mono text-outline">Across 3 GRN batches</span>
           </div>
           <div className="w-9 h-9 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
             <PackageCheck className="w-4 h-4" />
@@ -116,13 +116,13 @@ export const GRNThreeWayMatch: React.FC = () => {
 
         <div className="bg-white rounded-xl p-3.5 flex items-center justify-between">
           <div>
-            <span className="font-mono uppercase text-[10px] tracking-wider text-strand-green font-semibold">
+            <span className="font-mono text-[12px] text-strand-green font-semibold">
               Clean Audit Reconciled
             </span>
             <div className="mt-1 font-mono text-xl font-bold text-strand-green tabular-nums">
               1 GRN (₹4.20 L)
             </div>
-            <span className="text-[11px] font-mono text-outline">Reliance Industries · Matched</span>
+            <span className="text-[12px] font-mono text-outline">Reliance Industries · Matched</span>
           </div>
           <div className="w-9 h-9 rounded-lg bg-emerald-500/10 flex items-center justify-center text-strand-green">
             <CheckCircle2 className="w-4 h-4" />
@@ -131,13 +131,13 @@ export const GRNThreeWayMatch: React.FC = () => {
 
         <div className="bg-white rounded-xl p-3.5 flex items-center justify-between">
           <div>
-            <span className="font-mono uppercase text-[10px] tracking-wider text-strand-red font-semibold">
+            <span className="font-mono text-[12px] text-strand-red font-semibold">
               Exceptions Flagged
             </span>
             <div className="mt-1 font-mono text-xl font-bold text-strand-red tabular-nums">
               2 GRNs (₹41,400)
             </div>
-            <span className="text-[11px] font-mono text-outline">Debit recovery recommended</span>
+            <span className="text-[12px] font-mono text-outline">Debit recovery recommended</span>
           </div>
           <div className="w-9 h-9 rounded-lg bg-red-500/10 flex items-center justify-center text-strand-red">
             <AlertTriangle className="w-4 h-4" />
@@ -221,7 +221,7 @@ export const GRNThreeWayMatch: React.FC = () => {
                     <h3 className="font-semibold text-xs text-on-surface font-mono">
                       {rec.vendorName} · <span className="text-on-surface-variant">{rec.item}</span>
                     </h3>
-                    <div className="flex items-center gap-2 text-[11px] text-outline font-mono mt-0.5">
+                    <div className="flex items-center gap-2 text-[12px] text-outline font-mono mt-0.5">
                       <span>GRN: <strong className="text-on-surface">{rec.grnNumber}</strong></span>
                       <span>·</span>
                       <span>PO: <strong className="text-on-surface">{rec.poNumber}</strong></span>
@@ -242,7 +242,7 @@ export const GRNThreeWayMatch: React.FC = () => {
               {/* 3-Way Line Comparison Table (36px Fixed Row Height) */}
               <div className="overflow-x-auto rounded-lg border border-outline-variant bg-surface-container-lowest">
                 <table className="w-full text-left font-mono text-xs border-collapse">
-                  <thead className="bg-surface-container-low border-b border-outline-variant text-[10px] uppercase tracking-wider text-outline font-mono select-none">
+                  <thead className="bg-surface-container-low border-b border-outline-variant text-[12px] text-outline font-mono select-none">
                     <tr className="h-9">
                       <th className="px-3.5 py-0 align-middle font-semibold text-left">VERIFICATION DIMENSION</th>
                       <th className="px-3.5 py-0 align-middle font-semibold text-right">PO APPROVED PARAMETER</th>
@@ -272,11 +272,11 @@ export const GRNThreeWayMatch: React.FC = () => {
                       </td>
                       <td className="px-3.5 py-0 align-middle text-center whitespace-nowrap">
                         {rec.poQty === rec.grnQty && rec.grnQty === rec.invoiceQty ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10.5px] font-mono font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[12px] font-mono font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
                             <CheckCircle2 className="w-3 h-3 text-strand-green" /> Exact Match
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10.5px] font-mono font-semibold bg-red-50 text-red-800 border border-red-200">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[12px] font-mono font-semibold bg-red-50 text-red-800 border border-red-200">
                             <AlertTriangle className="w-3 h-3 text-strand-red" /> Qty Short ({rec.poQty - rec.grnQty} {rec.item.includes('Drums') ? 'drums' : 'kg'})
                           </span>
                         )}
@@ -303,11 +303,11 @@ export const GRNThreeWayMatch: React.FC = () => {
                       </td>
                       <td className="px-3.5 py-0 align-middle text-center whitespace-nowrap">
                         {rec.poRate === rec.invoiceRate ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10.5px] font-mono font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[12px] font-mono font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
                             <CheckCircle2 className="w-3 h-3 text-strand-green" /> Rate Verified
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10.5px] font-mono font-semibold bg-red-50 text-red-800 border border-red-200">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[12px] font-mono font-semibold bg-red-50 text-red-800 border border-red-200">
                             <AlertTriangle className="w-3 h-3 text-strand-red" /> Rate Surcharge (+₹{(rec.invoiceRate - rec.poRate).toFixed(2)})
                           </span>
                         )}
@@ -329,7 +329,7 @@ export const GRNThreeWayMatch: React.FC = () => {
                         <AlertTriangle className="w-4 h-4 text-strand-amber" />
                         Exception: {ex.type} — {ex.deltaText}
                       </span>
-                      <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-surface-container border border-outline-variant text-outline">
+                      <span className="text-[12px] font-mono px-2 py-0.5 rounded bg-surface-container border border-outline-variant text-outline">
                         claude-opus-5 audit engine
                       </span>
                     </div>
@@ -366,7 +366,7 @@ export const GRNThreeWayMatch: React.FC = () => {
                   </span>
                   <button
                     onClick={() => handleSendToAccounts(rec.grnNumber)}
-                      className="px-3 py-1.5 border-2 border-ink bg-accent active:translate-y-px hover:brightness-95 text-accent-ink rounded-lg text-xs font-mono font-semibold shadow-xs flex items-center gap-1.5 transition-colors"
+                      className="px-3 py-1.5 rounded-md border border-transparent bg-accent hover:bg-accent-hover text-white rounded-lg text-xs font-mono font-semibold shadow-xs flex items-center gap-1.5 transition-colors"
                   >
                     <FileCheck2 className="w-3.5 h-3.5" />
                     <span>Pass to Accounts Ledger</span>

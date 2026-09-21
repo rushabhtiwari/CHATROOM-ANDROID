@@ -64,12 +64,12 @@ export const Receivables: React.FC = () => {
         <div className="flex items-center gap-2 max-w-[240px] truncate">
           <span className="font-semibold text-xs text-on-surface truncate">{row.customerName}</span>
           {row.buckets.b61_90 > 0 && (
-            <span className="inline-flex items-center gap-0.5 font-mono text-[9px] font-bold text-strand-red bg-red-500/10 border border-red-500/30 px-1 py-0.5 rounded shrink-0 animate-pulse">
+            <span className="inline-flex items-center gap-0.5 font-mono text-[12px] font-bold text-strand-red bg-red-500/10 border border-red-500/30 px-1 py-0.5 rounded shrink-0 animate-pulse">
               <Ban className="w-2.5 h-2.5" />
               <span>STOP DISPATCH</span>
             </span>
           )}
-          <span className="text-[10px] font-mono text-outline shrink-0 ml-auto">
+          <span className="text-[12px] font-mono text-outline shrink-0 ml-auto">
             {row.region}
           </span>
         </div>
@@ -137,7 +137,7 @@ export const Receivables: React.FC = () => {
       cell: (row) => (
         <div className="flex items-center gap-1.5 truncate">
           <span className="font-mono text-xs font-semibold text-on-surface">{row.remindersCount} mails</span>
-          <span className="text-[10px] font-mono text-outline truncate">
+          <span className="text-[12px] font-mono text-outline truncate">
             ({row.lastReminderSent.split(' ')[0]} {row.lastReminderSent.split(' ')[1]})
           </span>
         </div>
@@ -171,14 +171,14 @@ export const Receivables: React.FC = () => {
         <div className="flex items-center gap-1 justify-end" onClick={(e) => e.stopPropagation()}>
           <button
             onClick={() => handleChaseSingleCustomer(row)}
-            className="px-2 py-0.5 text-[11px] font-mono font-medium rounded border border-primary/40 bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors"
+            className="px-2 py-0.5 text-[12px] font-mono font-medium rounded border border-primary/40 bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors"
             title="Dispatch statement reminder email"
           >
             Chase
           </button>
           <button
             onClick={() => handleViewLedger(row)}
-            className="px-2 py-0.5 text-[11px] font-mono font-medium rounded border border-outline-variant bg-surface-container-low text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors"
+            className="px-2 py-0.5 text-[12px] font-mono font-medium rounded border border-outline-variant bg-surface-container-low text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors"
             title="View statements & invoices"
           >
             Ledger
@@ -207,7 +207,7 @@ export const Receivables: React.FC = () => {
           <div className="flex items-center gap-3">
             {/* Chaser Cadence Control */}
             <div className="flex items-center gap-2 bg-surface-container-low border border-outline-variant rounded-lg px-2.5 py-1.5 text-xs font-mono text-on-surface">
-              <span className="text-outline text-[11px] uppercase font-semibold">Chaser Cadence:</span>
+              <span className="text-outline text-[12px] font-semibold">Chaser Cadence:</span>
               <select
                 value={reminderCadence}
                 onChange={(e) => setReminderCadence(parseInt(e.target.value))}
@@ -271,7 +271,7 @@ export const Receivables: React.FC = () => {
           <div>
             <div className="flex items-center gap-2 mb-0.5">
               <span className="w-2 h-2 rounded-full bg-strand-red animate-pulse" />
-              <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-strand-red">
+              <span className="font-mono text-[12px] font-bold text-strand-red">
                 ERP Automated Safeguard · Stop-Dispatch Hold Active
               </span>
             </div>

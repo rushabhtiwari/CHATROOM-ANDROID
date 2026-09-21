@@ -42,7 +42,7 @@ export const AuditLog: React.FC = () => {
           )}
           <div>
             <div className="font-semibold text-ink text-xs">{row.actorName}</div>
-            <div className="text-[10px] text-muted font-mono">{row.recordType}</div>
+            <div className="text-[12px] text-muted font-mono">{row.recordType}</div>
           </div>
         </div>
       )
@@ -71,7 +71,7 @@ export const AuditLog: React.FC = () => {
       header: 'Before & After Delta',
       width: '260px',
       cell: (row) => (
-        <div className="font-mono text-[11px]">
+        <div className="font-mono text-[12px]">
           {row.beforeValue && row.afterValue ? (
             <div className="space-y-0.5">
               <span className="text-muted line-through mr-1">{row.beforeValue}</span>

@@ -13,7 +13,6 @@ export default async function AppsPage() {
     <>
       <PageHeader
         title="Apps"
-        description="Department apps and company tools people open from Central."
         actions={
           <Link href="/admin/apps/new" className="button button-primary">
             <Plus size={16} weight="bold" aria-hidden="true" />

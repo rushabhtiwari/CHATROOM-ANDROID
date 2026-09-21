@@ -26,12 +26,9 @@ type TStat = {
 
 function StatTile({ stat }: { stat: TStat }) {
   return (
-    <div className="flex flex-col gap-2 rounded-lg border border-subtle bg-layer-1 px-4 py-3.5">
-      <div className="flex items-center gap-2">
-        <span className={cn("flex size-6 items-center justify-center rounded-md", stat.accent)}>{stat.icon}</span>
-        <span className="text-11 font-medium tracking-wide text-tertiary uppercase">{stat.label}</span>
-      </div>
-      <span className="font-heading text-24 leading-none font-semibold text-primary">{stat.value}</span>
+    <div className="flex flex-col gap-1.5 rounded-xl border border-subtle bg-surface-1 px-5 py-4">
+      <span className="font-heading text-28 leading-none font-semibold text-primary tabular-nums">{stat.value}</span>
+      <span className="text-13 font-medium text-tertiary">{stat.label}</span>
     </div>
   );
 }
@@ -114,7 +111,7 @@ export const WorkspaceOverview = observer(function WorkspaceOverview() {
 
   return (
     <div className="flex flex-col gap-6 pt-2 pb-4">
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
         {stats.map((stat) => (
           <StatTile key={stat.key} stat={stat} />
         ))}
@@ -122,13 +119,13 @@ export const WorkspaceOverview = observer(function WorkspaceOverview() {
 
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between">
-          <h2 className="font-heading text-14 font-semibold text-tertiary">Your projects</h2>
-          <Link href={`/${slug}/projects/`} className="text-12 font-medium text-accent-primary hover:underline">
+          <h2 className="font-heading text-16 font-semibold text-primary">Your projects</h2>
+          <Link href={`/${slug}/projects/`} className="text-13 font-medium text-accent-primary hover:underline">
             View all
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {projects.map((project) => {
             if (!project) return null;
             const counts = getProjectAnalyticsCountById(project.id);
@@ -143,33 +140,23 @@ export const WorkspaceOverview = observer(function WorkspaceOverview() {
               <Link
                 key={project.id}
                 href={`/${slug}/projects/${project.id}/issues/`}
-                className="group flex flex-col gap-3 rounded-lg border border-subtle bg-layer-1 px-4 py-3.5 transition-colors hover:border-strong hover:bg-layer-1-hover"
+                className="group flex flex-col gap-4 rounded-xl border border-subtle bg-surface-1 px-5 py-4 transition-colors hover:border-strong"
               >
-                <div className="flex items-start gap-2.5">
-                  <span className="mt-0.5 flex size-7 flex-shrink-0 items-center justify-center rounded-md bg-layer-2">
-                    <Logo logo={project.logo_props} size={16} />
+                <div className="flex items-center gap-3">
+                  <span className="flex size-9 flex-shrink-0 items-center justify-center rounded-lg bg-layer-1">
+                    <Logo logo={project.logo_props} size={18} />
                   </span>
-                  <div className="flex min-w-0 flex-col">
-                    <span className="truncate font-heading text-14 font-semibold text-primary">{project.name}</span>
-                    <span className="text-11 font-medium text-tertiary">
-                      {project.identifier} · {counts?.total_members ?? 0} members
-                    </span>
-                  </div>
+                  <span className="truncate font-heading text-16 font-semibold text-primary">{project.name}</span>
+                  <span className="ml-auto text-13 font-medium text-tertiary tabular-nums">
+                    {done} of {total}
+                  </span>
                 </div>
 
-                <div className="flex flex-col gap-1.5">
-                  <div className="flex items-center justify-between text-11 text-tertiary">
-                    <span>
-                      {done} of {total} done
-                    </span>
-                    <span className="font-medium text-secondary">{percent}%</span>
-                  </div>
-                  <div className="h-1.5 w-full overflow-hidden rounded-full bg-layer-2">
-                    <div
-                      className="h-full rounded-full bg-accent-primary transition-all"
-                      style={{ width: `${percent}%` }}
-                    />
-                  </div>
+                <div className="h-1.5 w-full overflow-hidden rounded-full bg-layer-2">
+                  <div
+                    className="h-full rounded-full bg-accent-primary transition-all"
+                    style={{ width: `${percent}%` }}
+                  />
                 </div>
               </Link>
             );

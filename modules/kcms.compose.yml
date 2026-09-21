@@ -16,6 +16,9 @@ services:
       dockerfile: deployments/kcms/Dockerfile
     ports:
       - "3020:80"
+    extra_hosts:
+      # Central single sign-on: the identity service runs on the host (needed on Linux).
+      - "host.docker.internal:host-gateway"
     environment:
       WEB_URL: http://localhost:3020
       # Load the Kiran demo workspace on the first boot of an empty volume.

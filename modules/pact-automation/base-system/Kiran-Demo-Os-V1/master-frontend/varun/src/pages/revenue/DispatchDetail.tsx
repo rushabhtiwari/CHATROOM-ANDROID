@@ -50,7 +50,7 @@ export const DispatchDetail: React.FC = () => {
           </div>
 
           <div className="text-right font-mono">
-            <div className="text-[10px] text-muted uppercase">Consignment Value</div>
+            <div className="text-[12px] text-muted ">Consignment Value</div>
             <div className="text-xl font-bold text-ink">{formatINR(dsp.value)}</div>
             <div className="text-xs text-slate-600">{dsp.quantity.toLocaleString('en-IN')} {dsp.uom}</div>
           </div>
@@ -62,7 +62,7 @@ export const DispatchDetail: React.FC = () => {
               <ShieldAlert className="w-4 h-4" />
               Dispatch Locked — Customer overdue ₹8,42,150 beyond 60 days
             </div>
-            <p className="text-[11px]">
+            <p className="text-[12px]">
               Gate pass generation suspended until formal release by Meera Iyer (Accounts Head).
             </p>
           </div>
@@ -70,18 +70,18 @@ export const DispatchDetail: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 font-mono text-xs">
           <div className="p-3 bg-canvas rounded border border-line">
-            <div className="text-[10px] text-muted uppercase">ASN Status</div>
+            <div className="text-[12px] text-muted ">ASN Status</div>
             <div className="font-semibold text-ink mt-1 flex items-center gap-1.5">
               <span>{dsp.asnNumber || 'Pending Link'}</span>
               {dsp.asnConfidence && <ConfidenceChip confidence={dsp.asnConfidence} />}
             </div>
           </div>
           <div className="p-3 bg-canvas rounded border border-line">
-            <div className="text-[10px] text-muted uppercase">POD Status</div>
+            <div className="text-[12px] text-muted ">POD Status</div>
             <div className="font-semibold text-ink mt-1">{dsp.podStatus}</div>
           </div>
           <div className="p-3 bg-canvas rounded border border-line">
-            <div className="text-[10px] text-muted uppercase">Chaser Reminders Sent</div>
+            <div className="text-[12px] text-muted ">Chaser Reminders Sent</div>
             <div className="font-semibold text-ink mt-1">{dsp.remindersSent} Auto-Mails</div>
           </div>
         </div>

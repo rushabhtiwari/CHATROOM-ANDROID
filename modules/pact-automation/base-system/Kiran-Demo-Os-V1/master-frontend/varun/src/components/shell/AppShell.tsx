@@ -66,7 +66,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
           type="button"
           aria-label="Close navigation menu"
           onClick={() => setIsMobileSidebarOpen(false)}
-          className="fixed inset-0 z-20 bg-ink/45 md:hidden"
+          className="fixed inset-0 z-20 bg-black/30 md:hidden"
         />
       )}
 
@@ -87,7 +87,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
                 edge; gutters step up with the viewport. */}
             <div
               key={location.pathname}
-              className="mx-auto w-full max-w-shell px-5 pb-16 pt-6 sm:px-7 lg:px-10 lg:pb-20 lg:pt-8 xl:px-14 animate-page-enter"
+              className="mx-auto w-full max-w-shell px-4 pb-16 pt-6 sm:px-8 sm:pt-8 animate-page-enter"
             >
               {children || <Outlet />}
             </div>

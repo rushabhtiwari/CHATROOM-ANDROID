@@ -199,7 +199,7 @@ export const AskKiran: React.FC = () => {
           >
             {/* User Prompt */}
             <div className="font-semibold text-sm text-ink flex items-center gap-2 border-b border-line pb-3">
-              <span className="w-6 h-6 rounded-full bg-slate-100 border border-line flex items-center justify-center font-mono text-[10px] text-slate-600">
+              <span className="w-6 h-6 rounded-full bg-slate-100 border border-line flex items-center justify-center font-mono text-[12px] text-slate-600">
                 Q
               </span>
               <span>{c.query}</span>
@@ -214,7 +214,7 @@ export const AskKiran: React.FC = () => {
             {c.tableData && (
               <div className="overflow-x-auto border border-line rounded">
                 <table className="w-full text-left font-mono text-xs">
-                  <thead className="bg-canvas text-muted text-[10px] uppercase border-b border-line">
+                  <thead className="bg-canvas text-muted text-[12px] border-b border-line">
                     <tr>
                       {c.tableData.headers.map((h, i) => (
                         <th key={i} className="p-2.5">{h}</th>
@@ -238,14 +238,14 @@ export const AskKiran: React.FC = () => {
 
             {/* Source Citations */}
             <div className="flex flex-wrap items-center gap-2 pt-2">
-              <span className="text-[10px] font-mono text-muted uppercase tracking-wider">
+              <span className="text-[12px] font-mono text-muted ">
                 Citations & Primary Records:
               </span>
               {c.sources.map((s, idx) => (
                 <a
                   key={idx}
                   href={s.link}
-                  className="px-2 py-1 bg-white hover:bg-canvas border border-line rounded text-[11px] font-mono text-kiran font-medium flex items-center gap-1 shadow-2xs"
+                  className="px-2 py-1 bg-white hover:bg-canvas border border-line rounded text-[12px] font-mono text-kiran font-medium flex items-center gap-1 shadow-2xs"
                 >
                   <span>{s.title}</span>
                   <ExternalLink className="w-3 h-3 text-muted" />
@@ -254,7 +254,7 @@ export const AskKiran: React.FC = () => {
             </div>
 
             {/* Monospace Metadata Footer */}
-            <div className="pt-3 border-t border-line/60 flex items-center justify-between text-[11px] font-mono text-muted">
+            <div className="pt-3 border-t border-line/60 flex items-center justify-between text-[12px] font-mono text-muted">
               <span>{c.model} · {c.latencySec}s · {c.tokens.toLocaleString('en-IN')} tokens · ₹{c.costINR.toFixed(2)}</span>
               <span>KiranOS Semantic Engine</span>
             </div>

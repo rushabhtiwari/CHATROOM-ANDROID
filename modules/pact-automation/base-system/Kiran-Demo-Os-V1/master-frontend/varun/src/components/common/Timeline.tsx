@@ -36,7 +36,7 @@ export const Timeline: React.FC<TimelineProps> = ({ events, className = '' }) =>
               {isAI ? (
                 <Sparkles className="w-3 h-3 text-ai" />
               ) : ev.avatar ? (
-                <span className="font-mono text-[10px]">{ev.avatar}</span>
+                <span className="font-mono text-[12px]">{ev.avatar}</span>
               ) : (
                 <User className="w-3 h-3 text-slate" />
               )}
@@ -50,7 +50,7 @@ export const Timeline: React.FC<TimelineProps> = ({ events, className = '' }) =>
                     {ev.actorName}
                   </span>
                   {isAI && ev.modelUsed && (
-                    <span className="font-mono text-[10px] px-1.5 py-0.2 rounded bg-ai-tint text-ai border border-ai/20">
+                    <span className="font-mono text-[12px] px-1.5 py-0.2 rounded bg-ai-tint text-ai border border-ai/20">
                       {ev.modelUsed}
                     </span>
                   )}
@@ -58,7 +58,7 @@ export const Timeline: React.FC<TimelineProps> = ({ events, className = '' }) =>
                     <ConfidenceChip confidence={ev.confidence} />
                   )}
                 </div>
-                <span className="font-mono text-[10px] text-muted flex items-center gap-1">
+                <span className="font-mono text-[12px] text-muted flex items-center gap-1">
                   <Clock className="w-3 h-3" />
                   {formatDateTimeIST(ev.timestamp)}
                 </span>

@@ -92,14 +92,14 @@ export const CommandCenter: React.FC = () => {
               onClick={handleRegenerate}
               disabled={isRegenerating}
               title="Regenerate morning AI briefing"
-              className="inline-flex h-10 items-center gap-2 border-2 border-hairline-strong bg-white px-4 text-body-s font-semibold leading-none text-ink transition-all duration-150 hover:border-ink hover:bg-canvas active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50 disabled:active:translate-y-0"
+              className="inline-flex h-10 items-center gap-2 rounded-md border border-hairline-strong bg-white px-4 text-body-s font-medium leading-none text-ink transition-colors duration-150 hover:bg-canvas disabled:cursor-not-allowed disabled:opacity-50"
             >
               <RefreshCw aria-hidden className={`h-4 w-4 ${isRegenerating ? 'animate-spin' : ''}`} />
               <span>Briefing</span>
             </button>
             <button
               onClick={() => navigate('/ask')}
-              className="inline-flex h-10 items-center gap-2 border-2 border-ink bg-accent px-4 text-body-s font-semibold leading-none text-accent-ink transition-all duration-150 hover:brightness-95 active:translate-y-px active:brightness-90"
+              className="inline-flex h-10 items-center gap-2 rounded-md border border-transparent bg-accent px-4 text-body-s font-semibold leading-none text-white transition-colors duration-150 hover:bg-accent-hover"
             >
               <Bot aria-hidden className="h-4 w-4" />
               <span>Ask Kiran</span>
@@ -204,10 +204,10 @@ export const CommandCenter: React.FC = () => {
       {/* 4. Two-Column Zone: Needs your decision (60%) vs AI activity today (40%) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column (60%): Needs your decision */}
-        <div className="lg:col-span-7 bg-surface-container-lowest border border-outline-variant rounded-none flex flex-col">
+        <div className="lg:col-span-7 bg-surface-container-lowest border border-outline-variant flex flex-col">
           <div className="p-4 border-b border-outline-variant flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-semibold uppercase tracking-wider text-on-surface font-mono">
+              <span className="text-xs font-semibold text-on-surface font-mono">
                 Needs Your Decision
               </span>
               <span className="font-mono text-xs px-2 py-0.5 rounded bg-amber-50 text-strand-amber font-semibold border border-amber-200">
@@ -238,7 +238,7 @@ export const CommandCenter: React.FC = () => {
                     >
                       {item.subject}
                     </Link>
-                    <div className="text-[11px] text-outline flex items-center gap-2 mt-0.5">
+                    <div className="text-[12px] text-outline flex items-center gap-2 mt-0.5">
                       <span>By <strong className="text-on-surface">{item.requesterName}</strong></span>
                       <span>·</span>
                       <span className="font-mono text-on-surface-variant font-medium">
@@ -253,14 +253,14 @@ export const CommandCenter: React.FC = () => {
                 <div className="flex items-center gap-2 shrink-0">
                   <button
                     onClick={() => navigate(item.referenceLink)}
-                    className="px-2.5 py-1 rounded-none bg-surface-container-lowest hover:bg-surface-container-low border border-outline-variant text-xs font-medium text-on-surface-variant"
+                    className="px-2.5 py-1 bg-surface-container-lowest hover:bg-surface-container-low border border-outline-variant text-xs font-medium text-on-surface-variant"
                   >
                     Open
                   </button>
                   <button
                     onClick={() => handleApprove(item.id)}
                     disabled={item.status !== 'Pending'}
-                      className="px-2.5 py-1 rounded-none border-2 border-ink bg-accent active:translate-y-px hover:brightness-95 disabled:opacity-50 disabled:text-slate-400 disabled:cursor-default text-xs font-semibold text-accent-ink transition-colors"
+                      className="px-2.5 py-1 rounded-md border border-transparent bg-accent hover:bg-accent-hover disabled:opacity-50 disabled:text-slate-400 disabled:cursor-default text-xs font-semibold text-white transition-colors"
                   >
                     {item.status === 'Pending' ? 'Approve' : 'Approved'}
                   </button>
@@ -269,7 +269,7 @@ export const CommandCenter: React.FC = () => {
             ))}
           </div>
 
-          <div className="p-3 border-t border-outline-variant text-center bg-surface-container-low/30 rounded-none">
+          <div className="p-3 border-t border-outline-variant text-center bg-surface-container-low/30 ">
             <Link to="/approvals" className="text-xs font-semibold text-primary hover:underline">
               Open Full Approval Inbox ({approvals.length} records) →
             </Link>
@@ -277,14 +277,14 @@ export const CommandCenter: React.FC = () => {
         </div>
 
         {/* Right Column (40%): AI Activity Today */}
-        <div className="lg:col-span-5 bg-surface-container-lowest border border-outline-variant rounded-none flex flex-col relative overflow-hidden">
+        <div className="lg:col-span-5 bg-surface-container-lowest border border-outline-variant flex flex-col relative overflow-hidden">
           {/* Violet Accent Bar */}
           <div className="h-1 w-full bg-ai" />
 
           <div className="p-4 border-b border-outline-variant flex items-center justify-between bg-ai-tint/20">
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-ai" />
-              <span className="text-xs font-semibold uppercase tracking-wider text-ai font-mono">
+              <span className="text-xs font-semibold text-ai font-mono">
                 AI Activity Today
               </span>
             </div>
@@ -325,10 +325,10 @@ export const CommandCenter: React.FC = () => {
                   </span>
                   <ConfidenceChip confidence={run.confidencePct} />
                 </div>
-                <p className="text-[11px] text-on-surface-variant line-clamp-2 leading-relaxed">
+                <p className="text-[12px] text-on-surface-variant line-clamp-2 leading-relaxed">
                   {run.output}
                 </p>
-                <div className="flex items-center justify-between text-[10px] font-mono text-outline">
+                <div className="flex items-center justify-between text-[12px] font-mono text-outline">
                   <span>{run.model} · {run.durationSec}s · {run.tokensUsed} tokens</span>
                   <span>{run.timestamp.split(',')[1]}</span>
                 </div>
@@ -336,7 +336,7 @@ export const CommandCenter: React.FC = () => {
             ))}
           </div>
 
-          <div className="p-3 border-t border-outline-variant text-center bg-surface-container-low/30 rounded-none">
+          <div className="p-3 border-t border-outline-variant text-center bg-surface-container-low/30 ">
             <Link to="/ai" className="text-xs font-semibold text-ai hover:underline">
               Explore AI Control Plane & Model Registry →
             </Link>
@@ -347,9 +347,9 @@ export const CommandCenter: React.FC = () => {
       {/* 5. Bottom Row: 3 Visual Analysis Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Card 1: Overdue tickets by department */}
-        <div className="bg-surface-container-lowest border border-outline-variant rounded-none p-4">
+        <div className="bg-surface-container-lowest border border-outline-variant p-4">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-semibold uppercase tracking-wider text-on-surface font-mono">
+            <span className="text-xs font-semibold text-on-surface font-mono">
               Overdue Tickets by Dept
             </span>
             <span className="text-xs font-mono text-outline">Total: 13</span>
@@ -370,9 +370,9 @@ export const CommandCenter: React.FC = () => {
         </div>
 
         {/* Card 2: Dispatch Plan vs Target */}
-        <div className="bg-surface-container-lowest border border-outline-variant rounded-none p-4">
+        <div className="bg-surface-container-lowest border border-outline-variant p-4">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-semibold uppercase tracking-wider text-on-surface font-mono">
+            <span className="text-xs font-semibold text-on-surface font-mono">
               Weekly Dispatches vs Plan (L Metres)
             </span>
             <span className="text-xs font-mono text-strand-green font-semibold">₹1.24 Cr done</span>
@@ -393,9 +393,9 @@ export const CommandCenter: React.FC = () => {
         </div>
 
         {/* Card 3: Escalations Open */}
-        <div className="bg-surface-container-lowest border border-outline-variant rounded-none p-4 flex flex-col justify-between">
+        <div className="bg-surface-container-lowest border border-outline-variant p-4 flex flex-col justify-between">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold uppercase tracking-wider text-on-surface font-mono">
+            <span className="text-xs font-semibold text-on-surface font-mono">
               Open Escalations
             </span>
             <Link to="/comms/escalations" className="text-xs text-primary hover:underline font-mono">
@@ -411,14 +411,14 @@ export const CommandCenter: React.FC = () => {
                   </span>
                   <StatusPill status={esc.severity} />
                 </div>
-                <div className="text-[11px] text-outline flex items-center justify-between font-mono">
+                <div className="text-[12px] text-outline flex items-center justify-between font-mono">
                   <span>Level: <strong className="text-on-surface">{esc.currentLevel}</strong> ({esc.currentRole})</span>
                   <span className="text-strand-red font-semibold">{esc.timeAtLevel}</span>
                 </div>
               </div>
             ))}
           </div>
-          <div className="pt-2.5 border-t border-outline-variant text-[11px] text-outline flex items-center justify-between font-mono">
+          <div className="pt-2.5 border-t border-outline-variant text-[12px] text-outline flex items-center justify-between font-mono">
             <span>Next escalation in 4h</span>
             <span className="text-strand-amber font-semibold">2 require immediate action</span>
           </div>

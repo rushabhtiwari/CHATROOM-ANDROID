@@ -1,25 +1,16 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { mockBankStatementLines, mockBookEntries } from '../../data/accounts';
 import { BankStatementLine, BookEntry } from '../../types';
 import { PageHeader } from '../../components/shell/PageHeader';
-import { IndianRupee } from '../../components/common/IndianRupee';
 import { formatINR } from '../../utils/formatters';
-import {
-  Calculator,
-  RefreshCw,
-  Sparkles,
-  CheckCircle2,
-  AlertTriangle,
-  ArrowRight,
-  PlusCircle,
-  FileCheck2,
-  ExternalLink
-} from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
+
+const PILL_OK = 'inline-flex items-center rounded-badge bg-[#E7F3EB] px-2 py-0.5 text-[12px] font-medium text-[#17723F] whitespace-nowrap';
+const PILL_WARN = 'inline-flex items-center rounded-badge bg-[#FBEFDC] px-2 py-0.5 text-[12px] font-medium text-[#8A4F00] whitespace-nowrap';
 
 export const BankReconciliation: React.FC = () => {
   const [bankLines, setBankLines] = useState<BankStatementLine[]>(mockBankStatementLines);
-  const [bookLines, setBookLines] = useState<BookEntry[]>(mockBookEntries);
+  const [bookLines] = useState<BookEntry[]>(mockBookEntries);
   const [isReconciling, setIsReconciling] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
@@ -27,13 +18,13 @@ export const BankReconciliation: React.FC = () => {
     setIsReconciling(true);
     setTimeout(() => {
       setIsReconciling(false);
-      setToastMessage('Reconciliation completed. Matched 2 additional entries via UTR reference.');
+      setToastMessage('Done. 2 more entries matched.');
       setTimeout(() => setToastMessage(null), 3500);
     }, 800);
   };
 
   const handleAcceptSuggestion = (lineId: string, suggestion: string) => {
-    setToastMessage(`Accepted AI suggestion "${suggestion}". Auto-drafted journal voucher.`);
+    setToastMessage(`Matched as "${suggestion}".`);
     setBankLines(prev =>
       prev.map(l => l.id === lineId ? { ...l, isMatched: true } : l)
     );
@@ -42,115 +33,91 @@ export const BankReconciliation: React.FC = () => {
 
   return (
     <div className="space-y-6 animate-fadeIn">
-      {/* Toast */}
       {toastMessage && (
-        <div className="fixed top-16 right-8 z-50 bg-ink text-white px-4 py-3 rounded-md shadow-popover border border-kiran flex items-center gap-2.5 text-xs animate-fadeIn">
-          <CheckCircle2 className="w-4 h-4 text-strand-green" />
-          <span>{toastMessage}</span>
+        <div className="fixed top-16 right-8 z-50 bg-ink text-white px-4 py-3 rounded-md shadow-popover text-[13px] animate-fadeIn">
+          {toastMessage}
         </div>
       )}
 
-      {/* Header */}
       <PageHeader
-        title="Daily Bank-vs-Books Difference Report"
+        title="Bank reconciliation"
         actions={
           <button
             onClick={handleRunReconciliation}
             disabled={isReconciling}
-            className="px-4 py-1.5 bg-kiran hover:bg-blue-700 text-white rounded text-xs font-semibold shadow-xs flex items-center gap-1.5"
+            className="btn-primary"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${isReconciling ? 'animate-spin' : ''}`} />
-            Run Reconciliation
+            <RefreshCw className={`w-4 h-4 ${isReconciling ? 'animate-spin' : ''}`} />
+            Reconcile
           </button>
         }
       />
 
-      {/* Discrepancy Status Banner */}
-      <div className="p-4 bg-amber-50 border border-amber-300 rounded-md flex flex-wrap items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded bg-strand-amber/20 border border-strand-amber/40 flex items-center justify-center shrink-0">
-            <AlertTriangle className="w-4 h-4 text-strand-amber" />
-          </div>
-          <div>
-            <div className="font-display font-semibold text-sm text-amber-950">
-              ₹2,14,380 unexplained across 11 entries
-            </div>
-            <p className="text-xs text-amber-800 mt-0.5">
-              AI has analyzed 3 unposted entries with matching suggested debit/credit accounts.
-            </p>
-          </div>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="kpi">
+          <div className="kpi-label">Unexplained</div>
+          <div className="kpi-value text-strand-red">₹2,14,380</div>
         </div>
-
-        <div className="flex items-center gap-2 font-mono text-xs">
-          <span className="px-2.5 py-1 rounded bg-white border border-amber-200 text-amber-900">
-            Auto-Match Rate: <strong>89.4%</strong>
-          </span>
+        <div className="kpi">
+          <div className="kpi-label">Unmatched entries</div>
+          <div className="kpi-value">11</div>
+        </div>
+        <div className="kpi">
+          <div className="kpi-label">Matched</div>
+          <div className="kpi-value">89.4%</div>
+        </div>
+        <div className="kpi">
+          <div className="kpi-label">Bank balance</div>
+          <div className="kpi-value">₹4,82,40,000</div>
         </div>
       </div>
 
-      {/* Synchronized Columns: Bank Statement Lines vs Book Entries */}
       <div className="grid grid-cols-12 gap-6">
-        
-        {/* Left Column (6 cols): Bank Statement Feed */}
-        <div className="col-span-12 lg:col-span-6 bg-surface border border-line rounded-lg p-5 shadow-card space-y-4">
-          <div className="flex items-center justify-between border-b border-line pb-3">
-            <div>
-              <h3 className="font-display font-semibold text-sm text-ink">
-                HDFC Bank Host-to-Host Statement
-              </h3>
-              <span className="font-mono text-[10px] text-muted">A/C: 50200012984511 (Secunderabad)</span>
-            </div>
-            <span className="font-mono text-xs font-semibold text-strand-green">
-              Balance: ₹4,82,40,000
+        {/* Bank statement */}
+        <div className="col-span-12 lg:col-span-6 panel">
+          <div className="panel-header">
+            <h3 className="text-[16px] font-semibold text-ink">Bank statement</h3>
+            <span className="text-[13px] text-muted whitespace-nowrap">
+              HDFC · <span className="font-code">50200012984511</span>
             </span>
           </div>
 
-          <div className="space-y-3 font-mono text-xs">
+          <div className="divide-y divide-line-2">
             {bankLines.map((line) => (
-              <div
-                key={line.id}
-                className={`p-3 rounded border transition-colors space-y-2 ${
-                  line.isMatched
-                    ? 'bg-emerald-50/30 border-emerald-200'
-                    : 'bg-amber-50/40 border-amber-300 ring-1 ring-strand-amber'
-                }`}
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <div>
-                    <div className="font-semibold text-ink font-sans">{line.description}</div>
-                    <div className="text-[10px] text-muted">{line.date} · Ref: {line.referenceNo}</div>
+              <div key={line.id} className="px-5 py-3.5 space-y-2">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="text-[14px] font-medium text-ink">{line.description}</div>
+                    <div className="text-[13px] text-muted">
+                      {line.date} · <span className="font-code">{line.referenceNo}</span>
+                    </div>
                   </div>
-                  <div className="text-right">
-                    {line.credit && <div className="font-bold text-strand-green">+{formatINR(line.credit)}</div>}
-                    {line.debit && <div className="font-bold text-strand-red">-{formatINR(line.debit)}</div>}
+                  <div className="text-right shrink-0 space-y-1">
+                    {line.credit && <div className="text-[14px] tabular-nums whitespace-nowrap text-ink">+{formatINR(line.credit)}</div>}
+                    {line.debit && <div className="text-[14px] tabular-nums whitespace-nowrap text-ink">-{formatINR(line.debit)}</div>}
+                    <span className={line.isMatched ? PILL_OK : PILL_WARN}>
+                      {line.isMatched ? 'Matched' : 'Unmatched'}
+                    </span>
                   </div>
                 </div>
 
-                {/* AI Reason Suggestion & Action (if unmatched) */}
                 {!line.isMatched && line.aiSuggestedReason && (
-                  <div className="p-2 bg-white rounded border border-ai/30 text-[11px] font-sans space-y-1.5">
-                    <div className="flex items-center justify-between text-ai font-semibold">
-                      <span className="flex items-center gap-1">
-                        <Sparkles className="w-3 h-3" />
-                        AI Discrepancy Reason:
-                      </span>
-                      <span className="px-1.5 py-0.2 rounded bg-ai-tint text-ai text-[10px] font-mono">
-                        {line.aiSuggestedReason}
-                      </span>
-                    </div>
-
-                    <div className="flex flex-wrap items-center justify-end gap-1.5 pt-1">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="text-[13px] text-muted">
+                      Suggested: <span className="text-ink">{line.aiSuggestedReason}</span>
+                    </span>
+                    <div className="flex items-center gap-2">
                       <button
                         onClick={() => handleAcceptSuggestion(line.id, line.aiSuggestedReason!)}
-                        className="px-2 py-0.5 bg-ai text-white rounded text-[10px] font-semibold hover:bg-ai/90 shadow-2xs"
+                        className="btn-secondary"
                       >
-                        Accept Suggestion
+                        Accept
                       </button>
                       <button
                         onClick={() => setToastMessage('Opened manual voucher matcher.')}
-                        className="px-2 py-0.5 bg-canvas border border-line rounded text-[10px] font-medium text-slate-700"
+                        className="btn-secondary"
                       >
-                        Match Manually
+                        Match manually
                       </button>
                     </div>
                   </div>
@@ -160,50 +127,35 @@ export const BankReconciliation: React.FC = () => {
           </div>
         </div>
 
-        {/* Right Column (6 cols): PACT Book Ledger Entries */}
-        <div className="col-span-12 lg:col-span-6 bg-surface border border-line rounded-lg p-5 shadow-card space-y-4">
-          <div className="flex items-center justify-between border-b border-line pb-3">
-            <div>
-              <h3 className="font-display font-semibold text-sm text-ink">
-                PACT ERP Journal & Receipt Book
-              </h3>
-              <span className="font-mono text-[10px] text-muted">General Ledger: Bank Receipts</span>
-            </div>
+        {/* Books */}
+        <div className="col-span-12 lg:col-span-6 panel">
+          <div className="panel-header">
+            <h3 className="text-[16px] font-semibold text-ink">Books</h3>
             <button
               onClick={() => setToastMessage('Opened journal voucher creation modal.')}
-              className="px-2.5 py-1 bg-white hover:bg-canvas border border-line text-xs font-semibold text-slate-800 rounded flex items-center gap-1 shadow-2xs"
+              className="btn-secondary"
             >
-              <PlusCircle className="w-3.5 h-3.5" />
-              Create Journal
+              New journal
             </button>
           </div>
 
-          <div className="space-y-3 font-mono text-xs">
+          <div className="divide-y divide-line-2">
             {bookLines.map((entry) => (
-              <div
-                key={entry.id}
-                className={`p-3 rounded border transition-colors space-y-1 ${
-                  entry.isMatched
-                    ? 'bg-emerald-50/30 border-emerald-200'
-                    : 'bg-white border-line'
-                }`}
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <div>
-                    <div className="font-semibold text-ink font-sans">{entry.particulars}</div>
-                    <div className="text-[10px] text-muted">{entry.date} · Voucher: {entry.voucherNo}</div>
+              <div key={entry.id} className="px-5 py-3.5">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="text-[14px] font-medium text-ink">{entry.particulars}</div>
+                    <div className="text-[13px] text-muted">
+                      {entry.date} · <span className="font-code">{entry.voucherNo}</span> · {entry.account}
+                    </div>
                   </div>
-                  <div className="text-right">
-                    {entry.credit && <div className="font-bold text-strand-green">+{formatINR(entry.credit)}</div>}
-                    {entry.debit && <div className="font-bold text-strand-red">-{formatINR(entry.debit)}</div>}
+                  <div className="text-right shrink-0 space-y-1">
+                    {entry.credit && <div className="text-[14px] tabular-nums whitespace-nowrap text-ink">+{formatINR(entry.credit)}</div>}
+                    {entry.debit && <div className="text-[14px] tabular-nums whitespace-nowrap text-ink">-{formatINR(entry.debit)}</div>}
+                    <span className={entry.isMatched ? PILL_OK : PILL_WARN}>
+                      {entry.isMatched ? 'Matched' : 'Unmatched'}
+                    </span>
                   </div>
-                </div>
-
-                <div className="flex items-center justify-between pt-1 text-[10px] text-muted">
-                  <span>Account: {entry.account}</span>
-                  <span className={entry.isMatched ? 'text-strand-green font-semibold' : 'text-strand-amber font-semibold'}>
-                    {entry.isMatched ? 'Matched to MT940' : 'Awaiting Bank Match'}
-                  </span>
                 </div>
               </div>
             ))}

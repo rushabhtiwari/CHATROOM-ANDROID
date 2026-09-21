@@ -59,7 +59,7 @@ export const QuotationList: React.FC = () => {
       cell: (row) => (
         <div>
           <div className="font-semibold text-ink">{row.customerName}</div>
-          <div className="text-[10px] text-muted truncate">{row.contactPerson}</div>
+          <div className="text-[12px] text-muted truncate">{row.contactPerson}</div>
         </div>
       )
     },

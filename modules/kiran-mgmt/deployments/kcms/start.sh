@@ -74,6 +74,16 @@ export API_BASE_URL="http://127.0.0.1:3004"
 export LIVE_BASE_PATH="/live"
 export SITE_ADDRESS="${SITE_ADDRESS:-:80}"
 
+# ---- Central Platform single sign-on ------------------------------------------------
+# The browser reaches the identity service on the host's localhost; this container
+# reaches the same service through the Docker host gateway.
+export CENTRAL_ISSUER_URL="${CENTRAL_ISSUER_URL:-http://localhost:8000}"
+export CENTRAL_INTERNAL_URL="${CENTRAL_INTERNAL_URL:-http://host.docker.internal:8000}"
+export CENTRAL_PORTAL_URL="${CENTRAL_PORTAL_URL:-http://localhost:3000}"
+export CENTRAL_CLIENT_ID="${CENTRAL_CLIENT_ID:-projects}"
+export CENTRAL_WORKSPACE="${CENTRAL_WORKSPACE:-kiran}"
+export ENABLE_SIGNUP="${ENABLE_SIGNUP:-0}"
+
 # `docker exec` does not inherit any of the above, so commands run inside the
 # container later (the demo seeder) read it back from here.
 export -p >/run/kcms-env.sh

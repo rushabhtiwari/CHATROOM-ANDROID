@@ -5,7 +5,7 @@ import { mailingApi } from '../../modules/mailing/api';
 import type { MailDetail, MailRow } from '../../modules/mailing/types';
 import { useAsync, useMailingVersion } from '../../modules/mailing/useMailing';
 import { MailInspector, AttachmentBadge } from '../../components/mailing/MailInspector';
-import { TONE, Tone } from '../../lib/tone';
+import { TONE, sentenceCase, Tone } from '../../lib/tone';
 
 const PAGE_SIZE = 12;
 
@@ -65,41 +65,22 @@ export const MailsInbox: React.FC = () => {
   const statuses = useMemo(() => data?.statuses ?? [], [data]);
 
   return (
-    <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
+    <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
       {/* ---- The ledger ------------------------------------------------ */}
       <section className="ku-sheet flex min-h-0 flex-col">
-        <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4 border-b border-hairline px-5 py-4">
-          <div className="min-w-0">
-            <p className="ku-eyebrow">Mail ledger</p>
-            <h2 className="ku-wide mt-1.5 font-display text-h3 font-semibold text-ink">
-              Every message the intake has seen
-            </h2>
-          </div>
-          <dl className="flex flex-wrap items-baseline gap-x-8 gap-y-2">
-            <div>
-              <dt className="ku-eyebrow">On view</dt>
-              <dd className="ku-fig mt-0.5 text-body font-semibold text-ink">{rows.length}</dd>
-            </div>
-            <div>
-              <dt className="ku-eyebrow">Matching</dt>
-              <dd className="ku-fig mt-0.5 text-body font-semibold text-ink">{total}</dd>
-            </div>
-          </dl>
-        </div>
-
         {/* ---- Filters ------------------------------------------------ */}
-        <div className="flex flex-wrap items-center gap-3 border-b border-hairline px-5 py-3">
-          <div className="relative min-w-[220px] flex-1">
-            <Search aria-hidden className="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-hairline-strong" />
+        <div className="flex flex-wrap items-center gap-2 border-b border-hairline px-4 py-3">
+          <div className="relative min-w-[140px] flex-1">
+            <Search aria-hidden className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-faint" />
             <input
               value={q}
               onChange={(event) => {
                 setQ(event.target.value);
                 setPage(1);
               }}
-              placeholder="Search subject, sender, PO number…"
+              placeholder="Search"
               aria-label="Search messages"
-              className="w-full min-w-0 border border-b-2 border-hairline-strong border-b-meta bg-white py-2 pl-8 pr-3 text-body-s text-ink transition-colors duration-150 placeholder:text-meta hover:border-b-ink focus:border-b-ink"
+              className="field pl-9"
             />
           </div>
 
@@ -110,7 +91,7 @@ export const MailsInbox: React.FC = () => {
               setPage(1);
             }}
             aria-label="Filter by status"
-            className="h-9 border-2 border-hairline-strong bg-white px-2 text-body-s text-ink"
+            className="field w-auto"
           >
             <option value="">All statuses</option>
             {statuses.map((entry) => (
@@ -127,11 +108,11 @@ export const MailsInbox: React.FC = () => {
               setPage(1);
             }}
             aria-label="Filter by direction"
-            className="h-9 border-2 border-hairline-strong bg-white px-2 text-body-s text-ink"
+            className="field w-auto"
           >
-            <option value="">Both directions</option>
-            <option value="INBOUND">Inbound</option>
-            <option value="OUTBOUND">Outbound</option>
+            <option value="">In and out</option>
+            <option value="INBOUND">In</option>
+            <option value="OUTBOUND">Out</option>
           </select>
         </div>
 
@@ -140,20 +121,7 @@ export const MailsInbox: React.FC = () => {
           {error && <p className="px-5 py-4 text-body-s text-st-red-ink">{error}</p>}
 
           {!error && rows.length === 0 && !loading && (
-            <div className="flex flex-col items-start px-6 py-14 text-left">
-              <span aria-hidden className="block h-0.5 w-7 origin-left animate-rule-in bg-accent" />
-              <div className="mt-3.5 flex items-center gap-2">
-                <Search aria-hidden size={13} className="shrink-0 text-hairline-strong" />
-                <span className="ku-eyebrow">Nothing on file</span>
-              </div>
-              <p className="ku-wide mt-2 font-display text-h3 font-semibold text-ink">
-                No message matches this view
-              </p>
-              <p className="mt-2 max-w-[54ch] text-body-s leading-relaxed text-meta">
-                Widen the search or clear a filter. New mail arrives from the watcher, or from the
-                direct mailer above.
-              </p>
-            </div>
+            <p className="px-5 py-16 text-center text-body-s text-meta">No mails found.</p>
           )}
 
           <ul className="ku-ruled">
@@ -169,10 +137,9 @@ export const MailsInbox: React.FC = () => {
         </div>
 
         {/* ---- Pagination --------------------------------------------- */}
-        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-hairline bg-canvas px-4 py-3 text-body-s text-meta">
-          <div>
-            Showing <span className="ku-fig font-semibold text-ink">{rows.length}</span> of{' '}
-            <span className="ku-fig font-semibold text-ink">{total}</span> messages
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-hairline px-4 py-2.5 text-body-s text-meta">
+          <div className="tnum text-caption">
+            {rows.length} of {total}
           </div>
           <div className="flex items-center gap-1.5">
             <button
@@ -181,11 +148,11 @@ export const MailsInbox: React.FC = () => {
               disabled={page === 1}
               aria-label="Previous page"
               title="Previous page"
-              className="flex h-8 w-8 items-center justify-center border-2 border-hairline-strong bg-white text-ink transition-all duration-150 hover:border-ink hover:bg-canvas active:translate-y-px disabled:cursor-not-allowed disabled:opacity-40"
+              className="btn-icon disabled:cursor-not-allowed disabled:opacity-40"
             >
               <ChevronLeft aria-hidden className="h-4 w-4" />
             </button>
-            <span className="ku-fig px-2 font-semibold text-ink">
+            <span className="tnum px-1 text-caption text-meta">
               {page} / {pages}
             </span>
             <button
@@ -194,7 +161,7 @@ export const MailsInbox: React.FC = () => {
               disabled={page >= pages}
               aria-label="Next page"
               title="Next page"
-              className="flex h-8 w-8 items-center justify-center border-2 border-hairline-strong bg-white text-ink transition-all duration-150 hover:border-ink hover:bg-canvas active:translate-y-px disabled:cursor-not-allowed disabled:opacity-40"
+              className="btn-icon disabled:cursor-not-allowed disabled:opacity-40"
             >
               <ChevronRight aria-hidden className="h-4 w-4" />
             </button>
@@ -210,16 +177,7 @@ export const MailsInbox: React.FC = () => {
             onOpenJob={(jobId) => navigate(`/admin/mailing/on-hold/${jobId}`)}
           />
         ) : (
-          <div className="flex flex-col items-start px-6 py-14 text-left">
-            <span aria-hidden className="block h-0.5 w-7 origin-left animate-rule-in bg-accent" />
-            <p className="ku-eyebrow mt-3.5">Reader</p>
-            <p className="ku-wide mt-2 font-display text-h3 font-semibold text-ink">
-              Select a message
-            </p>
-            <p className="mt-2 max-w-[54ch] text-body-s leading-relaxed text-meta">
-              Headers, body, attachments and the lifecycle the pipeline recorded appear here.
-            </p>
-          </div>
+          <p className="px-5 py-16 text-center text-body-s text-meta">Select a mail.</p>
         )}
       </section>
     </div>
@@ -236,41 +194,23 @@ const MailLine: React.FC<{ row: MailRow; selected: boolean; onSelect: () => void
       type="button"
       onClick={onSelect}
       aria-current={selected}
-      className={`flex w-full items-stretch border-l-3 text-left transition-colors duration-150 ${
-        selected ? 'border-l-accent bg-canvas' : 'border-l-transparent bg-white hover:border-l-accent hover:bg-canvas'
+      className={`flex min-h-[52px] w-full items-center gap-4 rounded-none px-4 py-3 text-left transition-colors duration-150 ${
+        selected ? 'bg-accent-tint' : 'bg-white hover:bg-canvas'
       }`}
     >
-      <div className="flex min-w-0 flex-1 flex-col gap-1.5 px-4 py-3">
-        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-          <span className="ku-docket">{row.id}</span>
-          <span className="ku-stamp border-st-grey-ink text-st-grey-ink">
-            {row.direction === 'INBOUND' ? 'In' : 'Out'}
-          </span>
-          <span className="min-w-0 flex-1 truncate text-body-s font-semibold text-ink">
-            {row.subject}
-          </span>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-caption text-meta">
-          <span className="ku-fig truncate">{row.fromAddress}</span>
-          <span className="ku-fig">{new Date(row.receivedAt).toLocaleString()}</span>
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-body-s font-medium text-ink">{row.subject}</p>
+        <p className="mt-0.5 flex items-center gap-2 truncate text-caption text-meta">
+          <span className="truncate">{row.fromAddress}</span>
+          <span aria-hidden>·</span>
+          <span className="tnum shrink-0">{new Date(row.receivedAt).toLocaleString()}</span>
           <AttachmentBadge count={row.attachmentCount} />
-          {row.poNumber && <span className="ku-fig text-ink">{row.poNumber}</span>}
-        </div>
-
-        {row.causeLabel && (
-          <p className="text-caption text-st-red-ink">{row.causeLabel}</p>
-        )}
+          {row.poNumber && <span className="shrink-0 font-code text-[12px] text-ink">{row.poNumber}</span>}
+        </p>
+        {row.causeLabel && <p className="mt-0.5 truncate text-caption text-st-red-ink">{row.causeLabel}</p>}
       </div>
 
-      <div className="flex shrink-0 flex-col items-end justify-center gap-1.5 px-4 py-3">
-        <span className={`ku-stamp ${TONE[row.tone as Tone].stamp}`}>{row.statusLabel}</span>
-        {row.confidence !== null && row.confidence > 0 && (
-          <span className="ku-fig text-caption text-meta">
-            conf {(row.confidence * 100).toFixed(0)}%
-          </span>
-        )}
-      </div>
+      <span className={`ku-stamp shrink-0 ${TONE[row.tone as Tone].stamp}`}>{sentenceCase(row.statusLabel)}</span>
     </button>
   </li>
 );

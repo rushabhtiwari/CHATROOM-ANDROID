@@ -69,7 +69,7 @@ export function UserProfileDialog({
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="max-w-md gap-5 p-0 overflow-hidden">
-          <div className="h-24 bg-gradient-to-br from-primary/85 via-sky-500/70 to-violet-500/65" />
+          <div className="h-24 bg-[#F2F2F5]" />
           <div className="-mt-14 px-6 pb-6">
             <div className="flex items-end justify-between gap-4">
               <div className="relative">
@@ -91,7 +91,7 @@ export function UserProfileDialog({
                   </button>
                 )}
               </div>
-              <span className="mb-1 rounded-full bg-secondary px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
+              <span className="mb-1 rounded-full bg-secondary px-2.5 py-1 text-[12px] font-medium text-muted-foreground">
                 {user.online ? "Online now" : "Offline"}
               </span>
             </div>
@@ -168,7 +168,7 @@ export function UserProfileDialog({
               </span>
               <span className="min-w-0 flex-1">
                 <span className="block text-sm font-semibold">Media, links and docs</span>
-                <span className="block text-[11px] text-muted-foreground">
+                <span className="block text-[12px] text-muted-foreground">
                   {sharedItemCount} shared {sharedItemCount === 1 ? "item" : "items"}
                 </span>
               </span>

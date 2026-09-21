@@ -35,7 +35,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
         <span className="ku-eyebrow">Nothing on file</span>
       </div>
 
-      <p className="ku-wide mt-2 font-display text-h3 font-semibold text-ink">{statement}</p>
+      <p className="mt-2 font-display text-h3 font-semibold text-ink">{statement}</p>
 
       {instruction && (
         <p className="mt-2 max-w-[54ch] text-body-s leading-relaxed text-meta">{instruction}</p>

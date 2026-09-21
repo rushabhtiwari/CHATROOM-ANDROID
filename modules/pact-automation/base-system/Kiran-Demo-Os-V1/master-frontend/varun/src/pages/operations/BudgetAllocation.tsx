@@ -78,24 +78,24 @@ export const BudgetAllocation: React.FC = () => {
           <HealthPill status="on_track" label="Good Standing (0 Unsettled Bills)" />
         </div>
 
-        <div className="ku-ledger border-t-3 border-t-structure grid-cols-1 sm:grid-cols-3 pt-1">
+        <div className="ku-ledger grid-cols-1 sm:grid-cols-3 pt-1">
           <div className="p-3 bg-white rounded-lg">
-            <div className="text-[10px] text-outline uppercase font-mono font-semibold">Monthly Limit</div>
+            <div className="text-[12px] text-outline font-mono font-semibold">Monthly Limit</div>
             <div className="text-lg font-bold text-on-surface mt-1 font-mono tabular-nums">₹1,50,000</div>
           </div>
           <div className="p-3 bg-white rounded-lg">
-            <div className="text-[10px] text-outline uppercase font-mono font-semibold">Current Utilized</div>
+            <div className="text-[12px] text-outline font-mono font-semibold">Current Utilized</div>
             <div className="text-lg font-bold text-on-surface-variant mt-1 font-mono tabular-nums">₹45,000</div>
           </div>
           <div className="p-3 bg-emerald-50 rounded-lg border border-emerald-200">
-            <div className="text-[10px] text-emerald-800 uppercase font-mono font-semibold">Available Limit</div>
+            <div className="text-[12px] text-emerald-800 font-mono font-semibold">Available Limit</div>
             <div className="text-lg font-bold text-strand-green mt-1 font-mono tabular-nums">₹1,05,000</div>
           </div>
         </div>
       </div>
 
       {/* Department Budget Cards Grid */}
-      <div className="ku-ledger border-t-3 border-t-structure grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      <div className="ku-ledger grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         {budgets.map((dept) => {
           const spentPct = Math.round((dept.spent / dept.allocated) * 100);
 
@@ -142,7 +142,7 @@ export const BudgetAllocation: React.FC = () => {
                 />
               </div>
 
-              <div className="mt-3 pt-2.5 border-t border-outline-variant text-[11px] text-outline flex items-center justify-between font-mono">
+              <div className="mt-3 pt-2.5 border-t border-outline-variant text-[12px] text-outline flex items-center justify-between font-mono">
                 <span>Pending Bill Vouchers:</span>
                 <span className={`font-semibold tabular-nums ${dept.pendingBillsCount > 0 ? 'text-strand-amber' : 'text-on-surface-variant'}`}>
                   {dept.pendingBillsCount} Pending

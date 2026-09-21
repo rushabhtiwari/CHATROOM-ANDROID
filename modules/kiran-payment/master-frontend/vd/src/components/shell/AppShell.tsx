@@ -42,7 +42,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
           <main className="flex-1 overflow-y-auto min-h-0">
             <div
               key={location.pathname}
-              className="max-w-[1680px] mx-auto px-8 py-7 animate-page-enter"
+              className="max-w-[1680px] mx-auto p-8 animate-page-enter"
             >
               {children || <Outlet />}
             </div>

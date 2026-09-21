@@ -90,12 +90,12 @@ export const HrReview: React.FC = () => {
                     <div className="flex flex-wrap items-center gap-2">
                       <h2 className="text-[14px] font-semibold text-ink">{claim.title}</h2>
                       {amountEdited && (
-                        <span className="inline-flex items-center gap-1 rounded-badge border border-strand-amber/30 bg-strand-amber/10 px-1.5 py-0.5 text-[10px] font-semibold text-strand-amber">
+                        <span className="inline-flex items-center gap-1 rounded-badge border border-strand-amber/30 bg-strand-amber/10 px-1.5 py-0.5 text-[12px] font-semibold text-strand-amber">
                           <Pencil className="h-2.5 w-2.5" /> Amount edited
                         </span>
                       )}
                     </div>
-                    <p className="mt-0.5 font-mono text-[11px] text-muted">
+                    <p className="mt-0.5 font-mono text-[12px] text-muted">
                       {claim.id} · {employee?.name ?? 'Unknown'} ·{' '}
                       {employee?.department ?? '—'} · {CATEGORY_LABEL[claim.category]} ·{' '}
                       filed {formatRelative(claim.submittedOn)}
@@ -114,14 +114,14 @@ export const HrReview: React.FC = () => {
                           href={receipt.url ?? '#'}
                           target="_blank"
                           rel="noreferrer"
-                          className="inline-flex max-w-[200px] items-center gap-1.5 rounded-badge border border-line bg-surface-2 px-2 py-1 text-[10.5px] text-slate-700 transition-colors hover:bg-line-2"
+                          className="inline-flex max-w-[200px] items-center gap-1.5 rounded-badge border border-line bg-surface-2 px-2 py-1 text-[12px] text-slate-700 transition-colors hover:bg-line-2"
                         >
                           <FileText className="h-3 w-3 shrink-0" />
                           <span className="truncate">{receipt.fileName}</span>
                         </a>
                       ))}
                       {claim.extraction && (
-                        <span className="inline-flex items-center gap-1 rounded-badge bg-ai-tint px-2 py-1 text-[10.5px] font-medium text-ai">
+                        <span className="inline-flex items-center gap-1 rounded-badge bg-ai-tint px-2 py-1 text-[12px] font-medium text-ai">
                           <Sparkles className="h-3 w-3" /> Read automatically
                         </span>
                       )}
@@ -132,7 +132,7 @@ export const HrReview: React.FC = () => {
                         {findings.map((finding, index) => (
                           <p
                             key={index}
-                            className="flex items-start gap-1.5 text-[11.5px] leading-relaxed text-strand-amber"
+                            className="flex items-start gap-1.5 text-[12px] leading-relaxed text-strand-amber"
                           >
                             <AlertTriangle className="mt-px h-3 w-3 shrink-0" />
                             {finding.message}
@@ -147,13 +147,13 @@ export const HrReview: React.FC = () => {
                       {formatCurrency(claim.amount)}
                     </span>
                     {amountEdited && (
-                      <span className="font-mono text-[11px] text-muted line-through">
+                      <span className="font-mono text-[12px] text-muted line-through">
                         {formatCurrency(claim.extractedAmount as number)}
                       </span>
                     )}
                     <Link
                       to={`/reimbursements/${claim.id}`}
-                      className="mt-1 inline-flex items-center gap-1 text-[11px] font-medium text-kiran hover:underline"
+                      className="mt-1 inline-flex items-center gap-1 text-[12px] font-medium text-kiran hover:underline"
                     >
                       Open in full <ArrowUpRight className="h-3 w-3" />
                     </Link>
@@ -172,7 +172,7 @@ export const HrReview: React.FC = () => {
                   <button
                     onClick={() => act(claim, true)}
                     disabled={Boolean(busy)}
-                      className="inline-flex items-center gap-1.5 rounded-md border-2 border-ink bg-accent active:translate-y-px px-3 py-1.5 text-xs font-semibold text-accent-ink shadow-xs transition-colors hover:brightness-95 disabled:opacity-50"
+                      className="inline-flex items-center gap-1.5 rounded-md rounded-md border border-transparent bg-accent px-3 py-1.5 text-xs font-semibold text-white shadow-xs transition-colors hover:bg-accent-hover disabled:opacity-50"
                   >
                     {busy === `${claim.id}-a` ? (
                       <Loader2 className="h-3.5 w-3.5 animate-spin" />

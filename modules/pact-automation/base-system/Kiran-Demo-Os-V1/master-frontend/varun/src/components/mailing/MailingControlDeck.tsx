@@ -110,7 +110,7 @@ export const MailingControlDeck: React.FC<Props> = ({ summary, connected, onChan
       } else {
         setNotice({
           tone: 'green',
-          text: `Injected as ${result.emailLogId} — pipeline settled at ${result.status}.`,
+          text: `Sent as ${result.emailLogId}.`,
         });
         setFiles([]);
         if (fileInput.current) fileInput.current.value = '';
@@ -131,10 +131,7 @@ export const MailingControlDeck: React.FC<Props> = ({ summary, connected, onChan
       setShowConnect(false);
       setNotice({
         tone: 'green',
-        text:
-          `Connected ${result.mailbox.address} — ` +
-          `${result.messageCount.toLocaleString()} message(s) in the mailbox. ` +
-          `Watching from the newest, so nothing already there is ingested.`,
+        text: `Connected ${result.mailbox.address}.`,
       });
       reloadConnection();
       onChanged();
@@ -143,7 +140,7 @@ export const MailingControlDeck: React.FC<Props> = ({ summary, connected, onChan
   const disconnect = () =>
     run(async () => {
       await mailingApi.disconnect(ACTOR);
-      setNotice({ tone: 'amber', text: 'Mailbox disconnected. The ledger is untouched.' });
+      setNotice({ tone: 'amber', text: 'Mailbox disconnected.' });
       reloadConnection();
       onChanged();
     });
@@ -153,76 +150,53 @@ export const MailingControlDeck: React.FC<Props> = ({ summary, connected, onChan
   return (
     <section className="ku-card" aria-label="Mailbox and direct mailing">
       {/* ---- Connection monitor -------------------------------------- */}
-      <div className="flex flex-wrap items-center gap-x-6 gap-y-3 border-b border-hairline px-5 py-3.5">
-        <div className="flex min-w-0 items-center gap-2.5">
-          <span
-            aria-hidden
-            className={`h-2 w-2 shrink-0 rounded-full ${
-              live ? 'bg-st-green-ink' : monitor?.paused ? 'bg-st-amber-ink' : 'bg-st-red-ink'
-            }`}
-          />
-          <span className="ku-eyebrow">
-            {monitor?.connection ?? 'IMAP'} watcher
-          </span>
-          <span className="ku-stamp border-st-grey-ink text-st-grey-ink">
-            {monitor?.paused ? 'Paused' : connected ? 'Running' : 'Reconnecting'}
-          </span>
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-3 px-5 py-4">
+        <div className="min-w-0">
+          <div className="flex items-center gap-2.5">
+            <span className="truncate text-h3 font-semibold text-ink">
+              {mailbox ? mailbox.address : 'No mailbox'}
+            </span>
+            <span
+              className={`ku-stamp ${
+                live ? 'text-st-green-ink' : monitor?.paused ? 'text-st-amber-ink' : 'text-st-red-ink'
+              }`}
+            >
+              {monitor?.paused ? 'Paused' : live ? 'Running' : connected ? 'Error' : 'Reconnecting'}
+            </span>
+          </div>
+          <p
+            className={`mt-0.5 text-caption ${monitor?.lastError ? 'text-st-red-ink' : 'text-meta'}`}
+          >
+            {monitor?.lastError
+              ? monitor.lastError
+              : monitor?.lastCheckedAt
+                ? `Checked ${new Date(monitor.lastCheckedAt).toLocaleTimeString()}`
+                : ' '}
+          </p>
         </div>
 
-        <dl className="flex flex-wrap items-baseline gap-x-6 gap-y-2 text-caption text-meta">
-          <div>
-            <dt className="ku-eyebrow">Mailbox</dt>
-            <dd className="mt-0.5 text-body-s text-ink">
-              {mailbox ? `${mailbox.address} · ${mailbox.mailbox}` : 'Not connected'}
-            </dd>
-          </div>
-          <div>
-            <dt className="ku-eyebrow">Last checked</dt>
-            <dd className="ku-fig mt-0.5 text-body-s text-ink">
-              {monitor?.lastCheckedAt ? new Date(monitor.lastCheckedAt).toLocaleTimeString() : '—'}
-            </dd>
-          </div>
-          <div>
-            <dt className="ku-eyebrow">Polls</dt>
-            <dd className="ku-fig mt-0.5 text-body-s text-ink">
-              {monitor?.pollCount?.toLocaleString() ?? '—'}
-            </dd>
-          </div>
-          <div>
-            <dt className="ku-eyebrow">Source</dt>
-            <dd className="mt-0.5 text-body-s text-ink">
-              {mailbox ? (mailbox.source === 'connected' ? 'Console' : 'Env file') : '—'}
-            </dd>
-          </div>
-          <div>
-            <dt className="ku-eyebrow">Last error</dt>
-            <dd
-              className={`mt-0.5 text-body-s ${monitor?.lastError ? 'text-st-red-ink' : 'text-ink'}`}
-            >
-              {monitor?.lastError ?? 'None'}
-            </dd>
-          </div>
-        </dl>
-
-        <div className="ml-auto flex shrink-0 flex-wrap items-center gap-3">
+        <div className="ml-auto flex shrink-0 flex-wrap items-center gap-2">
           <button
             type="button"
-            onClick={poll}
-            disabled={busy || monitor?.paused}
-            title="Run the watcher poll now"
-            className="inline-flex h-9 items-center gap-2 border-2 border-hairline-strong bg-white px-3 text-body-s font-semibold leading-none text-ink transition-all duration-150 hover:border-ink hover:bg-canvas active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50 disabled:active:translate-y-0"
+            onClick={() => setOpen((value) => !value)}
+            aria-expanded={open}
+            className="btn-secondary"
           >
-            <RefreshCw aria-hidden className={`h-3.5 w-3.5 ${busy ? 'animate-spin' : ''}`} />
-            Run poll now
+            <Send aria-hidden className="h-4 w-4 text-faint" />
+            {open ? 'Close' : 'Send test mail'}
           </button>
           <button
             type="button"
             onClick={togglePause}
             disabled={busy}
             title={monitor?.paused ? 'Resume the watcher' : 'Pause the watcher'}
-            className="inline-flex h-9 items-center gap-2 border-2 border-hairline-strong bg-white px-3 text-body-s font-semibold leading-none text-ink transition-all duration-150 hover:border-ink hover:bg-canvas active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50"
+            className="btn-secondary"
           >
-            {monitor?.paused ? <Play aria-hidden className="h-3.5 w-3.5" /> : <Pause aria-hidden className="h-3.5 w-3.5" />}
+            {monitor?.paused ? (
+              <Play aria-hidden className="h-4 w-4 text-faint" />
+            ) : (
+              <Pause aria-hidden className="h-4 w-4 text-faint" />
+            )}
             {monitor?.paused ? 'Resume' : 'Pause'}
           </button>
           {mailbox ? (
@@ -231,9 +205,9 @@ export const MailingControlDeck: React.FC<Props> = ({ summary, connected, onChan
               onClick={disconnect}
               disabled={busy}
               title={`Disconnect ${mailbox.address}`}
-              className="inline-flex h-9 items-center gap-2 border-2 border-hairline-strong bg-white px-3 text-body-s font-semibold leading-none text-ink transition-all duration-150 hover:border-ink hover:bg-canvas active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50"
+              className="btn-secondary"
             >
-              <Unplug aria-hidden className="h-3.5 w-3.5" />
+              <Unplug aria-hidden className="h-4 w-4 text-faint" />
               Disconnect
             </button>
           ) : (
@@ -241,20 +215,21 @@ export const MailingControlDeck: React.FC<Props> = ({ summary, connected, onChan
               type="button"
               onClick={() => setShowConnect((value) => !value)}
               aria-expanded={showConnect}
-              className="inline-flex h-9 items-center gap-2 border-2 border-structure bg-structure px-3 text-body-s font-semibold leading-none text-white transition-all duration-150 hover:bg-structure-600 active:translate-y-px"
+              className="btn-secondary"
             >
-              <Plug aria-hidden className="h-3.5 w-3.5" />
+              <Plug aria-hidden className="h-4 w-4 text-faint" />
               Connect mailbox
             </button>
           )}
           <button
             type="button"
-            onClick={() => setOpen((value) => !value)}
-            aria-expanded={open}
-            className="inline-flex h-9 items-center gap-2 border-2 border-ink bg-accent px-3 text-body-s font-semibold leading-none text-accent-ink transition-all duration-150 hover:brightness-95 active:translate-y-px active:brightness-90"
+            onClick={poll}
+            disabled={busy || monitor?.paused}
+            title="Check the mailbox now"
+            className="btn-primary"
           >
-            <Send aria-hidden className="h-3.5 w-3.5" />
-            {open ? 'Close injector' : 'Direct mailer'}
+            <RefreshCw aria-hidden className={`h-4 w-4 ${busy ? 'animate-spin' : ''}`} />
+            Check now
           </button>
         </div>
       </div>
@@ -262,12 +237,12 @@ export const MailingControlDeck: React.FC<Props> = ({ summary, connected, onChan
       {notice && (
         <div
           role="status"
-          className={`flex items-start gap-2.5 border-b border-l-3 border-hairline px-5 py-2.5 text-body-s ${
+          className={`flex items-start gap-2.5 border-t border-hairline px-5 py-3 text-body-s ${
             notice.tone === 'green'
-              ? 'border-l-st-green-ink bg-st-green-bg text-st-green-ink'
+              ? 'bg-st-green-bg text-st-green-ink'
               : notice.tone === 'amber'
-                ? 'border-l-st-amber-ink bg-st-amber-bg text-st-amber-ink'
-                : 'border-l-st-red-ink bg-st-red-bg text-st-red-ink'
+                ? 'bg-st-amber-bg text-st-amber-ink'
+                : 'bg-st-red-bg text-st-red-ink'
           }`}
         >
           <AlertTriangle aria-hidden className="mt-0.5 h-4 w-4 shrink-0" />
@@ -280,51 +255,39 @@ export const MailingControlDeck: React.FC<Props> = ({ summary, connected, onChan
 
       {/* ---- Connect a mailbox ---------------------------------------- */}
       {showConnect && !mailbox && (
-        <div className="border-b border-hairline px-5 py-5">
-          <div className="flex items-start gap-2.5">
-            <Link2 aria-hidden className="mt-0.5 h-4 w-4 shrink-0 text-meta" />
-            <p className="max-w-[70ch] text-body-s leading-6 text-meta">
-              Type the address and an{' '}
-              <strong className="font-semibold text-ink">app password</strong> — the server is
-              worked out from the domain. The credentials are proved against the mailbox before
-              anything is stored, and watching starts at the newest message, so connecting a real
-              account never pulls in its history.
-            </p>
-          </div>
-
-          <div className="mt-4 grid grid-cols-1 gap-x-8 gap-y-4 lg:grid-cols-2">
+        <div className="border-t border-hairline px-5 py-5">
+          <div className="grid grid-cols-1 gap-x-6 gap-y-4 lg:grid-cols-2">
             <Field
               label="Email address"
-              hint="Gmail, Outlook, Yahoo and Zoho are recognised by domain."
             >
               <input
                 value={mailAddress}
                 onChange={(event) => setMailAddress(event.target.value)}
                 autoComplete="username"
                 placeholder="orders@yourcompany.com"
-                className="w-full min-w-0 border border-b-2 border-hairline-strong border-b-meta bg-white px-3 py-2 text-body-s text-ink transition-colors duration-150 placeholder:text-meta hover:border-b-ink focus:border-b-ink"
+                className="w-full min-w-0 rounded-md border border-hairline-strong bg-white px-3 py-2 text-body-s text-ink transition-colors duration-150 placeholder:text-meta focus:border-accent"
               />
             </Field>
 
             <Field
               label="App password"
-              hint="For Gmail this is a 16-character app password, not the account password."
+              hint="For Gmail, use a 16-character app password."
             >
               <input
                 type="password"
                 value={appPassword}
                 onChange={(event) => setAppPassword(event.target.value)}
                 autoComplete="current-password"
-                className="w-full min-w-0 border border-b-2 border-hairline-strong border-b-meta bg-white px-3 py-2 text-body-s text-ink transition-colors duration-150 placeholder:text-meta hover:border-b-ink focus:border-b-ink"
+                className="w-full min-w-0 rounded-md border border-hairline-strong bg-white px-3 py-2 text-body-s text-ink transition-colors duration-150 placeholder:text-meta focus:border-accent"
               />
             </Field>
 
-            <Field label="IMAP host" hint="Leave blank to infer it from the address.">
+            <Field label="IMAP host">
               <input
                 value={imapHost}
                 onChange={(event) => setImapHost(event.target.value)}
-                placeholder="inferred from the domain"
-                className="w-full min-w-0 border border-b-2 border-hairline-strong border-b-meta bg-white px-3 py-2 text-body-s text-ink transition-colors duration-150 placeholder:text-meta hover:border-b-ink focus:border-b-ink"
+                placeholder="Optional"
+                className="w-full min-w-0 rounded-md border border-hairline-strong bg-white px-3 py-2 text-body-s text-ink transition-colors duration-150 placeholder:text-meta focus:border-accent"
               />
             </Field>
 
@@ -332,7 +295,7 @@ export const MailingControlDeck: React.FC<Props> = ({ summary, connected, onChan
               <input
                 value={folder}
                 onChange={(event) => setFolder(event.target.value)}
-                className="w-full min-w-0 border border-b-2 border-hairline-strong border-b-meta bg-white px-3 py-2 text-body-s text-ink transition-colors duration-150 hover:border-b-ink focus:border-b-ink"
+                className="w-full min-w-0 rounded-md border border-hairline-strong bg-white px-3 py-2 text-body-s text-ink transition-colors duration-150 focus:border-accent"
               />
             </Field>
           </div>
@@ -342,10 +305,10 @@ export const MailingControlDeck: React.FC<Props> = ({ summary, connected, onChan
               type="button"
               onClick={connect}
               disabled={busy || !mailAddress.includes('@') || !appPassword}
-              className="inline-flex h-10 items-center gap-2 border-2 border-ink bg-accent px-5 text-body-s font-semibold leading-none text-accent-ink transition-all duration-150 hover:brightness-95 active:translate-y-px active:brightness-90 disabled:cursor-not-allowed disabled:opacity-50 disabled:active:translate-y-0"
+              className="btn-primary"
             >
               <Plug aria-hidden className="h-4 w-4" />
-              {busy ? 'Verifying…' : 'Verify & connect'}
+              {busy ? 'Connecting…' : 'Connect'}
             </button>
           </div>
         </div>
@@ -353,27 +316,27 @@ export const MailingControlDeck: React.FC<Props> = ({ summary, connected, onChan
 
       {/* ---- Direct PO injector -------------------------------------- */}
       {open && (
-        <div className="grid grid-cols-1 gap-x-8 gap-y-5 px-5 py-5 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-x-6 gap-y-5 border-t border-hairline px-5 py-5 lg:grid-cols-2">
           <div className="space-y-4">
-            <Field label="Sender" hint="An address outside the whitelist is quarantined at intake.">
+            <Field label="Sender">
               <input
                 value={fromAddress}
                 onChange={(event) => setFromAddress(event.target.value)}
-                className="w-full min-w-0 border border-b-2 border-hairline-strong border-b-meta bg-white px-3 py-2 text-body-s text-ink transition-colors duration-150 hover:border-b-ink focus:border-b-ink"
+                className="w-full min-w-0 rounded-md border border-hairline-strong bg-white px-3 py-2 text-body-s text-ink transition-colors duration-150 focus:border-accent"
               />
             </Field>
             <Field label="Recipient">
               <input
                 value={toAddress}
                 onChange={(event) => setToAddress(event.target.value)}
-                className="w-full min-w-0 border border-b-2 border-hairline-strong border-b-meta bg-white px-3 py-2 text-body-s text-ink transition-colors duration-150 hover:border-b-ink focus:border-b-ink"
+                className="w-full min-w-0 rounded-md border border-hairline-strong bg-white px-3 py-2 text-body-s text-ink transition-colors duration-150 focus:border-accent"
               />
             </Field>
-            <Field label="Subject" hint="The PO number is read from here, the body, or the filename.">
+            <Field label="Subject">
               <input
                 value={subject}
                 onChange={(event) => setSubject(event.target.value)}
-                className="w-full min-w-0 border border-b-2 border-hairline-strong border-b-meta bg-white px-3 py-2 text-body-s text-ink transition-colors duration-150 hover:border-b-ink focus:border-b-ink"
+                className="w-full min-w-0 rounded-md border border-hairline-strong bg-white px-3 py-2 text-body-s text-ink transition-colors duration-150 focus:border-accent"
               />
             </Field>
           </div>
@@ -384,11 +347,11 @@ export const MailingControlDeck: React.FC<Props> = ({ summary, connected, onChan
                 value={bodyText}
                 onChange={(event) => setBodyText(event.target.value)}
                 rows={8}
-                className="w-full min-w-0 border border-b-2 border-hairline-strong border-b-meta bg-white px-3 py-2 text-body-s leading-6 text-ink transition-colors duration-150 hover:border-b-ink focus:border-b-ink"
+                className="w-full min-w-0 rounded-md border border-hairline-strong bg-white px-3 py-2 text-body-s leading-6 text-ink transition-colors duration-150 focus:border-accent"
               />
             </Field>
 
-            <Field label="Attachment" hint="A PDF raises extraction confidence; a name containing “scan” or “photo” drives the OCR-failure branch.">
+            <Field label="Attachment">
               <div className="flex flex-wrap items-center gap-3">
                 <input
                   ref={fileInput}
@@ -396,7 +359,7 @@ export const MailingControlDeck: React.FC<Props> = ({ summary, connected, onChan
                   multiple
                   accept="application/pdf"
                   onChange={(event) => setFiles(Array.from(event.target.files ?? []))}
-                  className="block w-full text-body-s text-meta file:mr-3 file:border-2 file:border-hairline-strong file:bg-white file:px-3 file:py-1.5 file:text-body-s file:font-semibold file:text-ink hover:file:border-ink"
+                  className="block w-full text-body-s text-meta file:mr-3 file:border file:border-hairline-strong file:bg-white file:px-3 file:py-1.5 file:text-body-s file:font-semibold file:text-ink hover:file:border-ink"
                 />
               </div>
               {files.length > 0 && (
@@ -417,10 +380,10 @@ export const MailingControlDeck: React.FC<Props> = ({ summary, connected, onChan
                 type="button"
                 onClick={send}
                 disabled={busy || !subject.trim() || !fromAddress.includes('@')}
-                className="inline-flex h-10 items-center gap-2 border-2 border-ink bg-accent px-5 text-body-s font-semibold leading-none text-accent-ink transition-all duration-150 hover:brightness-95 active:translate-y-px active:brightness-90 disabled:cursor-not-allowed disabled:opacity-50 disabled:active:translate-y-0"
+                className="btn-primary"
               >
                 <Send aria-hidden className="h-4 w-4" />
-                {busy ? 'Injecting…' : 'Inject into pipeline'}
+                {busy ? 'Sending…' : 'Send'}
               </button>
             </div>
           </div>
@@ -436,7 +399,7 @@ const Field: React.FC<{ label: string; hint?: string; children: React.ReactNode 
   children,
 }) => (
   <label className="block">
-    <span className="ku-eyebrow text-ink">{label}</span>
+    <span className="text-caption font-medium text-meta">{label}</span>
     <div className="mt-1.5">{children}</div>
     {hint && <p className="mt-1.5 text-caption leading-5 text-meta">{hint}</p>}
   </label>

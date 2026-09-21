@@ -8,7 +8,6 @@
  */
 
 import React, { useMemo } from 'react';
-import { AlertTriangle, Banknote, Clock, Wallet } from 'lucide-react';
 import { useRts } from '@/modules/rts/store';
 import { formatCompactCurrency, daysUntil } from '@/modules/rts/format';
 import { actionOwner, isTerminal } from '@/modules/rts/status';
@@ -48,61 +47,24 @@ export const ClaimSummaryBar: React.FC<{ className?: string }> = ({ className = 
   }, [requests, payouts]);
 
   const tiles = [
+    { label: 'Open', value: formatCompactCurrency(stats.inFlight), alert: false },
+    { label: 'In review', value: formatCompactCurrency(stats.awaiting), alert: false },
     {
-      label: 'In flight',
-      value: formatCompactCurrency(stats.inFlight),
-      detail: `${stats.inFlightCount} open claim${stats.inFlightCount === 1 ? '' : 's'}`,
-      icon: Wallet,
-      accent: 'text-kiran',
-      tint: 'bg-kiran-tint',
+      label: 'Oldest waiting',
+      value: stats.oldest === 0 ? '—' : `${stats.oldest} days`,
+      alert: stats.oldest > 5,
     },
-    {
-      label: 'Waiting on a reviewer',
-      value: formatCompactCurrency(stats.awaiting),
-      detail: `${stats.awaitingCount} with HR or Accounts`,
-      icon: Clock,
-      accent: 'text-strand-amber',
-      tint: 'bg-strand-amber/10',
-    },
-    {
-      label: 'Oldest unactioned',
-      value: stats.oldest === 0 ? '—' : `${stats.oldest}d`,
-      detail: stats.oldest > 5 ? 'Past the review window' : 'Within the review window',
-      icon: AlertTriangle,
-      accent: stats.oldest > 5 ? 'text-strand-red' : 'text-slate-600',
-      tint: stats.oldest > 5 ? 'bg-strand-red/8' : 'bg-slate-100',
-    },
-    {
-      label: 'Disbursed',
-      value: formatCompactCurrency(stats.settled),
-      detail: `${stats.settledCount} payout${stats.settledCount === 1 ? '' : 's'} settled`,
-      icon: Banknote,
-      accent: 'text-strand-green',
-      tint: 'bg-strand-green/10',
-    },
+    { label: 'Paid', value: formatCompactCurrency(stats.settled), alert: false },
   ];
 
   return (
-    <div className={`grid grid-cols-2 gap-3 lg:grid-cols-4 ${className}`}>
-      {tiles.map((tile) => {
-        const Icon = tile.icon;
-        return (
-          <div key={tile.label} className="panel px-4 py-3.5">
-            <div className="flex items-start justify-between gap-2">
-              <span className="label-eyebrow">{tile.label}</span>
-              <span
-                className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-md ${tile.tint} ${tile.accent}`}
-              >
-                <Icon className="h-3.5 w-3.5" />
-              </span>
-            </div>
-            <div className="mt-2 font-mono text-[22px] font-semibold leading-none tracking-tight text-ink">
-              {tile.value}
-            </div>
-            <p className="mt-1.5 text-[11px] text-muted">{tile.detail}</p>
-          </div>
-        );
-      })}
+    <div className={`grid grid-cols-2 gap-4 lg:grid-cols-4 ${className}`}>
+      {tiles.map((tile) => (
+        <div key={tile.label} className="kpi">
+          <div className="kpi-label">{tile.label}</div>
+          <div className={`kpi-value ${tile.alert ? 'text-strand-red' : ''}`}>{tile.value}</div>
+        </div>
+      ))}
     </div>
   );
 };

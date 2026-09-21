@@ -7,7 +7,7 @@ import { DataGrid, ColumnDef } from '../../components/common/DataGrid';
 import { StatusPill } from '../../components/common/StatusPill';
 import { PageHeader } from '../../components/shell/PageHeader';
 import { formatDate } from '../../utils/formatters';
-import { PackageCheck, Plus, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Plus, CheckCircle2, X } from 'lucide-react';
 
 export const SamplesList: React.FC = () => {
   const [samples, setSamples] = useState<SampleRequest[]>(mockSamples);
@@ -40,29 +40,26 @@ export const SamplesList: React.FC = () => {
 
     setSamples([newSample, ...samples]);
     setIsModalOpen(false);
-    setToastMessage(`Sample ${newSample.sampleNumber} logged successfully against ${rfq.rfqNumber}.`);
+    setToastMessage(`Sample ${newSample.sampleNumber} created.`);
     setTimeout(() => setToastMessage(null), 4000);
   };
 
   const columns: ColumnDef<SampleRequest>[] = [
     {
       id: 'sampleNumber',
-      header: 'Sample No.',
+      header: 'Sample no.',
       accessorKey: 'sampleNumber',
       isMono: true,
-      width: '140px',
-      cell: (row) => <span className="font-mono font-semibold text-kiran">{row.sampleNumber}</span>
+      cell: (row) => <span className="whitespace-nowrap">{row.sampleNumber}</span>
     },
     {
       id: 'rfqNumber',
-      header: 'Linked RFQ Ref',
+      header: 'RFQ',
       accessorKey: 'rfqNumber',
-      isMono: true,
-      width: '140px',
       cell: (row) => (
         <Link
           to={`/rfq/${row.rfqId}`}
-          className="font-mono text-xs text-ink hover:underline font-semibold bg-canvas px-1.5 py-0.5 rounded border border-line"
+          className="font-code text-[13px] text-kiran hover:underline whitespace-nowrap"
         >
           {row.rfqNumber}
         </Link>
@@ -72,64 +69,56 @@ export const SamplesList: React.FC = () => {
       id: 'customerName',
       header: 'Customer',
       accessorKey: 'customerName',
-      width: '220px',
-      cell: (row) => <span className="font-semibold text-ink">{row.customerName}</span>
+      cell: (row) => <span className="font-medium text-ink whitespace-nowrap">{row.customerName}</span>
     },
     {
       id: 'partNumber',
-      header: 'Part / Product',
+      header: 'Part',
       accessorKey: 'partNumber',
-      isMono: true,
-      width: '150px',
-      cell: (row) => <span className="font-mono text-xs text-slate-800">{row.partNumber}</span>
+      cell: (row) => <span className="whitespace-nowrap">{row.partNumber}</span>
     },
     {
       id: 'quantity',
       header: 'Quantity',
       accessorKey: 'quantity',
       isNumeric: true,
-      isMono: true,
-      width: '100px',
-      cell: (row) => `${row.quantity} ${row.uom}`
+      cell: (row) => <span className="tabular-nums">{row.quantity} {row.uom}</span>
     },
     {
       id: 'requestedByName',
-      header: 'Requested By',
+      header: 'Requested by',
       accessorKey: 'requestedByName',
-      width: '140px',
-      cell: (row) => <span className="text-xs text-slate-700">{row.requestedByName}</span>
+      cell: (row) => <span className="whitespace-nowrap">{row.requestedByName}</span>
     },
     {
       id: 'status',
       header: 'Status',
       accessorKey: 'status',
-      width: '160px',
-      cell: (row) => <StatusPill status={row.status} />
+      cell: (row) => (
+        <span className="whitespace-nowrap inline-block">
+          <StatusPill status={row.status} />
+        </span>
+      )
     },
     {
       id: 'daysPending',
-      header: 'Days Pending',
+      header: 'Pending',
       accessorKey: 'daysPending',
       isNumeric: true,
-      isMono: true,
-      width: '110px',
       cell: (row) => (
-        <span className={`font-mono text-xs ${row.daysPending > 4 ? 'text-strand-amber font-semibold' : 'text-slate'}`}>
+        <span className={`tabular-nums ${row.daysPending > 4 ? 'text-[#8A4F00] font-medium' : ''}`}>
           {row.daysPending}d
         </span>
       )
     },
     {
       id: 'remarks',
-      header: 'Remarks & Courier AWB',
+      header: 'Remarks',
       accessorKey: 'remarks',
-      width: '240px',
       cell: (row) => (
-        <div className="text-xs text-slate-600 truncate max-w-[220px]">
+        <div className="truncate max-w-[260px]" title={row.remarks}>
           {row.courierTracking && (
-            <span className="font-mono text-[10px] text-muted mr-1.5 bg-canvas px-1 rounded border border-line">
-              {row.courierTracking}
-            </span>
+            <span className="font-code text-[13px] text-muted mr-2">{row.courierTracking}</span>
           )}
           <span>{row.remarks}</span>
         </div>
@@ -138,24 +127,20 @@ export const SamplesList: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-4 animate-fadeIn">
-      {/* Toast Alert */}
+    <div className="space-y-6 animate-fadeIn">
       {toastMessage && (
-        <div className="fixed top-16 right-8 z-50 bg-ink text-white px-4 py-3 rounded-md shadow-popover border border-kiran flex items-center gap-2.5 text-xs animate-fadeIn">
-          <CheckCircle2 className="w-4 h-4 text-strand-green" />
+        <div className="fixed top-16 right-8 z-50 bg-ink text-white px-4 py-3 rounded-lg shadow-popover flex items-center gap-2.5 text-[14px] animate-fadeIn">
+          <CheckCircle2 className="w-4 h-4" />
           <span>{toastMessage}</span>
         </div>
       )}
 
       <PageHeader
-        title="Sample Requests & Approvals"
+        title="Samples"
         actions={
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="px-3 py-1.5 bg-kiran hover:bg-blue-700 text-white rounded text-xs font-semibold shadow-xs flex items-center gap-1.5"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            Request Sample
+          <button onClick={() => setIsModalOpen(true)} className="btn-primary">
+            <Plus className="w-4 h-4" />
+            New sample
           </button>
         }
       />
@@ -164,39 +149,26 @@ export const SamplesList: React.FC = () => {
         data={samples}
         columns={columns}
         keyExtractor={(item) => item.id}
-        searchPlaceholder="Search sample number, linked RFQ, customer..."
+        searchPlaceholder="Search samples"
       />
 
-      {/* Mandatory RFQ Link Create Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-ink/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-surface rounded-md shadow-popover border border-line max-w-md w-full p-5 space-y-4 animate-fadeIn">
-            <div className="flex items-center justify-between border-b border-line pb-3">
-              <h3 className="font-display font-semibold text-sm text-ink">
-                New Sample Qualification Request
-              </h3>
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="text-xs text-muted hover:text-ink"
-              >
-                Close
+        <div className="fixed inset-0 z-50 bg-black/30 flex items-center justify-center p-4">
+          <div className="bg-surface rounded-xl shadow-modal border border-line max-w-md w-full p-6 space-y-5 animate-fadeIn">
+            <div className="flex items-center justify-between">
+              <h3 className="text-[16px] font-semibold text-ink">New sample</h3>
+              <button onClick={() => setIsModalOpen(false)} className="btn-icon" aria-label="Close">
+                <X className="w-4 h-4" />
               </button>
             </div>
 
-            <form onSubmit={handleCreateSample} className="space-y-3 text-xs">
-              <div className="p-2.5 bg-amber-50 border border-amber-200 rounded text-amber-900 text-[11px] flex items-center gap-1.5">
-                <AlertCircle className="w-4 h-4 text-strand-amber shrink-0" />
-                <span>Samples must mandatorily link to an existing RFQ reference.</span>
-              </div>
-
+            <form onSubmit={handleCreateSample} className="space-y-4">
               <div>
-                <label className="block font-semibold text-ink mb-1">
-                  Select Parent RFQ Reference *
-                </label>
+                <label className="block text-[13px] font-medium text-muted mb-1.5">RFQ</label>
                 <select
                   value={selectedRfqId}
                   onChange={(e) => setSelectedRfqId(e.target.value)}
-                  className="w-full p-2 bg-canvas border border-line rounded font-mono text-xs text-ink focus:outline-none focus:ring-1 focus:ring-kiran"
+                  className="field"
                   required
                 >
                   {mockRFQs.map((rfq) => (
@@ -208,44 +180,32 @@ export const SamplesList: React.FC = () => {
               </div>
 
               <div>
-                <label className="block font-semibold text-ink mb-1">
-                  Sample Quantity (Metres) *
-                </label>
+                <label className="block text-[13px] font-medium text-muted mb-1.5">Quantity (metres)</label>
                 <input
                   type="number"
                   value={sampleQty}
                   onChange={(e) => setSampleQty(e.target.value)}
-                  className="w-full p-2 bg-canvas border border-line rounded font-mono text-xs text-ink focus:outline-none focus:ring-1 focus:ring-kiran"
+                  className="field"
                   required
                 />
               </div>
 
               <div>
-                <label className="block font-semibold text-ink mb-1">
-                  Test / Qualification Remarks
-                </label>
+                <label className="block text-[13px] font-medium text-muted mb-1.5">Remarks</label>
                 <textarea
                   rows={3}
                   value={sampleRemarks}
                   onChange={(e) => setSampleRemarks(e.target.value)}
-                  placeholder="e.g. UL94 V-0 flame test pre-qualification for customer EV harness R&D..."
-                  className="w-full p-2 bg-canvas border border-line rounded text-xs text-ink focus:outline-none focus:ring-1 focus:ring-kiran"
+                  className="field h-auto py-2"
                 />
               </div>
 
-              <div className="pt-3 border-t border-line flex items-center justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="px-3 py-1.5 bg-canvas hover:bg-slate-200 border border-line text-xs font-medium text-slate rounded"
-                >
+              <div className="flex items-center justify-end gap-2 pt-1">
+                <button type="button" onClick={() => setIsModalOpen(false)} className="btn-secondary">
                   Cancel
                 </button>
-                <button
-                  type="submit"
-                  className="px-4 py-1.5 bg-kiran hover:bg-blue-700 text-white text-xs font-semibold rounded shadow-xs"
-                >
-                  Submit Sample Request
+                <button type="submit" className="btn-primary">
+                  Create
                 </button>
               </div>
             </form>

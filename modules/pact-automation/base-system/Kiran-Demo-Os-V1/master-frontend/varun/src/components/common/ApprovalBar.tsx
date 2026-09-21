@@ -30,7 +30,7 @@ export const ApprovalBar: React.FC<ApprovalBarProps> = ({
         <ShieldCheck aria-hidden className="h-4 w-4 shrink-0 text-accent" />
         <div className="min-w-0">
           <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-            <span className="ku-wide font-display text-body font-semibold text-white">{title}</span>
+            <span className="font-display text-body font-semibold text-white">{title}</span>
             {nextSignee && (
               <span className="flex items-center gap-1 text-body-s text-hairline-strong">
                 <ArrowRight aria-hidden className="h-3 w-3" />
@@ -51,7 +51,7 @@ export const ApprovalBar: React.FC<ApprovalBarProps> = ({
         aria-label="Reject request"
             onClick={onReject}
             title="Reject request"
-            className="inline-flex h-10 items-center gap-2 border-2 border-st-red-line bg-transparent px-4 text-body-s font-semibold leading-none text-st-red-line transition-all duration-150 hover:border-white hover:text-white active:translate-y-px"
+            className="inline-flex h-10 items-center gap-2 border border-st-red-line bg-transparent px-4 text-body-s font-semibold leading-none text-st-red-line transition-colors duration-150 hover:border-white hover:text-white"
           >
             <XCircle aria-hidden className="h-4 w-4" />
             Reject
@@ -63,7 +63,7 @@ export const ApprovalBar: React.FC<ApprovalBarProps> = ({
             aria-label="Request changes"
             onClick={onRequestChanges}
             title="Request changes"
-            className="inline-flex h-10 items-center gap-2 border-2 border-hairline-strong bg-transparent px-4 text-body-s font-semibold leading-none text-white transition-all duration-150 hover:border-white active:translate-y-px"
+            className="inline-flex h-10 items-center gap-2 border border-hairline-strong bg-transparent px-4 text-body-s font-semibold leading-none text-white transition-colors duration-150 hover:border-white"
           >
             <AlertCircle aria-hidden className="h-4 w-4" />
             Request changes
@@ -74,7 +74,7 @@ export const ApprovalBar: React.FC<ApprovalBarProps> = ({
           aria-label="Approve request"
           onClick={onApprove}
           title="Approve request"
-          className="inline-flex h-10 items-center gap-2 border-2 border-ink bg-accent px-5 text-body-s font-semibold leading-none text-accent-ink transition-all duration-150 hover:brightness-95 active:translate-y-px active:brightness-90"
+          className="inline-flex h-10 items-center gap-2 rounded-md border border-transparent bg-accent px-5 text-body-s font-semibold leading-none text-white transition-colors duration-150 hover:bg-accent-hover"
         >
           <CheckCircle2 aria-hidden className="h-4 w-4" />
           Approve

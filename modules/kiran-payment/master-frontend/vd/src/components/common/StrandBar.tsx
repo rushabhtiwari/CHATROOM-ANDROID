@@ -38,24 +38,24 @@ export const StrandBar: React.FC<StrandBarProps> = ({
   const totalCount = segments.reduce((acc, s) => acc + s.count, 0);
 
   return (
-    <div className={`w-full bg-surface border border-line rounded-lg p-4 shadow-card ${className}`}>
+    <div className={`w-full bg-surface border border-line rounded-lg p-4 ${className}`}>
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-ink">Order Lifecycle Pipeline</span>
-          <span className="text-xs font-mono text-muted">({totalCount} active operations)</span>
+          <span className="text-[13px] font-semibold text-ink">Order Lifecycle Pipeline</span>
+          <span className="text-[13px] font-mono text-muted">({totalCount} active operations)</span>
         </div>
         {hoveredSegment ? (
-          <div className="text-xs flex items-center gap-3 animate-fadeIn">
+          <div className="text-[13px] flex items-center gap-3 animate-fadeIn">
             <span className="font-medium text-ink flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full" style={{ backgroundColor: hoveredSegment.color }} />
               {hoveredSegment.name}: <strong className="font-mono">{hoveredSegment.count} records</strong>
             </span>
-            <span className={`font-mono text-[11px] ${hoveredSegment.avgDwellDays > hoveredSegment.slaLimitDays && hoveredSegment.slaLimitDays > 0 ? 'text-strand-red font-semibold' : 'text-muted'}`}>
+            <span className={`font-mono text-[12px] ${hoveredSegment.avgDwellDays > hoveredSegment.slaLimitDays && hoveredSegment.slaLimitDays > 0 ? 'text-strand-red font-semibold' : 'text-muted'}`}>
               Avg dwell: {hoveredSegment.avgDwellDays}d (SLA: {hoveredSegment.slaLimitDays}d)
             </span>
           </div>
         ) : (
-          <span className="text-[11px] text-muted">Hover segments to inspect dwell time & SLAs</span>
+          <span className="text-[12px] text-muted">Hover segments to inspect dwell time & SLAs</span>
         )}
       </div>
 
@@ -79,7 +79,7 @@ export const StrandBar: React.FC<StrandBarProps> = ({
       </div>
 
       {/* Stage Labels */}
-      <div className="flex items-center justify-between mt-2 pt-2 border-t border-line/60 text-[10px] text-muted overflow-x-auto gap-2">
+      <div className="flex items-center justify-between mt-2 pt-2 border-t border-line/60 text-[12px] text-muted overflow-x-auto gap-2">
         {segments.slice(0, 8).map((seg) => (
           <div key={seg.id} className="flex items-center gap-1 shrink-0">
             <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: seg.color }} />
@@ -92,15 +92,15 @@ export const StrandBar: React.FC<StrandBarProps> = ({
       {/* Risk Callouts if dwell exceeds SLA */}
       {showDetails && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mt-3 pt-2.5 border-t border-line/40">
-          <div className="flex items-center gap-2 p-1.5 rounded bg-red-50/50 border border-red-200/60 text-xs text-red-900">
+          <div className="flex items-center gap-2 p-1.5 rounded bg-red-50/50 border border-red-200/60 text-[13px] text-red-900">
             <span className="w-1.5 h-1.5 rounded-full bg-strand-red shrink-0" />
             <span><strong>Quoting stage</strong> dwell at 3.4d vs 3.0d SLA limit</span>
           </div>
-          <div className="flex items-center gap-2 p-1.5 rounded bg-amber-50/50 border border-amber-200/60 text-xs text-amber-900">
+          <div className="flex items-center gap-2 p-1.5 rounded bg-amber-50/50 border border-amber-200/60 text-[13px] text-amber-900">
             <span className="w-1.5 h-1.5 rounded-full bg-strand-amber shrink-0" />
             <span><strong>In Production</strong> dwell at 6.8d vs 5.0d SLA target</span>
           </div>
-          <div className="flex items-center gap-2 p-1.5 rounded bg-red-50/50 border border-red-200/60 text-xs text-red-900">
+          <div className="flex items-center gap-2 p-1.5 rounded bg-red-50/50 border border-red-200/60 text-[13px] text-red-900">
             <span className="w-1.5 h-1.5 rounded-full bg-strand-red shrink-0" />
             <span><strong>POD pending</strong> dwell at 4.6d across 9 shipments</span>
           </div>

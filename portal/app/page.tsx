@@ -15,7 +15,6 @@ export default async function HomePage() {
             apps={apps}
             firstName={me.name.split(" ")[0]}
             isAdmin={me.is_admin}
-            departmentCount={me.departments.length}
           />
         </Suspense>
       </main>

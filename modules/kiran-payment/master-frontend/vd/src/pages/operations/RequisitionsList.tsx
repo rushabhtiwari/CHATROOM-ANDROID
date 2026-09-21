@@ -5,200 +5,145 @@ import { DataGrid, ColumnDef } from '../../components/common/DataGrid';
 import { StatusPill } from '../../components/common/StatusPill';
 import { PageHeader } from '../../components/shell/PageHeader';
 import { IndianRupee } from '../../components/common/IndianRupee';
-import { formatINR } from '../../utils/formatters';
-import {
-  CreditCard,
-  Plus,
-  AlertCircle,
-  Paperclip,
-  CheckCircle2,
-  RefreshCw,
-  ShieldAlert,
-  Send,
-  ExternalLink
-} from 'lucide-react';
+import { Plus } from 'lucide-react';
+
+const PILL = 'inline-flex items-center h-6 px-2 rounded-md text-[13px] font-medium whitespace-nowrap';
 
 export const RequisitionsList: React.FC = () => {
   const [requisitions, setRequisitions] = useState<AdvanceRequisition[]>(mockRequisitions);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const handleResendBillEmail = (reqNo: string, personName: string) => {
-    setToastMessage(`Automated invoice request email re-sent to ${personName}.`);
+    setToastMessage(`Reminder sent to ${personName}.`);
     setTimeout(() => setToastMessage(null), 3500);
   };
 
   const columns: ColumnDef<AdvanceRequisition>[] = [
     {
       id: 'reqNumber',
-      header: 'Req No.',
+      header: 'Request no.',
       accessorKey: 'reqNumber',
       isMono: true,
-      width: '140px',
-      cell: (row) => <span className="font-mono font-semibold text-kiran">{row.reqNumber}</span>
+      cell: (row) => <span className="font-code text-[13px] text-ink whitespace-nowrap">{row.reqNumber}</span>
     },
     {
       id: 'raisedByName',
-      header: 'Raised By / Dept',
+      header: 'Raised by',
       accessorKey: 'raisedByName',
-      width: '180px',
       cell: (row) => (
         <div>
-          <div className="font-semibold text-ink">{row.raisedByName}</div>
-          <div className="text-[10px] text-muted font-mono">{row.department}</div>
+          <div className="font-medium text-ink whitespace-nowrap">{row.raisedByName}</div>
+          <div className="text-[13px] text-muted">{row.department}</div>
         </div>
       )
     },
     {
       id: 'purpose',
-      header: 'Purpose & Description',
+      header: 'Purpose',
       accessorKey: 'purpose',
-      width: '280px',
-      cell: (row) => <span className="text-xs text-slate-700">{row.purpose}</span>
+      cell: (row) => <span className="text-slate-700">{row.purpose}</span>
     },
     {
       id: 'amount',
       header: 'Amount',
       accessorKey: 'amount',
       isNumeric: true,
-      isMono: true,
-      width: '120px',
       cell: (row) => <IndianRupee amount={row.amount} />
     },
     {
       id: 'attachmentsCount',
-      header: 'Attachments / Bills',
-      width: '160px',
-      cell: (row) => (
-        <div>
-          {row.hasMissingBill ? (
-            <span className="px-2 py-0.5 rounded bg-red-100 text-strand-red font-semibold text-[10px] border border-red-200">
-              Bill copy missing
-            </span>
-          ) : (
-            <span className="text-[11px] font-mono text-slate-600 flex items-center gap-1">
-              <Paperclip className="w-3 h-3 text-muted" />
-              {row.attachmentsCount} vouchers attached
-            </span>
-          )}
-        </div>
-      )
+      header: 'Bills',
+      cell: (row) =>
+        row.hasMissingBill ? (
+          <span className={`${PILL} bg-[#FBE9E7] text-[#B3302A]`}>Missing</span>
+        ) : (
+          <span className="text-slate-700 tabular-nums whitespace-nowrap">{row.attachmentsCount} attached</span>
+        )
     },
     {
       id: 'pactSyncStatus',
-      header: 'PACT ERP Status',
-      width: '180px',
+      header: 'PACT',
       cell: (row) => (
-        <span className={`text-[10px] font-mono px-2 py-0.5 rounded ${
-          row.pactSyncStatus === 'Posted to PACT'
-            ? 'bg-emerald-50 text-strand-green border border-emerald-200 font-semibold'
-            : 'bg-amber-50 text-strand-amber border border-amber-200 font-medium'
-        }`}>
+        <span
+          className={`${PILL} ${
+            row.pactSyncStatus === 'Posted to PACT'
+              ? 'bg-[#E7F3EB] text-[#17723F]'
+              : 'bg-[#FBEFDC] text-[#8A4F00]'
+          }`}
+        >
           {row.pactSyncStatus}
         </span>
       )
     },
     {
       id: 'approvalLevel',
-      header: 'Approval Stage',
-      width: '140px',
+      header: 'Approval',
       cell: (row) => (
-        <div className="flex items-center gap-1 font-mono text-xs">
-          {[1, 2, 3, 4].map((step) => (
-            <div
-              key={step}
-              className={`w-3 h-3 rounded-full flex items-center justify-center text-[8px] font-bold ${
-                step <= row.approvalLevel
-                  ? 'bg-strand-green text-white'
-                  : 'bg-line text-muted'
-              }`}
-            >
-              {step}
-            </div>
-          ))}
-          <span className="ml-1 text-[11px] text-muted font-sans">L{row.approvalLevel}/4</span>
-        </div>
+        <span className="text-slate-700 tabular-nums whitespace-nowrap">Level {row.approvalLevel} of 4</span>
       )
     },
     {
       id: 'status',
       header: 'Status',
       accessorKey: 'status',
-      width: '130px',
       cell: (row) => <StatusPill status={row.status} />
     }
   ];
 
   return (
     <div className="space-y-6 animate-fadeIn">
-      {/* Toast Alert */}
       {toastMessage && (
-        <div className="fixed top-16 right-8 z-50 bg-ink text-white px-4 py-3 rounded-md shadow-popover border border-kiran flex items-center gap-2.5 text-xs animate-fadeIn">
-          <CheckCircle2 className="w-4 h-4 text-strand-green" />
-          <span>{toastMessage}</span>
+        <div className="fixed top-16 right-8 z-50 bg-ink text-white px-4 py-3 rounded-lg shadow-popover text-[14px] animate-fadeIn">
+          {toastMessage}
         </div>
       )}
 
-      {/* Page Header */}
       <PageHeader
-        title="Advance Requisitions & Expenditure Controls"
+        title="Advance requests"
         actions={
-          <button
-            onClick={() => setToastMessage('Opened new requisition request form.')}
-            className="px-3 py-1.5 bg-kiran hover:bg-blue-700 text-white rounded text-xs font-semibold shadow-xs flex items-center gap-1.5"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            Raise Requisition
+          <button onClick={() => setToastMessage('Opened new requisition request form.')} className="btn-primary">
+            <Plus className="w-4 h-4" />
+            New request
           </button>
         }
       />
 
-      {/* Prior Unsettled Requisition Blocking Banner */}
-      <div className="p-4 bg-red-50 border border-red-300 rounded-md text-xs text-red-950 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <ShieldAlert className="w-5 h-5 text-strand-red shrink-0" />
-          <div>
-            <div className="font-bold text-strand-red">
-              Cannot raise a new requisition — ₹24,000 from REQ-2026-0188 pending bill submission since 28 July
-            </div>
-            <p className="text-[11px] text-red-800 mt-0.5">
-              Policy rule: Prior advances must have certified GST invoices submitted before next advance disbursement.
-            </p>
+      <div className="bg-surface border border-line rounded-lg divide-y divide-line-2">
+        <div className="px-5 py-4 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-3 text-[14px] text-ink">
+            <span className={`${PILL} bg-[#FBE9E7] text-[#B3302A]`}>Blocked</span>
+            <span>
+              ₹24,000 from <span className="font-code text-[13px]">REQ-2026-0188</span> needs bills, pending since 28 July.
+            </span>
           </div>
+          <button
+            onClick={() => {
+              setToastMessage('Emergency HOD waiver request submitted to Rajesh Kumar.');
+            }}
+            className="btn-secondary"
+          >
+            Ask for waiver
+          </button>
         </div>
 
-        <button
-          onClick={() => {
-            setToastMessage('Emergency HOD waiver request submitted to Rajesh Kumar.');
-          }}
-          className="px-3 py-1 bg-strand-red text-white rounded text-xs font-semibold hover:bg-red-700 shadow-xs"
-        >
-          Escalate to HOD for Emergency Waiver
-        </button>
-      </div>
-
-      {/* Missing Bills Notice Card */}
-      <div className="p-3 bg-amber-50 border border-amber-300 rounded-md text-xs text-amber-950 flex flex-wrap items-center justify-between gap-2">
-        <div className="flex items-center gap-2">
-          <AlertCircle className="w-4 h-4 text-strand-amber shrink-0" />
-          <span>
-            <strong>REQ-2026-0214:</strong> Auto-email requesting hotel & taxi tax invoice copies sent to Priya Nair on 17 Aug. No response.
-          </span>
+        <div className="px-5 py-4 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-3 text-[14px] text-ink">
+            <span className={`${PILL} bg-[#FBEFDC] text-[#8A4F00]`}>Waiting</span>
+            <span>
+              <span className="font-code text-[13px]">REQ-2026-0214</span> bills requested from Priya Nair on 17 Aug. No reply.
+            </span>
+          </div>
+          <button onClick={() => handleResendBillEmail('REQ-2026-0214', 'Priya Nair')} className="btn-secondary">
+            Remind
+          </button>
         </div>
-        <button
-          onClick={() => handleResendBillEmail('REQ-2026-0214', 'Priya Nair')}
-          className="px-2.5 py-1 bg-white hover:bg-canvas border border-amber-300 text-amber-900 rounded font-semibold text-[11px] shadow-2xs flex items-center gap-1"
-        >
-          <Send className="w-3 h-3 text-strand-amber" />
-          Resend Request Email
-        </button>
       </div>
 
-      {/* Main Grid */}
       <DataGrid
         data={requisitions}
         columns={columns}
         keyExtractor={(item) => item.id}
-        searchPlaceholder="Search requisition number, requester, purpose..."
+        searchPlaceholder="Search requests"
       />
     </div>
   );

@@ -74,7 +74,7 @@ export const PurchaseOrders: React.FC = () => {
       cell: (row) => (
         <div className="flex items-center gap-2 truncate">
           <span className="font-semibold text-xs text-on-surface truncate">{row.vendorName}</span>
-          <span className="font-mono text-[9px] px-1 py-0.5 rounded bg-surface-container text-outline shrink-0 font-medium">
+          <span className="font-mono text-[12px] px-1 py-0.5 rounded bg-surface-container text-outline shrink-0 font-medium">
             {row.vendorId}
           </span>
         </div>
@@ -88,7 +88,7 @@ export const PurchaseOrders: React.FC = () => {
       cell: (row) => (
         <div className="flex items-center justify-between gap-2 truncate">
           <span className="font-medium text-xs text-on-surface truncate">{row.item}</span>
-          <span className="text-[10px] text-outline font-mono shrink-0 tabular-nums">
+          <span className="text-[12px] text-outline font-mono shrink-0 tabular-nums">
             {row.quantity.toLocaleString('en-IN')} {row.uom}
           </span>
         </div>
@@ -125,7 +125,7 @@ export const PurchaseOrders: React.FC = () => {
       accessorKey: 'sentToVendorAt',
       width: '220px',
       cell: (row) => (
-        <span className="inline-flex items-center gap-1.5 text-[10px] font-mono px-2 py-0.5 rounded-badge bg-surface-container-low border border-outline-variant text-on-surface-variant truncate max-w-[210px]">
+        <span className="inline-flex items-center gap-1.5 text-[12px] font-mono px-2 py-0.5 rounded-badge bg-surface-container-low border border-outline-variant text-on-surface-variant truncate max-w-[210px]">
           <CheckCircle2 className="w-3 h-3 text-strand-green shrink-0" />
           <span className="truncate">{row.sentToVendorAt}</span>
         </span>
@@ -139,7 +139,7 @@ export const PurchaseOrders: React.FC = () => {
       cell: (row) => {
         if (row.grnStatus === '3-Way Match Verified') {
           return (
-            <span className="inline-flex items-center gap-1.5 pl-1.5 pr-2 py-[3px] rounded-badge text-[10.5px] font-medium leading-none border border-emerald-200 bg-emerald-50 text-emerald-800">
+            <span className="inline-flex items-center gap-1.5 pl-1.5 pr-2 py-[3px] rounded-badge text-[12px] font-medium leading-none border border-emerald-200 bg-emerald-50 text-emerald-800">
               <span className="w-[5px] h-[5px] rounded-full bg-strand-green shrink-0" />
               <span>3-Way Verified</span>
             </span>
@@ -165,7 +165,7 @@ export const PurchaseOrders: React.FC = () => {
           <button
             onClick={() => handleViewPO(row)}
             title={`View PO ${row.poNumber}`}
-            className="px-2 py-1 text-[10.5px] font-mono font-medium rounded border border-outline-variant bg-surface-container-lowest hover:bg-surface-container text-on-surface flex items-center gap-1 transition-colors shadow-2xs"
+            className="px-2 py-1 text-[12px] font-mono font-medium rounded border border-outline-variant bg-surface-container-lowest hover:bg-surface-container text-on-surface flex items-center gap-1 transition-colors shadow-2xs"
           >
             <FileText className="w-3 h-3 text-outline" />
             <span>View</span>
@@ -174,7 +174,7 @@ export const PurchaseOrders: React.FC = () => {
           <button
             onClick={() => handleTrackGRN(row)}
             title={`Track GRN for ${row.poNumber}`}
-            className="px-2 py-1 text-[10.5px] font-mono font-medium rounded border border-outline-variant bg-surface-container-low hover:bg-surface-container text-primary flex items-center gap-1 transition-colors shadow-2xs"
+            className="px-2 py-1 text-[12px] font-mono font-medium rounded border border-outline-variant bg-surface-container-low hover:bg-surface-container text-primary flex items-center gap-1 transition-colors shadow-2xs"
           >
             <PackageCheck className="w-3 h-3 text-primary" />
             <span>GRN</span>

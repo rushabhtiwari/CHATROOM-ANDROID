@@ -53,7 +53,7 @@ export const AutomationLayout: React.FC = () => {
       />
 
       {error && (
-        <div className="border border-l-3 border-hairline border-l-st-red-ink bg-st-red-bg px-4 py-2.5 text-body-s text-st-red-ink">
+        <div className="rounded-md bg-st-red-bg px-4 py-2.5 text-body-s text-st-red-ink">
           {error}
         </div>
       )}
@@ -61,7 +61,7 @@ export const AutomationLayout: React.FC = () => {
       {/* A profile mismatch is the one condition that would fill the wrong PACT document
           in front of a client, so it is a banner rather than a field on a panel. */}
       {kpac?.reachable && kpac.profileMatches === false && (
-        <div className="border border-l-3 border-hairline border-l-st-red-ink bg-st-red-bg px-4 py-2.5 text-body-s text-ink">
+        <div className="rounded-md bg-st-red-bg px-4 py-2.5 text-body-s text-ink">
           KPAC has <span className="ku-fig font-semibold">{kpac.profile}</span> loaded, but this
           console expects <span className="ku-fig font-semibold">{summary?.kpacProfile}</span>.
           Filling the wrong PACT screen is not something to guess at — nothing will be pushed
@@ -124,7 +124,7 @@ export const AutomationLayout: React.FC = () => {
                   summary.awaitingAdmin + summary.awaitingAccounts > 0 && (
                   <span
                     className={`tnum px-2 py-0.5 font-mono text-caption font-semibold ${
-                      isActive ? 'bg-accent text-accent-ink' : 'bg-canvas text-meta'
+                      isActive ? 'bg-accent text-white' : 'bg-canvas text-meta'
                     }`}
                   >
                       {summary.awaitingAdmin + summary.awaitingAccounts}

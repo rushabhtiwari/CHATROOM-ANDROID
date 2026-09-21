@@ -34,7 +34,7 @@ export const AIRuns: React.FC = () => {
       cell: (row) => (
         <div>
           <div className="font-semibold text-ink">{row.feature}</div>
-          <div className="text-[10px] text-muted font-mono">{row.timestamp}</div>
+          <div className="text-[12px] text-muted font-mono">{row.timestamp}</div>
         </div>
       )
     },
@@ -44,7 +44,7 @@ export const AIRuns: React.FC = () => {
       accessorKey: 'model',
       isMono: true,
       width: '160px',
-      cell: (row) => <span className="font-mono text-xs text-ai font-semibold">{row.model}</span>
+      cell: (row) => <span className="font-mono text-[13px] text-ai font-semibold">{row.model}</span>
     },
     {
       id: 'durationSec',
@@ -87,7 +87,7 @@ export const AIRuns: React.FC = () => {
       isMono: true,
       width: '150px',
       cell: (row) => (
-        <span className="font-mono text-xs text-slate-700 font-semibold bg-canvas px-1.5 py-0.5 rounded border border-line">
+        <span className="font-mono text-[13px] text-slate-700 font-semibold bg-canvas px-1.5 py-0.5 rounded border border-line">
           {row.runId}
         </span>
       )

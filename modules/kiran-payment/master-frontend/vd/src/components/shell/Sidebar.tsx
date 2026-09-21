@@ -1,20 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { ArrowUpRight, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { useChat } from '@/lib/chat-store';
 import { useRts } from '@/modules/rts/store';
 import { actionOwner } from '@/modules/rts/status';
 import { useWorkspace, type BadgeKey, type WorkspaceNavItem } from '@/lib/workspace';
 
-const TEAL = '#00AEEF';
-
-const BADGE_COLOR: Record<BadgeKey, string> = {
-  unread: 'bg-strand-teal',
-  activity: 'bg-strand-red',
-  withHr: 'bg-strand-amber',
-  awaitingReview: 'bg-strand-green',
-  awaitingPayment: 'bg-kiran-600',
-};
+/** Only unread / late counts earn the red pill; the rest are quiet numbers. */
+const ALERT_BADGES: ReadonlySet<BadgeKey> = new Set<BadgeKey>(['unread', 'activity']);
 
 export const Sidebar: React.FC = () => {
   const [collapsed, setCollapsed] = useState<boolean>(() => {
@@ -55,44 +48,39 @@ export const Sidebar: React.FC = () => {
     .sort((a, b) => b.length - a.length)[0];
 
   const rowClass = (isActive: boolean) =>
-    `group relative flex items-center gap-2.5 rounded-md text-[12.5px] font-medium transition-colors duration-150 ${
-      collapsed ? 'justify-center px-0 py-2' : 'px-2.5 py-[7px]'
+    `group relative flex items-center gap-2.5 h-9 rounded-md text-[14px] font-medium transition-colors duration-150 ${
+      collapsed ? 'justify-center px-0' : 'px-2.5'
     } ${
       isActive
-        ? 'bg-white/[0.10] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.07)]'
-        : 'text-white/65 hover:bg-white/[0.055] hover:text-white'
+        ? 'bg-[#DCE6F4] text-[#0B4F9C]'
+        : 'text-ink-3 hover:bg-black/[0.05] hover:text-ink'
     }`;
 
-  const renderItem = (item: WorkspaceNavItem, railColor: string) => {
+  const renderItem = (item: WorkspaceNavItem) => {
     const Icon = item.icon;
     const isActive = item.path !== undefined && item.path === activePath;
     const count = item.badge ? badges[item.badge] : 0;
 
     const content = (
       <>
-        {isActive && (
-          <span
-            aria-hidden
-            style={{ background: railColor }}
-            className="absolute left-0 top-1.5 bottom-1.5 w-[3px] rounded-full"
-          />
-        )}
         <Icon
-          className={`w-[15px] h-[15px] shrink-0 transition-colors ${
-            isActive ? 'text-white' : 'text-white/45 group-hover:text-white/85'
-          }`}
-          strokeWidth={isActive ? 2.1 : 1.9}
+          className={`w-4 h-4 shrink-0 ${isActive ? 'text-[#0B4F9C]' : 'text-[#6E6E76]'}`}
+          strokeWidth={1.8}
         />
         {!collapsed && <span className="truncate flex-1">{item.name}</span>}
         {!collapsed && item.href && (
-          <ArrowUpRight className="w-3 h-3 shrink-0 text-white/35 group-hover:text-white/70" />
+          <ArrowUpRight className="w-3.5 h-3.5 shrink-0 text-[#9A9AA2]" />
         )}
         {!collapsed && item.badge && count > 0 && (
-          <span
-            className={`font-mono text-[9.5px] font-semibold leading-none px-1.5 py-[3px] rounded-badge text-white shrink-0 ${BADGE_COLOR[item.badge]}`}
-          >
-            {count}
-          </span>
+          ALERT_BADGES.has(item.badge) ? (
+            <span className="text-[11px] font-semibold leading-none px-1.5 min-w-[18px] h-[18px] inline-flex items-center justify-center rounded-full text-white bg-[#D93A2F] shrink-0 tabular-nums">
+              {count}
+            </span>
+          ) : (
+            <span className="text-[12px] font-medium text-[#6E6E76] shrink-0 tabular-nums pr-0.5">
+              {count}
+            </span>
+          )
         )}
       </>
     );
@@ -128,48 +116,37 @@ export const Sidebar: React.FC = () => {
 
   return (
     <aside
-      style={{
-        backgroundImage:
-          'linear-gradient(168deg, #0A2547 0%, #072F58 55%, #04305A 100%)'
-      }}
-      className={`text-slate-300 transition-[width] duration-200 ease-out-refined flex flex-col select-none relative z-30 shrink-0 ${
-        collapsed ? 'w-[68px]' : 'w-[252px]'
+      className={`bg-[#F2F2F5] border-r border-[#E1E1E6] text-ink transition-[width] duration-200 ease-out-refined flex flex-col select-none relative z-30 shrink-0 ${
+        collapsed ? 'w-[68px]' : 'w-[248px]'
       }`}
     >
-      {/* Hairline separating the rail from the workspace */}
-      <div className="absolute inset-y-0 right-0 w-px bg-white/10" />
-
-      {/* Brand lockup */}
+      {/* Brand mark + workspace name */}
       <div
-        className={`h-16 flex items-center border-b border-white/[0.08] shrink-0 ${
-          collapsed ? 'justify-center px-0' : 'justify-between pl-4 pr-3'
+        className={`h-14 flex items-center shrink-0 ${
+          collapsed ? 'justify-center px-0' : 'justify-between pl-4 pr-2.5'
         }`}
       >
-        <NavLink to={home} className="flex items-center gap-3 overflow-hidden min-w-0">
-          <div className="w-9 h-9 rounded-md bg-white flex items-center justify-center shrink-0 shadow-[0_1px_3px_rgba(0,0,0,0.35)] ring-1 ring-white/20">
+        <NavLink to={home} className="flex items-center gap-2.5 overflow-hidden min-w-0">
+          <div className="w-8 h-8 rounded-md bg-white border border-line flex items-center justify-center shrink-0">
             <img
               src="/kiran-mark.png"
               alt="Kiran Cable Protection"
-              className="w-6 h-6 object-contain"
+              className="w-5 h-5 object-contain"
             />
           </div>
           {!collapsed && (
-            <div className="flex flex-col min-w-0">
-              <span className="font-display font-bold text-white text-[17px] tracking-[-0.02em] leading-none truncate">
-                Kiran<span className="text-white/55"> {workspace?.label ?? 'Connect'}</span>
-              </span>
-              <span className="text-[9.5px] text-white/45 tracking-[0.14em] uppercase font-medium mt-1 truncate">
-                {workspace?.tagline ?? 'Chat, calendar and activity'}
-              </span>
-            </div>
+            <span className="font-semibold text-ink text-[16px] tracking-[-0.01em] leading-none truncate">
+              {workspace?.label ?? 'Connect'}
+            </span>
           )}
         </NavLink>
 
         {!collapsed && (
           <button
             onClick={() => setCollapsed(true)}
-            className="p-1.5 rounded-sm text-white/40 hover:text-white hover:bg-white/10 transition-colors shrink-0"
+            className="w-8 h-8 inline-flex items-center justify-center rounded-md text-[#6E6E76] hover:text-ink hover:bg-black/[0.05] transition-colors shrink-0"
             title="Collapse sidebar"
+            aria-label="Collapse sidebar"
           >
             <PanelLeftClose className="w-4 h-4" />
           </button>
@@ -179,50 +156,43 @@ export const Sidebar: React.FC = () => {
       {collapsed && (
         <button
           onClick={() => setCollapsed(false)}
-          className="mx-auto mt-3 p-1.5 rounded-sm text-white/40 hover:text-white hover:bg-white/10 transition-colors"
+          className="mx-auto mt-1 w-8 h-8 inline-flex items-center justify-center rounded-md text-[#6E6E76] hover:text-ink hover:bg-black/[0.05] transition-colors"
           title="Expand sidebar"
+          aria-label="Expand sidebar"
         >
           <PanelLeftOpen className="w-4 h-4" />
         </button>
       )}
 
       {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto overflow-x-hidden py-4 px-2.5 space-y-5">
-        {navGroups.map((group, index) => {
-          // The shared group is always last and always teal; a department's
-          // own groups carry the department's strand.
-          const isShared = index === navGroups.length - 1;
-          const railColor = isShared ? TEAL : (workspace?.color ?? TEAL);
-
-          return (
-            <div key={group.label} className="space-y-px">
-              {!collapsed ? (
-                <div className="px-2.5 pb-1.5 text-[9.5px] font-semibold tracking-[0.14em] text-white/35 uppercase">
-                  {group.label}
-                </div>
-              ) : (
-                <div className="mx-2 border-t border-white/[0.08] my-2.5" />
-              )}
-              {group.items.map((item) => renderItem(item, railColor))}
-            </div>
-          );
-        })}
+      <nav className="flex-1 overflow-y-auto overflow-x-hidden pt-3 pb-4 px-3 space-y-5">
+        {navGroups.map((group) => (
+          <div key={group.label} className="space-y-0.5">
+            {!collapsed ? (
+              <div className="px-2.5 pb-1 text-[12px] font-semibold text-[#6E6E76]">
+                {group.label}
+              </div>
+            ) : (
+              <div className="mx-2 border-t border-[#E1E1E6] my-2.5" />
+            )}
+            {group.items.map((item) => renderItem(item))}
+          </div>
+        ))}
       </nav>
 
-      {/* Footer: the four strands */}
-      {!collapsed && (
-        <div className="px-4 py-3 border-t border-white/[0.08] flex items-center justify-between">
-          <span className="text-[10px] text-white/35 font-mono tracking-tight">
-            Kiran Central Platform
-          </span>
-          <span className="flex items-center gap-[3px]" aria-hidden>
-            <span className="w-1.5 h-1.5 rounded-full bg-strand-red" />
-            <span className="w-1.5 h-1.5 rounded-full bg-strand-amber" />
-            <span className="w-1.5 h-1.5 rounded-full bg-strand-green" />
-            <span className="w-1.5 h-1.5 rounded-full bg-strand-teal" />
-          </span>
-        </div>
-      )}
+      {/* Way back to the portal */}
+      <div className={`py-3 ${collapsed ? 'px-2' : 'px-3'}`}>
+        <a
+          href="http://localhost:3000"
+          title="All apps"
+          className={`flex items-center gap-2.5 h-9 rounded-md text-[14px] font-medium text-[#5B5B63] hover:bg-black/[0.05] hover:text-ink transition-colors ${
+            collapsed ? 'justify-center' : 'px-2.5'
+          }`}
+        >
+          <ArrowLeft className="w-4 h-4 shrink-0 text-[#6E6E76]" strokeWidth={1.8} />
+          {!collapsed && <span>All apps</span>}
+        </a>
+      </div>
     </aside>
   );
 };

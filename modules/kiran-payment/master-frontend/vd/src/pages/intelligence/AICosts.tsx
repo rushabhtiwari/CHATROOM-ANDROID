@@ -37,12 +37,12 @@ export const AICosts: React.FC = () => {
       />
 
       {/* Budget Gauges & Currency Parity Strip */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono text-xs">
-        <div className="bg-surface border border-line rounded-lg p-4 shadow-card space-y-2">
-          <div className="text-[11px] font-sans font-semibold uppercase tracking-wider text-muted">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono text-[13px]">
+        <div className="bg-surface border border-line rounded-lg p-4 space-y-2">
+          <div className="text-[12px] font-sans font-semibold text-muted">
             Monthly Budget Utilization
           </div>
-          <div className="text-2xl font-display font-bold text-ink">
+          <div className="text-2xl font-semibold text-ink">
             {formatINR(mockAIOverviewKPI.totalSpendINR)} / {formatINR(30000)}
           </div>
           <div className="w-full h-2 bg-line rounded-full overflow-hidden">
@@ -51,40 +51,40 @@ export const AICosts: React.FC = () => {
               className="h-full bg-ai rounded-full"
             />
           </div>
-          <div className="text-[10px] text-muted font-sans">38.6% remaining for August</div>
+          <div className="text-[12px] text-muted font-sans">38.6% remaining for August</div>
         </div>
 
-        <div className="bg-surface border border-line rounded-lg p-4 shadow-card space-y-1">
-          <div className="text-[11px] font-sans font-semibold uppercase tracking-wider text-muted">
+        <div className="bg-surface border border-line rounded-lg p-4 space-y-1">
+          <div className="text-[12px] font-sans font-semibold text-muted">
             Exchange Rate Parity
           </div>
-          <div className="text-2xl font-display font-bold text-ink">
+          <div className="text-2xl font-semibold text-ink">
             1 USD = ₹84.10 INR
           </div>
-          <div className="text-[10px] text-muted font-sans">Real-time daily conversion via RBI reference</div>
+          <div className="text-[12px] text-muted font-sans">Real-time daily conversion via RBI reference</div>
         </div>
 
-        <div className="bg-surface border border-line rounded-lg p-4 shadow-card space-y-1">
-          <div className="text-[11px] font-sans font-semibold uppercase tracking-wider text-muted">
+        <div className="bg-surface border border-line rounded-lg p-4 space-y-1">
+          <div className="text-[12px] font-sans font-semibold text-muted">
             Avg Cost / Extraction Ticket
           </div>
-          <div className="text-2xl font-display font-bold text-strand-green">
+          <div className="text-2xl font-semibold text-strand-green">
             ₹4.40
           </div>
-          <div className="text-[10px] text-muted font-sans">Down from ₹12.50 prior to Haiku routing</div>
+          <div className="text-[12px] text-muted font-sans">Down from ₹12.50 prior to Haiku routing</div>
         </div>
       </div>
 
       {/* 90-Day Stacked Cost Trajectory Area Chart */}
-      <div className="bg-surface border border-line rounded-lg p-5 shadow-card space-y-3">
+      <div className="bg-surface border border-line rounded-lg p-5 space-y-3">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="font-display font-semibold text-sm text-ink">
+            <h3 className="font-semibold text-sm text-ink">
               90-Day Cumulative AI Spend by Foundation Model (INR)
             </h3>
-            <p className="text-xs text-muted">Tracking inference burn across Claude Sonnet, Haiku, and Opus</p>
+            <p className="text-[13px] text-muted">Tracking inference burn across Claude Sonnet, Haiku, and Opus</p>
           </div>
-          <span className="font-mono text-xs text-ai font-semibold">90-Day View</span>
+          <span className="font-mono text-[13px] text-ai font-semibold">90-Day View</span>
         </div>
 
         <div className="h-64 w-full">
@@ -103,13 +103,13 @@ export const AICosts: React.FC = () => {
       </div>
 
       {/* Department Cost Attribution Bar Chart */}
-      <div className="bg-surface border border-line rounded-lg p-5 shadow-card space-y-3">
+      <div className="bg-surface border border-line rounded-lg p-5 space-y-3">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="font-display font-semibold text-sm text-ink">
+            <h3 className="font-semibold text-sm text-ink">
               Cost Attribution by Business Department
             </h3>
-            <p className="text-xs text-muted">Internal charging based on agent task origins</p>
+            <p className="text-[13px] text-muted">Internal charging based on agent task origins</p>
           </div>
         </div>
 

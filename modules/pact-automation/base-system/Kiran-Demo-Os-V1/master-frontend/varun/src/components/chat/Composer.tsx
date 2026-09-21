@@ -495,7 +495,7 @@ export function Composer({
             {queued.map((message) => (
               <div
                 key={message.id}
-                className="flex items-center gap-2 rounded-lg border border-primary/25 bg-primary/5 px-3 py-1.5 text-[11px]"
+                className="flex items-center gap-2 rounded-lg border border-primary/25 bg-primary/5 px-3 py-1.5 text-[12px]"
               >
                 <Clock className="h-3.5 w-3.5 shrink-0 text-primary" />
                 <span className="min-w-0 flex-1 truncate">{message.content}</span>
@@ -520,7 +520,7 @@ export function Composer({
             aria-label="Mention suggestions"
             className="absolute bottom-full z-40 mb-2 w-80 animate-msg-in overflow-hidden rounded-xl border border-border bg-popover shadow-[var(--shadow-float)]"
           >
-            <li className="px-3 pt-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+            <li className="px-3 pt-2 text-[12px] font-semibold text-muted-foreground">
               Mention
             </li>
             {mentionOptions.map((option, index) => (
@@ -550,7 +550,7 @@ export function Composer({
                     >
                       {option.label}
                     </span>
-                    <span className="block truncate text-[11px] text-muted-foreground">
+                    <span className="block truncate text-[12px] text-muted-foreground">
                       {option.detail}
                     </span>
                   </span>
@@ -566,7 +566,7 @@ export function Composer({
             aria-label="Slash commands"
             className="absolute bottom-full z-40 mb-2 w-80 animate-msg-in overflow-hidden rounded-xl border border-border bg-popover shadow-[var(--shadow-float)]"
           >
-            <li className="px-3 pt-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+            <li className="px-3 pt-2 text-[12px] font-semibold text-muted-foreground">
               Commands
             </li>
             {slashOptions.map((command, index) => (
@@ -585,7 +585,7 @@ export function Composer({
                     <span className="block truncate text-sm font-medium">
                       /{command.name} <span className="opacity-60">{command.hint}</span>
                     </span>
-                    <span className="block truncate text-[11px] text-muted-foreground">
+                    <span className="block truncate text-[12px] text-muted-foreground">
                       {command.description}
                     </span>
                   </span>
@@ -612,7 +612,7 @@ export function Composer({
         )}
 
         {!online && (
-          <p className="mb-2 rounded-lg bg-amber-500/10 px-3 py-1.5 text-[11px] text-amber-700 dark:text-amber-300">
+          <p className="mb-2 rounded-lg bg-amber-500/10 px-3 py-1.5 text-[12px] text-amber-700 dark:text-amber-300">
             Offline — messages are queued and will send automatically.
           </p>
         )}
@@ -636,7 +636,7 @@ export function Composer({
                 ) : (
                   <div className="flex h-full flex-col items-center justify-center gap-1 p-2 text-center text-muted-foreground">
                     <Paperclip className="h-5 w-5" />
-                    <span className="line-clamp-2 text-[10px]">{file.name}</span>
+                    <span className="line-clamp-2 text-[12px]">{file.name}</span>
                   </div>
                 )}
                 <button
@@ -657,7 +657,7 @@ export function Composer({
               <p className="text-xs font-semibold">
                 {pendingFiles.length === 1 ? "Ready to send" : `${pendingFiles.length} items ready`}
               </p>
-              <p className="mt-0.5 text-[11px] text-muted-foreground">
+              <p className="mt-0.5 text-[12px] text-muted-foreground">
                 Add a caption below, then press Send.
               </p>
             </div>
@@ -800,7 +800,7 @@ export function Composer({
             disabled={!value.trim() && pendingFiles.length === 0}
             aria-label="Send message"
             className={cn(
-              "flex h-10 w-10 items-center justify-center rounded-lg text-primary-foreground shadow-sm transition-colors active:translate-y-px disabled:opacity-40",
+              "flex h-10 w-10 items-center justify-center rounded-lg text-primary-foreground shadow-sm transition-colors disabled:opacity-40",
               isAgent ? "bg-ai hover:bg-ai/90" : "bg-primary hover:bg-primary/90",
             )}
           >
@@ -808,7 +808,7 @@ export function Composer({
           </button>
         </div>
 
-        <p className="mt-1.5 px-1 text-[11px] text-muted-foreground">
+        <p className="mt-1.5 px-1 text-[12px] text-muted-foreground">
           {isAgent ? (
             <span className="text-ai">{t("composer.agentHint")}</span>
           ) : (
@@ -870,7 +870,7 @@ function AgentOnlyInput({
       <button
         onClick={send}
         aria-label="Send to AI assistant"
-        className="flex h-9 w-9 items-center justify-center rounded-lg bg-ai text-ai-foreground shadow-sm active:translate-y-px"
+        className="flex h-9 w-9 items-center justify-center rounded-lg bg-ai text-ai-foreground shadow-sm"
       >
         <Send className="h-4 w-4" />
       </button>

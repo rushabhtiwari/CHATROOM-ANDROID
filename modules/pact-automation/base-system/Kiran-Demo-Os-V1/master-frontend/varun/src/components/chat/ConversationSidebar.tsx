@@ -147,7 +147,7 @@ export function ConversationSidebar({
             {level === "none" && <BellOff className="h-3 w-3 shrink-0 text-muted-foreground" />}
             <span
               suppressHydrationWarning
-              className="ml-auto shrink-0 text-[10px] text-muted-foreground"
+              className="ml-auto shrink-0 text-[12px] text-muted-foreground"
             >
               {last ? formatTime(last.timestamp, { timeZone: currentUser.timeZone }) : ""}
             </span>
@@ -168,7 +168,7 @@ export function ConversationSidebar({
             {mentions > 0 && (
               <span
                 aria-label={`${mentions} unread mentions`}
-                className="flex shrink-0 items-center gap-0.5 rounded-full bg-ai px-1.5 py-0.5 text-[10px] font-semibold text-ai-foreground"
+                className="flex shrink-0 items-center gap-0.5 rounded-full bg-ai px-1.5 py-0.5 text-[12px] font-semibold text-ai-foreground"
               >
                 <AtSign className="h-2.5 w-2.5" />
                 {mentions}
@@ -177,7 +177,7 @@ export function ConversationSidebar({
             {unread.total > 0 && (
               <span
                 aria-label={`${unread.total} unread messages`}
-                className="min-w-5 shrink-0 rounded-full bg-primary px-1.5 py-0.5 text-center text-[10px] font-semibold text-primary-foreground"
+                className="min-w-5 shrink-0 rounded-full bg-primary px-1.5 py-0.5 text-center text-[12px] font-semibold text-primary-foreground"
               >
                 {unread.total}
               </span>
@@ -198,7 +198,7 @@ export function ConversationSidebar({
             <div className="min-w-0">
               <p className="truncate text-sm font-semibold">{roomTitle(room)}</p>
               {room.topic && (
-                <p className="truncate text-[11px] text-primary-foreground/85">{room.topic}</p>
+                <p className="truncate text-[12px] text-primary-foreground/85">{room.topic}</p>
               )}
             </div>
           </div>
@@ -207,7 +207,7 @@ export function ConversationSidebar({
               {room.description}
             </p>
           )}
-          <p className="mt-2 text-[11px] text-primary-foreground/80">
+          <p className="mt-2 text-[12px] text-primary-foreground/80">
             {memberCount} members · {onlineCount} online
           </p>
         </TooltipContent>
@@ -225,7 +225,7 @@ export function ConversationSidebar({
           <UserAvatar user={currentUser} size={36} showStatus />
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-semibold">{currentUser.name}</p>
-            <p className="truncate text-[11px] text-muted-foreground">{currentUser.role}</p>
+            <p className="truncate text-[12px] text-muted-foreground">{currentUser.role}</p>
           </div>
           {onClose && (
             <button
@@ -277,7 +277,7 @@ export function ConversationSidebar({
           </DropdownMenu>
           <button
             onClick={onCreateGroup}
-            className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-primary py-2 text-xs font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 active:translate-y-px"
+            className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-primary py-2 text-xs font-semibold text-primary-foreground shadow-sm transition-colors hover:bg-primary/90"
           >
             <Users className="h-3.5 w-3.5" /> Create Group
           </button>
@@ -313,7 +313,7 @@ export function ConversationSidebar({
 
           {people.length > 0 && (
             <section>
-              <p className="px-4 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+              <p className="px-4 pb-1.5 text-[12px] font-semibold text-muted-foreground">
                 People
               </p>
               <div className="space-y-1 px-2">
@@ -336,7 +336,7 @@ export function ConversationSidebar({
               <button
                 onClick={() => setShowArchived((open) => !open)}
                 aria-expanded={showArchived}
-                className="flex w-full items-center gap-1.5 px-4 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground"
+                className="flex w-full items-center gap-1.5 px-4 pb-1.5 text-[12px] font-semibold text-muted-foreground hover:text-foreground"
               >
                 <Archive className="h-3 w-3" /> Archived · {archivedRooms.length}
               </button>
@@ -379,7 +379,7 @@ function RailSection({
         type="button"
         onClick={onToggle}
         aria-expanded={!collapsed}
-        className="flex w-full items-center gap-1.5 px-4 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground transition-colors hover:text-foreground"
+        className="flex w-full items-center gap-1.5 px-4 pb-1.5 text-[12px] font-semibold text-muted-foreground transition-colors hover:text-foreground"
       >
         <ChevronDown
           className={cn("h-3 w-3 shrink-0 transition-transform", collapsed && "-rotate-90")}

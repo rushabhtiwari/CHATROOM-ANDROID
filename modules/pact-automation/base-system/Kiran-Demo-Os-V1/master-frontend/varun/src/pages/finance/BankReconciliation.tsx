@@ -93,10 +93,10 @@ export const BankReconciliation: React.FC = () => {
         <div className="col-span-12 xl:col-span-6 bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-xs flex flex-col">
           <div className="p-3 px-4 bg-surface-container-low/50 border-b border-outline-variant flex items-center justify-between">
             <div>
-              <h3 className="font-semibold text-xs text-on-surface font-mono uppercase tracking-wider">
+              <h3 className="font-semibold text-xs text-on-surface font-mono ">
                 HDFC Bank Host-to-Host Feed
               </h3>
-              <span className="font-mono text-[10px] text-outline">A/C: 50200012984511 (Secunderabad)</span>
+              <span className="font-mono text-[12px] text-outline">A/C: 50200012984511 (Secunderabad)</span>
             </div>
             <span className="font-mono text-xs font-semibold text-strand-green bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 tabular-nums">
               Balance: ₹4,82,40,000
@@ -105,7 +105,7 @@ export const BankReconciliation: React.FC = () => {
 
           <div className="w-full overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs">
-              <thead className="font-mono uppercase tracking-wider text-outline text-[10px] bg-surface-container-low border-b border-outline-variant sticky top-0 z-10 select-none">
+              <thead className="font-mono text-outline text-[12px] bg-surface-container-low border-b border-outline-variant sticky top-0 z-10 select-none">
                 <tr>
                   <th className="px-3 py-2 w-24">Date</th>
                   <th className="px-3 py-2">Description / Ref</th>
@@ -122,7 +122,7 @@ export const BankReconciliation: React.FC = () => {
                       !line.isMatched ? 'bg-amber-50/30' : ''
                     }`}
                   >
-                    <td className="px-3 py-1.5 font-mono text-[11px] text-outline whitespace-nowrap">
+                    <td className="px-3 py-1.5 font-mono text-[12px] text-outline whitespace-nowrap">
                       {line.date}
                     </td>
                     <td className="px-3 py-1.5 min-w-[150px] max-w-[220px]">
@@ -130,7 +130,7 @@ export const BankReconciliation: React.FC = () => {
                         <span className="font-medium text-on-surface text-xs truncate" title={line.description}>
                           {line.description}
                         </span>
-                        <span className="font-mono text-[10px] text-outline shrink-0">
+                        <span className="font-mono text-[12px] text-outline shrink-0">
                           · {line.referenceNo}
                         </span>
                       </div>
@@ -144,14 +144,14 @@ export const BankReconciliation: React.FC = () => {
                     </td>
                     <td className="px-3 py-1.5 text-center whitespace-nowrap">
                       {line.isMatched ? (
-                        <span className="inline-flex items-center gap-1 pl-1.5 pr-2 py-[2px] rounded-badge text-[10px] font-medium font-mono leading-none border border-emerald-200 bg-emerald-50 text-emerald-800">
+                        <span className="inline-flex items-center gap-1 pl-1.5 pr-2 py-[2px] rounded-badge text-[12px] font-medium font-mono leading-none border border-emerald-200 bg-emerald-50 text-emerald-800">
             <span className="w-1.5 h-1.5 rounded-full bg-st-green-ink shrink-0" />
                           MATCHED
                         </span>
                       ) : (
                         <span
                           title={line.aiSuggestedReason}
-                          className="inline-flex items-center gap-1 pl-1.5 pr-2 py-[2px] rounded-badge text-[10px] font-medium font-mono leading-none border border-amber-300 bg-amber-50 text-amber-900 animate-pulse"
+                          className="inline-flex items-center gap-1 pl-1.5 pr-2 py-[2px] rounded-badge text-[12px] font-medium font-mono leading-none border border-amber-300 bg-amber-50 text-amber-900 animate-pulse"
                         >
                           <span className="w-1.5 h-1.5 rounded-full bg-strand-amber shrink-0" />
                           UNMATCHED
@@ -162,14 +162,14 @@ export const BankReconciliation: React.FC = () => {
                       {!line.isMatched ? (
                         <button
                           onClick={() => handleAcceptSuggestion(line.id, line.aiSuggestedReason || 'Auto match')}
-                          className="inline-flex items-center gap-1 h-6.5 px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-primary text-white hover:bg-primary/90 transition-colors shadow-2xs"
+                          className="inline-flex items-center gap-1 h-6.5 px-2 py-0.5 rounded text-[12px] font-mono font-semibold bg-primary text-white hover:bg-primary/90 transition-colors shadow-2xs"
                           title={line.aiSuggestedReason ? `Accept AI: ${line.aiSuggestedReason}` : 'Auto-Match'}
                         >
                           <Sparkles className="w-3 h-3" />
                           Auto-Match
                         </button>
                       ) : (
-                        <span className="inline-flex items-center gap-1 font-mono text-[10px] text-outline">
+                        <span className="inline-flex items-center gap-1 font-mono text-[12px] text-outline">
                           <CheckCircle2 className="w-3 h-3 text-strand-green" />
                           Linked
                         </span>
@@ -186,10 +186,10 @@ export const BankReconciliation: React.FC = () => {
         <div className="col-span-12 xl:col-span-6 bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden shadow-xs flex flex-col">
           <div className="p-3 px-4 bg-surface-container-low/50 border-b border-outline-variant flex items-center justify-between">
             <div>
-              <h3 className="font-semibold text-xs text-on-surface font-mono uppercase tracking-wider">
+              <h3 className="font-semibold text-xs text-on-surface font-mono ">
                 PACT ERP General Ledger
               </h3>
-              <span className="font-mono text-[10px] text-outline">General Ledger: Bank Receipts</span>
+              <span className="font-mono text-[12px] text-outline">General Ledger: Bank Receipts</span>
             </div>
             <button
               onClick={() => showToast('Opened journal voucher creation modal.')}
@@ -202,7 +202,7 @@ export const BankReconciliation: React.FC = () => {
 
           <div className="w-full overflow-x-auto">
             <table className="w-full text-left border-collapse text-xs">
-              <thead className="font-mono uppercase tracking-wider text-outline text-[10px] bg-surface-container-low border-b border-outline-variant sticky top-0 z-10 select-none">
+              <thead className="font-mono text-outline text-[12px] bg-surface-container-low border-b border-outline-variant sticky top-0 z-10 select-none">
                 <tr>
                   <th className="px-3 py-2 w-24">Date</th>
                   <th className="px-3 py-2 w-32">Voucher No</th>
@@ -219,7 +219,7 @@ export const BankReconciliation: React.FC = () => {
                       !entry.isMatched ? 'bg-amber-50/20' : ''
                     }`}
                   >
-                    <td className="px-3 py-1.5 font-mono text-[11px] text-outline whitespace-nowrap">
+                    <td className="px-3 py-1.5 font-mono text-[12px] text-outline whitespace-nowrap">
                       {entry.date}
                     </td>
                     <td className="px-3 py-1.5 font-mono text-xs font-medium text-on-surface whitespace-nowrap">
@@ -239,12 +239,12 @@ export const BankReconciliation: React.FC = () => {
                     </td>
                     <td className="px-3 py-1.5 text-center whitespace-nowrap">
                       {entry.isMatched ? (
-                        <span className="inline-flex items-center gap-1 pl-1.5 pr-2 py-[2px] rounded-badge text-[10px] font-medium font-mono leading-none border border-emerald-200 bg-emerald-50 text-emerald-800">
+                        <span className="inline-flex items-center gap-1 pl-1.5 pr-2 py-[2px] rounded-badge text-[12px] font-medium font-mono leading-none border border-emerald-200 bg-emerald-50 text-emerald-800">
             <span className="w-1.5 h-1.5 rounded-full bg-st-green-ink shrink-0" />
                           MATCHED
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1 pl-1.5 pr-2 py-[2px] rounded-badge text-[10px] font-medium font-mono leading-none border border-amber-200 bg-amber-50 text-amber-800">
+                        <span className="inline-flex items-center gap-1 pl-1.5 pr-2 py-[2px] rounded-badge text-[12px] font-medium font-mono leading-none border border-amber-200 bg-amber-50 text-amber-800">
                           <span className="w-1.5 h-1.5 rounded-full bg-strand-amber shrink-0" />
                           AWAITING
                         </span>

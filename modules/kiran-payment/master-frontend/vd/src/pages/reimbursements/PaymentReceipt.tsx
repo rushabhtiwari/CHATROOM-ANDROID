@@ -39,13 +39,13 @@ export const PaymentReceipt: React.FC = () => {
     return (
       <div className="flex min-h-screen items-center justify-center bg-canvas px-6">
         <div className="panel max-w-md px-8 py-10 text-center">
-          <h1 className="font-display text-lg font-semibold text-ink">Receipt unavailable</h1>
-          <p className="mt-2 text-[13px] leading-relaxed text-muted">{error}</p>
+          <h1 className="text-lg font-semibold text-ink">Receipt unavailable</h1>
+          <p className="mt-2 text-[14px] leading-relaxed text-muted">{error}</p>
           <Link
             to="/reimbursements/pay"
-            className="mt-6 inline-flex items-center gap-1.5 rounded-md bg-kiran px-3.5 py-2 text-xs font-semibold text-white"
+            className="btn-primary mt-6"
           >
-            <ArrowLeft className="h-3.5 w-3.5" /> Back to disbursement
+            Back
           </Link>
         </div>
       </div>
@@ -55,7 +55,7 @@ export const PaymentReceipt: React.FC = () => {
   if (!context) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-canvas">
-        <Loader2 className="h-5 w-5 animate-spin text-kiran" />
+        <Loader2 className="h-5 w-5 animate-spin text-slate-500" />
       </div>
     );
   }
@@ -68,15 +68,15 @@ export const PaymentReceipt: React.FC = () => {
         <div className="mb-4 flex items-center justify-between print:hidden">
           <Link
             to="/reimbursements/pay"
-            className="inline-flex items-center gap-1.5 text-[12.5px] font-medium text-slate-600 transition-colors hover:text-ink"
+            className="inline-flex items-center gap-1.5 text-[13px] font-medium text-muted transition-colors hover:text-ink"
           >
-            <ArrowLeft className="h-3.5 w-3.5" /> Disbursement
+            <ArrowLeft className="h-4 w-4" /> Payments
           </Link>
           <button
             onClick={() => window.print()}
-            className="inline-flex items-center gap-1.5 rounded-md border border-line bg-surface px-3 py-1.5 text-xs font-medium text-slate-700 transition-colors hover:bg-line-2"
+            className="btn-secondary"
           >
-            <Printer className="h-3.5 w-3.5" /> Print
+            <Printer className="h-4 w-4 text-slate-500" /> Print
           </button>
         </div>
 
@@ -90,17 +90,17 @@ export const PaymentReceipt: React.FC = () => {
                 className="h-9 w-9 rounded-md object-contain ring-1 ring-line"
               />
               <div>
-                <p className="font-display text-[15px] font-bold leading-none tracking-tight text-ink">
+                <p className="text-[15px] font-semibold leading-none text-ink">
                   Kiran Cable Protection
                 </p>
-                <p className="mt-1 text-[10px] uppercase tracking-[0.14em] text-muted">
+                <p className="mt-1 text-[12px] text-muted">
                   Products Private Limited
                 </p>
               </div>
             </div>
             <div className="text-right">
               <p className="label-eyebrow">Payment advice</p>
-              <p className="mt-1 font-mono text-[11px] text-muted">
+              <p className="mt-1 text-[13px] text-muted">
                 {settledOn ? formatDate(settledOn) : formatDate(new Date())}
               </p>
             </div>
@@ -109,26 +109,26 @@ export const PaymentReceipt: React.FC = () => {
           {/* The number everything else refers to */}
           <div className="border-b border-line bg-surface-2 px-8 py-6">
             <p className="label-eyebrow">Bank reference (UTR)</p>
-            <p className="mt-1.5 font-mono text-[26px] font-semibold leading-none tracking-tight text-ink">
+            <p className="mt-1.5 font-code text-[26px] font-semibold leading-none text-ink">
               {context.utr}
             </p>
             <div className="mt-5 flex flex-wrap gap-x-10 gap-y-3">
               <div>
                 <p className="label-eyebrow">Amount credited</p>
-                <p className="mt-1 font-mono text-[20px] font-semibold leading-none text-strand-green">
+                <p className="mt-1 text-[20px] font-semibold leading-none tabular-nums text-ink">
                   {formatCurrency(total)}
                 </p>
               </div>
               <div>
                 <p className="label-eyebrow">Method</p>
-                <p className="mt-1 font-mono text-[15px] font-semibold leading-none text-ink">
+                <p className="mt-1 text-[15px] font-semibold leading-none text-ink">
                   {method}
                 </p>
               </div>
               {settledOn && (
                 <div>
                   <p className="label-eyebrow">Settled</p>
-                  <p className="mt-1 font-mono text-[13px] leading-none text-ink">
+                  <p className="mt-1 text-[14px] leading-none text-ink">
                     {formatDateTime(settledOn)}
                   </p>
                 </div>
@@ -141,10 +141,10 @@ export const PaymentReceipt: React.FC = () => {
             <div className="border-b border-line px-8 py-5">
               <p className="label-eyebrow">Paid to</p>
               <p className="mt-1.5 text-[14px] font-semibold text-ink">{employee.name}</p>
-              <p className="mt-0.5 font-mono text-[11.5px] text-muted">
+              <p className="mt-0.5 text-[13px] text-muted">
                 {employee.employeeCode} · {employee.department}
               </p>
-              <p className="mt-2 font-mono text-[11.5px] text-slate-700">
+              <p className="mt-2 text-[13px] text-slate-700">
                 {employee.bankAccount.bankName} · {employee.bankAccount.accountNumberMasked} ·{' '}
                 {employee.bankAccount.ifsc}
               </p>
@@ -153,32 +153,32 @@ export const PaymentReceipt: React.FC = () => {
 
           {/* What it settles */}
           <div className="px-8 py-5">
-            <p className="label-eyebrow">Claims settled by this transfer</p>
-            <table className="mt-3 w-full text-[12.5px]">
+            <p className="label-eyebrow">Claims paid</p>
+            <table className="mt-3 w-full text-[14px]">
               <thead>
                 <tr className="border-b border-line text-left">
-                  <th className="pb-2 font-semibold text-muted">Claim</th>
-                  <th className="pb-2 font-semibold text-muted">Purpose</th>
-                  <th className="pb-2 text-right font-semibold text-muted">Amount</th>
+                  <th className="pb-2 text-[13px] font-medium text-muted">Claim</th>
+                  <th className="pb-2 text-[13px] font-medium text-muted">Purpose</th>
+                  <th className="pb-2 text-right text-[13px] font-medium text-muted">Amount</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-line-2">
                 {requests.map((request) => (
                   <tr key={request.id}>
-                    <td className="py-2 font-mono text-[11.5px] text-slate-600">{request.id}</td>
-                    <td className="py-2 pr-3 text-slate-700">{request.title}</td>
-                    <td className="py-2 text-right font-mono font-semibold text-ink">
+                    <td className="whitespace-nowrap py-2.5 pr-3 font-code text-[13px] text-slate-700">{request.id}</td>
+                    <td className="py-2.5 pr-3 text-slate-700">{request.title}</td>
+                    <td className="whitespace-nowrap py-2.5 text-right tabular-nums text-ink">
                       {formatCurrency(request.amount)}
                     </td>
                   </tr>
                 ))}
               </tbody>
               <tfoot>
-                <tr className="border-t-2 border-ink/15">
+                <tr className="border-t border-line">
                   <td colSpan={2} className="pt-3 text-right font-semibold text-ink">
                     Total
                   </td>
-                  <td className="pt-3 text-right font-mono text-[15px] font-semibold text-ink">
+                  <td className="whitespace-nowrap pt-3 text-right text-[15px] font-semibold tabular-nums text-ink">
                     {formatCurrency(total)}
                   </td>
                 </tr>
@@ -187,7 +187,7 @@ export const PaymentReceipt: React.FC = () => {
           </div>
 
           <footer className="border-t border-line bg-surface-2 px-8 py-4">
-            <p className="text-[10.5px] leading-relaxed text-muted">
+            <p className="text-[12px] leading-relaxed text-muted">
               Computer-generated advice; no signature is required. If the credit has not appeared
               within two working days, quote the UTR above to your bank.
             </p>

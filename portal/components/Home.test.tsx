@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { SEARCH_SET_EVENT, SEARCH_SUBMIT_EVENT } from "@/components/GlobalSearch";
@@ -33,7 +33,7 @@ const APPS: MyApp[] = [
 ];
 
 function renderHome(props: Partial<Parameters<typeof Home>[0]> = {}) {
-  return render(<Home apps={APPS} firstName="Ada" isAdmin departmentCount={1} {...props} />);
+  return render(<Home apps={APPS} firstName="Ada" isAdmin {...props} />);
 }
 
 beforeEach(() => {
@@ -42,14 +42,10 @@ beforeEach(() => {
 afterEach(() => vi.restoreAllMocks());
 
 describe("Home", () => {
-  it("greets the person and summarises their apps", () => {
+  it("greets the person and offers admins the apps shortcut", () => {
     renderHome();
     expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(/Ada$/);
-    const stats = screen.getByRole("list", { name: "Summary" });
-    expect(within(stats).getByText("Apps you can open").previousSibling).toHaveTextContent("3");
-    expect(within(stats).getByText("Live now").previousSibling).toHaveTextContent("1");
-    expect(within(stats).getByText("Coming soon").previousSibling).toHaveTextContent("2");
-    expect(within(stats).getByText("Your departments").previousSibling).toHaveTextContent("1");
+    expect(screen.queryByRole("list", { name: "Summary" })).toBeNull();
     expect(screen.getByRole("link", { name: "Manage apps" })).toHaveAttribute("href", "/admin/apps");
   });
 

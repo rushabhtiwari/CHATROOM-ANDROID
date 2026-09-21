@@ -44,7 +44,7 @@ export const MailingAnalytics: React.FC = () => {
 
   if (error) {
     return (
-      <div className="border border-l-3 border-hairline border-l-st-red-ink bg-st-red-bg px-4 py-2.5 text-body-s text-st-red-ink">
+      <div className="rounded-md bg-st-red-bg px-4 py-2.5 text-body-s text-st-red-ink">
         {error}
       </div>
     );
@@ -93,7 +93,7 @@ export const MailingAnalytics: React.FC = () => {
         <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4 border-b border-hairline px-5 py-4">
           <div className="min-w-0">
             <p className="ku-eyebrow">Intake velocity</p>
-            <h2 className="ku-wide mt-1.5 font-display text-h3 font-semibold text-ink">
+            <h2 className="mt-1.5 font-display text-h3 font-semibold text-ink">
               What arrived, and what it turned into
             </h2>
           </div>
@@ -104,10 +104,10 @@ export const MailingAnalytics: React.FC = () => {
                 type="button"
                 onClick={() => setDays(option)}
                 aria-pressed={days === option}
-                className={`border-2 px-2.5 py-1 text-caption font-semibold leading-none transition-all duration-150 active:translate-y-px ${
+                className={`border px-2.5 py-1 text-caption font-semibold leading-none transition-colors duration-150 ${
                   days === option
-                    ? 'border-ink bg-accent text-accent-ink'
-                    : 'border-hairline-strong bg-white text-ink hover:border-ink hover:bg-canvas'
+                    ? 'border-ink bg-accent text-white'
+                    : 'border-hairline-strong bg-white text-ink hover:bg-canvas'
                 }`}
               >
                 {option}d
@@ -150,7 +150,7 @@ export const MailingAnalytics: React.FC = () => {
         <section className="ku-card">
           <div className="border-b border-hairline px-5 py-4">
             <p className="ku-eyebrow">Root cause</p>
-            <h2 className="ku-wide mt-1.5 font-display text-h3 font-semibold text-ink">
+            <h2 className="mt-1.5 font-display text-h3 font-semibold text-ink">
               What puts messages on hold
             </h2>
             <p className="mt-1.5 text-body-s text-meta">
@@ -213,7 +213,7 @@ export const MailingAnalytics: React.FC = () => {
         <section className="ku-card flex flex-col">
           <div className="border-b border-hairline px-5 py-4">
             <p className="ku-eyebrow">Sender volume</p>
-            <h2 className="ku-wide mt-1.5 font-display text-h3 font-semibold text-ink">
+            <h2 className="mt-1.5 font-display text-h3 font-semibold text-ink">
               Who sends the traffic
             </h2>
           </div>
@@ -226,7 +226,7 @@ export const MailingAnalytics: React.FC = () => {
                     <th
                       key={heading}
                       scope="col"
-                      className={`ku-narrow sticky top-0 z-10 bg-white px-4 py-2.5 align-bottom text-micro font-semibold uppercase text-meta after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-structure after:content-[''] ${
+                      className={`ku-narrow sticky top-0 z-10 bg-white px-4 py-2.5 align-bottom text-micro font-semibold text-meta after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:bg-structure after:content-[''] ${
                         index === 0 ? 'text-left' : 'text-right'
                       }`}
                     >
@@ -239,7 +239,7 @@ export const MailingAnalytics: React.FC = () => {
                 {(data?.domainStats ?? []).map((row) => (
                   <tr
                     key={row.domain}
-                    className="border-b border-hairline border-l-3 border-l-transparent bg-white transition-colors duration-150 last:border-b-0 hover:border-l-accent hover:bg-canvas"
+                    className="border-b border-hairline bg-white transition-colors duration-150 last:border-b-0 hover:bg-canvas"
                   >
                     <td className="px-4 py-2.5">
                       <span className="ku-fig text-ink">{row.domain}</span>

@@ -2,7 +2,6 @@ import React, { useState, useMemo } from 'react';
 import {
   ChevronDown,
   ChevronUp,
-  ChevronsUpDown,
   Download,
   Search,
   Filter,
@@ -177,29 +176,26 @@ export function DataGrid<T>({
   const selectedItems = data.filter((item) => selectedIds.has(keyExtractor(item)));
 
   return (
-    <div className={`w-full bg-surface border border-line rounded-lg shadow-card flex flex-col overflow-hidden ${className}`}>
+    <div className={`w-full bg-surface border border-line rounded-lg flex flex-col overflow-hidden ${className}`}>
       {/* Top Header & Filter Controls */}
-      <div className="p-4 border-b border-line space-y-3">
+      <div className="px-5 py-4 border-b border-line space-y-4">
         {/* Saved Views (if present) */}
         {savedViews && savedViews.length > 0 && (
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-muted mr-1">Views:</span>
+          <div className="inline-flex items-center gap-0.5 p-0.5 rounded-md bg-[#EBEBEF] overflow-x-auto max-w-full">
             {savedViews.map((sv, idx) => (
               <button
                 key={idx}
                 onClick={sv.onClick}
-                className={`px-2.5 py-1 rounded-badge text-xs font-medium transition-colors flex items-center gap-1.5 shrink-0 ${
+                className={`h-7 px-3 rounded-sm text-[13px] font-medium transition-colors flex items-center gap-1.5 shrink-0 ${
                   sv.active
-                    ? 'bg-kiran text-white shadow-xs'
-                    : 'bg-canvas text-slate hover:bg-line/60 border border-line'
+                    ? 'bg-white text-ink shadow-[0_1px_2px_rgba(0,0,0,0.08)]'
+                    : 'text-muted hover:text-ink'
                 }`}
               >
                 <span>{sv.label}</span>
                 {sv.count !== undefined && (
                   <span
-                    className={`font-mono text-[10px] px-1 rounded ${
-                      sv.active ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-700'
-                    }`}
+                    className="text-[12px] text-[#6E6E76] tabular-nums"
                   >
                     {sv.count}
                   </span>
@@ -213,7 +209,7 @@ export function DataGrid<T>({
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2 flex-1 min-w-[260px] max-w-md">
             <div className="relative w-full">
-              <Search className="w-4 h-4 text-muted absolute left-2.5 top-1/2 -translate-y-1/2" />
+              <Search className="w-4 h-4 text-[#6E6E76] absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 placeholder={searchPlaceholder}
@@ -222,7 +218,7 @@ export function DataGrid<T>({
                   setSearchTerm(e.target.value);
                   setCurrentPage(1);
                 }}
-                className="w-full pl-8 pr-3 py-1.5 text-xs bg-canvas border border-line rounded focus:outline-none focus:ring-1 focus:ring-kiran focus:bg-white text-ink"
+                className="w-full h-10 pl-9 pr-3 text-[14px] bg-white border border-[#D8D8DE] rounded-md focus:outline-none focus:border-kiran focus:ring-2 focus:ring-kiran/15 text-ink placeholder:text-[#6E6E76]"
               />
             </div>
           </div>
@@ -232,38 +228,38 @@ export function DataGrid<T>({
             
             <button
               onClick={() => setIsCompact(!isCompact)}
-              className="p-1.5 text-slate hover:text-ink rounded border border-line hover:bg-canvas text-xs flex items-center gap-1"
+              className="w-9 h-9 inline-flex items-center justify-center text-[#6E6E76] hover:text-ink rounded-md hover:bg-black/[0.05]"
               title={isCompact ? 'Comfortable view' : 'Compact view'}
             >
-              <SlidersHorizontal className="w-3.5 h-3.5" />
+              <SlidersHorizontal className="w-4 h-4" />
             </button>
 
             <button
               onClick={handleExportCSV}
-              className="px-2.5 py-1.5 text-xs font-medium text-slate hover:text-ink bg-white border border-line hover:bg-canvas rounded flex items-center gap-1.5"
+              className="h-9 px-3.5 text-[14px] font-medium text-ink bg-white border border-[#D8D8DE] hover:bg-[#F4F4F6] rounded-md flex items-center gap-2"
             >
-              <Download className="w-3.5 h-3.5 text-muted" />
-              <span>Export CSV</span>
+              <Download className="w-4 h-4 text-[#6E6E76]" />
+              <span>Export</span>
             </button>
           </div>
         </div>
 
         {/* Bulk Action Bar (appears when items selected) */}
         {selectedIds.size > 0 && (
-          <div className="p-2 bg-kiran-tint border border-kiran/30 rounded flex items-center justify-between text-xs text-kiran font-medium animate-fadeIn">
+          <div className="px-3 py-2 bg-kiran-tint rounded-md flex items-center justify-between text-[13px] text-[#0B4F9C] font-medium animate-fadeIn">
             <span className="flex items-center gap-2">
               <CheckSquare className="w-4 h-4" />
-              <span>{selectedIds.size} row(s) selected</span>
+              <span>{selectedIds.size} selected</span>
             </span>
             <div className="flex items-center gap-2">
               {bulkActions.map((ba, idx) => (
                 <button
                   key={idx}
                   onClick={() => ba.action(selectedItems)}
-                  className={`px-2.5 py-1 rounded text-xs font-semibold shadow-xs ${
+                  className={`h-8 px-3 rounded-md text-[13px] font-medium ${
                     ba.variant === 'danger'
-                      ? 'bg-strand-red text-white hover:bg-red-700'
-                      : 'bg-kiran text-white hover:bg-blue-700'
+                      ? 'bg-white border border-[#D8D8DE] text-strand-red hover:bg-[#FBE9E7]'
+                      : 'bg-white border border-[#D8D8DE] text-ink hover:bg-[#F4F4F6]'
                   }`}
                 >
                   {ba.label}
@@ -271,7 +267,7 @@ export function DataGrid<T>({
               ))}
               <button
                 onClick={() => setSelectedIds(new Set())}
-                className="text-xs text-slate-500 hover:underline ml-2"
+                className="text-[13px] text-muted hover:text-ink ml-2"
               >
                 Clear
               </button>
@@ -282,10 +278,10 @@ export function DataGrid<T>({
 
       {/* Main Table */}
       <div className="w-full overflow-x-auto relative min-h-[300px]">
-        <table className="w-full text-left border-collapse text-[13px]">
-          <thead className="bg-surface-2/95 backdrop-blur-sm text-muted text-[10px] font-semibold uppercase tracking-[0.09em] border-b border-line sticky top-0 z-10 select-none">
+        <table className="w-full text-left border-collapse text-[14px]">
+          <thead className="bg-surface-2 text-muted text-[13px] font-medium border-b border-line sticky top-0 z-10 select-none">
             <tr>
-              <th className="w-10 px-3 py-2 text-center">
+              <th className="w-12 pl-5 pr-2 h-11 text-center">
                 <button
                   onClick={toggleSelectAllPage}
                   className="text-muted hover:text-ink focus:outline-none"
@@ -302,10 +298,10 @@ export function DataGrid<T>({
                   key={col.id}
                   style={{ width: col.width }}
                   onClick={() => col.sortable !== false && handleSort(col.id)}
-                  className={`px-3 py-2.5 whitespace-nowrap ${
+                  className={`px-4 h-11 font-medium whitespace-nowrap ${
                     col.isNumeric ? 'text-right' : 'text-left'
                   } ${
-                    col.sortable !== false ? 'cursor-pointer hover:text-ink hover:bg-line/40' : ''
+                    col.sortable !== false ? 'cursor-pointer hover:text-ink' : ''
                   }`}
                 >
                   <div
@@ -314,18 +310,12 @@ export function DataGrid<T>({
                     }`}
                   >
                     <span>{col.header}</span>
-                    {col.sortable !== false && (
-                      <span className="text-slate-400">
-                        {sortKey === col.id ? (
-                          sortDir === 'asc' ? (
-                            <ChevronUp className="w-3 h-3 text-kiran" />
-                          ) : (
-                            <ChevronDown className="w-3 h-3 text-kiran" />
-                          )
-                        ) : (
-                          <ChevronsUpDown className="w-3 h-3 opacity-40" />
-                        )}
-                      </span>
+                    {col.sortable !== false && sortKey === col.id && (
+                      sortDir === 'asc' ? (
+                        <ChevronUp className="w-3.5 h-3.5 text-[#6E6E76]" />
+                      ) : (
+                        <ChevronDown className="w-3.5 h-3.5 text-[#6E6E76]" />
+                      )
                     )}
                   </div>
                 </th>
@@ -340,9 +330,7 @@ export function DataGrid<T>({
                   className="px-6 py-12 text-center text-muted"
                 >
                   <div className="flex flex-col items-center justify-center gap-2">
-                    <Search className="w-8 h-8 text-slate-300 stroke-1" />
-                    <p className="text-sm font-medium text-slate-700">No records found</p>
-                    <p className="text-xs text-muted">Try adjusting your filters or search query.</p>
+                    <p className="text-[14px] text-muted">Nothing matches.</p>
                   </div>
                 </td>
               </tr>
@@ -360,11 +348,11 @@ export function DataGrid<T>({
                     } ${
                       isSelected
                         ? 'bg-kiran-tint'
-                        : 'hover:bg-canvas/70'
-                    } ${isCompact ? 'h-9' : 'h-11'}`}
+                        : 'hover:bg-canvas'
+                    } ${isCompact ? 'h-10' : 'h-[52px]'}`}
                   >
                     <td
-                      className="w-10 px-3 py-1.5 text-center"
+                      className="w-12 pl-5 pr-2 py-1.5 text-center"
                       onClick={(e) => toggleSelectOne(id, e)}
                     >
                       <button className="focus:outline-none">
@@ -381,10 +369,10 @@ export function DataGrid<T>({
                       return (
                         <td
                           key={col.id}
-                          className={`px-3 py-1.5 ${
-                            col.isNumeric ? 'text-right' : 'text-left'
-                          } ${col.isMono ? 'font-mono text-xs' : ''} ${
-                            cIdx === 0 ? 'font-semibold text-ink' : 'text-slate'
+                          className={`px-4 py-2 ${
+                            col.isNumeric ? 'text-right whitespace-nowrap' : 'text-left'
+                          } ${col.isMono ? (cIdx === 0 ? 'font-code text-[13px] whitespace-nowrap' : 'font-mono whitespace-nowrap') : ''} ${
+                            cIdx === 0 ? 'font-medium text-ink whitespace-nowrap' : 'text-ink-3'
                           }`}
                         >
                           {col.cell ? col.cell(item) : String(val ?? '—')}
@@ -400,28 +388,27 @@ export function DataGrid<T>({
       </div>
 
       {/* Pagination Footer */}
-      <div className="px-4 py-3 border-t border-line flex flex-wrap items-center justify-between gap-3 text-xs text-muted bg-surface-2">
+      <div className="px-5 h-[52px] border-t border-line flex flex-wrap items-center justify-between gap-3 text-[13px] text-muted">
         <div>
-          Showing <strong className="font-mono text-ink">{sortedData.length > 0 ? (currentPage - 1) * pageSize + 1 : 0}</strong>–
-          <strong className="font-mono text-ink">{Math.min(currentPage * pageSize, sortedData.length)}</strong> of{' '}
-          <strong className="font-mono text-ink">{sortedData.length}</strong> records
+          {sortedData.length > 0 ? (currentPage - 1) * pageSize + 1 : 0}–
+          {Math.min(currentPage * pageSize, sortedData.length)} of {sortedData.length}
         </div>
 
         <div className="flex items-center gap-1.5">
           <button
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
             disabled={currentPage === 1}
-            className="p-1.5 rounded-sm border border-line bg-surface text-slate disabled:opacity-40 disabled:cursor-not-allowed hover:bg-canvas hover:text-ink transition-colors"
+            className="w-9 h-9 inline-flex items-center justify-center rounded-md text-[#6E6E76] disabled:opacity-35 disabled:cursor-not-allowed hover:bg-black/[0.05] hover:text-ink transition-colors"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
-          <span className="font-mono px-2 text-ink">
+          <span className="px-2 text-ink tabular-nums">
             {currentPage} / {totalPages}
           </span>
           <button
             onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
             disabled={currentPage === totalPages}
-            className="p-1.5 rounded-sm border border-line bg-surface text-slate disabled:opacity-40 disabled:cursor-not-allowed hover:bg-canvas hover:text-ink transition-colors"
+            className="w-9 h-9 inline-flex items-center justify-center rounded-md text-[#6E6E76] disabled:opacity-35 disabled:cursor-not-allowed hover:bg-black/[0.05] hover:text-ink transition-colors"
           >
             <ChevronRight className="w-4 h-4" />
           </button>

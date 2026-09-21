@@ -158,7 +158,7 @@ export const TableLayout: React.FC<Props> = ({
             <div
               key={column.id}
               style={{ width: column.width }}
-              className="shrink-0 px-2.5 py-2 text-[10.5px] font-semibold uppercase tracking-[0.07em] text-muted"
+              className="shrink-0 px-2.5 py-2 text-[12px] font-semibold text-muted"
             >
               {column.label}
             </div>
@@ -240,7 +240,7 @@ const Cell: React.FC<{
         <button
           type="button"
           onClick={onOpen}
-          className="font-mono text-[11px] text-muted hover:text-kiran hover:underline"
+          className="font-mono text-[12px] text-muted hover:text-kiran hover:underline"
         >
           {itemId}
         </button>

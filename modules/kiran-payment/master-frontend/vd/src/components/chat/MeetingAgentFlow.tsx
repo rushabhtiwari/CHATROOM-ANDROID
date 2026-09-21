@@ -210,7 +210,7 @@ export const MeetingAgentFlow: React.FC<MeetingAgentFlowProps> = ({
           <p className="text-[13px] font-semibold text-ink">Meeting scheduled</p>
         </div>
         <p className="mt-2 text-[12.5px] font-medium text-ink">{scheduled.title}</p>
-        <p className="mt-0.5 font-mono text-[11px] text-muted">
+        <p className="mt-0.5 font-mono text-[12px] text-muted">
           {dayLabel(draft.date)} · {timeLabel(draft.time)} ·{' '}
           {durationLabel(draft.durationMinutes)}
         </p>
@@ -219,7 +219,7 @@ export const MeetingAgentFlow: React.FC<MeetingAgentFlowProps> = ({
             href={scheduled.meetingUri}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-md bg-kiran px-2.5 py-1.5 text-[11px] font-semibold text-white transition-colors hover:bg-kiran-600"
+            className="inline-flex items-center gap-1.5 rounded-md bg-kiran px-2.5 py-1.5 text-[12px] font-semibold text-white transition-colors hover:bg-kiran-600"
           >
             <Video className="h-3.5 w-3.5" /> Join Meet
           </a>
@@ -228,14 +228,14 @@ export const MeetingAgentFlow: React.FC<MeetingAgentFlowProps> = ({
               href={scheduled.calendarEventUrl}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-md border border-line px-2.5 py-1.5 text-[11px] font-medium text-slate-700 transition-colors hover:bg-line-2"
+              className="inline-flex items-center gap-1.5 rounded-md border border-line px-2.5 py-1.5 text-[12px] font-medium text-slate-700 transition-colors hover:bg-line-2"
             >
               <ExternalLink className="h-3.5 w-3.5" /> Google Calendar
             </a>
           )}
         </div>
         {scheduled.demo && (
-          <p className="mt-2.5 border-t border-line pt-2 text-[10.5px] leading-relaxed text-muted">
+          <p className="mt-2.5 border-t border-line pt-2 text-[12px] leading-relaxed text-muted">
             Google credentials are not configured on this server, so the Meet link is a
             placeholder. The Calendar link is real and opens with everything filled in. The
             meeting is on the KiranOS calendar either way.
@@ -251,7 +251,7 @@ export const MeetingAgentFlow: React.FC<MeetingAgentFlowProps> = ({
     <div className="space-y-2.5">
       <div className="flex items-center gap-2 rounded-md border border-ai/20 bg-ai-tint px-2.5 py-1.5">
         <CalendarDays className="h-3.5 w-3.5 shrink-0 text-ai" />
-        <p className="flex-1 text-[11px] font-medium text-ai">Scheduling a meeting</p>
+        <p className="flex-1 text-[12px] font-medium text-ai">Scheduling a meeting</p>
         <button
           type="button"
           onClick={onCancel}
@@ -343,7 +343,7 @@ export const MeetingAgentFlow: React.FC<MeetingAgentFlowProps> = ({
         <button
           type="button"
           onClick={() => setStep(ORDER[ORDER.indexOf(step) - 1] ?? 'attendees')}
-          className="inline-flex items-center gap-1 px-0.5 text-[11px] text-muted transition-colors hover:text-ink"
+          className="inline-flex items-center gap-1 px-0.5 text-[12px] text-muted transition-colors hover:text-ink"
         >
           <ChevronLeft className="h-3 w-3" /> Back
         </button>
@@ -368,7 +368,7 @@ const AnsweredTurn: React.FC<{ question: string; answer: string; onEdit: () => v
   onEdit,
 }) => (
   <div className="group px-0.5">
-    <p className="text-[11px] text-muted">{question}</p>
+    <p className="text-[12px] text-muted">{question}</p>
     <div className="flex items-start gap-1.5">
       <p className="min-w-0 flex-1 text-[12.5px] font-medium text-ink">{answer}</p>
       <button
@@ -423,7 +423,7 @@ const NextButton: React.FC<{ onClick: () => void; disabled?: boolean; label?: st
     type="button"
     onClick={onClick}
     disabled={disabled}
-    className="rounded-md bg-kiran px-3 py-1.5 text-[11px] font-semibold text-white shadow-xs transition-colors hover:bg-kiran-600 disabled:opacity-40"
+    className="rounded-md bg-kiran px-3 py-1.5 text-[12px] font-semibold text-white shadow-xs transition-colors hover:bg-kiran-600 disabled:opacity-40"
   >
     {label}
   </button>
@@ -439,7 +439,7 @@ const Chip: React.FC<{
     onClick={onClick}
     aria-pressed={active}
     className={cn(
-      'rounded-md border px-2.5 py-1.5 text-[11px] font-medium transition-colors',
+      'rounded-md border px-2.5 py-1.5 text-[12px] font-medium transition-colors',
       active
         ? 'border-kiran bg-kiran-tint text-kiran'
         : 'border-line bg-surface text-slate-700 hover:bg-line-2',
@@ -473,7 +473,7 @@ const AttendeeStep: React.FC<{
 
   if (members.length === 0) {
     return (
-      <p className="py-2 text-center text-[11.5px] text-muted">
+      <p className="py-2 text-center text-[12px] text-muted">
         There is nobody else in this conversation to invite.
       </p>
     );
@@ -508,8 +508,8 @@ const AttendeeStep: React.FC<{
           {all && <Check className="h-2.5 w-2.5" strokeWidth={3} />}
         </span>
         <Users className="h-3.5 w-3.5 text-muted" />
-        <span className="text-[11.5px] font-medium text-ink">Everyone in this conversation</span>
-        <span className="ml-auto font-mono text-[10px] text-muted">{members.length}</span>
+        <span className="text-[12px] font-medium text-ink">Everyone in this conversation</span>
+        <span className="ml-auto font-mono text-[12px] text-muted">{members.length}</span>
       </button>
 
       <div className="max-h-44 space-y-px overflow-y-auto">
@@ -536,15 +536,15 @@ const AttendeeStep: React.FC<{
               </span>
               <UserAvatar user={member} size={22} />
               <span className="min-w-0 flex-1">
-                <span className="block truncate text-[11.5px] font-medium text-ink">
+                <span className="block truncate text-[12px] font-medium text-ink">
                   {member.name}
                 </span>
-                <span className="block truncate text-[10px] text-muted">{member.role}</span>
+                <span className="block truncate text-[12px] text-muted">{member.role}</span>
               </span>
               {!member.email && (
                 <span
                   title="No calendar address on file — this person cannot be invited"
-                  className="shrink-0 rounded-badge bg-strand-amber/12 px-1.5 py-0.5 text-[9px] font-medium text-strand-amber"
+                  className="shrink-0 rounded-badge bg-strand-amber/12 px-1.5 py-0.5 text-[11px] font-medium text-strand-amber"
                 >
                   No email
                 </span>
@@ -555,7 +555,7 @@ const AttendeeStep: React.FC<{
       </div>
 
       <div className="flex items-center justify-between pt-0.5">
-        <span className="font-mono text-[10.5px] text-muted">{selected.length} selected</span>
+        <span className="font-mono text-[12px] text-muted">{selected.length} selected</span>
         <NextButton onClick={onNext} disabled={selected.length === 0} />
       </div>
     </div>
@@ -660,7 +660,7 @@ const TimeStep: React.FC<{
           ))}
         </div>
       ) : (
-        <p className="text-[11px] text-muted">
+        <p className="text-[12px] text-muted">
           The working day is over. Pick a time below, or go back and choose another day.
         </p>
       )}
@@ -672,7 +672,7 @@ const TimeStep: React.FC<{
         className="w-full rounded-md border border-line bg-surface px-2.5 py-1.5 font-mono text-[12px] focus:border-kiran focus:outline-none"
       />
       {!valid && value && (
-        <p className="text-[11px] text-strand-red">That time has already passed.</p>
+        <p className="text-[12px] text-strand-red">That time has already passed.</p>
       )}
       <div className="flex justify-end">
         <NextButton onClick={onNext} disabled={!valid} />
@@ -719,7 +719,7 @@ const AgendaStep: React.FC<{
       <button
         type="button"
         onClick={onNext}
-        className="text-[11px] font-medium text-muted transition-colors hover:text-ink"
+        className="text-[12px] font-medium text-muted transition-colors hover:text-ink"
       >
         Skip
       </button>
@@ -767,7 +767,7 @@ const ReviewStep: React.FC<{
       <dl className="space-y-1.5">
         {rows.map((row) => (
           <div key={row.step} className="group flex items-start gap-2">
-            <dt className="w-16 shrink-0 pt-px text-[10.5px] uppercase tracking-[0.08em] text-muted">
+            <dt className="w-16 shrink-0 pt-px text-[12px] text-muted">
               {row.label}
             </dt>
             <dd className="min-w-0 flex-1 text-[12px] font-medium text-ink">{row.value}</dd>
@@ -783,7 +783,7 @@ const ReviewStep: React.FC<{
         ))}
 
         <div className="group flex items-start gap-2">
-          <dt className="w-16 shrink-0 pt-px text-[10.5px] uppercase tracking-[0.08em] text-muted">
+          <dt className="w-16 shrink-0 pt-px text-[12px] text-muted">
             Guests
           </dt>
           <dd className="min-w-0 flex-1">
@@ -794,13 +794,13 @@ const ReviewStep: React.FC<{
                   className="inline-flex items-center gap-1 rounded-badge bg-line-2 py-0.5 pl-0.5 pr-1.5"
                 >
                   <UserAvatar user={attendee} size={16} />
-                  <span className="text-[10.5px] font-medium text-slate-700">
+                  <span className="text-[12px] font-medium text-slate-700">
                     {attendee.name}
                   </span>
                 </span>
               ))}
             </div>
-            <p className="mt-1 text-[10px] text-muted">
+            <p className="mt-1 text-[12px] text-muted">
               Organised by {organiser.name}
             </p>
           </dd>
@@ -816,7 +816,7 @@ const ReviewStep: React.FC<{
       </dl>
 
       {missingEmail.length > 0 && (
-        <p className="rounded-md bg-strand-amber/10 px-2 py-1.5 text-[10.5px] leading-relaxed text-strand-amber">
+        <p className="rounded-md bg-strand-amber/10 px-2 py-1.5 text-[12px] leading-relaxed text-strand-amber">
           {missingEmail.map((person) => person.name).join(', ')}{' '}
           {missingEmail.length === 1 ? 'has' : 'have'} no calendar address on file, so the
           invitation cannot be sent to {missingEmail.length === 1 ? 'them' : 'them'}.
@@ -824,11 +824,11 @@ const ReviewStep: React.FC<{
       )}
 
       {!valid && (
-        <p className="text-[11px] text-strand-red">
+        <p className="text-[12px] text-strand-red">
           The start time has passed. Change the day or the time.
         </p>
       )}
-      {error && <p className="text-[11px] text-strand-red">{error}</p>}
+      {error && <p className="text-[12px] text-strand-red">{error}</p>}
 
       <button
         type="button"
@@ -846,7 +846,7 @@ const ReviewStep: React.FC<{
           </>
         )}
       </button>
-      <p className="flex items-center justify-center gap-1 text-[10px] text-muted">
+      <p className="flex items-center justify-center gap-1 text-[12px] text-muted">
         <Clock3 className="h-2.5 w-2.5" />
         Creates a Google Meet link and invites everyone listed
       </p>

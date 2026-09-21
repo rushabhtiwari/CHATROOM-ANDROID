@@ -167,7 +167,7 @@ export function RoomSettingsDialog({
               </>
             )}
 
-            <p suppressHydrationWarning className="text-[11px] text-muted-foreground">
+            <p suppressHydrationWarning className="text-[12px] text-muted-foreground">
               Created {formatDateTime(activeRoom.createdAt, { timeZone: currentUser.timeZone })}
               {activeRoom.createdBy ? ` by ${userById(activeRoom.createdBy).name}` : ""}
             </p>
@@ -292,12 +292,12 @@ export function RoomSettingsDialog({
                       <span className="flex items-center gap-1.5 truncate text-sm font-medium">
                         {user.name}
                         {memberIsAdmin && (
-                          <span className="rounded-md bg-primary/15 px-1.5 py-0.5 text-[9px] font-semibold uppercase text-primary">
+                          <span className="rounded-md bg-primary/15 px-1.5 py-0.5 text-[12px] font-semibold text-primary">
                             Admin
                           </span>
                         )}
                       </span>
-                      <span className="block truncate text-[11px] text-muted-foreground">
+                      <span className="block truncate text-[12px] text-muted-foreground">
                         {user.role}
                       </span>
                     </span>
@@ -332,7 +332,7 @@ export function RoomSettingsDialog({
 
             {isGroup && admin && invitable.length > 0 && (
               <div className="border-t border-border pt-3">
-                <p className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                <p className="mb-2 text-[12px] font-semibold text-muted-foreground">
                   Add people
                 </p>
                 <div className="max-h-40 space-y-1 overflow-y-auto">
@@ -390,7 +390,7 @@ export function RoomSettingsDialog({
 
                 <div
                   className={cn(
-                    "rounded-lg px-3 py-2 text-[11px]",
+                    "rounded-lg px-3 py-2 text-[12px]",
                     status === "active"
                       ? "bg-online/10 text-online"
                       : "bg-destructive/10 text-destructive",
@@ -440,7 +440,7 @@ export function RoomSettingsDialog({
 
             {admin && (
               <div className="space-y-2 border-t border-border pt-3">
-                <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                <p className="text-[12px] font-semibold text-muted-foreground">
                   Generate a new link
                 </p>
                 <ChoiceRow
@@ -461,7 +461,7 @@ export function RoomSettingsDialog({
                 >
                   <RefreshCw className="h-3.5 w-3.5" /> Generate link
                 </Button>
-                <p className="text-[10px] leading-relaxed text-muted-foreground">
+                <p className="text-[12px] leading-relaxed text-muted-foreground">
                   Generating a new link immediately invalidates the previous one.
                 </p>
               </div>
@@ -484,8 +484,8 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="text-[11px] font-medium text-muted-foreground">{label}</span>
-      {hint && <span className="ml-1.5 text-[10px] text-muted-foreground/70">{hint}</span>}
+      <span className="text-[12px] font-medium text-muted-foreground">{label}</span>
+      {hint && <span className="ml-1.5 text-[12px] text-muted-foreground/70">{hint}</span>}
       <span className="mt-1 block">{children}</span>
     </label>
   );
@@ -504,7 +504,7 @@ function ChoiceRow<T extends number | null>({
 }) {
   return (
     <div>
-      <p className="mb-1 text-[11px] text-muted-foreground">{label}</p>
+      <p className="mb-1 text-[12px] text-muted-foreground">{label}</p>
       <div className="flex flex-wrap gap-1.5">
         {options.map((option) => (
           <button
@@ -512,7 +512,7 @@ function ChoiceRow<T extends number | null>({
             onClick={() => onChange(option.value)}
             aria-pressed={option.value === value}
             className={cn(
-              "rounded-lg border px-2.5 py-1 text-[11px] transition-colors",
+              "rounded-lg border px-2.5 py-1 text-[12px] transition-colors",
               option.value === value
                 ? "border-primary bg-primary/10 text-primary"
                 : "border-border bg-surface hover:bg-secondary",

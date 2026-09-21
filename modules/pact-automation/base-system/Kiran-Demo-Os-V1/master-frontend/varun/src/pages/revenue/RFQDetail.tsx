@@ -184,33 +184,33 @@ export const RFQDetail: React.FC = () => {
             {activeTab === 'costing' && (
               <div className="space-y-4">
                 <div className="p-4 rounded border border-line bg-canvas/30 space-y-3">
-                  <h3 className="text-xs font-semibold uppercase tracking-wider text-ink font-mono">
+                  <h3 className="text-xs font-semibold text-ink font-mono">
                     Production Costing Breakdown
                   </h3>
                   {rfq.costing ? (
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs font-mono">
                       <div className="p-2.5 bg-white border border-line rounded">
-                        <div className="text-[10px] text-muted uppercase">Raw Material</div>
+                        <div className="text-[12px] text-muted ">Raw Material</div>
                         <div className="font-semibold text-ink mt-0.5">{rfq.costing.material}</div>
                       </div>
                       <div className="p-2.5 bg-white border border-line rounded">
-                        <div className="text-[10px] text-muted uppercase">Cut Length Packaging</div>
+                        <div className="text-[12px] text-muted ">Cut Length Packaging</div>
                         <div className="font-semibold text-ink mt-0.5">{rfq.costing.cutLength}</div>
                       </div>
                       <div className="p-2.5 bg-white border border-line rounded">
-                        <div className="text-[10px] text-muted uppercase">Calculated Unit Rate</div>
+                        <div className="text-[12px] text-muted ">Calculated Unit Rate</div>
                         <div className="font-bold text-strand-green mt-0.5">{formatINR(rfq.costing.rate)} / m</div>
                       </div>
                       <div className="p-2.5 bg-white border border-line rounded">
-                        <div className="text-[10px] text-muted uppercase">Gross Margin</div>
+                        <div className="text-[12px] text-muted ">Gross Margin</div>
                         <div className="font-bold text-strand-amber mt-0.5">{rfq.costing.marginPct}%</div>
                       </div>
                       <div className="p-2.5 bg-white border border-line rounded">
-                        <div className="text-[10px] text-muted uppercase">Labor & Machine Cost</div>
+                        <div className="text-[12px] text-muted ">Labor & Machine Cost</div>
                         <div className="font-semibold text-slate-700 mt-0.5">₹{rfq.costing.laborCost} / m</div>
                       </div>
                       <div className="p-2.5 bg-white border border-line rounded">
-                        <div className="text-[10px] text-muted uppercase">Packaging & Spooling</div>
+                        <div className="text-[12px] text-muted ">Packaging & Spooling</div>
                         <div className="font-semibold text-slate-700 mt-0.5">₹{rfq.costing.packagingCost} / m</div>
                       </div>
                     </div>
@@ -227,7 +227,7 @@ export const RFQDetail: React.FC = () => {
             {activeTab === 'quotations' && (
               <div className="space-y-3">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-semibold text-ink font-mono uppercase">
+                  <span className="text-xs font-semibold text-ink font-mono ">
                     Linked Commercial Quotations ({rfq.quotations.length})
                   </span>
                   <button
@@ -249,7 +249,7 @@ export const RFQDetail: React.FC = () => {
                       >
                         {q.quoteNumber} ({q.version})
                       </Link>
-                      <div className="text-[11px] text-muted font-mono mt-0.5">
+                      <div className="text-[12px] text-muted font-mono mt-0.5">
                         Generated on {formatDate(q.date)} · Value: {formatINR(q.value)}
                       </div>
                     </div>
@@ -263,7 +263,7 @@ export const RFQDetail: React.FC = () => {
             {activeTab === 'samples' && (
               <div className="space-y-3">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-semibold text-ink font-mono uppercase">
+                  <span className="text-xs font-semibold text-ink font-mono ">
                     Linked Sample Qualification Requests ({rfq.samples.length})
                   </span>
                   <button
@@ -282,7 +282,7 @@ export const RFQDetail: React.FC = () => {
                       <Link to="/samples" className="font-semibold text-kiran hover:underline">
                         {s.sampleNumber}
                       </Link>
-                      <div className="text-[11px] text-muted mt-0.5">
+                      <div className="text-[12px] text-muted mt-0.5">
                         Linked to {rfq.rfqNumber} · Logged {formatDate(s.date)}
                       </div>
                     </div>
@@ -295,7 +295,7 @@ export const RFQDetail: React.FC = () => {
             {/* Tab 5: Documents */}
             {activeTab === 'documents' && (
               <div className="space-y-3">
-                <span className="text-xs font-semibold text-ink font-mono uppercase">
+                <span className="text-xs font-semibold text-ink font-mono ">
                   Technical Drawings & Client Specifications ({rfq.documents.length})
                 </span>
                 {rfq.documents.map((doc, idx) => (
@@ -308,7 +308,7 @@ export const RFQDetail: React.FC = () => {
                       <span className="font-semibold text-ink">{doc.name}</span>
                       <span className="text-muted">({doc.size})</span>
                     </div>
-                    <span className="text-[10px] text-muted">{doc.uploadedAt}</span>
+                    <span className="text-[12px] text-muted">{doc.uploadedAt}</span>
                   </div>
                 ))}
               </div>
@@ -317,7 +317,7 @@ export const RFQDetail: React.FC = () => {
             {/* Tab 6: Activity Timeline */}
             {activeTab === 'activity' && (
               <div className="space-y-4">
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-ink font-mono mb-2">
+                <h3 className="text-xs font-semibold text-ink font-mono mb-2">
                   Complete Department & AI Execution Log
                 </h3>
                 <Timeline events={rfq.timeline} />
@@ -332,10 +332,10 @@ export const RFQDetail: React.FC = () => {
           {/* Customer Financial & Credit Card */}
           <div className="bg-surface border border-line rounded-lg p-4 shadow-card space-y-3 font-mono text-xs">
             <div className="flex items-center justify-between border-b border-line pb-2">
-              <span className="font-semibold text-ink uppercase tracking-wider text-[11px]">
+              <span className="font-semibold text-ink text-[12px]">
                 Customer Account Card
               </span>
-              <span className="text-kiran text-[11px] font-sans font-medium">{customer.code}</span>
+              <span className="text-kiran text-[12px] font-sans font-medium">{customer.code}</span>
             </div>
 
             <div className="space-y-1.5">
@@ -360,7 +360,7 @@ export const RFQDetail: React.FC = () => {
             </div>
 
             {customer.stopDispatch && (
-              <div className="p-2.5 rounded bg-red-50 border border-red-300 text-[11px] text-red-900 font-sans space-y-1">
+              <div className="p-2.5 rounded bg-red-50 border border-red-300 text-[12px] text-red-900 font-sans space-y-1">
                 <div className="font-bold flex items-center gap-1 text-strand-red">
                   <ShieldAlert className="w-3.5 h-3.5" /> STOP DISPATCH ACTIVE
                 </div>
@@ -372,10 +372,10 @@ export const RFQDetail: React.FC = () => {
           {/* Department Routing Chain */}
           <div className="bg-surface border border-line rounded-lg p-4 shadow-card space-y-3 text-xs">
             <div className="flex items-center justify-between border-b border-line pb-2">
-              <span className="font-semibold text-ink uppercase tracking-wider text-[11px] font-mono">
+              <span className="font-semibold text-ink text-[12px] font-mono">
                 Department Routing Chain
               </span>
-              <span className="text-[10px] text-muted">Hop deadlines</span>
+              <span className="text-[12px] text-muted">Hop deadlines</span>
             </div>
 
             <div className="space-y-3">
@@ -395,9 +395,9 @@ export const RFQDetail: React.FC = () => {
                       {hop.status === 'completed' && <CheckCircle2 className="w-3.5 h-3.5 text-strand-green" />}
                       {hop.department}
                     </span>
-                    <span className="font-mono text-[10px]">{hop.deadline}</span>
+                    <span className="font-mono text-[12px]">{hop.deadline}</span>
                   </div>
-                  <div className="text-[11px] text-muted mt-0.5">
+                  <div className="text-[12px] text-muted mt-0.5">
                     Assignee: <strong>{hop.owner}</strong>
                   </div>
                 </div>
@@ -407,10 +407,10 @@ export const RFQDetail: React.FC = () => {
 
           {/* Linked Sales Orders & Reminders */}
           <div className="bg-surface border border-line rounded-lg p-4 shadow-card space-y-2 text-xs">
-            <div className="text-[11px] font-semibold uppercase tracking-wider text-muted font-mono border-b border-line pb-2">
+            <div className="text-[12px] font-semibold text-muted font-mono border-b border-line pb-2">
               Scheduled AI Reminders
             </div>
-            <div className="space-y-2 text-[11px] text-slate-700">
+            <div className="space-y-2 text-[12px] text-slate-700">
               <div className="flex items-center justify-between font-mono bg-canvas p-2 rounded">
                 <span>Planning costing auto-chase</span>
                 <span className="text-strand-amber">22 Aug, 10 AM</span>

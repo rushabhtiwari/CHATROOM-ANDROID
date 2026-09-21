@@ -40,6 +40,8 @@ from .views import (
     SignInAuthSpaceEndpoint,
     SignUpAuthSpaceEndpoint,
     SignOutAuthSpaceEndpoint,
+    CentralCallbackEndpoint,
+    CentralInitiateEndpoint,
     GiteaCallbackEndpoint,
     GiteaOauthInitiateEndpoint,
     GiteaCallbackSpaceEndpoint,
@@ -137,6 +139,9 @@ urlpatterns = [
     ),
     path("change-password/", ChangePasswordEndpoint.as_view(), name="forgot-password"),
     path("set-password/", SetUserPasswordEndpoint.as_view(), name="set-password"),
+    ## Central Platform single sign-on
+    path("central/", CentralInitiateEndpoint.as_view(), name="central-initiate"),
+    path("central/callback/", CentralCallbackEndpoint.as_view(), name="central-callback"),
     ## Gitea Oauth
     path("gitea/", GiteaOauthInitiateEndpoint.as_view(), name="gitea-initiate"),
     path("gitea/callback/", GiteaCallbackEndpoint.as_view(), name="gitea-callback"),

@@ -41,12 +41,12 @@ export const AICosts: React.FC = () => {
       />
 
       {/* Budget Gauges & Currency Parity Strip */}
-      <div className="ku-ledger border-t-3 border-t-structure grid-cols-1 sm:grid-cols-3">
+      <div className="ku-ledger grid-cols-1 sm:grid-cols-3">
         {/* Card 1: Budget Utilization with LinearProgressBar */}
         <div className="bg-white p-3.5 rounded-xl flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between text-xs">
-              <span className="font-semibold uppercase tracking-wider text-outline text-[11px] font-mono truncate pr-2">
+              <span className="font-semibold text-outline text-[12px] font-mono truncate pr-2">
                 Monthly Budget Utilization
               </span>
               <HealthPill status="on_track" label="61.4% Spent" />
@@ -68,7 +68,7 @@ export const AICosts: React.FC = () => {
               showLabels={false}
               heightClass="h-2"
             />
-            <div className="pt-2 flex items-center justify-between text-[11px] border-t border-outline-variant text-outline font-mono">
+            <div className="pt-2 flex items-center justify-between text-[12px] border-t border-outline-variant text-outline font-mono">
               <span>38.6% remaining for August</span>
               <span className="text-primary font-medium">₹11,580 available</span>
             </div>

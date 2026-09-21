@@ -67,10 +67,10 @@ export const EmailDetail: React.FC = () => {
         <div className="col-span-12 lg:col-span-5 space-y-6">
           <div className="bg-surface border border-ai/30 rounded-md p-5 shadow-card space-y-4">
             <div className="flex items-center justify-between border-b border-line pb-2">
-              <span className="text-xs font-semibold uppercase tracking-wider text-ai font-mono flex items-center gap-1.5">
+              <span className="text-xs font-semibold text-ai font-mono flex items-center gap-1.5">
                 <Sparkles className="w-4 h-4" /> AI Field Extractions
               </span>
-              <span className="text-[10px] font-mono text-muted">Model: claude-sonnet-4-6</span>
+              <span className="text-[12px] font-mono text-muted">Model: claude-sonnet-4-6</span>
             </div>
 
             <div className="space-y-2">

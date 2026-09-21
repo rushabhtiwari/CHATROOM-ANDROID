@@ -44,7 +44,7 @@ export const AIPrompts: React.FC = () => {
     <div className="space-y-6 animate-fadeIn pb-12">
       {/* Toast Alert */}
       {toastMessage && (
-        <div className="fixed top-16 right-8 z-50 bg-ink text-white px-4 py-3 rounded-md shadow-popover border border-kiran flex items-center gap-2.5 text-xs animate-fadeIn">
+        <div className="fixed top-16 right-8 z-50 bg-ink text-white px-4 py-3 rounded-md shadow-popover border border-kiran flex items-center gap-2.5 text-[13px] animate-fadeIn">
           <CheckCircle2 className="w-4 h-4 text-strand-green" />
           <span>{toastMessage}</span>
         </div>
@@ -64,32 +64,32 @@ export const AIPrompts: React.FC = () => {
               setSelectedPrompt(p);
               setTestOutput(null);
             }}
-            className={`px-3 py-1.5 rounded-badge text-xs font-semibold font-mono transition-colors flex items-center gap-2 ${
+            className={`px-3 py-1.5 rounded-badge text-[13px] font-semibold font-mono transition-colors flex items-center gap-2 ${
               selectedPrompt.id === p.id
-                ? 'bg-ink text-white shadow-xs'
+                ? 'bg-ink text-white '
                 : 'bg-surface text-slate-700 hover:bg-canvas border border-line'
             }`}
           >
             <span>{p.feature}</span>
-            <span className="text-[10px] opacity-75">({p.currentVersion})</span>
+            <span className="text-[12px] opacity-75">({p.currentVersion})</span>
           </button>
         ))}
       </div>
 
       {/* Prompt Card & Side-by-Side Diff */}
-      <div className="bg-surface border border-line rounded-lg p-6 shadow-card space-y-6">
+      <div className="bg-surface border border-line rounded-lg p-6 space-y-6">
         <div className="flex flex-wrap items-start justify-between gap-4 border-b border-line pb-4">
           <div>
             <div className="flex items-center gap-3">
-              <h3 className="font-display font-semibold text-lg text-ink">
+              <h3 className="font-semibold text-lg text-ink">
                 {selectedPrompt.feature}
               </h3>
-              <span className="font-mono text-xs text-ai font-bold bg-ai-tint px-2 py-0.5 rounded">
+              <span className="font-mono text-[13px] text-ai font-semibold bg-ai-tint px-2 py-0.5 rounded">
                 {selectedPrompt.currentVersion}
               </span>
               <StatusPill status={selectedPrompt.status} />
             </div>
-            <div className="text-xs text-muted font-mono mt-1">
+            <div className="text-[13px] text-muted font-mono mt-1">
               Engine: <strong className="text-ink">{selectedPrompt.feature}</strong> · Author: {selectedPrompt.lastEditedBy} · Modified: {selectedPrompt.lastEditedAt}
             </div>
           </div>
@@ -98,7 +98,7 @@ export const AIPrompts: React.FC = () => {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => handleApprovePrompt(selectedPrompt.id)}
-                className="px-3 py-1.5 bg-strand-green hover:bg-emerald-600 text-white rounded text-xs font-semibold shadow-xs flex items-center gap-1.5"
+                className="px-3 py-1.5 bg-strand-green hover:bg-emerald-600 text-white rounded text-[13px] font-semibold flex items-center gap-1.5"
               >
                 <Check className="w-3.5 h-3.5" />
                 Approve Prompt Revision
@@ -109,15 +109,15 @@ export const AIPrompts: React.FC = () => {
 
         {/* Side-by-Side Diff Viewer */}
         <div className="space-y-2">
-          <div className="flex items-center gap-2 text-xs font-semibold text-ink font-mono uppercase tracking-wider">
+          <div className="flex items-center gap-2 text-[13px] font-semibold text-ink font-mono ">
             <GitCompare className="w-4 h-4 text-kiran" />
             <span>Prompt Revision Diff (Previous vs Proposed)</span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-[13px] font-mono">
             {/* Previous Version */}
             <div className="bg-canvas/60 border border-line rounded p-4 space-y-2">
-              <div className="text-[11px] font-bold text-slate-600 font-sans border-b border-line pb-1">
+              <div className="text-[12px] font-semibold text-slate-600 font-sans border-b border-line pb-1">
                 Previous Active Version ({selectedPrompt.previousVersionText ? 'Previous' : 'Initial'})
               </div>
               <div className="text-slate-700 whitespace-pre-wrap leading-relaxed">
@@ -127,9 +127,9 @@ export const AIPrompts: React.FC = () => {
 
             {/* Current Proposed Version */}
             <div className="bg-emerald-50/30 border border-emerald-300/80 rounded p-4 space-y-2">
-              <div className="text-[11px] font-bold text-strand-green font-sans border-b border-emerald-200 pb-1 flex items-center justify-between">
+              <div className="text-[12px] font-semibold text-strand-green font-sans border-b border-emerald-200 pb-1 flex items-center justify-between">
                 <span>Proposed New Version ({selectedPrompt.currentVersion})</span>
-                <span className="text-[10px] text-emerald-800">Current draft</span>
+                <span className="text-[12px] text-emerald-800">Current draft</span>
               </div>
               <div className="text-slate-800 whitespace-pre-wrap leading-relaxed">
                 {selectedPrompt.promptText}
@@ -141,16 +141,16 @@ export const AIPrompts: React.FC = () => {
         {/* Live Interactive Test Bench */}
         <div className="pt-4 border-t border-line space-y-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-xs font-semibold text-ai font-mono uppercase tracking-wider">
+            <div className="flex items-center gap-2 text-[13px] font-semibold text-ai font-mono ">
               <Sparkles className="w-4 h-4 text-ai" />
               <span>Interactive Prompt Evaluation Bench</span>
             </div>
-            <span className="font-mono text-xs text-muted">Direct Sandbox</span>
+            <span className="font-mono text-[13px] text-muted">Direct Sandbox</span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-[13px] font-mono">
             <div>
-              <label className="block text-[11px] text-muted font-sans mb-1">
+              <label className="block text-[12px] text-muted font-sans mb-1">
                 Sample Inbound Test Payload:
               </label>
               <textarea
@@ -158,13 +158,13 @@ export const AIPrompts: React.FC = () => {
                 value={testInput}
                 onChange={(e) => setTestInput(e.target.value)}
                 placeholder="Paste customer RFQ email text or quotation requirements..."
-                className="w-full p-2.5 bg-canvas border border-line rounded text-xs text-ink focus:outline-none focus:ring-1 focus:ring-ai font-mono"
+                className="w-full p-2.5 bg-canvas border border-line rounded text-[13px] text-ink focus:outline-none focus:ring-1 focus:ring-ai font-mono"
               />
               <div className="pt-2 flex justify-end">
                 <button
                   onClick={handleTestPrompt}
                   disabled={isTesting}
-                  className="px-3 py-1.5 bg-ai hover:bg-ai/90 text-white rounded text-xs font-semibold shadow-xs flex items-center gap-1.5"
+                  className="px-3 py-1.5 bg-ai hover:bg-ai/90 text-white rounded text-[13px] font-semibold flex items-center gap-1.5"
                 >
                   <Play className="w-3 h-3" />
                   Run Sandbox Test
@@ -173,10 +173,10 @@ export const AIPrompts: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-[11px] text-muted font-sans mb-1">
+              <label className="block text-[12px] text-muted font-sans mb-1">
                 Model Structured Response Output:
               </label>
-              <div className="w-full h-36 p-2.5 bg-ink text-slate-200 rounded border border-line overflow-y-auto leading-relaxed text-[11px]">
+              <div className="w-full h-36 p-2.5 bg-ink text-slate-200 rounded border border-line overflow-y-auto leading-relaxed text-[12px]">
                 {testOutput ? (
                   <pre className="font-mono">{testOutput}</pre>
                 ) : (

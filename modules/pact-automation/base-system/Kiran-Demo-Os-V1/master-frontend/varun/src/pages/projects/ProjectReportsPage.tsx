@@ -49,7 +49,7 @@ const Panel: React.FC<{ title: string; hint?: string; children: React.ReactNode 
 }) => (
   <section className="rounded-lg border border-line bg-white p-4 shadow-card">
     <h2 className="font-display text-[13.5px] font-semibold text-ink">{title}</h2>
-    {hint && <p className="mt-0.5 text-[11.5px] text-muted">{hint}</p>}
+    {hint && <p className="mt-0.5 text-[12px] text-muted">{hint}</p>}
     <div className="mt-3">{children}</div>
   </section>
 );
@@ -89,7 +89,7 @@ export const ProjectReportsPage: React.FC = () => {
     <div className="h-full overflow-y-auto px-5 py-4">
       <div className="mx-auto max-w-5xl space-y-4">
         {/* Headline figures */}
-        <div className="ku-ledger border-t-3 border-t-structure grid-cols-2 lg:grid-cols-4">
+        <div className="ku-ledger grid-cols-2 lg:grid-cols-4">
           {[
             { label: 'Hours logged', value: `${rollup.hoursSpent}h` },
             { label: 'Cost to date', value: formatINR(rollup.costToDate) },
@@ -97,7 +97,7 @@ export const ProjectReportsPage: React.FC = () => {
             { label: 'Overdue items', value: String(rollup.overdue), danger: rollup.overdue > 0 },
           ].map((stat) => (
             <div key={stat.label} className="rounded-lg bg-white p-3">
-              <div className="text-[11px] text-muted">{stat.label}</div>
+              <div className="text-[12px] text-muted">{stat.label}</div>
               <div
                 className={`mt-0.5 font-mono text-[19px] font-bold ${
                   stat.danger ? 'text-strand-red' : 'text-ink'
@@ -238,7 +238,7 @@ export const ProjectReportsPage: React.FC = () => {
         >
           <table className="w-full text-[12px]">
             <thead>
-              <tr className="border-b border-line text-[10.5px] uppercase tracking-[0.07em] text-muted">
+              <tr className="border-b border-line text-[12px] text-muted">
                 <th className="py-1.5 text-left font-semibold">Member</th>
                 <th className="py-1.5 text-right font-semibold">Assigned</th>
                 <th className="py-1.5 text-right font-semibold">Overdue</th>
@@ -262,7 +262,7 @@ export const ProjectReportsPage: React.FC = () => {
                           size="xs"
                         />
                         <span className="text-ink">{person.name}</span>
-                        <span className="text-[10.5px] text-muted">{person.department}</span>
+                        <span className="text-[12px] text-muted">{person.department}</span>
                       </span>
                     </td>
                     <td className="py-1.5 text-right font-mono">{row.assigned}</td>
@@ -290,7 +290,7 @@ export const ProjectReportsPage: React.FC = () => {
                         {person.complianceScore}
                       </span>
                       {person.warningsCount > 0 && (
-                        <span className="ml-1.5 rounded border border-red-200 bg-red-50 px-1 text-[9.5px] text-strand-red">
+                        <span className="ml-1.5 rounded border border-red-200 bg-red-50 px-1 text-[12px] text-strand-red">
                           {person.warningsCount} warning
                         </span>
                       )}
@@ -325,7 +325,7 @@ export const ProjectReportsPage: React.FC = () => {
                     <div className="text-[12.5px] text-ink">
                       Week of {format(start, 'd MMM')} – {format(end, 'd MMM yyyy')}
                     </div>
-                    <div className="text-[11px] text-muted">
+                    <div className="text-[12px] text-muted">
                       Generated {format(parseISO(report.generatedAt), "d MMM, h:mm a")} ·{' '}
                       {closedItems} item{closedItems === 1 ? '' : 's'} closed
                     </div>
@@ -342,7 +342,7 @@ export const ProjectReportsPage: React.FC = () => {
                         },
                       )
                     }
-                    className="shrink-0 rounded-md border border-line px-2.5 py-1 text-[11.5px] font-medium text-slate-600 transition-colors hover:bg-canvas"
+                    className="shrink-0 rounded-md border border-line px-2.5 py-1 text-[12px] font-medium text-slate-600 transition-colors hover:bg-canvas"
                   >
                     Summary
                   </button>

@@ -34,7 +34,6 @@ export default async function PeoplePage({ searchParams }: PageProps<"/admin/use
     <>
       <PageHeader
         title="People"
-        description="Everyone who has signed in. New people have no access until you add them to a department."
       />
       <div className="card table-card">
         <form className="table-toolbar" role="search" aria-label="Find people">

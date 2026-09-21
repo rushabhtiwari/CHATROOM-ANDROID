@@ -34,8 +34,8 @@ export const WorkItemPage: React.FC = () => {
           <ArrowLeft className="h-3.5 w-3.5" />
           All work items
         </Link>
-        <span className="font-mono text-[11.5px] text-slate-300">·</span>
-        <span className="font-mono text-[11.5px] text-muted">{displayId(state, item)}</span>
+        <span className="font-mono text-[12px] text-slate-300">·</span>
+        <span className="font-mono text-[12px] text-muted">{displayId(state, item)}</span>
       </div>
 
       <div className="min-h-0 flex-1">

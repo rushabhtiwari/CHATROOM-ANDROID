@@ -80,7 +80,7 @@ export function AppsTable({ apps, departmentCount }: { apps: AppSummary[]; depar
                       <Link href={`/admin/apps/${app.id}`} className="row-link-target">
                         {app.name}
                       </Link>
-                      <small>{app.is_system ? "Built in" : app.description}</small>
+                      {app.is_system && <small>Built in</small>}
                     </span>
                   </div>
                 </td>

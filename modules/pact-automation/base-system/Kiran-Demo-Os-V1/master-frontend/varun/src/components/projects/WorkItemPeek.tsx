@@ -68,7 +68,7 @@ export const WorkItemPeek: React.FC<{
               <Link2 className="h-3.5 w-3.5" />
             </button>
             <span className="h-3.5 w-px bg-outline-variant mx-0.5" />
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-surface-container px-2 py-0.5 text-[11px] font-medium text-on-surface-variant border border-outline-variant">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-surface-container px-2 py-0.5 text-[12px] font-medium text-on-surface-variant border border-outline-variant">
               <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: itemState?.color ?? '#94A3B8' }} />
               {itemState?.name ?? 'Backlog'}
             </span>

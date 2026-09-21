@@ -123,7 +123,7 @@ export const BoardLayout: React.FC<Props> = ({
                 <h3 className="truncate text-xs font-semibold text-on-surface">
                   {group.label}
                 </h3>
-                <span className="font-mono text-[11px] px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface-variant font-medium">
+                <span className="font-mono text-[12px] px-1.5 py-0.2 rounded-full bg-surface-container-high text-on-surface-variant font-medium">
                   {group.items.length}
                 </span>
               </div>
@@ -167,7 +167,7 @@ export const BoardLayout: React.FC<Props> = ({
 
               {group.items.length === 0 && (
                 <p
-                  className={`rounded-md border border-dashed px-3 py-6 text-center text-[11.5px] transition-colors ${
+                  className={`rounded-md border border-dashed px-3 py-6 text-center text-[12px] transition-colors ${
                     isOver
                       ? 'border-kiran text-kiran'
                       : 'border-line text-muted'
@@ -182,7 +182,7 @@ export const BoardLayout: React.FC<Props> = ({
       })}
 
       {!draggable && (
-        <div className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 rounded-md border border-line bg-white px-3 py-1.5 text-[11.5px] text-muted shadow-card">
+        <div className="pointer-events-none absolute bottom-4 left-1/2 -translate-x-1/2 rounded-md border border-line bg-white px-3 py-1.5 text-[12px] text-muted shadow-card">
           Cards cannot be dragged while grouped by{' '}
           {groupBy === 'none' ? 'nothing' : 'created by'}.
         </div>
@@ -257,7 +257,7 @@ const Card: React.FC<CardProps> = ({
       }`}
     >
       <div className="mb-1.5 flex items-center justify-between">
-        <span className="font-mono text-[11px] font-semibold text-outline">{itemId}</span>
+        <span className="font-mono text-[12px] font-semibold text-outline">{itemId}</span>
         <div className="flex items-center gap-1 opacity-50 group-hover:opacity-100">
           <GripVertical className="h-3.5 w-3.5 text-outline" />
         </div>
@@ -275,7 +275,7 @@ const Card: React.FC<CardProps> = ({
         <div className="flex flex-wrap items-center gap-1.5">
           {display.priority && <PriorityIcon priority={item.priority} />}
           {showState && (
-            <span className="inline-flex items-center gap-1 rounded bg-surface-container px-1.5 py-0.5 text-[10px] text-on-surface-variant font-medium">
+            <span className="inline-flex items-center gap-1 rounded bg-surface-container px-1.5 py-0.5 text-[12px] text-on-surface-variant font-medium">
               <StateIcon group={stateGroup} color={stateColor} className="h-2.5 w-2.5" />
               {stateName}
             </span>
@@ -285,13 +285,13 @@ const Card: React.FC<CardProps> = ({
               <LabelChip key={label.id} name={label.name} color={label.color} />
             ))}
           {display.estimate && item.estimate !== null && (
-            <span className="rounded bg-surface-container px-1.5 py-0.5 font-mono text-[10px] text-on-surface-variant font-medium">
+            <span className="rounded bg-surface-container px-1.5 py-0.5 font-mono text-[12px] text-on-surface-variant font-medium">
               {item.estimate}
             </span>
           )}
           {display.dueDate && item.dueDate && (
             <span
-              className={`font-mono text-[10.5px] ${
+              className={`font-mono text-[12px] ${
                 overdue ? 'font-semibold text-strand-red' : 'text-outline'
               }`}
             >

@@ -54,7 +54,7 @@ export const AIGuardrails: React.FC = () => {
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs font-mono">
-            <thead className="bg-canvas text-muted text-[10px] uppercase border-b border-line">
+            <thead className="bg-canvas text-muted text-[12px] border-b border-line">
               <tr>
                 <th className="p-3 font-sans">Policy Name</th>
                 <th className="p-3 font-sans">Operational Scope</th>
@@ -69,13 +69,13 @@ export const AIGuardrails: React.FC = () => {
                 <tr key={g.id} className="hover:bg-canvas/60">
                   <td className="p-3">
                     <div className="font-bold text-ink font-sans text-xs">{g.name}</div>
-                    <div className="text-[10px] text-muted font-sans mt-0.5">{g.description}</div>
+                    <div className="text-[12px] text-muted font-sans mt-0.5">{g.description}</div>
                   </td>
                   <td className="p-3 font-sans text-slate-700">{g.scope}</td>
                   <td className="p-3 text-ai font-semibold">{g.threshold}</td>
                   <td className="p-3 font-sans text-slate-800">{g.action}</td>
                   <td className="p-3 text-center">
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
+                    <span className={`px-2 py-0.5 rounded text-[12px] font-semibold ${
                       g.isEnabled ? 'bg-emerald-50 text-strand-green border border-emerald-200' : 'bg-canvas text-muted'
                     }`}>
                       {g.isEnabled ? 'Enforcing' : 'Disabled'}
@@ -116,7 +116,7 @@ export const AIGuardrails: React.FC = () => {
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs font-mono">
-            <thead className="bg-canvas text-muted text-[10px] uppercase border-b border-line">
+            <thead className="bg-canvas text-muted text-[12px] border-b border-line">
               <tr>
                 <th className="p-3">Timestamp</th>
                 <th className="p-3 font-sans">Feature Context</th>
@@ -133,7 +133,7 @@ export const AIGuardrails: React.FC = () => {
                   <td className="p-3 text-strand-red font-semibold">{b.reason}</td>
                   <td className="p-3 font-sans text-slate-700 max-w-xs truncate">{b.interceptedPayload}</td>
                   <td className="p-3 font-sans">
-                    <span className="px-2 py-0.5 rounded bg-canvas border border-line text-[11px] text-slate-800 font-medium">
+                    <span className="px-2 py-0.5 rounded bg-canvas border border-line text-[12px] text-slate-800 font-medium">
                       {b.actionTaken}
                     </span>
                   </td>

@@ -110,7 +110,7 @@ export const EmailIntake: React.FC = () => {
         <div className="col-span-12 md:col-span-3 border-r border-line p-3 flex flex-col justify-between overflow-y-auto bg-canvas/30">
           <div className="space-y-4">
             <div>
-              <div className="text-[11px] font-semibold uppercase tracking-wider text-muted font-mono mb-2">
+              <div className="text-[12px] font-semibold text-muted font-mono mb-2">
                 Processing Queues
               </div>
               <div className="space-y-1">
@@ -134,7 +134,7 @@ export const EmailIntake: React.FC = () => {
                   >
                     <span>{q.label}</span>
                     <span
-                      className={`font-mono text-[10px] px-1.5 rounded ${
+                      className={`font-mono text-[12px] px-1.5 rounded ${
                         selectedQueue === q.id
                           ? 'bg-white/20 text-white'
                           : q.alert
@@ -153,7 +153,7 @@ export const EmailIntake: React.FC = () => {
 
             {/* Mailbox Filter */}
             <div>
-              <div className="text-[11px] font-semibold uppercase tracking-wider text-muted font-mono mb-2">
+              <div className="text-[12px] font-semibold text-muted font-mono mb-2">
                 Mailbox Channels
               </div>
               <div className="space-y-1">
@@ -166,7 +166,7 @@ export const EmailIntake: React.FC = () => {
                   <button
                     key={mb.id}
                     onClick={() => setSelectedMailbox(mb.id)}
-                    className={`w-full px-2 py-1 rounded text-[11px] font-mono text-left truncate transition-colors ${
+                    className={`w-full px-2 py-1 rounded text-[12px] font-mono text-left truncate transition-colors ${
                       selectedMailbox === mb.id
                         ? 'bg-kiran-tint text-kiran font-semibold border border-kiran/30'
                         : 'hover:bg-canvas text-slate-600'
@@ -179,7 +179,7 @@ export const EmailIntake: React.FC = () => {
             </div>
           </div>
 
-          <div className="pt-3 border-t border-line text-[11px] text-muted space-y-1">
+          <div className="pt-3 border-t border-line text-[12px] text-muted space-y-1">
             <div className="flex items-center justify-between">
               <span>Sync Interval:</span>
               <span className="font-mono text-ink">Real-time Push</span>
@@ -194,10 +194,10 @@ export const EmailIntake: React.FC = () => {
         {/* Centre Pane (4 cols / 420px): Email List */}
         <div className="col-span-12 md:col-span-4 border-r border-line flex flex-col overflow-hidden">
           <div className="p-2.5 border-b border-line bg-canvas/40 flex items-center justify-between">
-            <span className="text-xs font-semibold text-ink font-mono uppercase tracking-wider">
+            <span className="text-xs font-semibold text-ink font-mono ">
               Inbound Messages ({filterEmails.length})
             </span>
-            <span className="text-[11px] text-muted">Sorted by Newest</span>
+            <span className="text-[12px] text-muted">Sorted by Newest</span>
           </div>
 
           <div className="flex-1 overflow-y-auto divide-y divide-line">
@@ -217,11 +217,11 @@ export const EmailIntake: React.FC = () => {
                       <div className="font-semibold text-xs text-ink truncate">
                         {em.senderName} · <span className="font-normal text-slate-600">{em.senderCompany}</span>
                       </div>
-                      <div className="text-[10px] text-muted truncate font-mono">
+                      <div className="text-[12px] text-muted truncate font-mono">
                         {em.senderEmail}
                       </div>
                     </div>
-                    <span className="text-[10px] font-mono text-muted shrink-0">
+                    <span className="text-[12px] font-mono text-muted shrink-0">
                       {formatDateTimeIST(em.receivedAt).split(',')[1]}
                     </span>
                   </div>
@@ -229,17 +229,17 @@ export const EmailIntake: React.FC = () => {
                   <div className="text-xs font-medium text-slate-800 line-clamp-1 mb-1">
                     {em.subject}
                   </div>
-                  <p className="text-[11px] text-slate-500 line-clamp-2 leading-tight mb-2">
+                  <p className="text-[12px] text-slate-500 line-clamp-2 leading-tight mb-2">
                     {em.preview}
                   </p>
 
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-1.5">
-                      <span className="text-[10px] font-medium px-1.5 py-0.2 rounded bg-slate-100 border border-line text-slate-700">
+                      <span className="text-[12px] font-medium px-1.5 py-0.2 rounded bg-slate-100 border border-line text-slate-700">
                         {em.intent}
                       </span>
                       {em.attachments && em.attachments.length > 0 && (
-                        <span className="text-[10px] text-muted flex items-center gap-0.5">
+                        <span className="text-[12px] text-muted flex items-center gap-0.5">
                           <Paperclip className="w-3 h-3" />
                           {em.attachments.length}
                         </span>
@@ -266,7 +266,7 @@ export const EmailIntake: React.FC = () => {
                 <div className="text-xs text-muted mt-0.5">
                   From: <strong>{selectedEmail.senderName}</strong> &lt;{selectedEmail.senderEmail}&gt; ({selectedEmail.senderCompany})
                 </div>
-                <div className="text-[11px] font-mono text-slate-400">
+                <div className="text-[12px] font-mono text-slate-400">
                   Received: {formatDateTimeIST(selectedEmail.receivedAt)} · To: {selectedEmail.mailbox}
                 </div>
               </div>
@@ -279,7 +279,7 @@ export const EmailIntake: React.FC = () => {
                 {selectedEmail.attachments.map((att, idx) => (
                   <div
                     key={idx}
-                    className="px-2 py-1 bg-white border border-line rounded text-[11px] font-mono flex items-center gap-1.5 shadow-2xs hover:border-kiran cursor-pointer"
+                    className="px-2 py-1 bg-white border border-line rounded text-[12px] font-mono flex items-center gap-1.5 shadow-2xs hover:border-kiran cursor-pointer"
                   >
                     <Paperclip className="w-3 h-3 text-kiran" />
                     <span className="text-ink">{att.name}</span>
@@ -319,7 +319,7 @@ export const EmailIntake: React.FC = () => {
                   <AlertCircle className="w-4 h-4 text-strand-amber shrink-0" />
                   <span>No existing customer account matched for domain</span>
                 </div>
-                <p className="text-[11px] text-amber-800">
+                <p className="text-[12px] text-amber-800">
                   Assign to Sunita Rao (CRM) or link to an existing client ledger.
                 </p>
                 <div className="flex items-center gap-2 pt-1">
@@ -359,11 +359,11 @@ export const EmailIntake: React.FC = () => {
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-1.5">
                   <Sparkles className="w-3.5 h-3.5 text-ai" />
-                  <span className="text-xs font-semibold uppercase tracking-wider text-ink font-mono">
+                  <span className="text-xs font-semibold text-ink font-mono">
                     Structured RFQ Extraction
                   </span>
                 </div>
-                <span className="text-[10px] text-muted">
+                <span className="text-[12px] text-muted">
                   Hover any field to highlight source text above
                 </span>
               </div>
@@ -437,7 +437,7 @@ export const EmailIntake: React.FC = () => {
                     <Bot className="w-3.5 h-3.5" />
                     AI Follow-up Reply (Model: claude-sonnet-4-6)
                   </span>
-                  <span className="text-[10px] text-muted font-mono">
+                  <span className="text-[12px] text-muted font-mono">
                     Requires HOD Approval
                   </span>
                 </div>
@@ -448,7 +448,7 @@ export const EmailIntake: React.FC = () => {
                   className="w-full text-xs font-sans p-2 rounded bg-white border border-ai/30 text-ink focus:outline-none focus:ring-1 focus:ring-ai"
                 />
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] text-muted">
+                  <span className="text-[12px] text-muted">
                     Note: Will be routed to Rajesh Kumar's inbox before sending.
                   </span>
                   <div className="flex items-center gap-2">

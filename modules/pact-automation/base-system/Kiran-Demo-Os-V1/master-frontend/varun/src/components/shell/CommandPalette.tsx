@@ -200,7 +200,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
         role="dialog"
         aria-modal="true"
         aria-labelledby="command-palette-title"
-        className="w-full max-w-2xl bg-surface rounded-none border border-line overflow-hidden flex flex-col max-h-[72vh] animate-dialog-in"
+        className="w-full max-w-2xl bg-surface border border-line overflow-hidden flex flex-col max-h-[72vh] animate-dialog-in"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Input Box */}
@@ -220,9 +220,9 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
               setSelectedIndex(0);
             }}
             onKeyDown={handleKeyDown}
-            className="w-full text-[15px] bg-transparent focus-visible:ring-2 focus-visible:ring-primary/40 rounded-none text-ink placeholder:text-muted/80"
+            className="w-full text-[15px] bg-transparent focus-visible:ring-2 focus-visible:ring-primary/40 text-ink placeholder:text-muted/80"
           />
-          <kbd className="font-mono text-[10px] px-1.5 py-0.5 rounded-none bg-white border border-line text-slate-500">
+          <kbd className="font-mono text-[12px] px-1.5 py-0.5 bg-white border border-line text-slate-500">
             ESC
           </kbd>
         </div>
@@ -247,13 +247,13 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
                   aria-selected={isSelected}
                   onClick={() => handleSelect(item.path)}
                   onMouseEnter={() => setSelectedIndex(idx)}
-                  className={`w-full text-left p-2.5 rounded-none text-xs flex items-center justify-between gap-3 cursor-pointer transition-colors ${
+                  className={`w-full text-left p-2.5 text-xs flex items-center justify-between gap-3 cursor-pointer transition-colors ${
                     isSelected ? 'bg-kiran-tint text-kiran' : 'hover:bg-canvas text-slate'
                   }`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div
-                      className={`w-7 h-7 rounded-none flex items-center justify-center shrink-0 ${
+                      className={`w-7 h-7 flex items-center justify-center shrink-0 ${
                         isSelected ? 'bg-kiran text-white' : 'bg-canvas text-slate-600 border border-line'
                       }`}
                     >
@@ -262,18 +262,18 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
                         <span className="font-semibold text-ink truncate">{item.title}</span>
-                        <span className="font-mono text-[10px] text-muted px-1 rounded-none bg-slate-100 border border-line">
+                        <span className="font-mono text-[12px] text-muted px-1 bg-slate-100 border border-line">
                           {item.mono}
                         </span>
                       </div>
                       {'subtitle' in item && (item as any).subtitle && (
-                        <div className="text-[11px] text-muted truncate">{(item as any).subtitle}</div>
+                        <div className="text-[12px] text-muted truncate">{(item as any).subtitle}</div>
                       )}
                     </div>
                   </div>
 
                   <div className="flex items-center gap-2 shrink-0">
-                    <span className="text-[10px] font-mono text-muted uppercase tracking-wider">
+                    <span className="text-[12px] font-mono text-muted ">
                       {item.category}
                     </span>
                     <ArrowRight className="w-3.5 h-3.5 opacity-40 group-hover:opacity-100" />
@@ -285,13 +285,13 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose 
         </div>
 
         {/* Footer shortcuts */}
-        <div className="px-4 py-2 bg-canvas border-t border-line flex items-center justify-between text-[11px] text-muted">
+        <div className="px-4 py-2 bg-canvas border-t border-line flex items-center justify-between text-[12px] text-muted">
           <span>
-            Use <kbd className="font-mono bg-white px-1 border border-line rounded-none">↑</kbd>{' '}
-            <kbd className="font-mono bg-white px-1 border border-line rounded-none">↓</kbd> to navigate,{' '}
-            <kbd className="font-mono bg-white px-1 border border-line rounded-none">↵</kbd> to select
+            Use <kbd className="font-mono bg-white px-1 border border-line ">↑</kbd>{' '}
+            <kbd className="font-mono bg-white px-1 border border-line ">↓</kbd> to navigate,{' '}
+            <kbd className="font-mono bg-white px-1 border border-line ">↵</kbd> to select
           </span>
-          <span className="font-mono text-[10px]">KiranOS Intelligence Engine</span>
+          <span className="font-mono text-[12px]">KiranOS Intelligence Engine</span>
         </div>
       </div>
     </div>

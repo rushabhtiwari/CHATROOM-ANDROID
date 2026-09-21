@@ -18,11 +18,11 @@
 export type Tone = 'grey' | 'blue' | 'amber' | 'red' | 'green';
 
 export const TONE = {
-  grey:  { stamp: 'border-st-grey-ink text-st-grey-ink',   solid: 'bg-st-grey-ink',   bg: 'bg-st-grey-bg',   line: 'border-st-grey-line',   rule: 'border-t-3 border-t-st-grey-ink' },
-  blue:  { stamp: 'border-st-blue-ink text-st-blue-ink',   solid: 'bg-st-blue-ink',   bg: 'bg-st-blue-bg',   line: 'border-st-blue-line',   rule: 'border-t-3 border-t-st-blue-ink' },
-  amber: { stamp: 'border-st-amber-ink text-st-amber-ink', solid: 'bg-st-amber-ink',  bg: 'bg-st-amber-bg',  line: 'border-st-amber-line',  rule: 'border-t-3 border-t-st-amber-ink' },
-  red:   { stamp: 'border-st-red-ink text-st-red-ink',     solid: 'bg-st-red-ink',    bg: 'bg-st-red-bg',    line: 'border-st-red-line',    rule: 'border-t-3 border-t-st-red-ink' },
-  green: { stamp: 'border-st-green-ink text-st-green-ink', solid: 'bg-st-green-ink',  bg: 'bg-st-green-bg',  line: 'border-st-green-line',  rule: 'border-t-3 border-t-st-green-ink' },
+  grey:  { stamp: 'border-st-grey-ink text-st-grey-ink',   solid: 'bg-st-grey-ink',   bg: 'bg-st-grey-bg',   line: 'border-st-grey-line',   rule: '' },
+  blue:  { stamp: 'border-st-blue-ink text-st-blue-ink',   solid: 'bg-st-blue-ink',   bg: 'bg-st-blue-bg',   line: 'border-st-blue-line',   rule: '' },
+  amber: { stamp: 'border-st-amber-ink text-st-amber-ink', solid: 'bg-st-amber-ink',  bg: 'bg-st-amber-bg',  line: 'border-st-amber-line',  rule: '' },
+  red:   { stamp: 'border-st-red-ink text-st-red-ink',     solid: 'bg-st-red-ink',    bg: 'bg-st-red-bg',    line: 'border-st-red-line',    rule: '' },
+  green: { stamp: 'border-st-green-ink text-st-green-ink', solid: 'bg-st-green-ink',  bg: 'bg-st-green-bg',  line: 'border-st-green-line',  rule: '' },
 } as const satisfies Record<Tone, Record<string, string>>;
 
 /**
@@ -62,6 +62,23 @@ const TONE_BY_STATUS: Record<string, Tone> = {
   // No verdict yet, or the record is out of play.
   closed: 'grey', draft: 'grey', queued: 'grey', archived: 'grey',
   inactive: 'grey', unknown: 'grey', 'not started': 'grey', backlog: 'grey',
+};
+
+/**
+ * Sentence case for a status word arriving from the server: "Not An Order" reads
+ * "Not an order", "AWAITING ADMIN" reads "Awaiting admin". Short all-caps tokens
+ * (PACT, KPAC, PO, OCR) are left alone.
+ */
+const ACRONYMS = new Set(['PACT', 'KPAC', 'PO', 'OCR', 'PDF', 'SPF', 'DKIM', 'DMARC', 'AI', 'HR', 'ERP', 'GST']);
+export const sentenceCase = (label?: string | null): string => {
+  const words = String(label ?? '').replace(/_/g, ' ').trim().split(/\s+/);
+  return words
+    .map((word, index) => {
+      if (ACRONYMS.has(word.toUpperCase())) return word.toUpperCase();
+      const lower = word.toLowerCase();
+      return index === 0 ? lower.charAt(0).toUpperCase() + lower.slice(1) : lower;
+    })
+    .join(' ');
 };
 
 export const toneForStatus = (status?: string | null): Tone =>

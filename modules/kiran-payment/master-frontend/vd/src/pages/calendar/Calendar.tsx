@@ -122,7 +122,7 @@ export const Calendar: React.FC = () => {
             startOfWeek(anchor),
             6,
           ).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}`
-        : `From ${formatDayLong(anchor)}`;
+        : formatDayLong(anchor);
 
   const upcoming = useMemo(
     () => events.filter((event) => event.endAt >= Date.now()).length,
@@ -147,33 +147,19 @@ export const Calendar: React.FC = () => {
         title="Calendar"
         actions={
           <>
-            <div className="flex items-center rounded-md border border-line bg-surface">
-              <button
-                onClick={() => step(-1)}
-                aria-label="Previous period"
-                className="px-2 py-1.5 text-muted transition-colors hover:bg-line-2 hover:text-ink"
-              >
+            <div className="flex items-center gap-1">
+              <button onClick={() => step(-1)} aria-label="Previous period" className="btn-icon">
                 <ChevronLeft className="h-4 w-4" />
               </button>
-              <button
-                onClick={() => setAnchor(new Date())}
-                className="border-x border-line px-3 py-1.5 text-xs font-semibold text-ink transition-colors hover:bg-line-2"
-              >
+              <button onClick={() => setAnchor(new Date())} className="btn-secondary">
                 Today
               </button>
-              <button
-                onClick={() => step(1)}
-                aria-label="Next period"
-                className="px-2 py-1.5 text-muted transition-colors hover:bg-line-2 hover:text-ink"
-              >
+              <button onClick={() => step(1)} aria-label="Next period" className="btn-icon">
                 <ChevronRight className="h-4 w-4" />
               </button>
             </div>
-            <button
-              onClick={() => setComposing(anchor)}
-              className="flex items-center gap-1.5 rounded-md bg-kiran px-3 py-1.5 text-xs font-semibold text-white shadow-xs transition-colors hover:bg-kiran-600"
-            >
-              <Plus className="h-3.5 w-3.5" /> New event
+            <button onClick={() => setComposing(anchor)} className="btn-primary">
+              <Plus className="h-4 w-4" /> New event
             </button>
           </>
         }
@@ -190,20 +176,20 @@ export const Calendar: React.FC = () => {
             departmentColor="#00AEEF"
             className="flex-1"
           />
-          <span className="font-display text-sm font-semibold text-ink">{periodLabel}</span>
+          <span className="whitespace-nowrap text-[14px] font-medium text-ink">{periodLabel}</span>
         </div>
       </PageHeader>
 
       {error && (
-        <div className="mb-4 rounded-md border border-strand-red/25 bg-strand-red/5 px-4 py-3 text-[13px] text-strand-red">
+        <div className="mb-4 rounded-md bg-[#FBE9E7] px-4 py-3 text-[13px] text-[#B3302A]">
           {error}
         </div>
       )}
 
-      <div className="panel relative overflow-hidden">
+      <div className="panel relative overflow-hidden shadow-none">
         {loading && (
           <div className="absolute inset-0 z-10 flex items-center justify-center bg-surface/70 backdrop-blur-[1px]">
-            <Loader2 className="h-5 w-5 animate-spin text-kiran" />
+            <Loader2 className="h-5 w-5 animate-spin text-slate-500" />
           </div>
         )}
 
@@ -253,7 +239,7 @@ const MonthView: React.FC<{
         {WEEKDAYS.map((day) => (
           <div
             key={day}
-            className="px-2 py-2 text-center text-[10px] font-semibold uppercase tracking-[0.1em] text-muted"
+            className="px-2 py-2.5 text-center text-[13px] font-medium text-muted"
           >
             {day}
           </div>
@@ -267,23 +253,23 @@ const MonthView: React.FC<{
             <button
               key={day.toISOString()}
               onClick={() => onPick(day)}
-              className={`min-h-[104px] border-b border-r border-line p-1.5 text-left align-top transition-colors last-in-row:border-r-0 hover:bg-canvas ${
-                outside ? 'bg-surface-2/60' : 'bg-surface'
+              className={`min-h-[112px] border-b border-r border-line-2 p-2 text-left align-top transition-colors last-in-row:border-r-0 hover:bg-canvas ${
+                outside ? 'bg-surface-2' : 'bg-surface'
               }`}
             >
               <span
-                className={`inline-flex h-6 min-w-6 items-center justify-center rounded-full px-1 font-mono text-[11px] font-semibold ${
+                className={`inline-flex h-6 min-w-6 items-center justify-center rounded-full px-1 text-[13px] font-medium tabular-nums ${
                   isToday(day)
                     ? 'bg-kiran text-white'
                     : outside
-                      ? 'text-slate-300'
-                      : 'text-slate-600'
+                      ? 'text-slate-400'
+                      : 'text-ink'
                 }`}
               >
                 {day.getDate()}
               </span>
 
-              <div className="mt-1 space-y-px">
+              <div className="mt-1 space-y-0.5">
                 {dayEvents.slice(0, 3).map((event) => (
                   <span
                     key={event.id}
@@ -298,21 +284,20 @@ const MonthView: React.FC<{
                       keyEvent.stopPropagation();
                       onSelect(event);
                     }}
-                    className="flex items-center gap-1 truncate rounded-xs px-1 py-0.5 text-[10.5px] leading-tight text-ink hover:bg-kiran-tint"
+                    className={`flex items-center gap-1 truncate rounded px-1.5 py-0.5 text-[12px] leading-tight ${
+                      eventState(event) === 'past'
+                        ? 'bg-[#EFEFF2] text-[#48484F]'
+                        : 'bg-kiran-tint text-[#0B4F9C]'
+                    }`}
                   >
-                    <span
-                      className={`h-1.5 w-1.5 shrink-0 rounded-full ${
-                        eventState(event) === 'past' ? 'bg-slate-300' : 'bg-strand-teal'
-                      }`}
-                    />
-                    <span className="font-mono text-[9.5px] text-muted">
+                    <span className="shrink-0 tabular-nums opacity-75">
                       {formatTime(event.startAt)}
                     </span>
                     <span className="truncate">{event.title}</span>
                   </span>
                 ))}
                 {dayEvents.length > 3 && (
-                  <span className="block px-1 text-[10px] font-medium text-muted">
+                  <span className="block px-1.5 text-[12px] text-muted">
                     +{dayEvents.length - 3} more
                   </span>
                 )}
@@ -355,13 +340,13 @@ const WeekView: React.FC<{
         <div className="sticky top-0 z-10 grid grid-cols-[56px_repeat(7,1fr)] border-b border-line bg-surface-2">
           <div />
           {days.map((day) => (
-            <div key={day.toISOString()} className="px-2 py-2 text-center">
-              <div className="text-[10px] font-semibold uppercase tracking-[0.1em] text-muted">
+            <div key={day.toISOString()} className="px-2 py-2.5 text-center">
+              <div className="text-[13px] font-medium text-muted">
                 {WEEKDAYS[(day.getDay() + 6) % 7]}
               </div>
               <div
-                className={`mx-auto mt-1 flex h-6 w-6 items-center justify-center rounded-full font-mono text-[11px] font-semibold ${
-                  isToday(day) ? 'bg-kiran text-white' : 'text-slate-700'
+                className={`mx-auto mt-1 flex h-7 w-7 items-center justify-center rounded-full text-[14px] font-medium tabular-nums ${
+                  isToday(day) ? 'bg-kiran text-white' : 'text-ink'
                 }`}
               >
                 {day.getDate()}
@@ -373,10 +358,10 @@ const WeekView: React.FC<{
         {/* Grid */}
         <div className="relative grid grid-cols-[56px_repeat(7,1fr)]">
           {/* Hour rail */}
-          <div className="border-r border-line">
+          <div className="border-r border-line-2">
             {hours.map((hour) => (
               <div key={hour} className="relative h-14">
-                <span className="absolute -top-1.5 right-2 font-mono text-[10px] text-muted">
+                <span className="absolute -top-2 right-2 whitespace-nowrap text-[12px] text-muted">
                   {hour === 12 ? '12 pm' : hour > 12 ? `${hour - 12} pm` : `${hour} am`}
                 </span>
               </div>
@@ -386,7 +371,7 @@ const WeekView: React.FC<{
           {days.map((day) => {
             const positioned = layoutDay(events, day, DAY_START, DAY_END);
             return (
-              <div key={day.toISOString()} className="relative border-r border-line last:border-r-0">
+              <div key={day.toISOString()} className="relative border-r border-line-2 last:border-r-0">
                 {hours.map((hour) => (
                   <button
                     key={hour}
@@ -396,7 +381,7 @@ const WeekView: React.FC<{
                       onCompose(slot);
                     }}
                     aria-label={`Add an event at ${hour}:00 on ${formatDayLong(day)}`}
-                    className="block h-14 w-full border-b border-line-2 transition-colors hover:bg-kiran-tint/50"
+                    className="block h-14 w-full border-b border-line-2 transition-colors hover:bg-canvas"
                   />
                 ))}
 
@@ -412,18 +397,18 @@ const WeekView: React.FC<{
                         left: `calc(${(column / columns) * 100}% + 2px)`,
                         width: `calc(${(1 / columns) * 100}% - 4px)`,
                       }}
-                      className={`absolute overflow-hidden rounded-sm border-l-2 px-1.5 py-1 text-left shadow-xs transition-shadow hover:shadow-card ${
+                      className={`absolute overflow-hidden rounded-md px-2 py-1 text-left transition-colors ${
                         state === 'past'
-                          ? 'border-l-slate-300 bg-slate-100 text-slate-500'
+                          ? 'bg-[#EFEFF2] text-[#48484F]'
                           : state === 'live'
-                            ? 'border-l-strand-green bg-emerald-50 text-emerald-900'
-                            : 'border-l-strand-teal bg-kiran-tint text-ink'
+                            ? 'bg-kiran text-white'
+                            : 'bg-kiran-tint text-[#0B4F9C] hover:bg-[#DCE6F4]'
                       }`}
                     >
-                      <span className="block truncate text-[10.5px] font-semibold leading-tight">
+                      <span className="block truncate text-[12px] font-medium leading-tight">
                         {event.title}
                       </span>
-                      <span className="block truncate font-mono text-[9.5px] opacity-70">
+                      <span className="block truncate text-[12px] tabular-nums opacity-75">
                         {formatTime(event.startAt)}
                       </span>
                     </button>
@@ -436,10 +421,10 @@ const WeekView: React.FC<{
           {showNow && nowOffset >= 0 && nowOffset <= 1 && (
             <div
               aria-hidden
-              className="pointer-events-none absolute left-14 right-0 z-[5] border-t border-strand-red"
+              className="pointer-events-none absolute left-14 right-0 z-[5] border-t border-kiran"
               style={{ top: `${nowOffset * 100}%` }}
             >
-              <span className="absolute -left-1 -top-1 h-2 w-2 rounded-full bg-strand-red" />
+              <span className="absolute -left-1 -top-1 h-2 w-2 rounded-full bg-kiran" />
             </div>
           )}
         </div>
@@ -472,26 +457,23 @@ const AgendaView: React.FC<{
       <div className="p-6">
         <EmptyState
           icon={CalendarDays}
-          statement="Nothing scheduled in the next month"
-          instruction="Meetings scheduled from a conversation appear here automatically."
+          statement="Nothing scheduled"
         />
       </div>
     );
   }
 
   return (
-    <div className="divide-y divide-line">
+    <div className="divide-y divide-line-2">
       {grouped.map(({ day, items }) => (
         <div key={day.toISOString()} className="flex gap-4 px-5 py-4">
           <div className="w-28 shrink-0">
             <div
-              className={`font-display text-sm font-semibold ${
-                isToday(day) ? 'text-kiran' : 'text-ink'
-              }`}
+              className={`text-[14px] font-medium ${isToday(day) ? 'text-kiran' : 'text-ink'}`}
             >
               {isToday(day) ? 'Today' : day.toLocaleDateString(undefined, { weekday: 'long' })}
             </div>
-            <div className="font-mono text-[11px] text-muted">
+            <div className="text-[13px] text-muted">
               {day.toLocaleDateString(undefined, { day: 'numeric', month: 'short' })}
             </div>
           </div>
@@ -503,22 +485,20 @@ const AgendaView: React.FC<{
                 <button
                   key={event.id}
                   onClick={() => onSelect(event)}
-                  className="flex w-full items-start gap-3 rounded-md border border-line bg-surface px-3 py-2.5 text-left transition-colors hover:border-kiran/30 hover:bg-canvas"
+                  className="flex w-full items-start gap-3 rounded-md px-3 py-2.5 text-left transition-colors hover:bg-canvas"
                 >
                   <span
                     className={`mt-1 h-8 w-0.5 shrink-0 rounded-full ${
                       state === 'past'
                         ? 'bg-slate-300'
-                        : state === 'live'
-                          ? 'bg-strand-green'
-                          : 'bg-strand-teal'
+                        : 'bg-kiran'
                     }`}
                   />
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate text-[13px] font-semibold text-ink">
+                    <span className="block truncate text-[14px] font-medium text-ink">
                       {event.title}
                     </span>
-                    <span className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 font-mono text-[11px] text-muted">
+                    <span className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[13px] text-muted">
                       <span>{formatTimeRange(event.startAt, event.endAt)}</span>
                       {event.attendeeNames && event.attendeeNames.length > 0 && (
                         <span className="flex items-center gap-1">
@@ -533,7 +513,7 @@ const AgendaView: React.FC<{
                     </span>
                   </span>
                   {event.meetingUri && (
-                    <Video className="mt-0.5 h-3.5 w-3.5 shrink-0 text-strand-teal" />
+                    <Video className="mt-0.5 h-4 w-4 shrink-0 text-slate-500" />
                   )}
                 </button>
               );
@@ -558,7 +538,7 @@ const EventDetail: React.FC<{
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-ink/25 p-4 animate-overlay-in"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4 animate-overlay-in"
       role="button"
       tabIndex={-1}
       onClick={onClose}
@@ -568,22 +548,21 @@ const EventDetail: React.FC<{
         role="dialog"
         aria-label={event.title}
         onClick={(clickEvent) => clickEvent.stopPropagation()}
-        className="panel-lift w-full max-w-md animate-dialog-in overflow-hidden"
+        className="panel-lift w-full max-w-md animate-dialog-in overflow-hidden rounded-xl shadow-modal"
       >
         <div className="flex items-start gap-3 border-b border-line px-5 py-4">
-          <span className="mt-0.5 h-9 w-0.5 shrink-0 rounded-full bg-strand-teal" />
           <div className="min-w-0 flex-1">
-            <h2 className="font-display text-[17px] font-semibold leading-snug text-ink">
+            <h2 className="text-[17px] font-semibold leading-snug text-ink">
               {event.title}
             </h2>
-            <p className="mt-0.5 font-mono text-[11.5px] text-muted">
+            <p className="mt-0.5 text-[13px] text-muted">
               {formatDayLong(event.startAt)} · {formatTimeRange(event.startAt, event.endAt)}
             </p>
           </div>
           <button
             onClick={onClose}
             aria-label="Close"
-            className="rounded p-1 text-muted transition-colors hover:bg-line-2 hover:text-ink"
+            className="btn-icon -mr-2 shrink-0"
           >
             <X className="h-4 w-4" />
           </button>
@@ -591,12 +570,12 @@ const EventDetail: React.FC<{
 
         <div className="space-y-3.5 px-5 py-4">
           {event.description && (
-            <p className="text-[13px] leading-relaxed text-slate-700">{event.description}</p>
+            <p className="text-[14px] leading-relaxed text-slate-700">{event.description}</p>
           )}
 
           {event.location && (
-            <div className="flex items-center gap-2 text-[12.5px] text-slate-700">
-              <MapPin className="h-3.5 w-3.5 shrink-0 text-muted" /> {event.location}
+            <div className="flex items-center gap-2 text-[14px] text-slate-700">
+              <MapPin className="h-4 w-4 shrink-0 text-slate-500" /> {event.location}
             </div>
           )}
 
@@ -605,14 +584,14 @@ const EventDetail: React.FC<{
               <p className="label-eyebrow">Attendees</p>
               <div className="mt-1.5 flex flex-wrap gap-1">
                 {event.organizerName && (
-                  <span className="rounded-badge bg-kiran-tint px-2 py-0.5 text-[11px] font-medium text-kiran">
+                  <span className="rounded-md bg-kiran-tint px-2 py-0.5 text-[13px] text-[#0B4F9C]">
                     {event.organizerName} · organiser
                   </span>
                 )}
                 {event.attendeeNames?.map((name) => (
                   <span
                     key={name}
-                    className="rounded-badge bg-line-2 px-2 py-0.5 text-[11px] text-slate-700"
+                    className="rounded-md bg-[#EFEFF2] px-2 py-0.5 text-[13px] text-[#48484F]"
                   >
                     {name}
                   </span>
@@ -621,15 +600,15 @@ const EventDetail: React.FC<{
             </div>
           )}
 
-          <div className="flex flex-wrap gap-2 pt-0.5">
+          <div className="flex flex-wrap items-center gap-2 pt-0.5">
             {event.meetingUri && (
               <a
                 href={event.meetingUri}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-md bg-kiran px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-kiran-600"
+                className="btn-primary"
               >
-                <Video className="h-3.5 w-3.5" /> Join Meet
+                <Video className="h-4 w-4" /> Join
               </a>
             )}
             {event.calendarUri && (
@@ -637,40 +616,37 @@ const EventDetail: React.FC<{
                 href={event.calendarUri}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-md border border-line px-3 py-1.5 text-xs font-medium text-slate-700 transition-colors hover:bg-line-2"
+                className="btn-secondary"
               >
-                <ExternalLink className="h-3.5 w-3.5" /> Google Calendar
+                <ExternalLink className="h-4 w-4 text-slate-500" /> Google Calendar
               </a>
             )}
             {event.roomId && (
               <Link
                 to="/chat"
-                className="inline-flex items-center gap-1.5 rounded-md border border-line px-3 py-1.5 text-xs font-medium text-slate-700 transition-colors hover:bg-line-2"
+                className="btn-secondary"
               >
-                <MessageSquareText className="h-3.5 w-3.5" /> Open conversation
+                <MessageSquareText className="h-4 w-4 text-slate-500" /> Open chat
               </Link>
             )}
           </div>
 
           {event.demo && (
-            <p className="rounded-md bg-strand-amber/10 px-2.5 py-2 text-[11px] leading-relaxed text-strand-amber">
-              Google credentials are not configured on this server, so the Meet link is a
-              placeholder. The Calendar link opens a real event with everything filled in.
-            </p>
+            <p className="text-[13px] text-muted">The Meet link is a placeholder.</p>
           )}
         </div>
 
         {event.source !== 'seed' && (
-          <div className="flex justify-end border-t border-line bg-surface-2 px-5 py-3">
+          <div className="flex justify-end border-t border-line px-5 py-3">
             <button
               onClick={async () => {
                 setRemoving(true);
                 await onDelete(event);
               }}
               disabled={removing}
-              className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium text-strand-red transition-colors hover:bg-strand-red/8 disabled:opacity-50"
+              className="btn-secondary text-strand-red"
             >
-              <Trash2 className="h-3.5 w-3.5" /> Remove from calendar
+              <Trash2 className="h-4 w-4" /> Remove
             </button>
           </div>
         )}
@@ -725,7 +701,7 @@ const EventComposer: React.FC<{
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-ink/25 p-4 animate-overlay-in"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 p-4 animate-overlay-in"
       role="button"
       tabIndex={-1}
       onClick={onClose}
@@ -735,20 +711,20 @@ const EventComposer: React.FC<{
         role="dialog"
         aria-label="New calendar event"
         onClick={(clickEvent) => clickEvent.stopPropagation()}
-        className="panel-lift w-full max-w-sm animate-dialog-in overflow-hidden"
+        className="panel-lift w-full max-w-sm animate-dialog-in overflow-hidden rounded-xl shadow-modal"
       >
         <div className="flex items-center justify-between border-b border-line px-5 py-3.5">
-          <h2 className="font-display text-[15px] font-semibold text-ink">New event</h2>
+          <h2 className="text-[16px] font-semibold text-ink">New event</h2>
           <button
             onClick={onClose}
             aria-label="Close"
-            className="rounded p-1 text-muted transition-colors hover:bg-line-2 hover:text-ink"
+            className="btn-icon -mr-2 shrink-0"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
-        <div className="space-y-3 px-5 py-4">
+        <div className="space-y-4 px-5 py-4">
           <div>
             <label className="label-eyebrow" htmlFor="event-title">
               Title
@@ -758,12 +734,11 @@ const EventComposer: React.FC<{
               autoFocus
               value={title}
               onChange={(changeEvent) => setTitle(changeEvent.target.value)}
-              placeholder="What is this block for?"
-              className="mt-1 w-full rounded-md border border-line bg-surface px-2.5 py-2 text-[13px] placeholder:text-muted focus:border-kiran focus:outline-none"
+              className="field mt-1"
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="label-eyebrow" htmlFor="event-date">
                 Date
@@ -773,7 +748,7 @@ const EventComposer: React.FC<{
                 type="date"
                 value={date}
                 onChange={(changeEvent) => setDate(changeEvent.target.value)}
-                className="mt-1 w-full rounded-md border border-line bg-surface px-2.5 py-2 font-mono text-[12px] focus:border-kiran focus:outline-none"
+                className="field mt-1"
               />
             </div>
             <div>
@@ -785,23 +760,23 @@ const EventComposer: React.FC<{
                 type="time"
                 value={time}
                 onChange={(changeEvent) => setTime(changeEvent.target.value)}
-                className="mt-1 w-full rounded-md border border-line bg-surface px-2.5 py-2 font-mono text-[12px] focus:border-kiran focus:outline-none"
+                className="field mt-1"
               />
             </div>
           </div>
 
           <div>
             <span className="label-eyebrow">Duration</span>
-            <div className="mt-1 flex flex-wrap gap-1.5">
+            <div className="mt-1 flex flex-wrap gap-2">
               {[15, 30, 45, 60, 90].map((minutes) => (
                 <button
                   key={minutes}
                   onClick={() => setDuration(minutes)}
                   aria-pressed={duration === minutes}
-                  className={`rounded-md border px-2.5 py-1.5 text-[11px] font-medium transition-colors ${
+                  className={`h-9 rounded-md border px-3 text-[13px] font-medium transition-colors ${
                     duration === minutes
-                      ? 'border-kiran bg-kiran-tint text-kiran'
-                      : 'border-line bg-surface text-slate-700 hover:bg-line-2'
+                      ? 'border-kiran bg-kiran-tint text-[#0B4F9C]'
+                      : 'border-slate-300 bg-white text-ink hover:bg-slate-100'
                   }`}
                 >
                   {minutes >= 60 ? `${minutes / 60}h` : `${minutes}m`}
@@ -819,26 +794,26 @@ const EventComposer: React.FC<{
               value={location}
               onChange={(changeEvent) => setLocation(changeEvent.target.value)}
               placeholder="Optional"
-              className="mt-1 w-full rounded-md border border-line bg-surface px-2.5 py-2 text-[13px] placeholder:text-muted focus:border-kiran focus:outline-none"
+              className="field mt-1"
             />
           </div>
 
-          {error && <p className="text-[12px] text-strand-red">{error}</p>}
+          {error && <p className="text-[13px] text-strand-red">{error}</p>}
         </div>
 
-        <div className="flex justify-end gap-2 border-t border-line bg-surface-2 px-5 py-3">
+        <div className="flex items-center justify-end gap-2 border-t border-line px-5 py-3">
           <button
             onClick={onClose}
-            className="rounded-md px-3 py-1.5 text-xs font-medium text-slate-600 transition-colors hover:bg-line-2"
+            className="btn-secondary"
           >
             Cancel
           </button>
           <button
             onClick={submit}
             disabled={!title.trim() || saving}
-            className="inline-flex items-center gap-1.5 rounded-md bg-kiran px-3 py-1.5 text-xs font-semibold text-white shadow-xs transition-colors hover:bg-kiran-600 disabled:opacity-40"
+            className="btn-primary"
           >
-            {saving && <Loader2 className="h-3.5 w-3.5 animate-spin" />} Add to calendar
+            {saving && <Loader2 className="h-4 w-4 animate-spin" />} Add event
           </button>
         </div>
       </div>

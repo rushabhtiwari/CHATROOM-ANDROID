@@ -15,12 +15,12 @@ export const AdminUsers: React.FC = () => {
       width: '240px',
       cell: (row) => (
         <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-full bg-ink text-white font-mono text-[10px] flex items-center justify-center font-bold">
+          <div className="w-7 h-7 rounded-full bg-ink text-white font-mono text-[12px] flex items-center justify-center font-bold">
             {row.avatar}
           </div>
           <div>
             <div className="font-semibold text-ink text-xs">{row.name}</div>
-            <div className="text-[10px] text-muted">{row.role}</div>
+            <div className="text-[12px] text-muted">{row.role}</div>
           </div>
         </div>
       )
@@ -50,7 +50,7 @@ export const AdminUsers: React.FC = () => {
       accessorKey: 'accessTier',
       width: '140px',
       cell: (row) => (
-        <span className={`text-[10px] font-mono px-2 py-0.5 rounded font-semibold ${
+        <span className={`text-[12px] font-mono px-2 py-0.5 rounded font-semibold ${
           row.accessTier === 'Superadmin'
             ? 'bg-purple-100 text-ai border border-purple-200'
             : row.accessTier === 'HOD Approver'

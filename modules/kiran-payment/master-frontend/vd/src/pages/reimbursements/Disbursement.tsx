@@ -12,15 +12,7 @@
 
 import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  AlertTriangle,
-  Banknote,
-  Check,
-  Loader2,
-  RefreshCw,
-  RotateCcw,
-  ShieldCheck,
-} from 'lucide-react';
+import { Banknote, Check, Loader2, RefreshCw, RotateCcw } from 'lucide-react';
 import { PageHeader } from '@/components/shell/PageHeader';
 import { PageTabs } from '@/components/common/PageTabs';
 import { EmptyState } from '@/components/common/EmptyState';
@@ -37,7 +29,6 @@ export const Disbursement: React.FC = () => {
   const {
     requests,
     payouts,
-    employees,
     employeeById,
     disburseTo,
     retryPayout,
@@ -89,20 +80,17 @@ export const Disbursement: React.FC = () => {
   return (
     <>
       <PageHeader
-        title="Disbursement"
+        title="Payments"
         actions={
-          <button
-            onClick={resetDemoData}
-            className="inline-flex items-center gap-1.5 rounded-md border border-line bg-surface px-3 py-1.5 text-xs font-medium text-slate-600 transition-colors hover:bg-line-2"
-          >
-            <RotateCcw className="h-3.5 w-3.5" /> Reset demo data
+          <button onClick={resetDemoData} className="btn-secondary">
+            <RotateCcw className="h-4 w-4 text-slate-500" /> Reset demo
           </button>
         }
       >
         <PageTabs
           tabs={[
-            { id: 'queue', label: 'Payment queue', count: payees.length },
-            { id: 'ledger', label: 'Payout ledger', count: payouts.length },
+            { id: 'queue', label: 'To pay', count: payees.length },
+            { id: 'ledger', label: 'Paid', count: payouts.length },
           ]}
           activeTab={tab}
           onChange={(id) => setTab(id as Tab)}
@@ -111,80 +99,70 @@ export const Disbursement: React.FC = () => {
       </PageHeader>
 
       {lastUtr && (
-        <div className="mb-4 flex items-center gap-2.5 rounded-md border border-strand-green/25 bg-strand-green/5 px-4 py-3">
-          <Check className="h-4 w-4 shrink-0 text-strand-green" />
-          <p className="text-[13px] text-ink">
-            Transfer released. UTR{' '}
-            <span className="font-mono font-semibold">{lastUtr}</span>
+        <div className="mb-6 flex items-center gap-2.5 rounded-lg bg-[#E7F3EB] px-4 py-3">
+          <Check className="h-4 w-4 shrink-0 text-[#17723F]" />
+          <p className="text-[14px] text-ink">
+            Paid. UTR <span className="font-code text-[13px]">{lastUtr}</span>
           </p>
           <Link
             to={`/receipt/${lastUtr}`}
-            className="ml-auto shrink-0 text-[12px] font-medium text-kiran hover:underline"
+            className="ml-auto shrink-0 text-[13px] font-medium text-kiran hover:underline"
           >
-            View receipt
+            Receipt
           </Link>
         </div>
       )}
 
       {tab === 'queue' && (
         <>
-          <div className="panel mb-4 flex flex-wrap items-center justify-between gap-4 px-5 py-3.5">
-            <div>
-              <p className="label-eyebrow">Ready to disburse</p>
-              <p className="mt-1 font-mono text-[22px] font-semibold leading-none tracking-tight text-ink">
-                {formatCurrency(totalPayable)}
-              </p>
-              <p className="mt-1 text-[11px] text-muted">
-                across {payees.length} employee{payees.length === 1 ? '' : 's'}
-              </p>
-            </div>
-            <div>
-              <p className="label-eyebrow">Method</p>
-              <div className="mt-1.5 flex gap-1">
-                {METHODS.map((value) => (
-                  <button
-                    key={value}
-                    onClick={() => setMethod(value)}
-                    aria-pressed={method === value}
-                    className={`rounded-md border px-3 py-1.5 font-mono text-[11px] font-semibold transition-colors ${
-                      method === value
-                        ? 'border-kiran bg-kiran-tint text-kiran'
-                        : 'border-line bg-surface text-slate-600 hover:bg-line-2'
-                    }`}
-                  >
-                    {value}
-                  </button>
-                ))}
+          <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+            <div className="kpi min-w-[240px]">
+              <div className="kpi-label">
+                To pay · {payees.length} employee{payees.length === 1 ? '' : 's'}
               </div>
+              <div className="kpi-value">{formatCurrency(totalPayable)}</div>
+            </div>
+            <div
+              className="inline-flex rounded-md bg-[#EBEBEF] p-0.5"
+              role="group"
+              aria-label="Payment method"
+            >
+              {METHODS.map((value) => (
+                <button
+                  key={value}
+                  onClick={() => setMethod(value)}
+                  aria-pressed={method === value}
+                  className={`h-8 rounded-sm px-3.5 text-[13px] font-medium transition-colors ${
+                    method === value ? 'bg-white text-ink' : 'text-muted hover:text-ink'
+                  }`}
+                >
+                  {value}
+                </button>
+              ))}
             </div>
           </div>
 
           {payees.length === 0 ? (
-            <EmptyState
-              icon={Banknote}
-              statement="Nothing is waiting to be paid"
-              instruction="Claims appear here once Accounts has approved them."
-            />
+            <EmptyState icon={Banknote} statement="Nothing to pay" />
           ) : (
-            <div className="space-y-2.5">
+            <div className="space-y-4">
               {payees.map((row) => {
                 const employee = row.employee!;
                 const bank = employee.bankAccount;
                 return (
-                  <div key={employee.id} className="panel flex flex-wrap items-center gap-4 px-5 py-4">
+                  <div key={employee.id} className="panel flex flex-wrap items-center gap-5 p-5">
                     <div className="min-w-0 flex-1">
-                      <p className="text-[13.5px] font-semibold text-ink">{employee.name}</p>
-                      <p className="mt-0.5 font-mono text-[11px] text-muted">
+                      <p className="text-[16px] font-semibold text-ink">{employee.name}</p>
+                      <p className="mt-1 text-[13px] text-muted">
                         {employee.employeeCode} · {bank.bankName} · {bank.accountNumberMasked} ·{' '}
                         {bank.ifsc}
                       </p>
-                      <p className="mt-1 text-[11.5px] text-muted">
-                        {row.claimIds.length} claim{row.claimIds.length === 1 ? '' : 's'}:{' '}
-                        <span className="font-mono">{row.claimIds.join(', ')}</span>
+                      <p className="mt-1 font-code text-[13px] text-muted">
+                        {row.claimIds.join(', ')}
                       </p>
                     </div>
 
-                    <span className="shrink-0 font-mono text-[20px] font-semibold leading-none tracking-tight text-ink">
+                    <span className="shrink-0 whitespace-nowrap text-[22px] font-semibold leading-none tabular-nums text-ink">
                       {formatCurrency(row.total)}
                     </span>
 
@@ -192,25 +170,21 @@ export const Disbursement: React.FC = () => {
                       <button
                         onClick={() => pay(employee.id)}
                         disabled={busy === employee.id}
-                        className="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-strand-green px-3.5 py-2 text-xs font-semibold text-white shadow-xs transition-colors hover:bg-emerald-700 disabled:opacity-50"
+                        className="btn-primary shrink-0"
                       >
-                        {busy === employee.id ? (
-                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                        ) : (
-                          <Banknote className="h-3.5 w-3.5" />
-                        )}
+                        {busy === employee.id && <Loader2 className="h-4 w-4 animate-spin" />}
                         Pay by {method}
                       </button>
                     ) : (
-                      <div className="flex shrink-0 flex-col items-end gap-1">
-                        <span className="inline-flex items-center gap-1 text-[11px] font-medium text-strand-amber">
-                          <AlertTriangle className="h-3 w-3" /> Bank record unverified
+                      <div className="flex shrink-0 items-center gap-3">
+                        <span className="inline-flex items-center rounded-badge bg-[#FBEFDC] px-2 py-0.5 text-[12px] font-medium text-[#8A4F00]">
+                          Bank not verified
                         </span>
                         <button
                           onClick={() => verifyBankAccount(employee.id)}
-                          className="inline-flex items-center gap-1.5 rounded-md border border-line bg-surface px-3 py-1.5 text-[11px] font-semibold text-slate-700 transition-colors hover:bg-line-2"
+                          className="btn-secondary"
                         >
-                          <ShieldCheck className="h-3.5 w-3.5" /> Verify to enable
+                          Verify
                         </button>
                       </div>
                     )}
@@ -225,27 +199,25 @@ export const Disbursement: React.FC = () => {
       {tab === 'ledger' && (
         <div className="panel overflow-hidden">
           {ledger.length === 0 ? (
-            <p className="px-5 py-10 text-center text-[13px] text-muted">
-              No payouts have been made yet.
-            </p>
+            <p className="px-5 py-10 text-center text-[14px] text-muted">No payments yet.</p>
           ) : (
-            <table className="w-full text-[12.5px]">
+            <table className="w-full text-[14px]">
               <thead>
-                <tr className="grid-head border-b border-line text-left">
-                  <th className="px-5 py-2.5 font-semibold text-muted">UTR</th>
-                  <th className="px-3 py-2.5 font-semibold text-muted">Employee</th>
-                  <th className="px-3 py-2.5 font-semibold text-muted">Method</th>
-                  <th className="px-3 py-2.5 text-right font-semibold text-muted">Amount</th>
-                  <th className="px-3 py-2.5 font-semibold text-muted">Initiated</th>
-                  <th className="px-5 py-2.5 font-semibold text-muted">Status</th>
+                <tr className="border-b border-line bg-surface-2 text-left text-[13px] text-muted">
+                  <th className="px-4 py-3 font-medium">UTR</th>
+                  <th className="px-4 py-3 font-medium">Employee</th>
+                  <th className="px-4 py-3 font-medium">Method</th>
+                  <th className="px-4 py-3 text-right font-medium">Amount</th>
+                  <th className="px-4 py-3 font-medium">Date</th>
+                  <th className="px-4 py-3 font-medium">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-line">
+              <tbody className="divide-y divide-line-2">
                 {ledger.map((payout) => {
                   const meta = PAYOUT_META[payout.status];
                   return (
-                    <tr key={payout.id} className="hover:bg-canvas">
-                      <td className="px-5 py-2.5 font-mono text-[11.5px] text-ink">
+                    <tr key={payout.id} className="h-[52px] hover:bg-canvas">
+                      <td className="whitespace-nowrap px-4 py-3 font-code text-[13px] text-ink">
                         {payout.utr ? (
                           <Link to={`/receipt/${payout.utr}`} className="hover:text-kiran">
                             {payout.utr}
@@ -254,29 +226,27 @@ export const Disbursement: React.FC = () => {
                           <span className="text-muted">—</span>
                         )}
                       </td>
-                      <td className="px-3 py-2.5 text-slate-700">
+                      <td className="px-4 py-3 font-medium text-ink">
                         {employeeById(payout.employeeId)?.name ?? '—'}
                       </td>
-                      <td className="px-3 py-2.5 font-mono text-[11.5px] text-slate-600">
-                        {payout.method}
-                      </td>
-                      <td className="px-3 py-2.5 text-right font-mono font-semibold text-ink">
+                      <td className="px-4 py-3 text-slate-700">{payout.method}</td>
+                      <td className="whitespace-nowrap px-4 py-3 text-right tabular-nums text-ink">
                         {formatCurrency(payout.amount)}
                       </td>
-                      <td className="px-3 py-2.5 font-mono text-[11px] text-muted">
+                      <td className="whitespace-nowrap px-4 py-3 text-muted">
                         {formatDateTime(payout.initiatedOn)}
                       </td>
-                      <td className="px-5 py-2.5">
-                        <div className="flex items-center gap-2">
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-3">
                           <span
-                            className={`inline-flex items-center gap-1.5 rounded-badge border px-2 py-0.5 text-[10.5px] font-semibold ${
+                            className={`inline-flex items-center whitespace-nowrap rounded-badge px-2 py-0.5 text-[12px] font-medium ${
                               meta.tone === 'green'
-                                ? 'border-emerald-200 bg-emerald-50 text-emerald-800'
+                                ? 'bg-[#E7F3EB] text-[#17723F]'
                                 : meta.tone === 'red'
-                                  ? 'border-red-200 bg-red-50 text-red-800'
+                                  ? 'bg-[#FBE9E7] text-[#B3302A]'
                                   : meta.tone === 'amber'
-                                    ? 'border-amber-200 bg-amber-50 text-amber-800'
-                                    : 'border-slate-200 bg-slate-100 text-slate-700'
+                                    ? 'bg-[#FBEFDC] text-[#8A4F00]'
+                                    : 'bg-[#EFEFF2] text-[#48484F]'
                             }`}
                           >
                             {meta.label}
@@ -284,16 +254,14 @@ export const Disbursement: React.FC = () => {
                           {payout.status === 'FAILED' && (
                             <button
                               onClick={() => retryPayout(payout.id)}
-                              className="inline-flex items-center gap-1 text-[11px] font-medium text-kiran hover:underline"
+                              className="inline-flex items-center gap-1 text-[13px] font-medium text-kiran hover:underline"
                             >
-                              <RefreshCw className="h-3 w-3" /> Retry
+                              <RefreshCw className="h-3.5 w-3.5" /> Retry
                             </button>
                           )}
                         </div>
                         {payout.failureReason && (
-                          <p className="mt-0.5 text-[10.5px] text-strand-red">
-                            {payout.failureReason}
-                          </p>
+                          <p className="mt-1 text-[13px] text-strand-red">{payout.failureReason}</p>
                         )}
                       </td>
                     </tr>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Buildings, GearSix, HourglassMedium, RocketLaunch, SmileyBlank, SquaresFour } from "@phosphor-icons/react/ssr";
+import { GearSix, SmileyBlank } from "@phosphor-icons/react/ssr";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState, useSyncExternalStore } from "react";
@@ -8,30 +8,27 @@ import { useEffect, useState, useSyncExternalStore } from "react";
 import { AppCard } from "@/components/AppCard";
 import { SEARCH_SET_EVENT, SEARCH_SUBMIT_EVENT } from "@/components/GlobalSearch";
 import { Segmented } from "@/components/ui/Segmented";
-import { StatCard } from "@/components/ui/StatCard";
 import { Switch } from "@/components/ui/Switch";
-import { firstLiveMatch, formatDate, greetingFor, groupApps, type HomeTab, summarise, tabCounts } from "@/lib/home";
+import { firstLiveMatch, greetingFor, groupApps, type HomeTab, tabCounts } from "@/lib/home";
 import type { MyApp } from "@/lib/types";
 
-type Props = { apps: MyApp[]; firstName: string; isAdmin: boolean; departmentCount: number };
+type Props = { apps: MyApp[]; firstName: string; isAdmin: boolean };
 
 const subscribeToNothing = () => () => {};
 
-export function Home({ apps, firstName, isAdmin, departmentCount }: Props) {
+export function Home({ apps, firstName, isAdmin }: Props) {
   const query = useSearchParams().get("q") ?? "";
   const [tab, setTab] = useState<HomeTab>("all");
   const [liveOnly, setLiveOnly] = useState(false);
-  // Time and date are only known in the browser; the server renders neutral text.
-  const now = useSyncExternalStore(
+  // The hour is only known in the browser; the server renders a neutral greeting.
+  const hour = useSyncExternalStore(
     subscribeToNothing,
-    () => new Date().toDateString() + "|" + new Date().getHours(),
+    () => new Date().getHours(),
     () => null,
   );
-  const [dateText, hour] = now ? [formatDate(new Date()), Number(now.split("|")[1])] : ["", null];
 
   const groups = groupApps(apps, { query, tab, liveOnly });
   const counts = tabCounts(apps, query, liveOnly);
-  const summary = summarise(apps, departmentCount);
 
   useEffect(() => {
     function onSubmit() {
@@ -53,7 +50,6 @@ export function Home({ apps, firstName, isAdmin, departmentCount }: Props) {
     <>
       <header className="page-header home-header">
         <div className="page-header-text">
-          <p className="home-date">{dateText}</p>
           <h1>
             {greetingFor(hour)}, {firstName}
           </h1>
@@ -78,41 +74,6 @@ export function Home({ apps, firstName, isAdmin, departmentCount }: Props) {
         </div>
       ) : (
         <>
-          <ul className="stat-grid" aria-label="Summary">
-            <li>
-              <StatCard
-                icon={<SquaresFour size={22} weight="duotone" />}
-                value={summary.total}
-                label="Apps you can open"
-                tone="primary"
-              />
-            </li>
-            <li>
-              <StatCard
-                icon={<RocketLaunch size={22} weight="duotone" />}
-                value={summary.live}
-                label="Live now"
-                tone="success"
-              />
-            </li>
-            <li>
-              <StatCard
-                icon={<HourglassMedium size={22} weight="duotone" />}
-                value={summary.soon}
-                label="Coming soon"
-                tone="warning"
-              />
-            </li>
-            <li>
-              <StatCard
-                icon={<Buildings size={22} weight="duotone" />}
-                value={summary.departments}
-                label="Your departments"
-                tone="violet"
-              />
-            </li>
-          </ul>
-
           <div className="home-toolbar">
             <Segmented
               label="Show"
@@ -143,7 +104,6 @@ export function Home({ apps, firstName, isAdmin, departmentCount }: Props) {
               <div className="section-head">
                 <h2 id={`section-${group.category}`}>{group.label}</h2>
                 <span className="count-pill">{group.apps.length}</span>
-                <p>{group.description}</p>
               </div>
               <ul className="app-grid">
                 {group.apps.map((app) => (

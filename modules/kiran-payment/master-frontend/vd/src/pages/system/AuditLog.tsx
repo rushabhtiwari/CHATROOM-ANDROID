@@ -22,7 +22,7 @@ export const AuditLog: React.FC = () => {
       accessorKey: 'timestamp',
       isMono: true,
       width: '150px',
-      cell: (row) => <span className="text-muted text-xs">{row.timestamp}</span>
+      cell: (row) => <span className="text-muted text-[13px]">{row.timestamp}</span>
     },
     {
       id: 'actor',
@@ -41,8 +41,8 @@ export const AuditLog: React.FC = () => {
             </div>
           )}
           <div>
-            <div className="font-semibold text-ink text-xs">{row.actorName}</div>
-            <div className="text-[10px] text-muted font-mono">{row.recordType}</div>
+            <div className="font-semibold text-ink text-[13px]">{row.actorName}</div>
+            <div className="text-[12px] text-muted font-mono">{row.recordType}</div>
           </div>
         </div>
       )
@@ -61,7 +61,7 @@ export const AuditLog: React.FC = () => {
       isMono: true,
       width: '160px',
       cell: (row) => (
-        <span className="font-mono text-xs font-semibold text-kiran bg-canvas px-1.5 py-0.5 rounded border border-line">
+        <span className="font-mono text-[13px] font-semibold text-kiran bg-canvas px-1.5 py-0.5 rounded border border-line">
           {row.recordId}
         </span>
       )
@@ -71,11 +71,11 @@ export const AuditLog: React.FC = () => {
       header: 'Before & After Delta',
       width: '260px',
       cell: (row) => (
-        <div className="font-mono text-[11px]">
+        <div className="font-mono text-[12px]">
           {row.beforeValue && row.afterValue ? (
             <div className="space-y-0.5">
               <span className="text-muted line-through mr-1">{row.beforeValue}</span>
-              <span className="text-strand-green font-bold">&rarr; {row.afterValue}</span>
+              <span className="text-strand-green font-semibold">&rarr; {row.afterValue}</span>
             </div>
           ) : (
             <span className="text-slate-600">{row.afterValue || 'Event logged'}</span>
@@ -89,14 +89,14 @@ export const AuditLog: React.FC = () => {
       accessorKey: 'ipAddress',
       isMono: true,
       width: '140px',
-      cell: (row) => <span className="text-muted text-xs">{row.ipAddress}</span>
+      cell: (row) => <span className="text-muted text-[13px]">{row.ipAddress}</span>
     },
     {
       id: 'recordType',
       header: 'Record Type',
       accessorKey: 'recordType',
       width: '120px',
-      cell: (row) => <span className="font-mono text-xs text-slate-700">{row.recordType}</span>
+      cell: (row) => <span className="font-mono text-[13px] text-slate-700">{row.recordType}</span>
     }
   ];
 

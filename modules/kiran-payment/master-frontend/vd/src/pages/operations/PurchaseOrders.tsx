@@ -5,93 +5,76 @@ import { DataGrid, ColumnDef } from '../../components/common/DataGrid';
 import { StatusPill } from '../../components/common/StatusPill';
 import { PageHeader } from '../../components/shell/PageHeader';
 import { IndianRupee } from '../../components/common/IndianRupee';
-import { formatDate, formatINR } from '../../utils/formatters';
-import { FileCheck2, Plus, Send } from 'lucide-react';
+import { formatDate } from '../../utils/formatters';
 
 export const PurchaseOrders: React.FC = () => {
   const columns: ColumnDef<PurchaseOrderRecord>[] = [
     {
       id: 'poNumber',
-      header: 'PO No.',
+      header: 'PO no.',
       accessorKey: 'poNumber',
       isMono: true,
-      width: '150px',
-      cell: (row) => <span className="font-mono font-semibold text-kiran">{row.poNumber}</span>
+      cell: (row) => <span className="font-code text-[13px] text-ink whitespace-nowrap">{row.poNumber}</span>
     },
     {
       id: 'vendorName',
-      header: 'Supplier / Vendor',
+      header: 'Vendor',
       accessorKey: 'vendorName',
-      width: '240px',
-      cell: (row) => <span className="font-semibold text-ink">{row.vendorName}</span>
+      cell: (row) => <span className="font-medium text-ink">{row.vendorName}</span>
     },
     {
       id: 'item',
-      header: 'Raw Material Item',
+      header: 'Item',
       accessorKey: 'item',
-      width: '240px',
       cell: (row) => (
         <div>
-          <div className="font-medium text-ink">{row.item}</div>
-          <div className="text-[10px] text-muted font-mono">{row.quantity.toLocaleString('en-IN')} {row.uom}</div>
+          <div className="text-ink">{row.item}</div>
+          <div className="text-[13px] text-muted">{row.quantity.toLocaleString('en-IN')} {row.uom}</div>
         </div>
       )
     },
     {
       id: 'value',
-      header: 'PO Value',
+      header: 'Value',
       accessorKey: 'value',
       isNumeric: true,
-      isMono: true,
-      width: '130px',
       cell: (row) => <IndianRupee amount={row.value} />
     },
     {
       id: 'deliveryDate',
-      header: 'Promised Delivery',
+      header: 'Delivery',
       accessorKey: 'deliveryDate',
-      isMono: true,
-      width: '130px',
-      cell: (row) => formatDate(row.deliveryDate)
+      cell: (row) => <span className="whitespace-nowrap">{formatDate(row.deliveryDate)}</span>
     },
     {
       id: 'sentToVendorAt',
-      header: 'Vendor Dispatch Sync',
+      header: 'Sent to vendor',
       accessorKey: 'sentToVendorAt',
-      width: '220px',
-      cell: (row) => (
-        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-canvas border border-line text-slate-700">
-          {row.sentToVendorAt}
-        </span>
-      )
+      cell: (row) => <span className="text-[13px] text-muted">{row.sentToVendorAt}</span>
     },
     {
       id: 'grnStatus',
-      header: 'GRN Status',
+      header: 'Receipt',
       accessorKey: 'grnStatus',
-      width: '160px',
       cell: (row) => <StatusPill status={row.grnStatus} />
     },
     {
       id: 'status',
-      header: 'PO Status',
+      header: 'Status',
       accessorKey: 'status',
-      width: '120px',
       cell: (row) => <StatusPill status={row.status} />
     }
   ];
 
   return (
-    <div className="space-y-4 animate-fadeIn">
-      <PageHeader
-        title="Supplier Purchase Orders"
-      />
+    <div className="space-y-6 animate-fadeIn">
+      <PageHeader title="Purchase orders" />
 
       <DataGrid
         data={mockPurchaseOrders}
         columns={columns}
         keyExtractor={(item) => item.id}
-        searchPlaceholder="Search PO number, supplier name, raw material..."
+        searchPlaceholder="Search orders"
       />
     </div>
   );

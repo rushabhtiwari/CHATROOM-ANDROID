@@ -208,7 +208,8 @@ export function AgentDock({
 
   return (
     <>
-      {!open && (
+      {/* The composer already offers @agent; the bubble only returns when a reply is waiting. */}
+      {!open && unread > 0 && (
         <TooltipProvider delayDuration={300}>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -217,16 +218,15 @@ export function AgentDock({
                 onClick={() => openDock()}
                 aria-label="Ask the AI assistant"
                 className={cn(
-                  "fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full border border-primary/20 bg-surface shadow-[var(--shadow-float)] transition-transform hover:scale-105 active:scale-95",
+                  "fixed bottom-24 right-5 z-50 flex h-11 w-11 items-center justify-center rounded-full border border-border bg-surface shadow-[var(--shadow-float)]",
                   // Above the mobile composer's safe area.
                   "max-md:bottom-[calc(env(safe-area-inset-bottom,0px)+5.5rem)]",
                   suppressed && "max-md:hidden",
                 )}
               >
-                <span className="ai-card absolute inset-0 rounded-full opacity-70" aria-hidden />
-                <Sparkles className="relative h-6 w-6 animate-ai-glow text-ai" />
+                <Sparkles className="relative h-5 w-5 text-primary" />
                 {unread > 0 && (
-                  <span className="absolute -right-0.5 -top-0.5 flex h-5 min-w-5 items-center justify-center rounded-full bg-ai px-1 text-[10px] font-semibold text-ai-foreground">
+                  <span className="absolute -right-1 -top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-[#D93A2F] px-1 text-[11px] font-semibold text-white">
                     {unread}
                   </span>
                 )}
@@ -265,14 +265,11 @@ export function AgentDock({
               <Sparkles className="h-4 w-4 text-ai" />
             </span>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-semibold">AI Assistant</p>
-              <p className="truncate text-[11px] text-muted-foreground">
-                Private · {roomTitle(activeRoom)}
+              <p className="truncate text-sm font-semibold">Assistant</p>
+              <p className="truncate text-[12px] text-muted-foreground">
+                <Lock className="mr-1 inline h-3 w-3" />Only you · {roomTitle(activeRoom)}
               </p>
             </div>
-            <span className="flex shrink-0 items-center gap-1 rounded-full border border-primary/15 bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-ai">
-              <Lock className="h-2.5 w-2.5" /> Private to you
-            </span>
             <button
               type="button"
               onClick={() => closeDock()}
@@ -328,7 +325,7 @@ export function AgentDock({
             {switchedFrom && (
               <div className="flex items-center gap-2 pt-1" role="separator">
                 <span className="h-px flex-1 bg-border" />
-                <span className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">
+                <span className="text-[12px] font-medium text-muted-foreground">
                   Switched to {switchedFrom}
                 </span>
                 <span className="h-px flex-1 bg-border" />
@@ -350,14 +347,14 @@ export function AgentDock({
                 rows={1}
                 placeholder={`Ask about ${roomTitle(activeRoom)}…`}
                 aria-label="Message the AI assistant"
-                className="max-h-28 min-h-9 flex-1 resize-none rounded-lg border border-input bg-card px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/15"
+                className="max-h-28 min-h-9 flex-1 resize-none rounded-lg border border-input bg-card px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/15"
               />
               <button
                 type="button"
                 onClick={() => ask(text)}
                 disabled={!text.trim()}
                 aria-label="Send to the AI assistant"
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 disabled:opacity-40"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-40"
               >
                 <Send className="h-4 w-4" />
               </button>
@@ -366,12 +363,12 @@ export function AgentDock({
               <button
                 type="button"
                 onClick={clearMeeting}
-                className="w-full rounded-lg border border-border py-1.5 text-[11px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+                className="w-full rounded-lg border border-border py-1.5 text-[12px] font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
               >
                 Back to the assistant
               </button>
             ) : (
-              <p className="mt-1.5 px-0.5 text-[10px] text-muted-foreground">
+              <p className="mt-1.5 px-0.5 text-[12px] text-muted-foreground">
                 Replies stay private to you until you share them. Enter sends, Shift+Enter for a
                 new line.
               </p>
@@ -391,7 +388,7 @@ function EmptyState({ onPick }: { onPick: (prompt: string) => void }) {
         <Sparkles className="h-5 w-5 animate-ai-glow text-ai" />
       </span>
       <p className="text-sm font-semibold">Ask me anything about this conversation</p>
-      <p className="mt-1 text-[11px] leading-relaxed text-muted-foreground">
+      <p className="mt-1 text-[12px] leading-relaxed text-muted-foreground">
         I read the recent messages in this room. Answers are private to you.
       </p>
       <div className="mt-4 flex flex-wrap justify-center gap-2">
@@ -400,7 +397,7 @@ function EmptyState({ onPick }: { onPick: (prompt: string) => void }) {
             key={starter}
             type="button"
             onClick={() => onPick(starter)}
-            className="rounded-full border border-border bg-surface px-3 py-1.5 text-[11px] font-medium text-secondary-foreground shadow-sm transition-colors hover:bg-secondary"
+            className="rounded-full border border-border bg-surface px-3 py-1.5 text-[12px] font-medium text-secondary-foreground transition-colors hover:bg-secondary"
           >
             {starter}
           </button>

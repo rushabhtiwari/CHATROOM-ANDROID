@@ -33,7 +33,7 @@ export const PurchaseRequests: React.FC = () => {
       cell: (row) => (
         <div className={row.isAutoPopulatedMRP ? 'border-l-2 border-ai pl-2 py-0.5' : ''}>
           <div className="font-semibold text-ink">{row.item}</div>
-          <div className="text-[10px] text-muted font-mono">{row.partNumber} · {row.costCenter}</div>
+          <div className="text-[12px] text-muted font-mono">{row.partNumber} · {row.costCenter}</div>
         </div>
       )
     },
@@ -68,7 +68,7 @@ export const PurchaseRequests: React.FC = () => {
       accessorKey: 'approvalRoute',
       width: '240px',
       cell: (row) => (
-        <span className={`text-[11px] ${row.isAutoPopulatedMRP ? 'text-ai font-medium' : 'text-slate-600'}`}>
+        <span className={`text-[12px] ${row.isAutoPopulatedMRP ? 'text-ai font-medium' : 'text-slate-600'}`}>
           {row.approvalRoute}
         </span>
       )

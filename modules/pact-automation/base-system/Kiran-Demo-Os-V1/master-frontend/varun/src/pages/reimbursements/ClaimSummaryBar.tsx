@@ -83,7 +83,7 @@ export const ClaimSummaryBar: React.FC<{ className?: string }> = ({ className = 
   ];
 
   return (
-    <div className={`ku-ledger border-t-3 border-t-structure grid-cols-2 lg:grid-cols-4 ${className}`}>
+    <div className={`ku-ledger grid-cols-2 lg:grid-cols-4 ${className}`}>
       {tiles.map((tile) => {
         const Icon = tile.icon;
         return (
@@ -99,7 +99,7 @@ export const ClaimSummaryBar: React.FC<{ className?: string }> = ({ className = 
             <div className="mt-2 font-mono text-[22px] font-semibold leading-none tracking-tight text-ink">
               {tile.value}
             </div>
-            <p className="mt-1.5 text-[11px] text-muted">{tile.detail}</p>
+            <p className="mt-1.5 text-[12px] text-muted">{tile.detail}</p>
           </div>
         );
       })}

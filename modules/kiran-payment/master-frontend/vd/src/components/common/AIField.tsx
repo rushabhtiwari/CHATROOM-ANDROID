@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ConfidenceChip } from './ConfidenceChip';
-import { Sparkles, Edit2, Check, ExternalLink } from 'lucide-react';
+import { Edit2, Check } from 'lucide-react';
 
 interface AIFieldProps {
   label: string;
@@ -56,17 +56,12 @@ export const AIField: React.FC<AIFieldProps> = ({
 
   return (
     <div
-      className={`relative group rounded-sm p-2 transition-all ${
-        isExtracted ? 'border-l-2 border-ai bg-ai-tint/20' : 'border-l-2 border-transparent bg-canvas/60'
-      } ${className}`}
+      className={`relative group rounded-md px-2 py-1.5 transition-colors hover:bg-canvas ${className}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="flex items-center justify-between mb-1">
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-muted flex items-center gap-1">
-          {isExtracted && <Sparkles className="w-3 h-3 text-ai" />}
-          {label}
-        </span>
+      <div className="flex items-center justify-between gap-2 mb-0.5">
+        <span className="text-[13px] font-medium text-muted">{label}</span>
         {isExtracted && !isMissing && (
           <ConfidenceChip confidence={confidence} />
         )}
@@ -78,81 +73,60 @@ export const AIField: React.FC<AIFieldProps> = ({
             type="text"
             value={editValue}
             onChange={(e) => setEditValue(e.target.value)}
-            className="w-full text-xs font-mono bg-white border border-ai rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-ai text-ink"
+            className="field"
             autoFocus
           />
           <button
             onClick={handleSave}
-            className="p-1 bg-ai text-white rounded hover:bg-ai/90"
+            className="btn-icon shrink-0"
             title="Save correction"
+            aria-label="Save correction"
           >
-            <Check className="w-3.5 h-3.5" />
+            <Check className="w-4 h-4" />
           </button>
         </div>
       ) : (
-        <div className="flex items-center justify-between">
-          <div
-            className={`text-xs font-medium ${
-              isMissing
-                ? 'text-muted italic'
-                : 'text-ink font-mono'
-            }`}
-          >
-            {value || 'Not found in email'}
+        <div className="flex items-center justify-between gap-2">
+          <div className={`text-[14px] ${isMissing ? 'text-muted' : 'text-ink font-medium'}`}>
+            {value || 'Not found'}
           </div>
           {isMissing ? (
             <button
               onClick={() => setIsEditing(true)}
-              className="text-[11px] text-ai hover:underline flex items-center gap-0.5 ml-2 shrink-0"
+              className="text-[13px] text-kiran hover:underline shrink-0"
             >
-              Ask customer
+              Add
             </button>
           ) : (
             <button
               onClick={() => setIsEditing(true)}
-              className="opacity-0 group-hover:opacity-100 text-[11px] text-muted hover:text-ai transition-opacity flex items-center gap-0.5"
+              aria-label="Edit"
+              className="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-ink transition-opacity"
             >
-              <Edit2 className="w-2.5 h-2.5" />
+              <Edit2 className="w-3.5 h-3.5" />
             </button>
           )}
         </div>
       )}
 
-      {/* Popover on Hover */}
+      {/* Popover on hover */}
       {isHovered && isExtracted && !isEditing && (
-        <div className="absolute left-0 bottom-full mb-1 z-50 w-72 p-2.5 bg-ink text-white rounded-md shadow-popover border border-line/20 text-[11px]">
-          <div className="flex items-center justify-between border-b border-white/10 pb-1.5 mb-1.5">
-            <span className="font-semibold text-ai-tint flex items-center gap-1">
-              <Sparkles className="w-3 h-3 text-ai" />
-              AI Extracted Field
-            </span>
-            <span className="font-mono text-[10px] text-slate-300">{modelUsed}</span>
-          </div>
-
-          <div className="space-y-1 text-slate-300">
-            <div className="truncate">
-              <span className="text-muted">Source: </span>
-              <span className="text-white">{sourceEmailSubject}</span>
+        <div className="absolute left-0 bottom-full mb-1 z-50 w-72 p-3 bg-white text-ink rounded-lg shadow-popover border border-line text-[13px] space-y-1.5">
+          <div className="truncate font-medium">{sourceEmailSubject}</div>
+          {sourceText && (
+            <div className="rounded-md bg-surface-2 px-2 py-1.5 text-[13px] text-slate-700">
+              "{sourceText}"
             </div>
-            {sourceText && (
-              <div className="bg-white/5 p-1 rounded font-mono text-[10px] text-ai-tint/90 border border-ai/30">
-                "{sourceText}"
-              </div>
-            )}
-            <div className="text-[10px] text-slate-400">
-              Confidence: {confidence}% · {timestamp}
-            </div>
+          )}
+          <div className="text-[12px] text-muted">
+            {confidence}% · {modelUsed} · {timestamp}
           </div>
-
-          <div className="mt-2 pt-1.5 border-t border-white/10 flex items-center justify-between">
-            <button
-              onClick={() => setIsEditing(true)}
-              className="text-ai-tint hover:text-white font-medium flex items-center gap-1 text-[10px]"
-            >
-              <Edit2 className="w-2.5 h-2.5" /> Correct this value
-            </button>
-            <span className="text-[10px] text-slate-400">Hover links to text</span>
-          </div>
+          <button
+            onClick={() => setIsEditing(true)}
+            className="text-[13px] font-medium text-kiran hover:underline"
+          >
+            Edit
+          </button>
         </div>
       )}
     </div>

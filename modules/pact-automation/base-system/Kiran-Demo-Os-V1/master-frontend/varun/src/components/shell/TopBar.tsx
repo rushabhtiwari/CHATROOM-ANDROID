@@ -27,6 +27,9 @@ const SEGMENT_LABEL: Record<string, string> = {
   mis: 'MIS',
   hr: 'HR Review',
   pay: 'Disbursement',
+  mailing: 'Mail',
+  pact: 'PACT automation',
+  kpac: 'KPAC & PACT',
 };
 
 export const TopBar: React.FC<TopBarProps> = ({ onOpenCommandPalette, onOpenSidebar }) => {
@@ -44,140 +47,117 @@ export const TopBar: React.FC<TopBarProps> = ({ onOpenCommandPalette, onOpenSide
   const unread = notifications.filter((notification) => !notification.read).length;
 
   return (
-    <header className="h-[68px] bg-surface-container-lowest border-b border-outline-variant px-4 sm:px-6 flex items-center justify-between gap-4 select-none sticky top-0 z-20 text-on-surface">
+    <header className="sticky top-0 z-20 flex h-14 shrink-0 select-none items-center justify-between gap-4 border-b border-hairline bg-white px-4 text-ink sm:px-8">
       {/* Left: breadcrumbs */}
-      <div className="flex items-center gap-1.5 text-xs text-outline min-w-0">
+      <div className="flex min-w-0 items-center gap-1.5 text-caption text-meta">
         <button
           type="button"
           onClick={onOpenSidebar}
           aria-label="Open navigation menu"
-          className="md:hidden shrink-0 rounded-none p-1.5 text-outline hover:bg-surface-container-low hover:text-on-surface"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-faint hover:bg-black/5 hover:text-ink md:hidden"
         >
           <Menu className="h-4 w-4" />
         </button>
-          <Link to="/" aria-label="Kiran PACT Automation home" className="hover:text-primary font-medium shrink-0 transition-colors">
-          Kiran PACT
-        </Link>
         {pathSegments.length === 0 ? (
-          <>
-            <ChevronRight className="w-3.5 h-3.5 text-outline-variant shrink-0" />
-            <span className="text-on-surface font-semibold">Command Center</span>
-          </>
+          <span className="font-medium text-ink">Home</span>
         ) : (
-          pathSegments.map((segment, idx) => {
-            const isLast = idx === pathSegments.length - 1;
-            const path = `/${pathSegments.slice(0, idx + 1).join('/')}`;
-            const formatted =
-              SEGMENT_LABEL[segment] ??
-              segment.replace(/-/g, ' ').replace(/\b\w/g, (character) => character.toUpperCase());
+          pathSegments
+            .map((segment, idx) => ({ segment, idx }))
+            .filter(({ segment }) => segment !== 'admin')
+            .map(({ segment, idx }, position) => {
+              const isLast = idx === pathSegments.length - 1;
+              const path = `/${pathSegments.slice(0, idx + 1).join('/')}`;
+              const pretty = segment.replace(/-/g, ' ');
+              const formatted =
+                SEGMENT_LABEL[segment] ??
+                (/\d/.test(segment)
+                  ? segment.toUpperCase()
+                  : pretty.charAt(0).toUpperCase() + pretty.slice(1));
 
-            return (
-              <React.Fragment key={path}>
-                <ChevronRight className="w-3.5 h-3.5 text-outline-variant shrink-0" />
-                {isLast ? (
-                  <span className="text-on-surface font-semibold truncate">{formatted}</span>
-                ) : (
-                  <Link to={path} className="text-outline hover:text-primary shrink-0 transition-colors">
-                    {formatted}
-                  </Link>
-                )}
-              </React.Fragment>
-            );
-          })
+              return (
+                <React.Fragment key={path}>
+                  {position > 0 && <ChevronRight className="h-3.5 w-3.5 shrink-0 text-slate-400" />}
+                  {isLast ? (
+                    <span className="truncate font-medium text-ink">{formatted}</span>
+                  ) : (
+                    <Link to={path} className="shrink-0 transition-colors hover:text-ink">
+                      {formatted}
+                    </Link>
+                  )}
+                </React.Fragment>
+              );
+            })
         )}
       </div>
 
-      {/* Middle: command palette */}
-      <div className="flex-1 max-w-md mx-4 hidden md:block">
+      {/* Right: search, connection, identity */}
+      <div className="flex items-center gap-2">
         <button
           onClick={onOpenCommandPalette}
           aria-label="Open command palette"
-          className="w-full bg-surface-container-low hover:bg-surface-container-lowest border border-outline-variant hover:border-[#E99741] rounded-none px-3 py-2.5 text-xs text-on-surface-variant flex items-center justify-between transition-colors duration-150 shadow-none group"
+          className="hidden h-9 w-64 items-center gap-2 rounded-md border border-hairline bg-canvas px-3 text-body-s text-faint transition-colors hover:border-hairline-strong md:flex"
         >
-          <span className="flex items-center gap-2 min-w-0">
-            <Search className="w-3.5 h-3.5 text-outline group-hover:text-primary transition-colors shrink-0" />
-            <span className="text-outline group-hover:text-on-surface-variant transition-colors truncate">Jump to mail or PACT…</span>
-          </span>
-          <kbd className="font-mono text-[10px] font-medium px-1.5 py-0.5 rounded-none bg-surface-container-lowest border border-outline-variant text-outline shrink-0">
-            ⌘K
-          </kbd>
+          <Search className="h-4 w-4 shrink-0" />
+          <span className="truncate">Search</span>
         </button>
-      </div>
 
-      {/* Right: live state, approvals, identity */}
-      <div className="flex items-center gap-3">
-        {/* Honest about the server connection: the finance screens are live or
-            they are not, and a stale figure is worse than a stated outage. */}
-        {connected ? (
-          <span
-            role="status"
-            aria-label="Live connection"
-            className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-none bg-surface-container-low border border-outline-variant text-[11px] font-mono"
-            title="Connected to the live event stream"
-          >
-            <span className="w-2 h-2 rounded-full bg-st-green-ink shrink-0" />
-            <span className="font-medium text-on-surface">Live</span>
-          </span>
-        ) : (
+        {/* Only an outage is worth saying out loud. */}
+        {!connected && (
           <span
             role="status"
             aria-label="Offline connection"
-            className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-none bg-strand-amber/10 border border-strand-amber/30 text-[11px] font-mono text-strand-amber"
+            className="ku-stamp hidden text-st-amber-ink sm:inline-flex"
             title="The live event stream is down; figures may be stale"
           >
-            <WifiOff className="w-3 h-3" />
-            <span className="font-medium">Offline</span>
+            <WifiOff className="h-3 w-3" />
+            Offline
           </span>
         )}
-
 
         <button
           onClick={onOpenCommandPalette}
           aria-label="Open command palette"
-          title="Open command palette"
-          className="relative p-1.5 rounded-none text-outline hover:text-on-surface hover:bg-surface-container-low transition-colors"
+          title="Notifications"
+          className="relative flex h-9 w-9 items-center justify-center rounded-md text-faint transition-colors hover:bg-black/5 hover:text-ink"
         >
-          <Bell className="w-4 h-4" />
+          <Bell className="h-[18px] w-[18px]" />
           {unread > 0 && (
-            <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-strand-red" />
+            <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-[#D93A2F] ring-2 ring-white" />
           )}
         </button>
 
         {/*
-          One identity for the whole console — the chat, the claim card in a
-          thread and the reviewer buttons all read from it. During a
-          demonstration this is what lets one presenter be the employee, then
-          HR, then Accounts, without three browser windows.
+          One identity for the whole console: the chat, the claim card in a
+          thread and the reviewer buttons all read from it.
         */}
         <DropdownMenu>
-          <DropdownMenuTrigger aria-label={`Account menu for ${currentUser.name}`} className="flex items-center gap-2 pl-2 border-l border-outline-variant rounded-none py-1 pr-1.5 hover:bg-surface-container-low transition-colors">
+          <DropdownMenuTrigger
+            aria-label={`Account menu for ${currentUser.name}`}
+            className="flex items-center gap-2 rounded-full p-0.5 transition-colors hover:bg-black/5 xl:rounded-md xl:py-1 xl:pl-1 xl:pr-2.5"
+          >
             <UserAvatar user={currentUser} size={30} />
-            <div className="hidden xl:flex flex-col leading-tight text-left">
-              <span className="text-xs font-semibold text-on-surface">{currentUser.name}</span>
-              <span className="text-[10px] text-outline">{currentUser.role}</span>
-            </div>
+            <span className="hidden text-body-s font-medium text-ink xl:block">{currentUser.name}</span>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-64 bg-surface-container-lowest border-outline-variant">
-            <DropdownMenuLabel className="text-outline text-xs">Signed in as</DropdownMenuLabel>
-            <div className="px-2 pb-2">
-              <p className="text-[13px] font-semibold text-on-surface">{currentUser.name}</p>
-              <p className="text-[11px] text-outline">
+          <DropdownMenuContent align="end" className="w-64 border-hairline bg-white">
+            <div className="px-2 py-2">
+              <p className="text-body-s font-semibold text-ink">{currentUser.name}</p>
+              <p className="text-caption text-meta">
                 {currentUser.role} · {currentUser.department}
               </p>
             </div>
-            <DropdownMenuSeparator className="bg-outline-variant" />
-            <DropdownMenuLabel className="text-outline text-xs">View the console as</DropdownMenuLabel>
+            <DropdownMenuSeparator className="bg-hairline" />
+            <DropdownMenuLabel className="text-caption font-medium text-meta">Switch user</DropdownMenuLabel>
             <div className="max-h-72 overflow-y-auto">
               {users.map((user) => (
                 <DropdownMenuItem
                   key={user.id}
                   onClick={() => setCurrentUserId(user.id)}
-                  className="gap-2 cursor-pointer hover:bg-surface-container-low"
+                  className="cursor-pointer gap-2 hover:bg-canvas"
                 >
                   <UserAvatar user={user} size={22} showStatus />
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate text-[12px] text-on-surface">{user.name}</span>
-                    <span className="block truncate text-[10px] text-outline">{user.role}</span>
+                    <span className="block truncate text-body-s text-ink">{user.name}</span>
+                    <span className="block truncate text-micro text-meta">{user.role}</span>
                   </span>
                 </DropdownMenuItem>
               ))}

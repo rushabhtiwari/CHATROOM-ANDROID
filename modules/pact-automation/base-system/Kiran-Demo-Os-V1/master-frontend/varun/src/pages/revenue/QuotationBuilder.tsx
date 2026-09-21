@@ -146,7 +146,7 @@ export const QuotationBuilder: React.FC = () => {
             {/* Line Items Table */}
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-canvas text-muted text-[10px] uppercase font-semibold border-b border-line">
+                <thead className="bg-canvas text-muted text-[12px] font-semibold border-b border-line">
                   <tr>
                     <th className="p-2">Part No / Description</th>
                     <th className="p-2 text-right">Qty</th>
@@ -160,10 +160,10 @@ export const QuotationBuilder: React.FC = () => {
                     <tr key={item.id} className="hover:bg-canvas/60">
                       <td className="p-2">
                         <div className="font-semibold text-ink">{item.partNumber}</div>
-                        <div className="text-[10px] text-muted font-sans line-clamp-1">
+                        <div className="text-[12px] text-muted font-sans line-clamp-1">
                           {item.description}
                         </div>
-                        <div className="text-[10px] text-muted">
+                        <div className="text-[12px] text-muted">
                           HSN: {item.hsnCode} · GST: {item.gstRate}%
                         </div>
                       </td>
@@ -186,7 +186,7 @@ export const QuotationBuilder: React.FC = () => {
                           }`}
                         />
                         {item.isPriceAboveStandard && (
-                          <div className="text-[9px] text-strand-amber font-semibold mt-0.5">
+                          <div className="text-[12px] text-strand-amber font-semibold mt-0.5">
                             +{(((item.offeredPrice - item.standardPrice) / item.standardPrice) * 100).toFixed(1)}% vs Std
                           </div>
                         )}
@@ -219,7 +219,7 @@ export const QuotationBuilder: React.FC = () => {
             {/* AI Commercial Terms Generator */}
             <div className="space-y-2 pt-2 border-t border-line">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-ink font-mono uppercase tracking-wider">
+                <span className="text-xs font-semibold text-ink font-mono ">
                   Commercial Terms & Conditions
                 </span>
                 <button
@@ -250,10 +250,10 @@ export const QuotationBuilder: React.FC = () => {
               <div className="font-display font-bold text-lg text-ink tracking-tight">
                 KIRAN CABLE PROTECTION PRODUCTS PVT. LTD.
               </div>
-              <div className="text-[11px] text-muted">
+              <div className="text-[12px] text-muted">
                 Plot 14/B, Industrial Development Area, Nacharam, Secunderabad - 500076, Telangana
               </div>
-              <div className="text-[11px] text-muted font-mono">
+              <div className="text-[12px] text-muted font-mono">
                 GSTIN: 36AAACK4921K1Z8 · CIN: U31300TG1976PTC002014
               </div>
             </div>
@@ -272,10 +272,10 @@ export const QuotationBuilder: React.FC = () => {
           {/* Quotation Metadata Bar */}
           <div className="grid grid-cols-2 gap-4 font-mono text-xs border-b border-line pb-4">
             <div>
-              <div className="text-muted text-[10px] uppercase font-sans">Quotation To:</div>
+              <div className="text-muted text-[12px] font-sans">Quotation To:</div>
               <div className="font-bold text-ink">{quote.customerName}</div>
               <div className="text-slate-600">{quote.contactPerson}</div>
-              <div className="text-slate-500 text-[11px]">{quote.contactEmail}</div>
+              <div className="text-slate-500 text-[12px]">{quote.contactEmail}</div>
             </div>
             <div className="text-right space-y-0.5">
               <div>Quote Ref: <strong className="text-ink">{quote.quoteNumber}</strong></div>
@@ -288,7 +288,7 @@ export const QuotationBuilder: React.FC = () => {
           {/* Letterhead Items Table */}
           <div className="space-y-2">
             <table className="w-full text-left border border-line">
-              <thead className="bg-canvas text-ink text-[11px] font-semibold uppercase border-b border-line">
+              <thead className="bg-canvas text-ink text-[12px] font-semibold border-b border-line">
                 <tr>
                   <th className="p-2">Item</th>
                   <th className="p-2 text-right">Qty</th>
@@ -301,7 +301,7 @@ export const QuotationBuilder: React.FC = () => {
                   <tr key={idx}>
                     <td className="p-2">
                       <div className="font-semibold text-ink">{it.partNumber}</div>
-                      <div className="text-[10px] text-muted font-sans">{it.description}</div>
+                      <div className="text-[12px] text-muted font-sans">{it.description}</div>
                     </td>
                     <td className="p-2 text-right">{it.quantity.toLocaleString('en-IN')} {it.uom}</td>
                     <td className="p-2 text-right">₹{it.offeredPrice.toFixed(2)}</td>
@@ -335,15 +335,15 @@ export const QuotationBuilder: React.FC = () => {
           {/* Terms & Bank Details */}
           <div className="border-t border-line pt-4 space-y-3">
             <div>
-              <div className="font-semibold text-ink text-[11px] uppercase tracking-wider mb-1">
+              <div className="font-semibold text-ink text-[12px] mb-1">
                 Terms & Conditions
               </div>
-              <div className="whitespace-pre-line text-[11px] text-slate-600 font-mono leading-relaxed bg-canvas/40 p-3 rounded">
+              <div className="whitespace-pre-line text-[12px] text-slate-600 font-mono leading-relaxed bg-canvas/40 p-3 rounded">
                 {commercialTerms}
               </div>
             </div>
 
-            <div className="p-3 rounded border border-line bg-canvas/30 text-[11px] font-mono flex items-center justify-between">
+            <div className="p-3 rounded border border-line bg-canvas/30 text-[12px] font-mono flex items-center justify-between">
               <div>
                 <span className="text-muted">Bank Name: </span><strong>HDFC Bank Ltd</strong>
                 <span className="mx-2">·</span>
@@ -358,13 +358,13 @@ export const QuotationBuilder: React.FC = () => {
           {/* Letterhead Footer Sign-off */}
           <div className="pt-6 flex items-end justify-between text-xs">
             <div>
-              <span className="text-muted text-[10px]">Prepared by:</span>
+              <span className="text-muted text-[12px]">Prepared by:</span>
               <div className="font-semibold text-ink font-mono">KiranOS Automated Quotation Desk</div>
             </div>
             <div className="text-right">
-              <span className="text-muted text-[10px]">Authorized Signatory:</span>
+              <span className="text-muted text-[12px]">Authorized Signatory:</span>
               <div className="font-semibold text-ink">Rajesh Kumar (Head of Sales)</div>
-              <div className="text-[10px] text-muted">Kiran Cable Protection Products Pvt. Ltd.</div>
+              <div className="text-[12px] text-muted">Kiran Cable Protection Products Pvt. Ltd.</div>
             </div>
           </div>
         </div>

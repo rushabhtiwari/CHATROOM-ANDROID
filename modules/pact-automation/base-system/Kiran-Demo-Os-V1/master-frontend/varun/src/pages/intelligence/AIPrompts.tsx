@@ -71,7 +71,7 @@ export const AIPrompts: React.FC = () => {
             }`}
           >
             <span>{p.feature}</span>
-            <span className="text-[10px] opacity-75">({p.currentVersion})</span>
+            <span className="text-[12px] opacity-75">({p.currentVersion})</span>
           </button>
         ))}
       </div>
@@ -98,7 +98,7 @@ export const AIPrompts: React.FC = () => {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => handleApprovePrompt(selectedPrompt.id)}
-                  className="px-3 py-1.5 border-2 border-ink bg-accent active:translate-y-px hover:brightness-95 text-accent-ink rounded text-xs font-semibold shadow-xs flex items-center gap-1.5"
+                  className="px-3 py-1.5 rounded-md border border-transparent bg-accent hover:bg-accent-hover text-white rounded text-xs font-semibold shadow-xs flex items-center gap-1.5"
               >
                 <Check className="w-3.5 h-3.5" />
                 Approve Prompt Revision
@@ -109,7 +109,7 @@ export const AIPrompts: React.FC = () => {
 
         {/* Side-by-Side Diff Viewer */}
         <div className="space-y-2">
-          <div className="flex items-center gap-2 text-xs font-semibold text-ink font-mono uppercase tracking-wider">
+          <div className="flex items-center gap-2 text-xs font-semibold text-ink font-mono ">
             <GitCompare className="w-4 h-4 text-kiran" />
             <span>Prompt Revision Diff (Previous vs Proposed)</span>
           </div>
@@ -117,7 +117,7 @@ export const AIPrompts: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
             {/* Previous Version */}
             <div className="bg-canvas/60 border border-line rounded p-4 space-y-2">
-              <div className="text-[11px] font-bold text-slate-600 font-sans border-b border-line pb-1">
+              <div className="text-[12px] font-bold text-slate-600 font-sans border-b border-line pb-1">
                 Previous Active Version ({selectedPrompt.previousVersionText ? 'Previous' : 'Initial'})
               </div>
               <div className="text-slate-700 whitespace-pre-wrap leading-relaxed">
@@ -127,9 +127,9 @@ export const AIPrompts: React.FC = () => {
 
             {/* Current Proposed Version */}
             <div className="bg-emerald-50/30 border border-emerald-300/80 rounded p-4 space-y-2">
-              <div className="text-[11px] font-bold text-strand-green font-sans border-b border-emerald-200 pb-1 flex items-center justify-between">
+              <div className="text-[12px] font-bold text-strand-green font-sans border-b border-emerald-200 pb-1 flex items-center justify-between">
                 <span>Proposed New Version ({selectedPrompt.currentVersion})</span>
-                <span className="text-[10px] text-emerald-800">Current draft</span>
+                <span className="text-[12px] text-emerald-800">Current draft</span>
               </div>
               <div className="text-slate-800 whitespace-pre-wrap leading-relaxed">
                 {selectedPrompt.promptText}
@@ -141,7 +141,7 @@ export const AIPrompts: React.FC = () => {
         {/* Live Interactive Test Bench */}
         <div className="pt-4 border-t border-line space-y-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-xs font-semibold text-ai font-mono uppercase tracking-wider">
+            <div className="flex items-center gap-2 text-xs font-semibold text-ai font-mono ">
               <Sparkles className="w-4 h-4 text-ai" />
               <span>Interactive Prompt Evaluation Bench</span>
             </div>
@@ -150,7 +150,7 @@ export const AIPrompts: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
             <div>
-              <label className="block text-[11px] text-muted font-sans mb-1">
+              <label className="block text-[12px] text-muted font-sans mb-1">
                 Sample Inbound Test Payload:
               </label>
               <textarea
@@ -173,10 +173,10 @@ export const AIPrompts: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-[11px] text-muted font-sans mb-1">
+              <label className="block text-[12px] text-muted font-sans mb-1">
                 Model Structured Response Output:
               </label>
-              <div className="w-full h-36 p-2.5 bg-ink text-slate-200 rounded border border-line overflow-y-auto leading-relaxed text-[11px]">
+              <div className="w-full h-36 p-2.5 bg-ink text-slate-200 rounded border border-line overflow-y-auto leading-relaxed text-[12px]">
                 {testOutput ? (
                   <pre className="font-mono">{testOutput}</pre>
                 ) : (

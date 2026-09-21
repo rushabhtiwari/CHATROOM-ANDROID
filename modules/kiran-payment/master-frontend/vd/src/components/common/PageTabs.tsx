@@ -19,7 +19,7 @@ export const PageTabs: React.FC<PageTabsProps> = ({
   tabs,
   activeTab,
   onChange,
-  departmentColor = '#06477F', // default Kiran blue
+  departmentColor: _departmentColor, // kept for callers; tabs are one blue
   className = ''
 }) => {
   return (
@@ -30,22 +30,14 @@ export const PageTabs: React.FC<PageTabsProps> = ({
           <button
             key={tab.id}
             onClick={() => onChange(tab.id)}
-            style={{
-              borderBottomColor: isActive ? departmentColor : 'transparent',
-              color: isActive ? '#0E2340' : '#7A8798'
-            }}
-            className={`pb-2.5 pt-1 text-xs font-semibold tracking-tight transition-all relative border-b-2 flex items-center gap-1.5 whitespace-nowrap focus:outline-none ${
-              isActive ? 'font-semibold' : 'hover:text-slate'
+            className={`h-10 text-[14px] font-medium transition-colors relative border-b-2 flex items-center gap-2 whitespace-nowrap focus:outline-none ${
+              isActive ? 'border-kiran text-ink' : 'border-transparent text-muted hover:text-ink'
             }`}
           >
             <span>{tab.label}</span>
             {tab.count !== undefined && (
               <span
-                className={`font-mono text-[10px] px-1.5 py-0.2 rounded ${
-                  isActive
-                    ? 'bg-ink text-white'
-                    : 'bg-slate-100 text-slate-600'
-                }`}
+                className="text-[12px] text-[#6E6E76] tabular-nums"
               >
                 {tab.count}
               </span>

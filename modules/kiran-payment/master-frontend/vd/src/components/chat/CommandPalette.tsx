@@ -122,7 +122,7 @@ export function CommandPalette({
               >
                 <UserAvatar user={user} size={20} showStatus />
                 <span className="ml-2 truncate">{user.name}</span>
-                <span className="ml-auto text-[11px] text-muted-foreground">{user.role}</span>
+                <span className="ml-auto text-[12px] text-muted-foreground">{user.role}</span>
               </CommandItem>
             ))}
         </CommandGroup>
@@ -142,7 +142,7 @@ export function CommandPalette({
                 </span>
                 <span
                   suppressHydrationWarning
-                  className="ml-2 shrink-0 text-[10px] text-muted-foreground"
+                  className="ml-2 shrink-0 text-[12px] text-muted-foreground"
                 >
                   {formatRelative(message.timestamp)}
                 </span>
@@ -189,7 +189,7 @@ export function CommandPalette({
                 <MessageCircle className="mr-2 h-4 w-4" />
               )}
               /{command.name}
-              <span className="ml-2 truncate text-[11px] text-muted-foreground">
+              <span className="ml-2 truncate text-[12px] text-muted-foreground">
                 {command.description}
               </span>
             </CommandItem>
