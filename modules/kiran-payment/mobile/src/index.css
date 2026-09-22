@@ -1,0 +1,66 @@
+/*
+ * The console's stylesheet is the design system: the three Tailwind
+ * directives, the Geist faces, and every token the shared components read.
+ * Importing it rather than restating it means this app cannot drift from the
+ * console's palette by accident.
+ */
+@import 'kiran-os/src/index.css';
+
+/*
+ * Everything below is the phone, and only the phone.
+ */
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+
+  body {
+    /* The app owns scrolling per screen. A scrolling body on iOS produces the
+       rubber-band effect over the whole shell, which makes a fixed tab bar
+       detach from the bottom of the window. */
+    overflow: hidden;
+    overscroll-behavior: none;
+    -webkit-font-smoothing: antialiased;
+    /* A long-press on iOS otherwise selects text and raises the callout menu,
+       which collides with long-press-to-react. Inputs opt back in below. */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  input,
+  textarea,
+  [contenteditable='true'] {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+
+  /* iOS zooms the viewport when a focused field's text is under 16px. */
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
+
+  /* The tap highlight is Android's idiom, not iOS's; the app draws its own
+     pressed states. */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+@layer utilities {
+  /* A scroll container that keeps iOS momentum and does not hand its
+     overscroll to whatever is behind it. */
+  .scroll-y {
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}

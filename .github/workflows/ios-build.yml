@@ -1,0 +1,115 @@
+name: iOS app
+
+# The app is developed on Windows, where Xcode does not exist. This workflow is
+# the compiler: it is the only place the iOS project is actually built, so a
+# change that breaks the native project is caught here rather than on whichever
+# Mac eventually opens it.
+#
+# It builds for the Simulator with signing disabled, which needs no Apple
+# Developer account and no certificates in the repository. Producing an
+# installable .ipa needs a signing identity and a provisioning profile; that is
+# a separate job, added when there is an account to sign with.
+
+on:
+  push:
+    branches: [master, main, 'feat/ios-app']
+    paths:
+      - 'modules/kiran-payment/mobile/**'
+      - 'modules/kiran-payment/master-frontend/vd/**'
+      - 'modules/kiran-payment/package.json'
+      - 'modules/kiran-payment/package-lock.json'
+      - '.github/workflows/ios-build.yml'
+  pull_request:
+    paths:
+      - 'modules/kiran-payment/mobile/**'
+      - 'modules/kiran-payment/master-frontend/vd/**'
+      - '.github/workflows/ios-build.yml'
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: modules/kiran-payment
+
+jobs:
+  build:
+    # macos-15 and later run on Apple silicon with Xcode 16, which is what
+    # Capacitor 7 expects.
+    runs-on: macos-15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: modules/kiran-payment/package-lock.json
+
+      # Installs the whole workspace: the mobile app and the console it shares
+      # its domain layer with. The mobile build compiles the console's
+      # TypeScript from source, so the console's dependencies are not optional.
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck --workspace mobile
+
+      - name: Build the web app
+        run: npm run build --workspace mobile
+        env:
+          # A Simulator build has no server to talk to. Left empty, the app
+          # falls back to relative paths, which resolve to the app bundle and
+          # fail the way an unreachable backend does — which is the behaviour
+          # worth verifying here anyway.
+          VITE_API_ORIGIN: ''
+
+      # Copies the built web app into the native project and regenerates the
+      # Pods manifest from the installed plugins.
+      - name: Sync Capacitor
+        run: npx cap sync ios
+        working-directory: modules/kiran-payment/mobile
+
+      - name: Cache CocoaPods
+        uses: actions/cache@v4
+        with:
+          path: modules/kiran-payment/mobile/ios/App/Pods
+          key: pods-${{ runner.os }}-${{ hashFiles('modules/kiran-payment/mobile/ios/App/Podfile.lock') }}
+          restore-keys: pods-${{ runner.os }}-
+
+      - name: Install Pods
+        run: pod install --repo-update
+        working-directory: modules/kiran-payment/mobile/ios/App
+
+      - name: Build for the Simulator
+        working-directory: modules/kiran-payment/mobile/ios/App
+        run: |
+          set -o pipefail
+          xcodebuild \
+            -workspace App.xcworkspace \
+            -scheme App \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            build
+
+      # The .app is a Simulator build — it cannot be installed on a phone. It
+      # is here so that a change can be opened and driven on a Mac, or in a
+      # Simulator, without rebuilding it from scratch first.
+      - name: Upload the Simulator app
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: KiranOS-simulator-app
+          path: modules/kiran-payment/mobile/ios/App/build/Build/Products/Debug-iphonesimulator/App.app
+          retention-days: 14
+
+      - name: Upload build logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcodebuild-logs
+          path: modules/kiran-payment/mobile/ios/App/build/Logs
+          retention-days: 7

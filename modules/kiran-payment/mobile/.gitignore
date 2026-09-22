@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+
+# Capacitor copies the built web app into the native project on every sync.
+ios/App/App/public/
+ios/App/Pods/
+ios/App/Podfile.lock
+ios/App/build/
+DerivedData/
+*.xcuserstate
+xcuserdata/

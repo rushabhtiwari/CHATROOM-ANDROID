@@ -1,0 +1,16 @@
+{
+  "name": "kiran-payment",
+  "private": true,
+  "version": "1.0.0",
+  "description": "KiranOS console, its API, and the iOS app that shares its domain layer.",
+  "workspaces": [
+    "master-frontend/vd",
+    "mobile"
+  ],
+  "scripts": {
+    "dev:console": "npm run dev --workspace kiran-os",
+    "dev:mobile": "npm run dev --workspace mobile",
+    "build:mobile": "npm run build --workspace mobile",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  }
+}
