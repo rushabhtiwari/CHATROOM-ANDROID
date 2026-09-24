@@ -84,11 +84,7 @@ export function MeetingFlowScreen() {
   };
 
   const canAdvance =
-    step === 'who'
-      ? attendeeIds.length > 0
-      : step === 'what'
-        ? title.trim().length > 0
-        : true;
+    step === 'who' ? attendeeIds.length > 0 : step === 'what' ? title.trim().length > 0 : true;
 
   const confirm = async () => {
     setBusy(true);
@@ -185,7 +181,11 @@ export function MeetingFlowScreen() {
                     style={{ backgroundColor: user.color }}
                     aria-hidden
                   >
-                    {user.name.split(' ').slice(0, 2).map((word) => word[0]).join('')}
+                    {user.name
+                      .split(' ')
+                      .slice(0, 2)
+                      .map((word) => word[0])
+                      .join('')}
                   </span>
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-[15px] text-ink">{user.name}</span>
@@ -337,8 +337,8 @@ export function MeetingFlowScreen() {
 
           {failed && (
             <p className="mt-3 rounded-lg bg-strand-amber/10 px-3 py-2 text-[13px] leading-snug text-strand-amber">
-              The meeting could not be created. Without Google credentials the backend cannot
-              make a Meet link — the meeting still reaches the console's own calendar.
+              The meeting could not be created. Without Google credentials the backend cannot make a
+              Meet link — the meeting still reaches the console's own calendar.
             </p>
           )}
         </div>
@@ -376,15 +376,7 @@ export function MeetingFlowScreen() {
   );
 }
 
-function Line({
-  label,
-  value,
-  onEdit,
-}: {
-  label: string;
-  value: string;
-  onEdit: () => void;
-}) {
+function Line({ label, value, onEdit }: { label: string; value: string; onEdit: () => void }) {
   return (
     <div className="flex items-start gap-3 border-b border-line px-3 py-2.5 last:border-b-0">
       <span className="w-[72px] shrink-0 text-[13px] text-slate-500">{label}</span>

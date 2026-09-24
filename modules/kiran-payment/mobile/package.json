@@ -13,7 +13,9 @@
     "sync": "npm run build && cap sync ios",
     "ios:add": "cap add ios",
     "ios:open": "cap open ios",
-    "ios:run": "cap run ios"
+    "ios:run": "cap run ios",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx}\""
   },
   "dependencies": {
     "kiran-os": "*",
@@ -60,6 +62,7 @@
     "autoprefixer": "^10.4.20",
     "jsdom": "^26.0.0",
     "postcss": "^8.5.2",
+    "prettier": "^3.9.7",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.7.3",
     "vite": "^6.1.0",

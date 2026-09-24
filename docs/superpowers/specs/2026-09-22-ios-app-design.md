@@ -118,13 +118,25 @@ Order tracking is read-only. Writes wait for sub-project #3.
 `mobile/src/api/origin.ts` is the one place that knows where the server
 is. It reads `VITE_API_ORIGIN`, defaulting to the empty string: empty
 on web (relative paths, proxied as today), a real host on device.
-Shared modules reach the server through an `apiFetch` wrapper.
-`modules/rts/api.ts` changes one line — its `BASE` reads the origin
-instead of a literal — which is safe because its own comment
-establishes it as the single point of server contact. `/uploads` URLs
-get the same treatment.
 
-FastAPI must allow CORS for `capacitor://localhost`.
+**Amended during implementation.** This section first proposed an
+`apiFetch` wrapper plus a one-line change to `modules/rts/api.ts`. The
+code had more call sites than that: six, across three console files
+(`fetch('/api/agent')` and `/api/meet` in the chat store, every call in
+`modules/rts/api.ts` and `modules/calendar/api.ts`, and the live-update
+stream opened with `new EventSource('/api/events')`), plus receipt links
+the server returns as `/uploads/...`. Editing each would change the
+console for the phone's sake and miss the next one added.
+
+Instead `mobile/src/api/install.ts` wraps `fetch` and `EventSource` once
+at startup and rewrites only relative `/api` and `/uploads` paths —
+matched as whole segments — to the configured origin, with credentials.
+The app's own assets, absolute URLs, `blob:` and `data:` pass through.
+With no origin configured nothing is installed. The console is not
+modified.
+
+FastAPI allows CORS for `capacitor://localhost` (done in
+`backend/app/main.py`).
 
 This seam is also how #2 and #3 arrive without touching the UI.
 
@@ -132,8 +144,8 @@ This seam is also how #2 and #3 arrive without touching the UI.
 
 Screens call `useChat` and `useOrders`, which read the `kiran-os`
 domain layer. Chat sends flow through the simulated transport; the
-agent, receipts, claims and meetings flow through `apiFetch` to
-`API_ORIGIN`. Snapshots persist through Capacitor Preferences.
+agent, receipts, claims and meetings flow through the installed
+redirect to `API_ORIGIN`. Snapshots persist through Capacitor Preferences.
 
 `chat-persistence.ts` writes to `localStorage`, which iOS WKWebView
 evicts under storage pressure. The mobile app injects a
@@ -155,7 +167,7 @@ Server-sent push is a dependency on #2 and #3 and is out of scope here.
 `outbox` drives a per-message sending/failed state with tap-to-retry
 and discard. `online` binds to `@capacitor/network`, so airplane mode
 replaces the simulated toggle. `storageStatus` and
-`reclaimAttachmentSpace` drive a storage banner. `apiFetch` failures
+`reclaimAttachmentSpace` drive a storage banner. Failed server calls
 degrade exactly as the console degrades — the agent reports it has no
 model, receipt reading falls back to manual entry. Nothing dead-ends.
 

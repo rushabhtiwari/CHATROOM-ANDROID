@@ -9,6 +9,8 @@ import App from '~/App';
 import { installDurableStorage } from '~/native/storage';
 import { initShell } from '~/native/shell';
 import { isNative } from '~/native/platform';
+import { API_ORIGIN } from '~/api/origin';
+import { installServerOrigin } from '~/api/install';
 import '~/index.css';
 
 /**
@@ -21,6 +23,9 @@ import '~/index.css';
  * over the conversations the user actually had.
  */
 async function bootstrap() {
+  // Before anything can make a request: RtsProvider fetches on mount and opens
+  // its event stream, and those must already be pointed at the real server.
+  installServerOrigin(API_ORIGIN);
   await installDurableStorage(isNative);
   await initShell();
 

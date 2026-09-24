@@ -56,9 +56,7 @@ export async function initPush({ onToken, onTap }: PushHandlers): Promise<boolea
 
   const existing = await PushNotifications.checkPermissions();
   const granted =
-    existing.receive === 'granted'
-      ? existing
-      : await PushNotifications.requestPermissions();
+    existing.receive === 'granted' ? existing : await PushNotifications.requestPermissions();
   if (granted.receive !== 'granted') return false;
 
   await PushNotifications.addListener('registration', (token: Token) => onToken(token.value));

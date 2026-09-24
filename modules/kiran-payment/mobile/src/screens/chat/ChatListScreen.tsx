@@ -7,13 +7,16 @@ import { cn } from '@/lib/utils';
 import { Empty, Row, Screen } from '~/components/Screen';
 import { RoomAvatar } from '~/components/RoomAvatar';
 import { relativeTime } from '~/lib/format';
+import { previewText } from '~/lib/text';
 
 /** The one line of a conversation that shows in the list. */
 function preview(message: SharedMessage | undefined, senderName: string | null): string {
   if (!message) return 'No messages yet';
   if (message.deletedAt) return 'Message deleted';
   const body = message.attachment
-    ? (message.attachment.type.startsWith('image/') ? 'Photo' : message.attachment.name)
+    ? message.attachment.type.startsWith('image/')
+      ? 'Photo'
+      : message.attachment.name
     : message.content;
   return senderName ? `${senderName}: ${body}` : body;
 }
@@ -109,7 +112,7 @@ export function ChatListScreen() {
                           unread.total > 0 ? 'text-ink-3' : 'text-slate-500',
                         )}
                       >
-                        {plainText(preview(last, senderName))}
+                        {previewText(plainText(preview(last, senderName)))}
                       </span>
                       {unread.total > 0 && (
                         <span

@@ -83,13 +83,7 @@ export function Screen({
 }
 
 /** A grouped list, the way iOS groups settings and records. */
-export function Section({
-  title,
-  children,
-}: {
-  title?: string;
-  children: React.ReactNode;
-}) {
+export function Section({ title, children }: { title?: string; children: React.ReactNode }) {
   return (
     <section className="mt-5 first:mt-3">
       {title && (

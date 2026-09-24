@@ -105,10 +105,7 @@ export function OrdersScreen() {
       {loading ? (
         <Empty title="Loading orders…" />
       ) : filtered.length === 0 ? (
-        <Empty
-          title="No orders match"
-          detail="Search by customer, product, part number or PO."
-        />
+        <Empty title="No orders match" detail="Search by customer, product, part number or PO." />
       ) : (
         <div className="border-t border-line">
           {filtered.map((order) => (

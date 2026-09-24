@@ -81,8 +81,8 @@ export function MeScreen() {
       </Section>
 
       <p className="px-4 py-4 text-[12px] leading-relaxed text-slate-400">
-        Switching people stands in for signing in. The platform identity service is not yet wired
-        to this console, so there is no real session to change.
+        Switching people stands in for signing in. The platform identity service is not yet wired to
+        this console, so there is no real session to change.
       </p>
     </Screen>
   );

@@ -6,6 +6,7 @@ import { MarkdownContent } from '@/components/chat/MarkdownContent';
 import { ClaimCard } from '@/components/chat/ClaimCard';
 import { relativeTime } from '~/lib/format';
 import { tap, warn } from '~/native/haptics';
+import { previewText } from '~/lib/text';
 
 /** The delivery tick, which on a phone is the only send feedback there is. */
 function DeliveryMark({ message }: { message: SharedMessage }) {
@@ -131,7 +132,7 @@ export function MessageBubble({
             >
               <Reply className="mt-0.5 h-3 w-3 shrink-0 opacity-70" />
               <span className="line-clamp-2 opacity-90">
-                {plainText(repliedTo.content) || 'Attachment'}
+                {previewText(plainText(repliedTo.content)) || 'Attachment'}
               </span>
             </button>
           )}

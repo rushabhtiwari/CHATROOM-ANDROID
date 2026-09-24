@@ -1,5 +1,13 @@
-import { useRef, useState } from 'react';
-import { CalendarClock, Camera, Image as ImageIcon, Paperclip, Send, Sparkles, X } from 'lucide-react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import {
+  CalendarClock,
+  Camera,
+  Image as ImageIcon,
+  Paperclip,
+  Send,
+  Sparkles,
+  X,
+} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useChat } from '@/lib/chat-store';
 import type { MessageId, SharedMessage } from '@/lib/chat-types';
@@ -8,6 +16,7 @@ import { cn } from '@/lib/utils';
 import { pickPhoto } from '~/native/camera';
 import { isNative } from '~/native/platform';
 import { selection, tap } from '~/native/haptics';
+import { previewText } from '~/lib/text';
 
 /**
  * The composer.
@@ -23,11 +32,20 @@ export function Composer({
   onClearReply,
   /** Set inside a thread: replies post to the root rather than the channel. */
   threadRootId = null,
+  onAskAgent,
+  seed,
 }: {
   roomId: string;
   replyTo: SharedMessage | null;
   onClearReply: () => void;
   threadRootId?: MessageId | null;
+  /** Called as an `@agent` question is sent, so the answer's sheet can open. */
+  onAskAgent?: () => void;
+  /**
+   * Text to place in the composer — an assistant reply handed over to edit.
+   * `nonce` makes handing over the same text twice still count as new.
+   */
+  seed?: { text: string; nonce: number };
 }) {
   const navigate = useNavigate();
   const {
@@ -51,16 +69,27 @@ export function Composer({
   const fileInput = useRef<HTMLInputElement>(null);
   const textarea = useRef<HTMLTextAreaElement>(null);
 
+  useEffect(() => {
+    if (!seed) return;
+    setText(seed.text);
+    requestAnimationFrame(() => textarea.current?.focus());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [seed?.nonce]);
+
   const permission = canSend(activeRoom, currentUserId);
   const agentPrompt = text.trim().startsWith('@agent');
 
-  const grow = () => {
+  // Size the box to its text whenever the text changes — however it changed.
+  // Typing, a mention being inserted, an assistant reply handed over, a send
+  // clearing it: resizing at each call site missed some of these; resizing on
+  // the value itself cannot.
+  useLayoutEffect(() => {
     const node = textarea.current;
     if (!node) return;
     node.style.height = 'auto';
     // Five lines, then it scrolls: past that the composer eats the conversation.
     node.style.height = `${Math.min(node.scrollHeight, 120)}px`;
-  };
+  }, [text]);
 
   /**
    * Re-evaluate the mention list on every keystroke and caret move.
@@ -110,7 +139,6 @@ export function Composer({
     requestAnimationFrame(() => {
       node?.focus();
       node?.setSelectionRange(position, position);
-      grow();
     });
   };
 
@@ -121,6 +149,9 @@ export function Composer({
     setBusy(true);
     try {
       if (agentPrompt) {
+        // Open the sheet before awaiting, so the pending state is what the
+        // asker sees rather than a composer that simply went quiet.
+        onAskAgent?.();
         await askAgent(roomId, body.replace(/^@agent\s*/, ''));
       } else {
         sendMessage(roomId, body, {
@@ -132,7 +163,6 @@ export function Composer({
       setText('');
       setMentions(null);
       onClearReply();
-      if (textarea.current) textarea.current.style.height = 'auto';
     } finally {
       setBusy(false);
     }
@@ -214,7 +244,7 @@ export function Composer({
           <div className="min-w-0 flex-1 border-l-2 border-brand pl-2">
             <p className="text-[12px] font-semibold text-brand">Replying</p>
             <p className="truncate text-[13px] text-slate-600">
-              {plainText(replyTo.content) || 'Attachment'}
+              {previewText(plainText(replyTo.content)) || 'Attachment'}
             </p>
           </div>
           <button
@@ -277,7 +307,6 @@ export function Composer({
           rows={1}
           onChange={(event) => {
             setText(event.target.value);
-            grow();
             requestAnimationFrame(syncMentions);
           }}
           onKeyUp={syncMentions}

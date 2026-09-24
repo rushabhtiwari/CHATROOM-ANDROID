@@ -31,10 +31,11 @@ defaults:
     working-directory: modules/kiran-payment
 
 jobs:
-  build:
-    # macos-15 and later run on Apple silicon with Xcode 16, which is what
-    # Capacitor 7 expects.
-    runs-on: macos-15
+  # Everything that does not need a Mac runs here first. macOS minutes cost
+  # roughly ten times Linux ones, and a failing test should fail in a minute
+  # rather than after pods and an Xcode build.
+  test:
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -53,6 +54,31 @@ jobs:
 
       - name: Typecheck
         run: npm run typecheck --workspace mobile
+
+      - name: Formatting
+        run: npm run format:check --workspace mobile
+
+      # Screen tests run against the real chat store, not a mock of it.
+      - name: Tests
+        run: npm run test --workspace mobile
+
+  build:
+    needs: test
+    # macos-15 and later run on Apple silicon with Xcode 16, which is what
+    # Capacitor 7 expects.
+    runs-on: macos-15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: modules/kiran-payment/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
 
       - name: Build the web app
         run: npm run build --workspace mobile

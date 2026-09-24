@@ -15,9 +15,7 @@ export function RoomAvatar({ room, size = 44 }: { room: Room; size?: number }) {
   const title = roomTitle(room);
 
   const other =
-    room.type === 'direct'
-      ? room.participantIds.find((id) => id !== currentUserId)
-      : undefined;
+    room.type === 'direct' ? room.participantIds.find((id) => id !== currentUserId) : undefined;
   const otherUser = other ? userById(other) : undefined;
 
   const initials = title
@@ -30,22 +28,14 @@ export function RoomAvatar({ room, size = 44 }: { room: Room; size?: number }) {
   return (
     <div className="relative shrink-0" style={{ width: size, height: size }}>
       {room.photo?.dataUrl ? (
-        <img
-          src={room.photo.dataUrl}
-          alt=""
-          className="h-full w-full rounded-full object-cover"
-        />
+        <img src={room.photo.dataUrl} alt="" className="h-full w-full rounded-full object-cover" />
       ) : (
         <div
           className="flex h-full w-full items-center justify-center rounded-full text-[15px] font-semibold text-white"
           style={{ backgroundColor: otherUser?.color ?? room.color ?? '#0A63C9' }}
           aria-hidden
         >
-          {room.type === 'group' && !initials ? (
-            <Users className="h-5 w-5" />
-          ) : (
-            initials
-          )}
+          {room.type === 'group' && !initials ? <Users className="h-5 w-5" /> : initials}
         </div>
       )}
 

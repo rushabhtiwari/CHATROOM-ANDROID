@@ -28,10 +28,7 @@ export function DispatchesScreen() {
   }, [dispatches]);
 
   return (
-    <Screen
-      title="Dispatches"
-      subtitle={dispatches ? `${dispatches.length} in flight` : undefined}
-    >
+    <Screen title="Dispatches" subtitle={dispatches ? `${dispatches.length} in flight` : undefined}>
       <div className="no-scrollbar flex gap-2 overflow-x-auto border-b border-line bg-surface px-4 py-2">
         {(['all', ...DISPATCH_STAGES] as const).map((key) => (
           <button

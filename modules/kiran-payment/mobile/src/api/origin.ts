@@ -3,9 +3,8 @@
  *
  * The console reaches the Python API through same-origin relative paths —
  * `/api` and `/uploads` — because Vite proxies them to :3001. A Capacitor app
- * has neither: it is served from `capacitor://localhost` and there is no proxy
- * in front of it, so a relative `/api/state` resolves to the app bundle and
- * 404s. Every server path in this app goes through here instead.
+ * has neither: it is served from `capacitor://localhost` with no proxy in
+ * front of it, so a relative `/api/state` resolves to the app bundle and 404s.
  *
  * Empty is the correct default. On the web it preserves the console's
  * behaviour exactly. A build destined for a device sets VITE_API_ORIGIN to an
@@ -13,16 +12,18 @@
  */
 export const API_ORIGIN = (import.meta.env.VITE_API_ORIGIN ?? '').replace(/\/$/, '');
 
-/** True when this build talks to a server on a different origin than itself. */
-export const IS_CROSS_ORIGIN = API_ORIGIN !== '';
+/** Paths the server owns. Everything else is the app's own bundle. */
+const SERVER_PATH = /^\/(api|uploads)(?=[/?#]|$)/;
 
 /**
- * An absolute URL for a server path.
+ * The URL a request should really go to.
  *
- * Paths already carrying a scheme are returned untouched, so a value that
- * arrives from the server as a full URL is not mangled into a double origin.
+ * Only relative paths under `/api` or `/uploads` move — matched as whole
+ * segments, so `/apiary` stays put. Absolute URLs (including `blob:` and
+ * `data:`) and the app's own files are returned untouched. With no origin
+ * configured this is the identity function.
  */
-export function serverUrl(path: string): string {
-  if (/^[a-z][a-z0-9+.-]*:/i.test(path)) return path;
-  return `${API_ORIGIN}${path.startsWith('/') ? path : `/${path}`}`;
+export function toServerUrl(url: string, origin: string = API_ORIGIN): string {
+  if (!origin || !SERVER_PATH.test(url)) return url;
+  return `${origin}${url}`;
 }

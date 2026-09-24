@@ -37,7 +37,12 @@ export function OrderDetailScreen() {
   const { value: order, loading } = useAsync(() => getOrder(orderId ?? ''), [orderId]);
   const [tab, setTab] = useState<Tab>('schedule');
 
-  if (loading) return <Screen back title="Order"><Empty title="Loading…" /></Screen>;
+  if (loading)
+    return (
+      <Screen back title="Order">
+        <Empty title="Loading…" />
+      </Screen>
+    );
   if (!order) {
     return (
       <Screen back title="Order">
@@ -117,9 +122,7 @@ export function OrderDetailScreen() {
                 aria-hidden
               />
               <span className="min-w-0 flex-1 truncate text-[14px] text-ink">{bucket.week}</span>
-              <span className="shrink-0 text-[13px] text-slate-600">
-                {compactQty(bucket.qty)}
-              </span>
+              <span className="shrink-0 text-[13px] text-slate-600">{compactQty(bucket.qty)}</span>
               <span className="w-[86px] shrink-0 text-right text-[12px] text-slate-500">
                 {bucket.status}
               </span>
@@ -137,9 +140,7 @@ export function OrderDetailScreen() {
               <div key={work.id} className="px-4 py-3">
                 <div className="flex items-baseline gap-2">
                   <span className="font-code text-[13px] text-ink">{work.id}</span>
-                  <span
-                    className={cn('ml-auto text-[12px] font-semibold', WORK_TONE[work.status])}
-                  >
+                  <span className={cn('ml-auto text-[12px] font-semibold', WORK_TONE[work.status])}>
                     {work.status}
                   </span>
                 </div>
@@ -158,7 +159,10 @@ export function OrderDetailScreen() {
             <Empty title="Nothing dispatched yet" />
           ) : (
             order.dispatches.map((dispatch) => (
-              <div key={dispatch.invoiceNo} className="flex min-h-touch items-center gap-3 px-4 py-2.5">
+              <div
+                key={dispatch.invoiceNo}
+                className="flex min-h-touch items-center gap-3 px-4 py-2.5"
+              >
                 <div className="min-w-0 flex-1">
                   <p className="font-code text-[13px] text-ink">{dispatch.invoiceNo}</p>
                   <p className="text-[12px] text-slate-500">{shortDate(dispatch.date)}</p>

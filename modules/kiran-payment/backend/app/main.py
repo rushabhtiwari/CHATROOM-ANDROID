@@ -36,10 +36,13 @@ app = FastAPI(
 )
 
 # The Vite dev server proxies /api, so same-origin is the normal path. CORS is
-# here so the API also works when a tab is opened straight against :3001.
+# here so the API also works when a tab is opened straight against :3001, and
+# for the iOS app: Capacitor serves it from capacitor://localhost with no proxy
+# in front, so every request it makes is cross-origin. Without that scheme here
+# the phone can reach the server but the web view discards every response.
 app.add_middleware(
     CORSMiddleware,
-    allow_origin_regex=r"http://(localhost|127\.0\.0\.1)(:\d+)?",
+    allow_origin_regex=r"(http://(localhost|127\.0\.0\.1)(:\d+)?|capacitor://localhost)",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

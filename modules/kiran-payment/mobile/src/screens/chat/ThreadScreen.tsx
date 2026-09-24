@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Bell, BellOff, ChevronLeft } from 'lucide-react';
 import { useChat } from '@/lib/chat-store';
@@ -8,6 +8,7 @@ import { MessageBubble } from '~/screens/chat/MessageBubble';
 import { Composer } from '~/screens/chat/Composer';
 import { Empty, Screen } from '~/components/Screen';
 import { tap } from '~/native/haptics';
+import { useStickToBottom } from '~/lib/useStickToBottom';
 
 /**
  * A thread, as a pushed screen.
@@ -33,6 +34,8 @@ export function ThreadScreen() {
   const [replyTo, setReplyTo] = useState<SharedMessage | null>(null);
   const [reacting, setReacting] = useState<SharedMessage | null>(null);
   const scroller = useRef<HTMLDivElement>(null);
+  const content = useRef<HTMLDivElement>(null);
+  const { onScroll } = useStickToBottom(scroller, content, rootId);
 
   useEffect(() => {
     if (roomId && roomId !== activeRoom?.id) setActiveRoom(roomId);
@@ -40,10 +43,6 @@ export function ThreadScreen() {
 
   const root = rootId ? messageById(rootId) : undefined;
   const replies = rootId ? threadReplies(rootId) : [];
-
-  useLayoutEffect(() => {
-    scroller.current?.scrollTo({ top: scroller.current.scrollHeight });
-  }, [replies.length]);
 
   if (!roomId || !rootId || !root) {
     return (
@@ -99,41 +98,43 @@ export function ThreadScreen() {
         </div>
       </header>
 
-      <div ref={scroller} className="scroll-y min-h-0 flex-1 py-2">
-        {/* The root reads as the subject of the screen, not as the first
+      <div ref={scroller} onScroll={onScroll} className="scroll-y min-h-0 flex-1">
+        <div ref={content} className="py-2">
+          {/* The root reads as the subject of the screen, not as the first
             reply, so it sits above a rule rather than in the run. */}
-        <MessageBubble
-          message={root}
-          showSender
-          inThread
-          onReply={setReplyTo}
-          onReact={setReacting}
-        />
-        <div className="my-2 flex items-center gap-3 px-4">
-          <span className="h-px flex-1 bg-line" />
-          <span className="text-[11px] uppercase tracking-wide text-slate-400">
-            {replies.length === 0 ? 'No replies yet' : 'Replies'}
-          </span>
-          <span className="h-px flex-1 bg-line" />
-        </div>
+          <MessageBubble
+            message={root}
+            showSender
+            inThread
+            onReply={setReplyTo}
+            onReact={setReacting}
+          />
+          <div className="my-2 flex items-center gap-3 px-4">
+            <span className="h-px flex-1 bg-line" />
+            <span className="text-[11px] uppercase tracking-wide text-slate-400">
+              {replies.length === 0 ? 'No replies yet' : 'Replies'}
+            </span>
+            <span className="h-px flex-1 bg-line" />
+          </div>
 
-        {replies.map((message, index) => {
-          const previous = replies[index - 1];
-          const showSender =
-            !previous ||
-            previous.senderId !== message.senderId ||
-            message.timestamp - previous.timestamp > 5 * 60_000;
-          return (
-            <MessageBubble
-              key={message.id}
-              message={message}
-              showSender={showSender}
-              inThread
-              onReply={setReplyTo}
-              onReact={setReacting}
-            />
-          );
-        })}
+          {replies.map((message, index) => {
+            const previous = replies[index - 1];
+            const showSender =
+              !previous ||
+              previous.senderId !== message.senderId ||
+              message.timestamp - previous.timestamp > 5 * 60_000;
+            return (
+              <MessageBubble
+                key={message.id}
+                message={message}
+                showSender={showSender}
+                inThread
+                onReply={setReplyTo}
+                onReact={setReacting}
+              />
+            );
+          })}
+        </div>
       </div>
 
       <Composer

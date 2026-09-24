@@ -105,7 +105,10 @@ export function DispatchDetailScreen() {
       <Section title="Consignment">
         <Field label="Quantity" value={compactQty(dispatch.quantity, dispatch.uom)} />
         <Field label="Value" value={compactCurrency(dispatch.value)} />
-        <Field label="Invoice" value={<span className="font-code">{dispatch.invoiceNumber}</span>} />
+        <Field
+          label="Invoice"
+          value={<span className="font-code">{dispatch.invoiceNumber}</span>}
+        />
         {dispatch.asnNumber && (
           <Field label="ASN" value={<span className="font-code">{dispatch.asnNumber}</span>} />
         )}
@@ -117,7 +120,10 @@ export function DispatchDetailScreen() {
 
       <Section title="In transit">
         <Field label="Carrier" value={dispatch.carrier} />
-        <Field label="Vehicle" value={<span className="font-code">{dispatch.vehicleNumber}</span>} />
+        <Field
+          label="Vehicle"
+          value={<span className="font-code">{dispatch.vehicleNumber}</span>}
+        />
         <Field label="Destination" value={dispatch.destination} />
       </Section>
 

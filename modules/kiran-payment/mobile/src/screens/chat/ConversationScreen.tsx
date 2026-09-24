@@ -1,14 +1,17 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ChevronLeft, Pin } from 'lucide-react';
+import { ChevronLeft, Pin, Sparkles } from 'lucide-react';
 import { useChat } from '@/lib/chat-store';
 import type { SharedMessage } from '@/lib/chat-types';
 import { MessageBubble } from '~/screens/chat/MessageBubble';
 import { Composer } from '~/screens/chat/Composer';
 import { ReactionSheet } from '~/screens/chat/ThreadScreen';
+import { AgentSheet } from '~/screens/chat/AgentSheet';
 import { RoomAvatar } from '~/components/RoomAvatar';
 import { Empty, Screen } from '~/components/Screen';
 import { tap } from '~/native/haptics';
+import { previewText } from '~/lib/text';
+import { useStickToBottom } from '~/lib/useStickToBottom';
 
 export function ConversationScreen() {
   const { roomId } = useParams<{ roomId: string }>();
@@ -26,12 +29,19 @@ export function ConversationScreen() {
     plainText,
     currentUserId,
     userById,
+    aiConversation,
   } = useChat();
 
   const [replyTo, setReplyTo] = useState<SharedMessage | null>(null);
   const [reacting, setReacting] = useState<SharedMessage | null>(null);
+  const [agentOpen, setAgentOpen] = useState(false);
+  const [seed, setSeed] = useState<{ text: string; nonce: number }>();
   const scroller = useRef<HTMLDivElement>(null);
-  const atBottom = useRef(true);
+  const content = useRef<HTMLDivElement>(null);
+
+  const { onScroll } = useStickToBottom(scroller, content, roomId, (node) => {
+    if (node.scrollTop < 60 && hasMoreHistory) loadOlder();
+  });
 
   // The route is the authority for which room is open, so a tapped
   // notification or a back gesture cannot leave the store pointing elsewhere.
@@ -42,15 +52,6 @@ export function ConversationScreen() {
   useEffect(() => {
     if (roomId) markRoomRead(roomId);
   }, [roomId, channelMessages.length, markRoomRead]);
-
-  // Stick to the newest message, but only when the reader is already there —
-  // yanking someone out of the history they are scrolled into is worse than
-  // missing a message by one screen.
-  useLayoutEffect(() => {
-    if (atBottom.current) {
-      scroller.current?.scrollTo({ top: scroller.current.scrollHeight });
-    }
-  }, [channelMessages.length]);
 
   if (!roomId || !rooms.some((room) => room.id === roomId)) {
     // The tab bar hides itself on a conversation route, so this state has to
@@ -64,13 +65,6 @@ export function ConversationScreen() {
 
   const pinned = pinnedMessages(roomId)[0];
   const room = activeRoom;
-
-  const onScroll = () => {
-    const node = scroller.current;
-    if (!node) return;
-    atBottom.current = node.scrollHeight - node.scrollTop - node.clientHeight < 80;
-    if (node.scrollTop < 60 && hasMoreHistory) loadOlder();
-  };
 
   const subtitle =
     room.type === 'direct'
@@ -103,6 +97,20 @@ export function ConversationScreen() {
             </h1>
             {subtitle && <p className="truncate text-[12px] text-slate-500">{subtitle}</p>}
           </div>
+          <button
+            type="button"
+            onClick={() => {
+              tap();
+              setAgentOpen(true);
+            }}
+            aria-label="Open the assistant"
+            className="relative flex h-11 w-11 items-center justify-center rounded-lg text-ai active:bg-slate-100"
+          >
+            <Sparkles className="h-5 w-5" />
+            {aiConversation(roomId).length > 0 && (
+              <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-ai" aria-hidden />
+            )}
+          </button>
         </div>
       </header>
 
@@ -117,45 +125,57 @@ export function ConversationScreen() {
               to be flattened rather than rendered — otherwise a pinned message
               reads as literal asterisks. */}
           <span className="truncate text-[13px] text-brand">
-            {plainText(pinned.content) || 'Attachment'}
+            {previewText(plainText(pinned.content)) || 'Attachment'}
           </span>
         </button>
       )}
 
-      <div ref={scroller} onScroll={onScroll} className="scroll-y min-h-0 flex-1 py-2">
-        {hasMoreHistory && (
-          <p className="py-2 text-center text-[12px] text-slate-400">Loading earlier messages…</p>
-        )}
-        {channelMessages.length === 0 ? (
-          <Empty title="No messages yet" detail="Say something to start this conversation." />
-        ) : (
-          channelMessages.map((message, index) => {
-            const previous = channelMessages[index - 1];
-            const showSender =
-              !previous ||
-              previous.senderId !== message.senderId ||
-              message.timestamp - previous.timestamp > 5 * 60_000;
-            return (
-              <MessageBubble
-                key={message.id}
-                message={message}
-                showSender={showSender}
-                onReply={setReplyTo}
-                onReact={setReacting}
-                onOpenThread={(target) => navigate(`/chats/${roomId}/thread/${target.id}`)}
-              />
-            );
-          })
-        )}
+      <div ref={scroller} onScroll={onScroll} className="scroll-y min-h-0 flex-1">
+        <div ref={content} className="py-2">
+          {hasMoreHistory && (
+            <p className="py-2 text-center text-[12px] text-slate-400">Loading earlier messages…</p>
+          )}
+          {channelMessages.length === 0 ? (
+            <Empty title="No messages yet" detail="Say something to start this conversation." />
+          ) : (
+            channelMessages.map((message, index) => {
+              const previous = channelMessages[index - 1];
+              const showSender =
+                !previous ||
+                previous.senderId !== message.senderId ||
+                message.timestamp - previous.timestamp > 5 * 60_000;
+              return (
+                <MessageBubble
+                  key={message.id}
+                  message={message}
+                  showSender={showSender}
+                  onReply={setReplyTo}
+                  onReact={setReacting}
+                  onOpenThread={(target) => navigate(`/chats/${roomId}/thread/${target.id}`)}
+                />
+              );
+            })
+          )}
+        </div>
       </div>
 
-      <Composer roomId={roomId} replyTo={replyTo} onClearReply={() => setReplyTo(null)} />
+      <Composer
+        roomId={roomId}
+        replyTo={replyTo}
+        onClearReply={() => setReplyTo(null)}
+        onAskAgent={() => setAgentOpen(true)}
+        seed={seed}
+      />
 
       {reacting && (
-        <ReactionSheet
-          message={reacting}
-          onClose={() => setReacting(null)}
-          onReply={setReplyTo}
+        <ReactionSheet message={reacting} onClose={() => setReacting(null)} onReply={setReplyTo} />
+      )}
+
+      {agentOpen && (
+        <AgentSheet
+          roomId={roomId}
+          onClose={() => setAgentOpen(false)}
+          onSendToComposer={(text) => setSeed({ text, nonce: Date.now() })}
         />
       )}
     </div>

@@ -44,10 +44,19 @@ The console reaches the API through relative paths, which work because Vite
 proxies them. A Capacitor app is served from `capacitor://localhost` and has no
 proxy, so a relative `/api/state` resolves to the app bundle.
 
-`src/api/origin.ts` is the one place that knows where the server is. It reads
-`VITE_API_ORIGIN`: empty on the web, an absolute origin for any build that runs
-on a device. Copy `.env.example` to `.env` and set it before building for a
-phone. The backend must allow CORS for `capacitor://localhost`.
+`src/api/install.ts` fixes that from outside the console: at startup it wraps
+`fetch` and `EventSource` and sends relative `/api` and `/uploads` paths to
+`VITE_API_ORIGIN`. Nothing else is touched, and with the variable unset nothing
+is installed. Copy `.env.example` to `.env` and set it before building for a
+phone; the backend already allows CORS for `capacitor://localhost`.
+
+To check a device build without a device, build with the variable set and serve
+`dist/` from any plain static server — one with no proxy, which is what the
+phone has:
+
+```bash
+VITE_API_ORIGIN=http://127.0.0.1:3001 npm run build --workspace mobile
+```
 
 ## Native behaviour
 
@@ -63,6 +72,19 @@ so screens never have to guard a call:
   involved.
 - `push.ts` — APNs registration and notification routing.
 - `haptics.ts`, `shell.ts` — feedback, status bar, keyboard, splash.
+
+## Tests
+
+```bash
+npm run test --workspace mobile
+npm run format:check --workspace mobile
+```
+
+The screen tests mount the real `ChatProvider` over its real seed, so sending a
+message, inserting a mention or opening a thread goes through the same store the
+app uses. Only the network is faked, answered from `src/test/fixtures/state.json`
+— a snapshot captured from the real backend. CI runs these on Linux before the
+macOS build starts.
 
 ## Building for iOS
 

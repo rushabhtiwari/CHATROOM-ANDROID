@@ -40,9 +40,7 @@ export function compactCurrency(value: number): string {
 /** Quantities run to hundreds of thousands of metres. */
 export function compactQty(value: number, uom?: string): string {
   const formatted =
-    Math.abs(value) >= 100_000
-      ? `${(value / 1000).toFixed(0)}k`
-      : value.toLocaleString('en-IN');
+    Math.abs(value) >= 100_000 ? `${(value / 1000).toFixed(0)}k` : value.toLocaleString('en-IN');
   return uom ? `${formatted} ${uom}` : formatted;
 }
 
