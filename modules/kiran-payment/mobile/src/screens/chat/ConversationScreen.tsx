@@ -5,11 +5,10 @@ import { useChat } from '@/lib/chat-store';
 import type { SharedMessage } from '@/lib/chat-types';
 import { MessageBubble } from '~/screens/chat/MessageBubble';
 import { Composer } from '~/screens/chat/Composer';
+import { ReactionSheet } from '~/screens/chat/ThreadScreen';
 import { RoomAvatar } from '~/components/RoomAvatar';
-import { Empty } from '~/components/Screen';
+import { Empty, Screen } from '~/components/Screen';
 import { tap } from '~/native/haptics';
-
-const QUICK_REACTIONS = ['👍', '✅', '🙏', '👀', '🎉', '❤️'];
 
 export function ConversationScreen() {
   const { roomId } = useParams<{ roomId: string }>();
@@ -24,7 +23,7 @@ export function ConversationScreen() {
     loadOlder,
     markRoomRead,
     pinnedMessages,
-    toggleReaction,
+    plainText,
     currentUserId,
     userById,
   } = useChat();
@@ -54,7 +53,13 @@ export function ConversationScreen() {
   }, [channelMessages.length]);
 
   if (!roomId || !rooms.some((room) => room.id === roomId)) {
-    return <Empty title="Conversation not found" detail="It may have been archived or deleted." />;
+    // The tab bar hides itself on a conversation route, so this state has to
+    // carry its own way out or it is a dead end.
+    return (
+      <Screen back={() => navigate('/chats')} title="Conversation">
+        <Empty title="Conversation not found" detail="It may have been archived or deleted." />
+      </Screen>
+    );
   }
 
   const pinned = pinnedMessages(roomId)[0];
@@ -108,7 +113,12 @@ export function ConversationScreen() {
           className="flex w-full items-center gap-2 border-b border-line bg-accent px-4 py-1.5 text-left"
         >
           <Pin className="h-3.5 w-3.5 shrink-0 text-brand" />
-          <span className="truncate text-[13px] text-brand">{pinned.content || 'Attachment'}</span>
+          {/* The banner is one line of plain text, so the markdown source has
+              to be flattened rather than rendered — otherwise a pinned message
+              reads as literal asterisks. */}
+          <span className="truncate text-[13px] text-brand">
+            {plainText(pinned.content) || 'Attachment'}
+          </span>
         </button>
       )}
 
@@ -132,6 +142,7 @@ export function ConversationScreen() {
                 showSender={showSender}
                 onReply={setReplyTo}
                 onReact={setReacting}
+                onOpenThread={(target) => navigate(`/chats/${roomId}/thread/${target.id}`)}
               />
             );
           })
@@ -141,43 +152,11 @@ export function ConversationScreen() {
       <Composer roomId={roomId} replyTo={replyTo} onClearReply={() => setReplyTo(null)} />
 
       {reacting && (
-        <div
-          className="absolute inset-0 z-30 flex items-end bg-ink/30"
-          onClick={() => setReacting(null)}
-          role="presentation"
-        >
-          <div
-            className="w-full animate-sheet-up rounded-t-2xl bg-surface pb-safe-bottom"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <div className="flex justify-around px-4 py-4">
-              {QUICK_REACTIONS.map((emoji) => (
-                <button
-                  key={emoji}
-                  type="button"
-                  onClick={() => {
-                    tap();
-                    toggleReaction(reacting.id, emoji);
-                    setReacting(null);
-                  }}
-                  className="flex h-12 w-12 items-center justify-center rounded-full text-2xl active:bg-slate-100"
-                >
-                  {emoji}
-                </button>
-              ))}
-            </div>
-            <button
-              type="button"
-              onClick={() => {
-                setReplyTo(reacting);
-                setReacting(null);
-              }}
-              className="min-h-touch w-full border-t border-line text-[15px] font-medium text-brand active:bg-slate-100"
-            >
-              Reply
-            </button>
-          </div>
-        </div>
+        <ReactionSheet
+          message={reacting}
+          onClose={() => setReacting(null)}
+          onReply={setReplyTo}
+        />
       )}
     </div>
   );

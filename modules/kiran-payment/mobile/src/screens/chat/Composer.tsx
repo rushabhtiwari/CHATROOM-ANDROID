@@ -1,7 +1,9 @@
 import { useRef, useState } from 'react';
-import { Camera, Image as ImageIcon, Paperclip, Send, Sparkles, X } from 'lucide-react';
+import { CalendarClock, Camera, Image as ImageIcon, Paperclip, Send, Sparkles, X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useChat } from '@/lib/chat-store';
 import type { MessageId, SharedMessage } from '@/lib/chat-types';
+import { activeMentionQuery, mentionCandidates, type MentionCandidate } from '@/lib/mentions';
 import { cn } from '@/lib/utils';
 import { pickPhoto } from '~/native/camera';
 import { isNative } from '~/native/platform';
@@ -11,24 +13,41 @@ import { selection, tap } from '~/native/haptics';
  * The composer.
  *
  * Deliberately smaller than the console's, which is a 32KB component carrying
- * slash commands, scheduling, a claim flow and an emoji grid. What survives
- * onto a phone is what a thumb reaches for: text, a photo, the assistant, and
- * whatever you are replying to.
+ * slash commands, an emoji grid and a claim flow. What survives onto a phone is
+ * what a thumb reaches for: text, mentions, a photo, the assistant, scheduling,
+ * and whatever you are replying to.
  */
 export function Composer({
   roomId,
   replyTo,
   onClearReply,
+  /** Set inside a thread: replies post to the root rather than the channel. */
+  threadRootId = null,
 }: {
   roomId: string;
   replyTo: SharedMessage | null;
   onClearReply: () => void;
+  threadRootId?: MessageId | null;
 }) {
-  const { sendMessage, sendAttachment, askAgent, canSend, currentUserId, activeRoom, plainText } =
-    useChat();
+  const navigate = useNavigate();
+  const {
+    sendMessage,
+    sendAttachment,
+    askAgent,
+    canSend,
+    currentUserId,
+    activeRoom,
+    users,
+    userGroups,
+    plainText,
+  } = useChat();
+
   const [text, setText] = useState('');
   const [busy, setBusy] = useState(false);
   const [attachOpen, setAttachOpen] = useState(false);
+  const [mentions, setMentions] = useState<{ items: MentionCandidate[]; start: number } | null>(
+    null,
+  );
   const fileInput = useRef<HTMLInputElement>(null);
   const textarea = useRef<HTMLTextAreaElement>(null);
 
@@ -43,6 +62,58 @@ export function Composer({
     node.style.height = `${Math.min(node.scrollHeight, 120)}px`;
   };
 
+  /**
+   * Re-evaluate the mention list on every keystroke and caret move.
+   *
+   * The console does this against a popup anchored to the caret. There is no
+   * caret to anchor to on a phone — the keyboard owns the bottom half of the
+   * screen — so the list sits directly above the composer instead, which is
+   * the only place it can be both visible and reachable.
+   */
+  const syncMentions = () => {
+    const node = textarea.current;
+    if (!node) return;
+    const value = node.value;
+    // Read the caret from the DOM on the next frame rather than from the
+    // change event. `selectionStart` on a React synthetic event is not
+    // reliably up to date for programmatic and IME input — and an incorrect
+    // caret makes the query silently empty, which looks like the feature
+    // simply not working.
+    const caret = node.selectionStart ?? value.length;
+    const active = activeMentionQuery(value, caret);
+    if (!active) {
+      setMentions(null);
+      return;
+    }
+    const items = mentionCandidates(
+      active.query,
+      users,
+      userGroups,
+      currentUserId,
+      activeRoom.participantIds,
+    );
+    setMentions(items.length > 0 ? { items, start: active.start } : null);
+  };
+
+  const applyMention = (candidate: MentionCandidate) => {
+    if (!mentions) return;
+    const node = textarea.current;
+    const caret = node?.selectionStart ?? text.length;
+    const next = `${text.slice(0, mentions.start)}${candidate.token} ${text.slice(caret)}`;
+    setText(next);
+    setMentions(null);
+    selection();
+
+    // Put the caret after the inserted token rather than at the end, so a
+    // mention typed mid-sentence does not send the writer back to the tail.
+    const position = mentions.start + candidate.token.length + 1;
+    requestAnimationFrame(() => {
+      node?.focus();
+      node?.setSelectionRange(position, position);
+      grow();
+    });
+  };
+
   const submit = async () => {
     const body = text.trim();
     if (!body || busy) return;
@@ -52,10 +123,14 @@ export function Composer({
       if (agentPrompt) {
         await askAgent(roomId, body.replace(/^@agent\s*/, ''));
       } else {
-        sendMessage(roomId, body, { replyToId: (replyTo?.id as MessageId) ?? null });
+        sendMessage(roomId, body, {
+          replyToId: (replyTo?.id as MessageId) ?? null,
+          threadRootId,
+        });
       }
       selection();
       setText('');
+      setMentions(null);
       onClearReply();
       if (textarea.current) textarea.current.style.height = 'auto';
     } finally {
@@ -69,6 +144,7 @@ export function Composer({
     if (file) {
       await sendAttachment(roomId, file, undefined, {
         replyToId: (replyTo?.id as MessageId) ?? null,
+        threadRootId,
       });
       onClearReply();
       return;
@@ -88,6 +164,51 @@ export function Composer({
 
   return (
     <div className="shrink-0 border-t border-line bg-surface">
+      {mentions && (
+        <ul className="max-h-[188px] overflow-y-auto border-b border-line" role="listbox">
+          {mentions.items.slice(0, 6).map((candidate) => (
+            <li key={candidate.key}>
+              <button
+                type="button"
+                role="option"
+                aria-selected={false}
+                // Taking focus would blur the textarea, and the blur handler
+                // clears this list — the click would land on nothing.
+                onMouseDown={(event) => event.preventDefault()}
+                onTouchStart={(event) => event.preventDefault()}
+                onClick={() => applyMention(candidate)}
+                className="flex min-h-touch w-full items-center gap-2.5 px-3 py-2 text-left active:bg-slate-100"
+              >
+                <span
+                  className={cn(
+                    'flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold text-white',
+                    candidate.kind === 'agent' && 'bg-ai',
+                    candidate.kind === 'broadcast' && 'bg-strand-amber',
+                    candidate.kind === 'group' && 'bg-slate-500',
+                  )}
+                  style={
+                    candidate.kind === 'user'
+                      ? { backgroundColor: candidate.user?.color ?? '#0A63C9' }
+                      : undefined
+                  }
+                  aria-hidden
+                >
+                  {candidate.kind === 'agent' ? '✦' : candidate.label.replace('@', '')[0]}
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-[14px] font-medium text-ink">
+                    {candidate.label}
+                  </span>
+                  <span className="block truncate text-[12px] text-slate-500">
+                    {candidate.detail}
+                  </span>
+                </span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+
       {replyTo && (
         <div className="flex items-start gap-2 border-b border-line bg-slate-50 px-3 py-2">
           <div className="min-w-0 flex-1 border-l-2 border-brand pl-2">
@@ -123,6 +244,16 @@ export function Composer({
           >
             <ImageIcon className="h-4 w-4" /> Photos
           </button>
+          <button
+            type="button"
+            onClick={() => {
+              setAttachOpen(false);
+              navigate(`/chats/${roomId}/schedule`);
+            }}
+            className="flex min-h-touch flex-1 items-center justify-center gap-2 rounded-lg bg-slate-100 text-[14px] font-medium text-ink active:bg-slate-200"
+          >
+            <CalendarClock className="h-4 w-4" /> Meet
+          </button>
         </div>
       )}
 
@@ -147,7 +278,11 @@ export function Composer({
           onChange={(event) => {
             setText(event.target.value);
             grow();
+            requestAnimationFrame(syncMentions);
           }}
+          onKeyUp={syncMentions}
+          onSelect={syncMentions}
+          onBlur={() => setMentions(null)}
           placeholder="Message"
           aria-label="Message"
           className="max-h-[120px] min-h-[40px] flex-1 resize-none rounded-2xl border border-line bg-slate-50 px-3 py-2 text-[16px] leading-snug text-ink outline-none focus:border-brand"
@@ -175,7 +310,7 @@ export function Composer({
         hidden
         onChange={async (event) => {
           const file = event.target.files?.[0];
-          if (file) await sendAttachment(roomId, file);
+          if (file) await sendAttachment(roomId, file, undefined, { threadRootId });
           event.target.value = '';
         }}
       />

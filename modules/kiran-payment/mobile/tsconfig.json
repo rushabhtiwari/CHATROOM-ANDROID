@@ -12,8 +12,11 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    // The console sets both to false and typechecks clean. Because the
+    // mobile build compiles the console's source, a stricter setting here
+    // would report errors in their files against a rule they did not choose.
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
     "types": ["vite/client", "node"],
     "baseUrl": ".",

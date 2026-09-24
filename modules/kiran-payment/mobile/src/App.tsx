@@ -4,6 +4,8 @@ import { useChat } from '@/lib/chat-store';
 import { TabBar } from '~/components/TabBar';
 import { ChatListScreen } from '~/screens/chat/ChatListScreen';
 import { ConversationScreen } from '~/screens/chat/ConversationScreen';
+import { ThreadScreen } from '~/screens/chat/ThreadScreen';
+import { MeetingFlowScreen } from '~/screens/chat/MeetingFlowScreen';
 import { OrdersScreen } from '~/screens/orders/OrdersScreen';
 import { OrderDetailScreen } from '~/screens/orders/OrderDetailScreen';
 import { DispatchesScreen } from '~/screens/orders/DispatchesScreen';
@@ -67,6 +69,8 @@ export default function App() {
         <Route path="/" element={<Navigate to="/chats" replace />} />
         <Route path="/chats" element={<ChatListScreen />} />
         <Route path="/chats/:roomId" element={<ConversationScreen />} />
+        <Route path="/chats/:roomId/schedule" element={<MeetingFlowScreen />} />
+        <Route path="/chats/:roomId/thread/:rootId" element={<ThreadScreen />} />
         <Route path="/orders" element={<OrdersScreen />} />
         <Route path="/orders/:orderId" element={<OrderDetailScreen />} />
         <Route path="/dispatches" element={<DispatchesScreen />} />

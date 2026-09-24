@@ -1,7 +1,9 @@
-import { AlertCircle, Check, CheckCheck, Clock, Pin, Reply } from 'lucide-react';
+import { AlertCircle, Check, CheckCheck, Clock, MessagesSquare, Pin, Reply } from 'lucide-react';
 import { useChat } from '@/lib/chat-store';
 import type { SharedMessage } from '@/lib/chat-types';
 import { cn } from '@/lib/utils';
+import { MarkdownContent } from '@/components/chat/MarkdownContent';
+import { ClaimCard } from '@/components/chat/ClaimCard';
 import { relativeTime } from '~/lib/format';
 import { tap, warn } from '~/native/haptics';
 
@@ -48,16 +50,32 @@ export function MessageBubble({
   showSender,
   onReply,
   onReact,
+  onOpenThread,
+  /** Inside a thread the replies are the whole screen, so no thread footer. */
+  inThread = false,
 }: {
   message: SharedMessage;
   showSender: boolean;
   onReply: (message: SharedMessage) => void;
   onReact: (message: SharedMessage) => void;
+  onOpenThread?: (message: SharedMessage) => void;
+  inThread?: boolean;
 }) {
-  const { currentUserId, userById, messageById, plainText, toggleReaction } = useChat();
+  const {
+    currentUserId,
+    userById,
+    users,
+    userGroups,
+    messageById,
+    plainText,
+    toggleReaction,
+    threadCount,
+  } = useChat();
+
   const mine = message.senderId === currentUserId;
   const sender = userById(message.senderId);
   const repliedTo = message.replyToId ? messageById(message.replyToId) : undefined;
+  const replies = inThread ? 0 : threadCount(message.id);
 
   if (message.system) {
     return (
@@ -65,7 +83,7 @@ export function MessageBubble({
     );
   }
 
-  // A long press is the phone's right-click. Touch devices get no contextmenu
+  // A long press is the phone's right-click. Touch devices give no contextmenu
   // event worth relying on, so the timer is explicit.
   let pressTimer: ReturnType<typeof setTimeout> | undefined;
   const startPress = () => {
@@ -140,10 +158,28 @@ export function MessageBubble({
             </div>
           )}
 
+          {/* A claim card is the console's component, unchanged. It re-reads the
+              claim from the server on every render, so approving one here and
+              approving it in the console cannot disagree. */}
+          {message.claimId && (
+            <div className="mb-1.5">
+              <ClaimCard claimId={message.claimId} mine={mine} />
+            </div>
+          )}
+
           {message.deletedAt ? (
             <span className="italic opacity-70">Message deleted</span>
           ) : (
-            <span className="whitespace-pre-wrap break-words">{message.content}</span>
+            message.content && (
+              <MarkdownContent
+                content={message.content}
+                users={users}
+                groups={userGroups}
+                currentUserId={currentUserId}
+                onPrimary={mine}
+                className="break-words"
+              />
+            )
           )}
 
           <span
@@ -180,6 +216,23 @@ export function MessageBubble({
               </button>
             ))}
           </div>
+        )}
+
+        {replies > 0 && onOpenThread && (
+          <button
+            type="button"
+            onClick={() => {
+              tap();
+              onOpenThread(message);
+            }}
+            className={cn(
+              'mt-1 flex items-center gap-1.5 rounded-full bg-accent px-2.5 py-1 text-[12px] font-medium text-brand',
+              mine && 'ml-auto',
+            )}
+          >
+            <MessagesSquare className="h-3.5 w-3.5" />
+            {replies} {replies === 1 ? 'reply' : 'replies'}
+          </button>
         )}
       </div>
     </div>
