@@ -1,0 +1,59 @@
+name: Android smoke test
+
+# Installs the published APK (the android-latest release) on emulators and
+# uses it through real taps and the on-screen keyboard: launch, open a
+# conversation, type, send, Back, restart. See .github/scripts/android-smoke.mjs
+# for the checks. Screenshots and logs are uploaded per Android version.
+#
+# Manual only: an emulator run takes several minutes per version.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Android 13, Android 15 (the first to force edge-to-edge) and 16.
+        api-level: [33, 35, 36]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Download the APK
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release download android-latest --pattern KiranOS.apk
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Run on the emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        env:
+          SMOKE_OUT: smoke-api-${{ matrix.api-level }}
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: node .github/scripts/android-smoke.mjs
+
+      - name: Upload screenshots and logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-smoke-api-${{ matrix.api-level }}
+          path: smoke-api-${{ matrix.api-level }}
+          retention-days: 14
