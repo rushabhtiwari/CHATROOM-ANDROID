@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ExternalLink, FileText, Forward, Link2, MessageSquare, X } from 'lucide-react';
+import { toServerUrl } from '~/api/origin';
 import { toast } from 'sonner';
 import { useChat } from '@/lib/chat-store';
 import type { SharedMessage } from '@/lib/chat-types';
@@ -39,7 +40,11 @@ export function PhotoViewer({ message, onClose }: { message: SharedMessage; onCl
         </div>
       </div>
       <div className="flex min-h-0 flex-1 items-center justify-center">
-        <img src={attachment.dataUrl} alt={attachment.name} className="max-h-full max-w-full" />
+        <img
+          src={toServerUrl(attachment.dataUrl)}
+          alt={attachment.name}
+          className="max-h-full max-w-full"
+        />
       </div>
       <div className="flex justify-around px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-2 text-white">
         <button
@@ -132,10 +137,13 @@ export function SharedMediaScreen() {
                 aria-label={`Photo from ${userById(message.senderId).name}`}
               >
                 {message.attachment!.type.startsWith('video/') ? (
-                  <video src={message.attachment!.dataUrl} className="h-full w-full object-cover" />
+                  <video
+                    src={toServerUrl(message.attachment!.dataUrl)}
+                    className="h-full w-full object-cover"
+                  />
                 ) : (
                   <img
-                    src={message.attachment!.dataUrl}
+                    src={toServerUrl(message.attachment!.dataUrl)}
                     alt={message.attachment!.name}
                     className="h-full w-full object-cover"
                     loading="lazy"
@@ -171,7 +179,7 @@ export function SharedMediaScreen() {
                 </button>
                 {message.attachment!.dataUrl && (
                   <a
-                    href={message.attachment!.dataUrl}
+                    href={toServerUrl(message.attachment!.dataUrl)}
                     download={message.attachment!.name}
                     target="_blank"
                     rel="noreferrer"

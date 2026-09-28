@@ -60,6 +60,12 @@ export interface OpLog {
   subscribe(user: UserId, handlers: LogHandlers): () => void;
   isOnline(): boolean;
   setOnline(online: boolean): void;
+  /**
+   * Store a file where every device can load it, and return its URL. Only a
+   * log shared through a server has one; without it, attachments stay on the
+   * device that sent them.
+   */
+  uploadAttachment?(file: File): Promise<{ url: string }>;
 }
 
 const DEFAULTS: TransportConfig = {

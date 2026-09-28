@@ -4,6 +4,8 @@ import {
   Camera,
   Clock,
   FileText,
+  ReceiptText,
+  Video,
   Image as ImageIcon,
   Paperclip,
   Send,
@@ -20,6 +22,7 @@ import { isNative } from '~/native/platform';
 import { selection, tap } from '~/native/haptics';
 import { previewText } from '~/lib/text';
 import { Sheet, SheetButton } from '~/components/Sheet';
+import { ClaimComposer } from '@/components/chat/ClaimComposer';
 import { upcomingTime } from '~/lib/format';
 
 /** `datetime-local` wants local time without a zone: "2026-09-28T14:30". */
@@ -82,6 +85,7 @@ export function Composer({
     saveDraft,
     clearDraft,
     scheduleMessage,
+    createMeeting,
   } = useChat();
 
   const [text, setText] = useState('');
@@ -93,6 +97,7 @@ export function Composer({
   const fileInput = useRef<HTMLInputElement>(null);
   const docInput = useRef<HTMLInputElement>(null);
   const [scheduling, setScheduling] = useState<string | null>(null);
+  const [claiming, setClaiming] = useState(false);
   const textarea = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -307,57 +312,70 @@ export function Composer({
       )}
 
       {attachOpen && (
-        <div className="flex gap-2 border-b border-line px-3 py-2">
-          <button
-            type="button"
-            onClick={() => attach('camera')}
-            className="flex min-h-touch flex-1 items-center justify-center gap-2 rounded-lg bg-slate-100 text-[14px] font-medium text-ink active:bg-slate-200"
-          >
-            <Camera className="h-4 w-4" /> Camera
-          </button>
-          <button
-            type="button"
-            onClick={() => attach('library')}
-            className="flex min-h-touch flex-1 items-center justify-center gap-2 rounded-lg bg-slate-100 text-[14px] font-medium text-ink active:bg-slate-200"
-          >
-            <ImageIcon className="h-4 w-4" /> Photos
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              setAttachOpen(false);
-              docInput.current?.click();
-            }}
-            className="flex min-h-touch flex-1 items-center justify-center gap-2 rounded-lg bg-slate-100 text-[14px] font-medium text-ink active:bg-slate-200"
-          >
-            <FileText className="h-4 w-4" /> File
-          </button>
-        </div>
-      )}
-      {attachOpen && (
-        <div className="flex gap-2 border-b border-line px-3 py-2">
-          <button
-            type="button"
-            onClick={() => {
-              setAttachOpen(false);
-              navigate(`/chats/${roomId}/schedule`);
-            }}
-            className="flex min-h-touch flex-1 items-center justify-center gap-2 rounded-lg bg-slate-100 text-[14px] font-medium text-ink active:bg-slate-200"
-          >
-            <CalendarClock className="h-4 w-4" /> Meeting
-          </button>
-          {!threadRootId && (
+        <div className="grid grid-cols-4 gap-2 border-b border-line px-3 py-3">
+          {[
+            { label: 'Camera', icon: Camera, run: () => attach('camera') },
+            { label: 'Photos', icon: ImageIcon, run: () => attach('library') },
+            {
+              label: 'File',
+              icon: FileText,
+              run: () => {
+                setAttachOpen(false);
+                docInput.current?.click();
+              },
+            },
+            {
+              label: 'Meet now',
+              icon: Video,
+              run: async () => {
+                setAttachOpen(false);
+                await createMeeting(roomId);
+              },
+            },
+            {
+              label: 'Schedule',
+              icon: CalendarClock,
+              run: () => {
+                setAttachOpen(false);
+                navigate(`/chats/${roomId}/schedule`);
+              },
+            },
+            ...(threadRootId
+              ? []
+              : [
+                  {
+                    label: 'Send later',
+                    icon: Clock,
+                    run: () => {
+                      setAttachOpen(false);
+                      setScheduling(toLocalInput(defaultSendAt()));
+                    },
+                  },
+                ]),
+            {
+              label: 'Claim',
+              icon: ReceiptText,
+              run: () => {
+                setAttachOpen(false);
+                setClaiming(true);
+              },
+            },
+          ].map(({ label, icon: Icon, run }) => (
             <button
+              key={label}
               type="button"
               onClick={() => {
-                setAttachOpen(false);
-                setScheduling(toLocalInput(defaultSendAt()));
+                tap();
+                void run();
               }}
-              className="flex min-h-touch flex-1 items-center justify-center gap-2 rounded-lg bg-slate-100 text-[14px] font-medium text-ink active:bg-slate-200"
+              className="flex flex-col items-center gap-1 rounded-xl py-2 text-[12px] font-medium text-ink active:bg-slate-100"
             >
-              <Clock className="h-4 w-4" /> Send later
+              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-accent text-brand">
+                <Icon className="h-5 w-5" />
+              </span>
+              {label}
             </button>
-          )}
+          ))}
         </div>
       )}
 
@@ -422,6 +440,26 @@ export function Composer({
           event.target.value = '';
         }}
       />
+
+      {claiming && (
+        // The console's claim form, unchanged: photograph or pick the receipt,
+        // let the assistant read it, correct the fields, file. The claim is
+        // created by the finance API and posted here as a live card.
+        <Sheet onClose={() => setClaiming(false)} label="Reimbursement claim">
+          <div className="p-3">
+            <ClaimComposer
+              onClose={() => setClaiming(false)}
+              onFiled={(claimId, reviewerName) => {
+                setClaiming(false);
+                sendMessage(roomId, `Filed a reimbursement claim for ${reviewerName} to review.`, {
+                  claimId,
+                  threadRootId,
+                });
+              }}
+            />
+          </div>
+        </Sheet>
+      )}
 
       {scheduling !== null && (
         <Sheet onClose={() => setScheduling(null)} title="Send later">

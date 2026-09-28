@@ -221,3 +221,31 @@ describe('append', () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 });
+
+describe('uploadAttachment', () => {
+  const file = new File(['bytes'], 'site.jpg', { type: 'image/jpeg' });
+
+  it('posts the file and returns the URL everyone can load', async () => {
+    fetchMock.mockReturnValueOnce(json({ url: '/uploads/chat/abc.jpg', name: 'site.jpg' }, 201));
+    expect(await createServerLog().uploadAttachment!(file)).toEqual({
+      url: '/uploads/chat/abc.jpg',
+    });
+    const [url, init] = fetchMock.mock.calls[0]!;
+    expect(url).toBe('/api/chat/attachments');
+    expect((init.body as FormData).get('file')).toBeInstanceOf(File);
+  });
+
+  it("says why when the server refuses it, and that retrying won't help", async () => {
+    fetchMock.mockReturnValueOnce(json({ detail: 'That file is larger than 15 MB.' }, 413));
+    const error = await createServerLog().uploadAttachment!(file).catch((e) => e);
+    expect(error.message).toBe('That file is larger than 15 MB.');
+    expect(error.retriable).toBe(false);
+  });
+
+  it('does not try while offline', async () => {
+    const log = createServerLog();
+    log.setOnline(false);
+    await expect(log.uploadAttachment!(file)).rejects.toBeInstanceOf(TransportError);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+});

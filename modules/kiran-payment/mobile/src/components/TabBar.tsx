@@ -1,11 +1,12 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { MessageSquare, Package, Truck, User } from 'lucide-react';
+import { CalendarDays, MessageSquare, Package, Truck, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useChat } from '@/lib/chat-store';
 import { tap } from '~/native/haptics';
 
 const TABS = [
   { to: '/chats', label: 'Chats', Icon: MessageSquare },
+  { to: '/calendar', label: 'Calendar', Icon: CalendarDays },
   { to: '/orders', label: 'Orders', Icon: Package },
   { to: '/dispatches', label: 'Dispatches', Icon: Truck },
   { to: '/me', label: 'Me', Icon: User },

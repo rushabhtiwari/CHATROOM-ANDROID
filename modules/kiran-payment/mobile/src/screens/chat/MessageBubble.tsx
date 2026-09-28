@@ -1,3 +1,4 @@
+import { toServerUrl } from '~/api/origin';
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
@@ -233,7 +234,7 @@ export function MessageBubble({
                   aria-label={`View ${message.attachment.name}`}
                 >
                   <img
-                    src={message.attachment.dataUrl}
+                    src={toServerUrl(message.attachment.dataUrl)}
                     alt={message.attachment.name}
                     className="max-h-72 w-full object-cover"
                     loading="lazy"
@@ -241,7 +242,7 @@ export function MessageBubble({
                 </button>
               ) : (
                 <a
-                  href={message.attachment.dataUrl || undefined}
+                  href={toServerUrl(message.attachment.dataUrl) || undefined}
                   download={message.attachment.name}
                   target="_blank"
                   rel="noreferrer"

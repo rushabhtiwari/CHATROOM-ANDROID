@@ -1,3 +1,4 @@
+import { toServerUrl } from '~/api/origin';
 import { useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
@@ -216,7 +217,7 @@ export function ProfileScreen() {
                   className="aspect-square overflow-hidden bg-slate-100"
                 >
                   <img
-                    src={message.attachment!.dataUrl}
+                    src={toServerUrl(message.attachment!.dataUrl)}
                     alt={message.attachment!.name}
                     className="h-full w-full object-cover"
                     loading="lazy"

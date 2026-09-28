@@ -61,6 +61,29 @@ export function createServerLog(): OpLog {
       online = next;
     },
 
+    async uploadAttachment(file) {
+      if (!online) {
+        throw new TransportError("You are offline. Send the file again once you are back.", true);
+      }
+      const form = new FormData();
+      form.append("file", file, file.name);
+      let response: Response;
+      try {
+        response = await fetch("/api/chat/attachments", { method: "POST", body: form });
+      } catch {
+        throw new TransportError("Could not reach the chat server to upload the file.", true);
+      }
+      if (!response.ok) {
+        const detail = await response
+          .json()
+          .then((body: { detail?: unknown }) => (typeof body.detail === "string" ? body.detail : null))
+          .catch(() => null);
+        throw new TransportError(detail ?? `The upload failed (${response.status}).`, response.status >= 500);
+      }
+      const body = (await response.json()) as { url: string };
+      return { url: body.url };
+    },
+
     async append(entry): Promise<AppendAck> {
       if (!online) {
         throw new TransportError("You are offline. It will be sent automatically.", true);

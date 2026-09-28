@@ -992,7 +992,21 @@ export function ChatProvider({ children, log: providedLog }: { children: ReactNo
       const meta = { name: file.name, type: file.type, size: file.size };
       let attachment: SharedMessage["attachment"];
 
-      if (file.size <= INLINE_ATTACHMENT_LIMIT) {
+      if (log.uploadAttachment) {
+        // On the chat server: the file goes up first and the message carries
+        // its URL, so everyone in the room sees the photo, not just its sender.
+        const uploading = toast.loading(`Uploading ${file.name}…`);
+        try {
+          const { url } = await log.uploadAttachment(file);
+          attachment = { ...meta, dataUrl: url };
+          toast.dismiss(uploading);
+        } catch (error) {
+          toast.error(error instanceof Error ? error.message : "The upload failed.", {
+            id: uploading,
+          });
+          return;
+        }
+      } else if (file.size <= INLINE_ATTACHMENT_LIMIT) {
         // Small enough that base64 in the message costs less than a second
         // store, and it survives even where IndexedDB is blocked.
         const dataUrl = await new Promise<string>((resolve) => {
@@ -1036,7 +1050,7 @@ export function ChatProvider({ children, log: providedLog }: { children: ReactNo
         audience.personal.length > 0 ? { ...draft, mentionIds: audience.personal } : draft;
       postMessage(message, { announce: true });
     },
-    [buildMessage, mentionAudienceOf, postMessage],
+    [buildMessage, mentionAudienceOf, postMessage, log],
   );
 
   const pendingSendOf = (messageId: MessageId) =>

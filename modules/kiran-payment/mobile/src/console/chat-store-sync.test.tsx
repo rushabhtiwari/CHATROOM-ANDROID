@@ -217,6 +217,38 @@ describe('the store over a log', () => {
   });
 });
 
+describe('attachments on a shared log', () => {
+  it('uploads the file first and sends its URL, so everyone can load it', async () => {
+    const log = new FakeLog();
+    const upload = vi.fn(async () => ({ url: '/uploads/chat/abc.jpg' }));
+    Object.assign(log, { uploadAttachment: upload });
+    const { chat } = mount(log);
+    await waitFor(() => expect(chat().storageReady).toBe(true));
+    const file = new File([new Uint8Array(300_000)], 'site.jpg', { type: 'image/jpeg' });
+    await act(() => chat().sendAttachment('r1', file));
+    expect(upload).toHaveBeenCalledWith(file);
+    const sent = log.appended.find((entry) => entry.op.type === 'message.send')!;
+    expect(sent.op).toMatchObject({
+      message: { attachment: { name: 'site.jpg', dataUrl: '/uploads/chat/abc.jpg' } },
+    });
+    expect(JSON.stringify(sent.op)).not.toContain('blobId');
+  });
+
+  it('sends nothing when the upload fails', async () => {
+    const log = new FakeLog();
+    Object.assign(log, {
+      uploadAttachment: async () => {
+        throw new TransportError('server said no', false);
+      },
+    });
+    const { chat } = mount(log);
+    await waitFor(() => expect(chat().storageReady).toBe(true));
+    const before = log.appended.length;
+    await act(() => chat().sendAttachment('r1', new File(['x'], 'a.png', { type: 'image/png' })));
+    expect(log.appended.length).toBe(before);
+  });
+});
+
 describe('the outbox across restarts', () => {
   it('saves unsent ops and resends them, same opIds, when the app opens again', async () => {
     const first = new FakeLog();
@@ -296,5 +328,3 @@ function emptyFrom(chat: Chat): Workspace {
     followedThreads: {},
   };
 }
-
-void vi;

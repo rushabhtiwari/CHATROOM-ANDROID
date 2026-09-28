@@ -25,6 +25,7 @@ vi.mock('~/native/attachment-store', async () => {
 });
 
 const { ChatProvider, useChat } = await import('@/lib/chat-store');
+const { createLocalLog } = await import('@/lib/chat-log');
 
 function SendPhoto() {
   const { sendAttachment, storageReady } = useChat();
@@ -40,8 +41,10 @@ function SendPhoto() {
 
 describe('chat store wiring', () => {
   it('stores attachments through the device store, not IndexedDB', async () => {
+    // A log with no server: on the chat server attachments are uploaded
+    // instead, and the device store is what holds them everywhere else.
     render(
-      <ChatProvider>
+      <ChatProvider log={createLocalLog({ failureRate: 0, latency: 10 })}>
         <SendPhoto />
       </ChatProvider>,
     );

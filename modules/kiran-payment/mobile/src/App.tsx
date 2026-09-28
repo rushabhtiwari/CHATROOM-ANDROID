@@ -23,6 +23,7 @@ import { OrderDetailScreen } from '~/screens/orders/OrderDetailScreen';
 import { DispatchesScreen } from '~/screens/orders/DispatchesScreen';
 import { DispatchDetailScreen } from '~/screens/orders/DispatchDetailScreen';
 import { MeScreen } from '~/screens/MeScreen';
+import { CalendarScreen } from '~/screens/CalendarScreen';
 import { watchConnectivity } from '~/native/network';
 import { initPush, type Destination } from '~/native/push';
 import { hideSplash } from '~/native/shell';
@@ -98,6 +99,7 @@ export default function App() {
         <Route path="/orders/:orderId" element={<OrderDetailScreen />} />
         <Route path="/dispatches" element={<DispatchesScreen />} />
         <Route path="/dispatches/:dispatchId" element={<DispatchDetailScreen />} />
+        <Route path="/calendar" element={<CalendarScreen />} />
         <Route path="/me" element={<MeScreen />} />
         <Route path="*" element={<Navigate to="/chats" replace />} />
       </Routes>
