@@ -7,13 +7,14 @@
  * push *from* — neither the chat server nor the orders API has been built, so
  * no remote notification will arrive until they are.
  *
- * Rather than fake that, the app also schedules *local* notifications from the
- * chat store's own notification feed. Those are genuine: they are how a
- * backgrounded app tells you about a mention it already knows about. When the
- * servers land, the same `handleTap` routing serves both.
+ * There are deliberately no *local* notifications. The design once had the
+ * app re-raise its own notification feed while backgrounded, but iOS suspends
+ * a backgrounded app's JavaScript within seconds, and with no chat server
+ * nothing arrives in that window to re-raise. Once a server exists, background
+ * notifications have to come from it over APNs — and local ones alongside
+ * would only arrive twice.
  */
 import { PushNotifications, type Token } from '@capacitor/push-notifications';
-import { LocalNotifications } from '@capacitor/local-notifications';
 import { isNative } from './platform';
 
 /** Where a notification says the user should end up. */
@@ -70,41 +71,5 @@ export async function initPush({ onToken, onTap }: PushHandlers): Promise<boolea
   });
   await PushNotifications.register();
 
-  await LocalNotifications.requestPermissions();
-  await LocalNotifications.addListener('localNotificationActionPerformed', (action) => {
-    const destination = destinationFrom(action.notification.extra);
-    if (destination) onTap(destination);
-  });
-
   return true;
-}
-
-/**
- * Raise a local notification for something the app already knows about.
- *
- * Used for mentions arriving while the app is backgrounded. Delivered
- * immediately; the id has to be a 32-bit integer, so it is derived from the
- * source id rather than being the id itself.
- */
-export async function notifyLocally(input: {
-  id: string;
-  title: string;
-  body: string;
-  destination: Destination;
-}): Promise<void> {
-  if (!isNative) return;
-
-  let hash = 0;
-  for (const char of input.id) hash = (hash * 31 + char.charCodeAt(0)) | 0;
-
-  await LocalNotifications.schedule({
-    notifications: [
-      {
-        id: Math.abs(hash),
-        title: input.title,
-        body: input.body,
-        extra: input.destination,
-      },
-    ],
-  });
 }

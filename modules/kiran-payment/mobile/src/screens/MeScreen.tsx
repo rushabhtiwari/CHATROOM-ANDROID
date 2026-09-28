@@ -2,6 +2,7 @@ import { Check, Wifi, WifiOff } from 'lucide-react';
 import { useChat } from '@/lib/chat-store';
 import { Row, Screen, Section } from '~/components/Screen';
 import { isNative, platform } from '~/native/platform';
+import { useDeviceStorageFailing } from '~/lib/useDeviceStorage';
 
 /**
  * Who you are, and what the app is doing.
@@ -13,6 +14,7 @@ import { isNative, platform } from '~/native/platform';
  */
 export function MeScreen() {
   const { users, currentUser, setCurrentUserId, online, storageStatus } = useChat();
+  const deviceFailing = useDeviceStorageFailing();
 
   return (
     <Screen title="Me">
@@ -51,12 +53,20 @@ export function MeScreen() {
         </Row>
         <Row>
           <span className="flex-1 text-[15px] text-ink">Storage</span>
-          <span className="text-[13px] text-slate-500">
-            {storageStatus?.reason === 'quota'
-              ? 'Full'
-              : storageStatus?.reason === 'unavailable'
-                ? 'Unavailable'
-                : 'Healthy'}
+          <span
+            className={
+              deviceFailing
+                ? 'text-[13px] font-medium text-strand-amber'
+                : 'text-[13px] text-slate-500'
+            }
+          >
+            {deviceFailing
+              ? 'Not saving to this phone'
+              : storageStatus?.reason === 'quota'
+                ? 'Full'
+                : storageStatus?.reason === 'unavailable'
+                  ? 'Unavailable'
+                  : 'Healthy'}
           </span>
         </Row>
       </Section>

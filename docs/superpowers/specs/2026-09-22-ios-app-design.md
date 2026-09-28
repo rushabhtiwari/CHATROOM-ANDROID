@@ -155,10 +155,16 @@ migration path, different sink.
 ## 6. Push notifications
 
 v1 ships the plumbing, not fake pushes: permission flow, APNs token
-registration, a `native/push.ts` adapter, deep-link routing (a message
+registration, a `native/push.ts` adapter, and deep-link routing (a message
 notification opens that conversation; a dispatch notification opens
-that dispatch), and local notifications driven by the existing in-app
-notification feed.
+that dispatch).
+
+**Amended during implementation.** This section first also promised
+local notifications driven by the in-app notification feed. They were
+dropped: iOS suspends a backgrounded app's JavaScript within seconds,
+and with no chat server nothing arrives in that window to re-raise.
+Background notifications have to come from the server over APNs, and
+local ones alongside would arrive twice.
 
 Server-sent push is a dependency on #2 and #3 and is out of scope here.
 

@@ -6,6 +6,7 @@ import type { Room, SharedMessage } from '@/lib/chat-types';
 import { cn } from '@/lib/utils';
 import { Empty, Row, Screen } from '~/components/Screen';
 import { RoomAvatar } from '~/components/RoomAvatar';
+import { StorageWarning } from '~/components/StorageWarning';
 import { relativeTime } from '~/lib/format';
 import { previewText } from '~/lib/text';
 
@@ -50,6 +51,7 @@ export function ChatListScreen() {
 
   return (
     <Screen title="Chats">
+      <StorageWarning />
       {!online && (
         <div className="flex items-center gap-2 bg-strand-amber/10 px-4 py-2 text-[13px] text-strand-amber">
           <WifiOff className="h-4 w-4 shrink-0" />

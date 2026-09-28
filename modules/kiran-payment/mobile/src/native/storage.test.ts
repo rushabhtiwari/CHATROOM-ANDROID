@@ -120,3 +120,65 @@ describe('installDurableStorage', () => {
     expect(window.localStorage).toBe(before);
   });
 });
+
+describe('storage health', () => {
+  beforeEach(() => {
+    prefs.clear();
+    failWrites = false;
+    vi.resetModules();
+  });
+
+  it('announces a failed save, so the app can stop saying "Healthy"', async () => {
+    const module = await import('~/native/storage');
+    await module.installDurableStorage(true);
+    const heard: unknown[] = [];
+    const off = module.onStorageFailure((error) => heard.push(error));
+
+    failWrites = true;
+    window.localStorage.setItem('kiranos-chat-v1', 'x');
+    await settle();
+    expect(heard).toHaveLength(1);
+    expect(heard[0]).toBeInstanceOf(Error);
+
+    off();
+    window.localStorage.setItem('kiranos-chat-v1', 'y');
+    await settle();
+    expect(heard).toHaveLength(1);
+  });
+
+  it('clears the failure once a save succeeds again', async () => {
+    const module = await import('~/native/storage');
+    await module.installDurableStorage(true);
+    failWrites = true;
+    window.localStorage.setItem('kiranos-chat-v1', 'x');
+    await settle();
+    expect(module.storageError()).not.toBeNull();
+
+    failWrites = false;
+    window.localStorage.setItem('kiranos-chat-v1', 'y');
+    await settle();
+    expect(module.storageError()).toBeNull();
+  });
+
+  it('announces recovery once, when a save succeeds after a failure', async () => {
+    const module = await import('~/native/storage');
+    await module.installDurableStorage(true);
+    const heard: unknown[] = [];
+    module.onStorageFailure((error) => heard.push(error));
+
+    window.localStorage.setItem('a', '1'); // healthy: nothing to announce
+    await settle();
+    failWrites = true;
+    window.localStorage.setItem('a', '2');
+    await settle();
+    failWrites = false;
+    window.localStorage.setItem('a', '3');
+    window.localStorage.setItem('a', '4'); // still healthy: announced once
+    await settle();
+
+    expect(heard.map((e) => (e === null ? 'recovered' : 'failed'))).toEqual([
+      'failed',
+      'recovered',
+    ]);
+  });
+});

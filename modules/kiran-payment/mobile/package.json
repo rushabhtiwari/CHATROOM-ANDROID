@@ -15,7 +15,8 @@
     "ios:open": "cap open ios",
     "ios:run": "cap run ios",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
-    "format:check": "prettier --check \"src/**/*.{ts,tsx}\""
+    "format:check": "prettier --check \"src/**/*.{ts,tsx}\"",
+    "check": "tsc --noEmit && prettier --check \"src/**/*.{ts,tsx}\" && vitest run && vite build"
   },
   "dependencies": {
     "kiran-os": "*",
@@ -25,7 +26,6 @@
     "@capacitor/device": "^7.0.1",
     "@capacitor/haptics": "^7.0.1",
     "@capacitor/keyboard": "^7.0.1",
-    "@capacitor/local-notifications": "^7.0.1",
     "@capacitor/network": "^7.0.1",
     "@capacitor/preferences": "^7.0.1",
     "@capacitor/push-notifications": "^7.0.1",

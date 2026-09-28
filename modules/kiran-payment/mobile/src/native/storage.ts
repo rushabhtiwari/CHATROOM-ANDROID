@@ -29,11 +29,42 @@ import { Preferences } from '@capacitor/preferences';
  * alone; there are no other keys to keep out.
  */
 
+/** Called with the error on failure, and with null when saving recovers. */
+type FailureListener = (error: unknown) => void;
+const listeners = new Set<FailureListener>();
+
 class PreferencesBackedStorage implements Storage {
   private readonly cache = new Map<string, string>();
+  private sequence = 0;
 
-  /** The most recent write failure, for the storage banner to report. */
+  /**
+   * Whether the device copy is currently behind the in-memory one: the error
+   * from the most recent write, or null once a write succeeds again.
+   */
   lastError: unknown = null;
+
+  /**
+   * Run one write against Preferences and record how it went.
+   *
+   * Only the latest write's outcome counts. Writes are not awaited, so an
+   * older write that fails after a newer one has succeeded must not mark the
+   * store as failing — the device already holds the newer value.
+   */
+  private mirror(write: () => Promise<unknown>) {
+    const mine = ++this.sequence;
+    write().then(
+      () => {
+        if (mine !== this.sequence || this.lastError === null) return;
+        this.lastError = null;
+        for (const listener of listeners) listener(null);
+      },
+      (error) => {
+        if (mine !== this.sequence) return;
+        this.lastError = error;
+        for (const listener of listeners) listener(error);
+      },
+    );
+  }
 
   constructor(entries: Iterable<[string, string]>) {
     for (const [key, value] of entries) this.cache.set(key, value);
@@ -53,23 +84,17 @@ class PreferencesBackedStorage implements Storage {
 
   setItem(key: string, value: string): void {
     this.cache.set(key, String(value));
-    void Preferences.set({ key, value: String(value) }).catch((error) => {
-      this.lastError = error;
-    });
+    this.mirror(() => Preferences.set({ key, value: String(value) }));
   }
 
   removeItem(key: string): void {
     this.cache.delete(key);
-    void Preferences.remove({ key }).catch((error) => {
-      this.lastError = error;
-    });
+    this.mirror(() => Preferences.remove({ key }));
   }
 
   clear(): void {
     this.cache.clear();
-    void Preferences.clear().catch((error) => {
-      this.lastError = error;
-    });
+    this.mirror(() => Preferences.clear());
   }
 }
 
@@ -103,5 +128,17 @@ export async function installDurableStorage(isNative: boolean): Promise<void> {
   });
 }
 
-/** The most recent persistence failure, if the durable store is in use. */
+/** The current persistence failure, if the durable store is in use. */
 export const storageError = () => installed?.lastError ?? null;
+
+/**
+ * Hear about a failed save, and about recovering from one (with null).
+ *
+ * The chat store cannot see these: its own save goes to this shim's memory,
+ * which always succeeds, so it would go on reporting a healthy workspace while
+ * nothing reached the device. Returns an unsubscribe function.
+ */
+export function onStorageFailure(listener: FailureListener): () => void {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+}
