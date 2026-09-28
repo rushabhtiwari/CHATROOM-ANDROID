@@ -34,6 +34,19 @@ PORT = int(os.getenv("RTS_PORT", "3001"))
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "").strip()
 EXTRACTION_MODEL = os.getenv("RTS_EXTRACTION_MODEL", "claude-haiku-4-5").strip()
 
+# OpenAI, as an alternative provider for the assistant and receipt reading.
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "").strip()
+OPENAI_BASE_URL = os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1").strip().rstrip("/")
+OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini").strip()
+OPENAI_EXTRACTION_MODEL = os.getenv("OPENAI_EXTRACTION_MODEL", OPENAI_MODEL).strip()
+
+# Which provider answers: "openai" or "anthropic". Unset, OpenAI is used when
+# its key is present and Anthropic otherwise.
+AI_PROVIDER = (
+    os.getenv("AI_PROVIDER", "").strip().lower()
+    or ("openai" if OPENAI_API_KEY else "anthropic")
+)
+
 ENFORCE_BUDGET = os.getenv("RTS_ENFORCE_BUDGET", "false").lower() in ("1", "true", "yes")
 
 # Files the extractor will read. Anything else is stored but not sent to the model.
@@ -78,5 +91,14 @@ def google_configured(kind: str = "calendar") -> bool:
     return bool(GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET and token)
 
 
+def use_openai() -> bool:
+    return AI_PROVIDER == "openai"
+
+
 def has_api_key() -> bool:
-    return bool(ANTHROPIC_API_KEY)
+    """True when the chosen provider has a key."""
+    return bool(OPENAI_API_KEY) if use_openai() else bool(ANTHROPIC_API_KEY)
+
+
+def ai_key_name() -> str:
+    return "OPENAI_API_KEY" if use_openai() else "ANTHROPIC_API_KEY"

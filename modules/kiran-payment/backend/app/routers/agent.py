@@ -22,7 +22,8 @@ from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import BaseModel, Field
 
-from ..config import ANTHROPIC_API_KEY, has_api_key
+from .. import openai_client
+from ..config import ANTHROPIC_API_KEY, OPENAI_MODEL, ai_key_name, has_api_key, use_openai
 
 router = APIRouter(tags=["assistant"])
 
@@ -128,7 +129,7 @@ def _offline_reply(body: AgentRequest) -> str:
         return (
             "The assistant is not connected to a model right now, and there are "
             "no recent messages in this conversation to work from.\n\n"
-            "Add `ANTHROPIC_API_KEY` to `backend/.env` to turn it on."
+            f"Add `{ai_key_name()}` to `backend/.env` to turn it on."
         )
 
     speakers: list[str] = []
@@ -144,7 +145,7 @@ def _offline_reply(body: AgentRequest) -> str:
         "rather than an analysis of it.\n\n"
         f"**In the room:** {', '.join(speakers[:6])}\n\n"
         f"**Last {len(recent)} messages**\n{body_text}\n\n"
-        "Add `ANTHROPIC_API_KEY` to `backend/.env` for a real answer."
+        f"Add `{ai_key_name()}` to `backend/.env` for a real answer."
     )
 
 
@@ -158,7 +159,24 @@ async def _stream_offline(text: str) -> AsyncIterator[str]:
     yield "data: [DONE]\n\n"
 
 
+async def _stream_openai(body: AgentRequest) -> AsyncIterator[str]:
+    system = SYSTEM_SUMMARY if body.mode == "summary" else SYSTEM_CHAT
+    try:
+        async for delta in openai_client.stream_chat(
+            OPENAI_MODEL, system, _messages(body), MAX_OUTPUT_TOKENS
+        ):
+            yield _sse({"delta": delta})
+        yield _sse({"done": True})
+        yield "data: [DONE]\n\n"
+    except Exception as error:  # noqa: BLE001 — the reason is shown to the user
+        yield _sse({"error": openai_client.readable(error)})
+
+
 async def _stream_model(body: AgentRequest) -> AsyncIterator[str]:
+    if use_openai():
+        async for frame in _stream_openai(body):
+            yield frame
+        return
     try:
         import anthropic
     except ImportError:
@@ -224,6 +242,18 @@ async def agent(body: AgentRequest, request: Request):
             headers={"Cache-Control": "no-cache, no-transform", "X-Accel-Buffering": "no"},
         )
 
+    if not body.stream and use_openai():
+        try:
+            text = await openai_client.complete_chat(
+                OPENAI_MODEL,
+                SYSTEM_SUMMARY if body.mode == "summary" else SYSTEM_CHAT,
+                _messages(body),
+                MAX_OUTPUT_TOKENS,
+            )
+            return JSONResponse({"reply": text})
+        except Exception as error:  # noqa: BLE001
+            return JSONResponse({"error": openai_client.readable(error)}, status_code=502)
+
     if not body.stream:
         try:
             import anthropic
@@ -249,4 +279,9 @@ async def agent(body: AgentRequest, request: Request):
 
 @router.get("/agent/status")
 def agent_status() -> dict:
-    return {"configured": has_api_key(), "model": AGENT_MODEL if has_api_key() else None}
+    model = OPENAI_MODEL if use_openai() else AGENT_MODEL
+    return {
+        "configured": has_api_key(),
+        "provider": "openai" if use_openai() else "anthropic",
+        "model": model if has_api_key() else None,
+    }

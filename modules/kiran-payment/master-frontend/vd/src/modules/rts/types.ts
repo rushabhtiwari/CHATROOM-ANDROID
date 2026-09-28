@@ -182,7 +182,7 @@ export interface Extraction {
   policyFindings: PolicyFinding[];
   notes?: string | null;
   /** 'sample' and 'heuristic' mean the model did not read the file. */
-  source: 'claude' | 'sample' | 'heuristic';
+  source: 'claude' | 'openai' | 'sample' | 'heuristic';
   model?: string | null;
   receiptIds: string[];
 }

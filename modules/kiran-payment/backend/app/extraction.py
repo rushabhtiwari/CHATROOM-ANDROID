@@ -24,6 +24,9 @@ from typing import Any, Optional
 
 from .config import (
     ANTHROPIC_API_KEY,
+    OPENAI_EXTRACTION_MODEL,
+    ai_key_name,
+    use_openai,
     EXTRACTION_MODEL,
     IMAGE_TYPES,
     PDF_TYPES,
@@ -502,7 +505,7 @@ def extract(
     if not has_api_key():
         result = _heuristic(file_names, caps)
         result["notes"] = (
-            "No ANTHROPIC_API_KEY is configured, so the receipt was not read. "
+            f"No {ai_key_name()} is configured, so the receipt was not read. "
             "Add a key to backend/.env to enable extraction."
         )
         return result
@@ -510,6 +513,9 @@ def extract(
     blocks = [b for b in (_content_block(p) for p in paths) if b]
     if not blocks:
         return _heuristic(file_names, caps)
+
+    if use_openai():
+        return _extract_openai(paths, blocks, caps, file_names)
 
     try:
         import anthropic
@@ -580,8 +586,50 @@ def extract(
         return result
 
 
+def _instruction(count: int) -> str:
+    text = "Read the attached receipt" + ("s" if count > 1 else "") + " and record the claim."
+    if count > 1:
+        text += (
+            " They belong to one trip, so combine them into a single claim: "
+            "sum the totals, and pick the category of the largest charge."
+        )
+    return text
+
+
+def _extract_openai(
+    paths: list[Path], blocks: list[dict], caps: list[dict], file_names: list[str]
+) -> dict:
+    """The same reading, through OpenAI: the receipts as images or PDF files,
+    and the receipt tool forced as a function call."""
+    from . import openai_client
+
+    parts = [
+        openai_client.file_part(
+            block["source"]["media_type"], block["source"]["data"], path.name
+        )
+        for path, block in zip([p for p in paths if _content_block(p)], blocks)
+    ]
+    parts.append({"type": "text", "text": _instruction(len(blocks))})
+    tool = {k: v for k, v in RECEIPT_TOOL.items() if k != "strict"}
+    try:
+        raw = openai_client.call_function(
+            OPENAI_EXTRACTION_MODEL, _system_prompt(caps), parts, tool
+        )
+    except Exception as exc:  # noqa: BLE001 - the demo must not die on a bad call
+        result = _heuristic(file_names, caps)
+        result["notes"] = (
+            f"{openai_client.readable(exc)} Please enter the details manually."
+        )
+        return result
+    if not raw:
+        return _heuristic(file_names, caps)
+    return _shape(raw, caps, source="openai", model=OPENAI_EXTRACTION_MODEL)
+
+
 def describe_backend() -> dict[str, Any]:
+    model = OPENAI_EXTRACTION_MODEL if use_openai() else EXTRACTION_MODEL
     return {
         "configured": has_api_key(),
-        "model": EXTRACTION_MODEL if has_api_key() else None,
+        "provider": "openai" if use_openai() else "anthropic",
+        "model": model if has_api_key() else None,
     }

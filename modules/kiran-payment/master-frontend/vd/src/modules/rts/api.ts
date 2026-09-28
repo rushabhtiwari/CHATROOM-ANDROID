@@ -207,7 +207,7 @@ export interface Extraction {
   overallConfidence: number;
   policyFindings: PolicyFinding[];
   notes?: string | null;
-  source: 'claude' | 'sample' | 'heuristic';
+  source: 'claude' | 'openai' | 'sample' | 'heuristic';
   model?: string | null;
   receiptIds: string[];
 }
