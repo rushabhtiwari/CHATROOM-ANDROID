@@ -1,0 +1,1479 @@
+{
+  "exportedAt": 1790571653009,
+  "users": [
+    {
+      "id": "u1",
+      "name": "Rohan Deshmukh",
+      "role": "Regional Sales Manager",
+      "department": "Sales",
+      "email": "rohan.deshmukh@kirancable.co.in",
+      "online": true,
+      "color": "#4cc9f0",
+      "timeZone": "Asia/Kolkata"
+    },
+    {
+      "id": "u2",
+      "name": "Ananya Iyer",
+      "role": "Principal Engineer",
+      "department": "Engineering",
+      "email": "ananya.iyer@kirancable.co.in",
+      "online": true,
+      "color": "#b388ff",
+      "timeZone": "Asia/Kolkata"
+    },
+    {
+      "id": "u3",
+      "name": "Arjun Bhatt",
+      "role": "Field Systems Engineer",
+      "department": "Engineering",
+      "email": "arjun.bhatt@kirancable.co.in",
+      "online": false,
+      "color": "#ffb703",
+      "timeZone": "Europe/Berlin"
+    },
+    {
+      "id": "u4",
+      "name": "Priya Raghavan",
+      "role": "Senior Content Strategist",
+      "department": "Content",
+      "email": "priya.raghavan@kirancable.co.in",
+      "online": true,
+      "color": "#4ade80",
+      "timeZone": "Asia/Kolkata"
+    },
+    {
+      "id": "u5",
+      "name": "Imran Shaikh",
+      "role": "Quality Inspector",
+      "department": "Operations",
+      "email": "imran.shaikh@kirancable.co.in",
+      "online": false,
+      "color": "#f472b6",
+      "timeZone": "America/New_York"
+    },
+    {
+      "id": "u6",
+      "name": "Rajat Khanna",
+      "role": "Head of Engineering",
+      "department": "Engineering",
+      "email": "rajat.khanna@kirancable.co.in",
+      "online": true,
+      "color": "#fb7185",
+      "timeZone": "Asia/Kolkata"
+    },
+    {
+      "id": "u7",
+      "name": "Meera Nair",
+      "role": "HR Business Partner",
+      "department": "People",
+      "email": "meera.nair@kirancable.co.in",
+      "online": true,
+      "color": "#38bdf8",
+      "timeZone": "Asia/Kolkata"
+    },
+    {
+      "id": "u8",
+      "name": "Tanvi Malhotra",
+      "role": "HR Generalist",
+      "department": "People",
+      "email": "tanvi.malhotra@kirancable.co.in",
+      "online": true,
+      "color": "#f97316",
+      "timeZone": "Asia/Kolkata"
+    },
+    {
+      "id": "u9",
+      "name": "Sunita Barve",
+      "role": "Head of Operations",
+      "department": "Operations",
+      "email": "sunita.barve@kirancable.co.in",
+      "online": false,
+      "color": "#a78bfa",
+      "timeZone": "Asia/Kolkata"
+    },
+    {
+      "id": "u10",
+      "name": "Vikram Sethi",
+      "role": "Accounts Controller",
+      "department": "Finance",
+      "email": "vikram.sethi@kirancable.co.in",
+      "online": false,
+      "color": "#2dd4bf",
+      "timeZone": "Europe/London"
+    },
+    {
+      "id": "u11",
+      "name": "Sneha Kulkarni",
+      "role": "Marketing Manager",
+      "department": "Marketing",
+      "email": "sneha.kulkarni@kirancable.co.in",
+      "online": true,
+      "color": "#e879f9",
+      "timeZone": "Asia/Kolkata"
+    },
+    {
+      "id": "u12",
+      "name": "Farhan Qureshi",
+      "role": "Plant Operations Lead",
+      "department": "Operations",
+      "email": "farhan.qureshi@kirancable.co.in",
+      "online": true,
+      "color": "#facc15",
+      "timeZone": "Asia/Singapore"
+    },
+    {
+      "id": "u13",
+      "name": "Deepak Rao",
+      "role": "Chief Financial Officer",
+      "department": "Finance",
+      "email": "deepak.rao@kirancable.co.in",
+      "online": false,
+      "color": "#818cf8",
+      "timeZone": "Europe/Berlin"
+    },
+    {
+      "id": "u14",
+      "name": "Kavya Reddy",
+      "role": "Payments Officer",
+      "department": "Finance",
+      "email": "kavya.reddy@kirancable.co.in",
+      "online": true,
+      "color": "#22d3ee",
+      "timeZone": "Asia/Kolkata"
+    }
+  ],
+  "groups": [
+    {
+      "id": "g-eng",
+      "handle": "engineering",
+      "name": "Engineering",
+      "memberIds": [
+        "u2",
+        "u3",
+        "u6"
+      ]
+    },
+    {
+      "id": "g-design",
+      "handle": "design",
+      "name": "Product Development",
+      "memberIds": [
+        "u4"
+      ]
+    },
+    {
+      "id": "g-leads",
+      "handle": "leads",
+      "name": "Department heads",
+      "memberIds": [
+        "u6",
+        "u7",
+        "u9",
+        "u13"
+      ]
+    },
+    {
+      "id": "g-sales",
+      "handle": "sales",
+      "name": "Sales",
+      "memberIds": [
+        "u1",
+        "u11"
+      ]
+    },
+    {
+      "id": "g-people",
+      "handle": "people",
+      "name": "People team",
+      "memberIds": [
+        "u7",
+        "u8"
+      ]
+    }
+  ],
+  "rooms": [
+    {
+      "id": "d-people",
+      "type": "group",
+      "category": "department",
+      "name": "People & HR",
+      "topic": "Leave, payroll and reimbursement policy",
+      "description": "Policy, leave, payroll dates and the reimbursement rules. Everyone is a member.",
+      "createdBy": "u7",
+      "createdAt": 1775019652956,
+      "adminIds": [
+        "u7",
+        "u9"
+      ],
+      "participantIds": [
+        "u1",
+        "u2",
+        "u3",
+        "u4",
+        "u5",
+        "u6",
+        "u7",
+        "u8",
+        "u9",
+        "u10",
+        "u11",
+        "u12",
+        "u13",
+        "u14"
+      ],
+      "groupMuted": false,
+      "mutedUserIds": [],
+      "invite": null,
+      "color": "#38bdf8"
+    },
+    {
+      "id": "d-eng",
+      "type": "group",
+      "category": "department",
+      "name": "Engineering",
+      "topic": "Extrusion lines, die changes and field failures",
+      "description": "Extrusion line coordination: die changes, wall-thickness trials, field failure analysis and product specification decisions.",
+      "createdBy": "u13",
+      "createdAt": 1777611652956,
+      "adminIds": [
+        "u13",
+        "u3"
+      ],
+      "participantIds": [
+        "u1",
+        "u2",
+        "u3",
+        "u5",
+        "u13",
+        "u14"
+      ],
+      "groupMuted": false,
+      "mutedUserIds": [],
+      "invite": {
+        "code": "ENG4417",
+        "createdAt": 1787979652956,
+        "expiresAt": 1791781252956,
+        "maxUses": 40,
+        "uses": 11
+      },
+      "color": "#818cf8"
+    },
+    {
+      "id": "d-design",
+      "type": "group",
+      "category": "department",
+      "name": "Product Development",
+      "topic": "HDPE duct spec revision under review",
+      "description": "New product introduction: material trials, wall-thickness specifications and the drawings that go with each SKU.",
+      "createdBy": "u4",
+      "createdAt": 1778475652956,
+      "adminIds": [
+        "u4"
+      ],
+      "participantIds": [
+        "u1",
+        "u2",
+        "u4",
+        "u11",
+        "u13"
+      ],
+      "groupMuted": false,
+      "mutedUserIds": [],
+      "invite": null,
+      "color": "#4ade80"
+    },
+    {
+      "id": "r2",
+      "type": "group",
+      "category": "department",
+      "name": "Sales",
+      "topic": "Pipeline review every Thursday",
+      "description": "Enquiries, quotations, order status and customer escalations across all four regions. Bring numbers, not adjectives.",
+      "createdBy": "u6",
+      "createdAt": 1789534852956,
+      "adminIds": [
+        "u6",
+        "u1"
+      ],
+      "participantIds": [
+        "u1",
+        "u2",
+        "u6",
+        "u5"
+      ],
+      "groupMuted": false,
+      "mutedUserIds": [],
+      "invite": {
+        "code": "SLS900",
+        "createdAt": 1789534852956,
+        "expiresAt": null,
+        "maxUses": null,
+        "uses": 1
+      },
+      "color": "#b388ff"
+    },
+    {
+      "id": "d-marketing",
+      "type": "group",
+      "category": "department",
+      "name": "Marketing",
+      "topic": "Elecrama stand and the Q3 catalogue",
+      "description": "Campaigns, trade shows, the product catalogue, and anything that carries the Kiran mark outside the company.",
+      "createdBy": "u11",
+      "createdAt": 1780203652956,
+      "adminIds": [
+        "u11"
+      ],
+      "participantIds": [
+        "u1",
+        "u4",
+        "u6",
+        "u11"
+      ],
+      "groupMuted": false,
+      "mutedUserIds": [],
+      "invite": null,
+      "color": "#e879f9"
+    },
+    {
+      "id": "d-success",
+      "type": "group",
+      "category": "department",
+      "name": "Customer Support",
+      "topic": "Site complaints and warranty claims",
+      "description": "Installation queries, warranty claims and site complaints. Anything that needs a root cause goes to Engineering with the lot number.",
+      "createdBy": "u12",
+      "createdAt": 1781931652956,
+      "adminIds": [
+        "u12"
+      ],
+      "participantIds": [
+        "u1",
+        "u5",
+        "u6",
+        "u12"
+      ],
+      "groupMuted": false,
+      "mutedUserIds": [],
+      "invite": null,
+      "color": "#facc15"
+    },
+    {
+      "id": "d-finance",
+      "type": "group",
+      "category": "department",
+      "name": "Finance & Accounts",
+      "topic": "August close on the 5th",
+      "description": "Receivables, payables, reimbursements and the monthly close. Approvals over ₹2,00,000 need a thread here.",
+      "createdBy": "u10",
+      "createdAt": 1776747652956,
+      "adminIds": [
+        "u10"
+      ],
+      "participantIds": [
+        "u1",
+        "u6",
+        "u7",
+        "u10"
+      ],
+      "groupMuted": false,
+      "mutedUserIds": [],
+      "invite": null,
+      "color": "#2dd4bf"
+    },
+    {
+      "id": "r1",
+      "type": "group",
+      "category": "project",
+      "name": "Plant Expansion — Unit 3",
+      "topic": "Machine order decision due Friday",
+      "description": "Unit 3 expansion: line capacity, machine selection, civil works schedule and the capital budget behind them.",
+      "createdBy": "u1",
+      "createdAt": 1788757252956,
+      "adminIds": [
+        "u1"
+      ],
+      "participantIds": [
+        "u1",
+        "u2",
+        "u3",
+        "u4",
+        "u5",
+        "u6"
+      ],
+      "groupMuted": false,
+      "mutedUserIds": [
+        "u3"
+      ],
+      "invite": {
+        "code": "ABC123",
+        "createdAt": 1788757252956,
+        "expiresAt": 1791176452956,
+        "maxUses": 25,
+        "uses": 3
+      },
+      "color": "#4cc9f0"
+    },
+    {
+      "id": "r3",
+      "type": "group",
+      "category": "project",
+      "name": "Bharat Metro — Duct Order",
+      "topic": "Dispatch window: 27th–29th",
+      "description": "Execution room for the Bharat Metro duct order: production slotting, quality clearance, packing and dispatch.",
+      "createdBy": "u1",
+      "createdAt": 1790139652956,
+      "adminIds": [
+        "u1"
+      ],
+      "participantIds": [
+        "u1",
+        "u3",
+        "u4"
+      ],
+      "groupMuted": false,
+      "mutedUserIds": [],
+      "invite": {
+        "code": "ALP447",
+        "createdAt": 1790139652956,
+        "expiresAt": 1790485252956,
+        "maxUses": 10,
+        "uses": 2
+      },
+      "color": "#4ade80"
+    },
+    {
+      "id": "p-atlas",
+      "type": "group",
+      "category": "project",
+      "name": "PACT ERP Rollout",
+      "topic": "Cutover window: 27th, 01:00–04:00 IST",
+      "description": "Moving purchase, stores and dispatch onto PACT. The runbook is pinned; every cutover step needs a named owner.",
+      "createdBy": "u13",
+      "createdAt": 1787634052956,
+      "adminIds": [
+        "u13",
+        "u3"
+      ],
+      "participantIds": [
+        "u1",
+        "u3",
+        "u13",
+        "u14"
+      ],
+      "groupMuted": false,
+      "mutedUserIds": [],
+      "invite": null,
+      "color": "#22d3ee"
+    },
+    {
+      "id": "s-watercooler",
+      "type": "group",
+      "category": "social",
+      "name": "Watercooler",
+      "topic": "Not work",
+      "description": "Non-work chatter. Mute it without guilt.",
+      "createdBy": "u9",
+      "createdAt": 1782795652956,
+      "adminIds": [
+        "u9"
+      ],
+      "participantIds": [
+        "u1",
+        "u2",
+        "u4",
+        "u6",
+        "u9",
+        "u11",
+        "u12",
+        "u14"
+      ],
+      "groupMuted": false,
+      "mutedUserIds": [],
+      "invite": null,
+      "color": "#f97316"
+    },
+    {
+      "id": "gd1",
+      "type": "groupdm",
+      "createdAt": 1790226052956,
+      "adminIds": [],
+      "participantIds": [
+        "u1",
+        "u2",
+        "u4"
+      ],
+      "mutedUserIds": [],
+      "color": "#f59e0b"
+    },
+    {
+      "id": "d1",
+      "type": "direct",
+      "createdAt": 1790398852956,
+      "adminIds": [],
+      "participantIds": [
+        "u1",
+        "u2"
+      ],
+      "mutedUserIds": []
+    },
+    {
+      "id": "d2",
+      "type": "direct",
+      "createdAt": 1790485252956,
+      "adminIds": [],
+      "participantIds": [
+        "u1",
+        "u4"
+      ],
+      "mutedUserIds": []
+    },
+    {
+      "id": "d3",
+      "type": "direct",
+      "createdAt": 1790312452956,
+      "adminIds": [],
+      "participantIds": [
+        "u1",
+        "u3"
+      ],
+      "mutedUserIds": []
+    },
+    {
+      "id": "d4",
+      "type": "direct",
+      "createdAt": 1790053252956,
+      "adminIds": [],
+      "participantIds": [
+        "u1",
+        "u7"
+      ],
+      "mutedUserIds": []
+    },
+    {
+      "id": "d6",
+      "type": "direct",
+      "createdAt": 1790226052956,
+      "adminIds": [],
+      "participantIds": [
+        "u1",
+        "u10"
+      ],
+      "mutedUserIds": []
+    },
+    {
+      "id": "d5",
+      "type": "direct",
+      "createdAt": 1790398852956,
+      "adminIds": [],
+      "participantIds": [
+        "u1",
+        "u6"
+      ],
+      "mutedUserIds": []
+    }
+  ],
+  "messages": [
+    {
+      "id": "d-people-u7-2880",
+      "clientId": "seed-d-people-u7-2880",
+      "roomId": "d-people",
+      "senderId": "u7",
+      "content": "**Reimbursement rules, restated.**\n\nClaims go in within 30 days of the spend, with the original bill attached. HR clears business need, Accounts clears budget. Anything above ₹25,000 also needs Deepak's sign-off.\n\nThe 30-day window is the part people keep missing. After that it needs a written exception.",
+      "timestamp": 1790398852956,
+      "reactions": {
+        "👍": [
+          "u1",
+          "u5",
+          "u12"
+        ]
+      },
+      "delivery": "read",
+      "pinnedBy": "u7",
+      "pinnedAt": 1790398852956
+    },
+    {
+      "id": "d-people-u7-1440",
+      "clientId": "seed-d-people-u7-1440",
+      "roomId": "d-people",
+      "senderId": "u7",
+      "content": "Plant is closed on the 15th. Dispatch cover is arranged with <!quality> — Imran is on site for the morning shift.",
+      "timestamp": 1790485252956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "d-people-u8-620",
+      "clientId": "seed-d-people-u8-620",
+      "roomId": "d-people",
+      "senderId": "u8",
+      "content": "Two offers went out for the Unit 3 line operator roles this morning. Both verbal yes, paperwork pending.",
+      "timestamp": 1790534452956,
+      "reactions": {
+        "🎉": [
+          "u7",
+          "u9",
+          "u12"
+        ]
+      },
+      "delivery": "read"
+    },
+    {
+      "id": "d-people-u13-600",
+      "clientId": "seed-d-people-u13-600",
+      "roomId": "d-people",
+      "senderId": "u13",
+      "content": "Good. Do we have joining dates? I need them before I close the Unit 3 manpower budget.",
+      "timestamp": 1790535652956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "d-people-u8-590",
+      "clientId": "seed-d-people-u8-590",
+      "roomId": "d-people",
+      "senderId": "u8",
+      "content": "Earliest the 1st, latest the 15th. I'll confirm by Thursday.",
+      "timestamp": 1790536252956,
+      "reactions": {},
+      "delivery": "read",
+      "threadRootId": "d-people-u13-600"
+    },
+    {
+      "id": "d-people-u7-240",
+      "clientId": "seed-d-people-u7-240",
+      "roomId": "d-people",
+      "senderId": "u7",
+      "content": "Travel policy update is live in the handbook. The change that matters: own-vehicle fuel is now reimbursed at ₹11 per km against the log, rather than on the bill amount.",
+      "timestamp": 1790557252956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "d-people-u10-232",
+      "clientId": "seed-d-people-u10-232",
+      "roomId": "d-people",
+      "senderId": "u10",
+      "content": "Accounts has the new rate in the system from this month's claims onward. Anything already filed is settled at the old rate.",
+      "timestamp": 1790557732956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "d-people-u7-45",
+      "clientId": "seed-d-people-u7-45",
+      "roomId": "d-people",
+      "senderId": "u7",
+      "content": "Kavya Reddy joins Accounts today as Payments Officer, reporting to Deepak. She takes over the disbursement run from Friday.",
+      "timestamp": 1790568952956,
+      "reactions": {
+        "👋": [
+          "u1",
+          "u2",
+          "u10",
+          "u13"
+        ]
+      },
+      "delivery": "read"
+    },
+    {
+      "id": "d-eng-u6-4320",
+      "clientId": "seed-d-eng-u6-4320",
+      "roomId": "d-eng",
+      "senderId": "u6",
+      "content": "**Line 2 die change — week 34**\n\n- Changeover: Wednesday 14:00\n- Trial run: Wednesday 18:00\n- Full production: Thursday 06:00, once the wall thickness passes\n\nAnything not slotted before the changeover goes to next week. No exceptions — we lose four hours either way.",
+      "timestamp": 1790312452956,
+      "reactions": {},
+      "delivery": "read",
+      "pinnedBy": "u6",
+      "pinnedAt": 1790312452956
+    },
+    {
+      "id": "d-eng-u3-3600",
+      "clientId": "seed-d-eng-u3-3600",
+      "roomId": "d-eng",
+      "senderId": "u3",
+      "content": "Back from the Nashik site. The failure is not the duct — it is the jointing. Installer used a solvent cement rated for PVC on an HDPE coupler.",
+      "timestamp": 1790355652956,
+      "reactions": {
+        "👀": [
+          "u6",
+          "u5"
+        ]
+      },
+      "delivery": "read"
+    },
+    {
+      "id": "d-eng-u2-3540",
+      "clientId": "seed-d-eng-u2-3540",
+      "roomId": "d-eng",
+      "senderId": "u2",
+      "content": "That matches the two before it. Can we get a one-page installation sheet into every carton? Cheaper than another site visit.",
+      "timestamp": 1790359252956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "d-eng-u3-3500",
+      "clientId": "seed-d-eng-u3-3500",
+      "roomId": "d-eng",
+      "senderId": "u3",
+      "content": "Drafting it today. Photographs of the right and wrong coupler, nothing else — anything longer will not get read on site.",
+      "timestamp": 1790361652956,
+      "reactions": {},
+      "delivery": "read",
+      "threadRootId": "d-eng-u2-3540"
+    },
+    {
+      "id": "d-eng-u5-1800",
+      "clientId": "seed-d-eng-u5-1800",
+      "roomId": "d-eng",
+      "senderId": "u5",
+      "content": "Wall thickness on the 110mm trial came in at 4.2mm against a 4.0 spec. Within tolerance but consistently heavy — we are giving away material on every metre.",
+      "timestamp": 1790463652956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "d-eng-u6-1740",
+      "clientId": "seed-d-eng-u6-1740",
+      "roomId": "d-eng",
+      "senderId": "u6",
+      "content": "Pull the die back by 0.15 and re-run. If it holds at 4.05 we save roughly ₹2.4 lakh a month on Line 2 alone.",
+      "timestamp": 1790467252956,
+      "reactions": {
+        "🔥": [
+          "u2",
+          "u12"
+        ]
+      },
+      "delivery": "read"
+    },
+    {
+      "id": "d-eng-u2-900",
+      "clientId": "seed-d-eng-u2-900",
+      "roomId": "d-eng",
+      "senderId": "u2",
+      "content": "Re-run is scheduled after the changeover. I'll post the numbers here.",
+      "timestamp": 1790517652956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "d-eng-u12-420",
+      "clientId": "seed-d-eng-u12-420",
+      "roomId": "d-eng",
+      "senderId": "u12",
+      "content": "Raw material note: the HDPE lot from Suraj is running slightly high on melt index. Nothing failing, but it will shift the die settings again.",
+      "timestamp": 1790546452956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "d-design-u2-5760",
+      "clientId": "seed-d-design-u2-5760",
+      "roomId": "d-design",
+      "senderId": "u2",
+      "content": "**Spec revision — 110mm HDPE duct**\n\nMoving from a 4.0mm nominal wall to 3.85mm with a tighter tolerance band. Same crush rating, less material.\n\nDrawings are updated. This needs a quality sign-off before it goes near a customer drawing.",
+      "timestamp": 1790226052956,
+      "reactions": {},
+      "delivery": "read",
+      "pinnedBy": "u2",
+      "pinnedAt": 1790226052956
+    },
+    {
+      "id": "d-design-u5-5700",
+      "clientId": "seed-d-design-u5-5700",
+      "roomId": "d-design",
+      "senderId": "u5",
+      "content": "I want three lots at the new wall through crush testing before I sign anything. Two passes is not evidence.",
+      "timestamp": 1790229652956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "d-design-u2-5640",
+      "clientId": "seed-d-design-u2-5640",
+      "roomId": "d-design",
+      "senderId": "u2",
+      "content": "Agreed. Lots are booked for the 22nd, 23rd and 25th.",
+      "timestamp": 1790233252956,
+      "reactions": {},
+      "delivery": "read",
+      "threadRootId": "d-design-u5-5700"
+    },
+    {
+      "id": "d-design-u4-2400",
+      "clientId": "seed-d-design-u4-2400",
+      "roomId": "d-design",
+      "senderId": "u4",
+      "content": "Once it is signed off I need the revised drawing numbers for the catalogue. The current sheet still shows the old wall.",
+      "timestamp": 1790427652956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "d-design-u11-2340",
+      "clientId": "seed-d-design-u11-2340",
+      "roomId": "d-design",
+      "senderId": "u11",
+      "content": "And a line for the Elecrama stand — \"same strength, less plastic\" is a story worth telling if the numbers hold.",
+      "timestamp": 1790431252956,
+      "reactions": {
+        "💯": [
+          "u2",
+          "u4"
+        ]
+      },
+      "delivery": "read"
+    },
+    {
+      "id": "d-design-u13-1200",
+      "clientId": "seed-d-design-u13-1200",
+      "roomId": "d-design",
+      "senderId": "u13",
+      "content": "It holds commercially too. At current volumes the material saving is about ₹31 lakh a year across the 110 range.",
+      "timestamp": 1790499652956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "r2-u1-4200",
+      "clientId": "seed-r2-u1-4200",
+      "roomId": "r2",
+      "senderId": "u1",
+      "content": "**Pipeline, week 34**\n\n- Bharat Metro — order in production, dispatch window 27th–29th\n- Suzlon renewal — quotation with them, decision expected this week\n- L&T Chennai — site visit done, drawings requested\n\nThe Suzlon one is the number that moves the quarter.",
+      "timestamp": 1790319652956,
+      "reactions": {},
+      "delivery": "read",
+      "pinnedBy": "u1",
+      "pinnedAt": 1790319652956
+    },
+    {
+      "id": "r2-u1-3000",
+      "clientId": "seed-r2-u1-3000",
+      "roomId": "r2",
+      "senderId": "u1",
+      "content": "Back from Pune. Suzlon procurement want a three-year rate hold rather than annual. Deepak, is that something we can price?",
+      "timestamp": 1790391652956,
+      "reactions": {
+        "👀": [
+          "u6"
+        ]
+      },
+      "delivery": "read"
+    },
+    {
+      "id": "r2-u5-2940",
+      "clientId": "seed-r2-u5-2940",
+      "roomId": "r2",
+      "senderId": "u5",
+      "content": "Before anyone commits — a three-year hold on HDPE pricing with the resin market where it is would need a raw-material escalation clause. Otherwise we are the ones carrying it.",
+      "timestamp": 1790395252956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "r2-u2-2880",
+      "clientId": "seed-r2-u2-2880",
+      "roomId": "r2",
+      "senderId": "u2",
+      "content": "Second that. Fixed conversion, indexed material. That is the only shape that works.",
+      "timestamp": 1790398852956,
+      "reactions": {},
+      "delivery": "read",
+      "threadRootId": "r2-u5-2940"
+    },
+    {
+      "id": "r2-u1-180",
+      "clientId": "seed-r2-u1-180",
+      "roomId": "r2",
+      "senderId": "u1",
+      "content": "Filing the travel for the Pune visit now. Three days, rail plus local transfers.",
+      "timestamp": 1790560852956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "d-marketing-u11-4800",
+      "clientId": "seed-d-marketing-u11-4800",
+      "roomId": "d-marketing",
+      "senderId": "u11",
+      "content": "**Elecrama stand — 6×6, hall 4.** Layout is confirmed. We get the corner, which is worth more than the extra metre we asked for.",
+      "timestamp": 1790283652956,
+      "reactions": {},
+      "delivery": "read",
+      "pinnedBy": "u11",
+      "pinnedAt": 1790283652956
+    },
+    {
+      "id": "d-marketing-u4-3300",
+      "clientId": "seed-d-marketing-u4-3300",
+      "roomId": "d-marketing",
+      "senderId": "u4",
+      "content": "Catalogue is at second proof. Waiting on the revised 110mm drawings before it can go to print.",
+      "timestamp": 1790373652956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "d-marketing-u11-3240",
+      "clientId": "seed-d-marketing-u11-3240",
+      "roomId": "d-marketing",
+      "senderId": "u11",
+      "content": "Print deadline is the 20th. If the drawings slip past the 18th we print the current spec and insert an errata, which I would rather not do.",
+      "timestamp": 1790377252956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "d-marketing-u4-3200",
+      "clientId": "seed-d-marketing-u4-3200",
+      "roomId": "d-marketing",
+      "senderId": "u4",
+      "content": "Understood. I'll chase quality on the 17th if nothing has landed.",
+      "timestamp": 1790379652956,
+      "reactions": {},
+      "delivery": "read",
+      "threadRootId": "d-marketing-u11-3240"
+    },
+    {
+      "id": "d-marketing-u1-600",
+      "clientId": "seed-d-marketing-u1-600",
+      "roomId": "d-marketing",
+      "senderId": "u1",
+      "content": "Can we have twenty of the new catalogue held back for the Suzlon meeting? Physical copies still land better than a PDF in that room.",
+      "timestamp": 1790535652956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "d-success-u12-5400",
+      "clientId": "seed-d-success-u12-5400",
+      "roomId": "d-success",
+      "senderId": "u12",
+      "content": "**Open site complaints — 3**\n\n- Nashik: jointing failure, engineering visited, root cause is installer method\n- Vadodara: short supply of couplers, replacement dispatched\n- Bhopal: colour variation across two lots, customer wants an explanation\n\nOnly Bhopal needs a decision.",
+      "timestamp": 1790247652956,
+      "reactions": {},
+      "delivery": "read",
+      "pinnedBy": "u12",
+      "pinnedAt": 1790247652956
+    },
+    {
+      "id": "d-success-u5-5340",
+      "clientId": "seed-d-success-u5-5340",
+      "roomId": "d-success",
+      "senderId": "u5",
+      "content": "Bhopal is real. Two different masterbatch lots inside one order. It is cosmetic, but on an exposed run the customer will see it every day.",
+      "timestamp": 1790251252956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "d-success-u1-5280",
+      "clientId": "seed-d-success-u1-5280",
+      "roomId": "d-success",
+      "senderId": "u1",
+      "content": "They are a repeat account. I would rather replace the visible run than argue that it meets spec.",
+      "timestamp": 1790254852956,
+      "reactions": {
+        "👍": [
+          "u12",
+          "u6"
+        ]
+      },
+      "delivery": "read"
+    },
+    {
+      "id": "d-success-u12-5200",
+      "clientId": "seed-d-success-u12-5200",
+      "roomId": "d-success",
+      "senderId": "u12",
+      "content": "Agreed. Raising the replacement against warranty.",
+      "timestamp": 1790259652956,
+      "reactions": {},
+      "delivery": "read",
+      "threadRootId": "d-success-u1-5280"
+    },
+    {
+      "id": "d-success-u6-4800",
+      "clientId": "seed-d-success-u6-4800",
+      "roomId": "d-success",
+      "senderId": "u6",
+      "content": "Longer term: lock masterbatch to one lot per order in the production plan. It costs us nothing and removes the whole class of complaint.",
+      "timestamp": 1790283652956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "d-success-u12-300",
+      "clientId": "seed-d-success-u12-300",
+      "roomId": "d-success",
+      "senderId": "u12",
+      "content": "Raised with production planning. It goes into the PACT rollout as a rule rather than a habit.",
+      "timestamp": 1790553652956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "d-finance-u13-4320",
+      "clientId": "seed-d-finance-u13-4320",
+      "roomId": "d-finance",
+      "senderId": "u13",
+      "content": "**August close — the 5th.**\n\nEverything for August must be in the system by the 3rd. Reimbursement claims included: a claim filed on the 4th lands in September, and people are always surprised by that.",
+      "timestamp": 1790312452956,
+      "reactions": {},
+      "delivery": "read",
+      "pinnedBy": "u13",
+      "pinnedAt": 1790312452956
+    },
+    {
+      "id": "d-finance-u10-3600",
+      "clientId": "seed-d-finance-u10-3600",
+      "roomId": "d-finance",
+      "senderId": "u10",
+      "content": "Receivables ageing is better than last month. Over-90 is down to ₹41 lakh from ₹58 lakh, mostly the Vadodara account clearing.",
+      "timestamp": 1790355652956,
+      "reactions": {
+        "🎉": [
+          "u13"
+        ]
+      },
+      "delivery": "read"
+    },
+    {
+      "id": "d-finance-u7-1200",
+      "clientId": "seed-d-finance-u7-1200",
+      "roomId": "d-finance",
+      "senderId": "u7",
+      "content": "Reimbursement queue is at eleven claims. Six are mine to clear, and I will have them done today.",
+      "timestamp": 1790499652956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "d-finance-u10-1140",
+      "clientId": "seed-d-finance-u10-1140",
+      "roomId": "d-finance",
+      "senderId": "u10",
+      "content": "Once HR clears them I can run the disbursement in one batch on Friday. One transfer per employee rather than one per claim — it saves the bank charges and the reconciliation.",
+      "timestamp": 1790503252956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "d-finance-u13-1080",
+      "clientId": "seed-d-finance-u13-1080",
+      "roomId": "d-finance",
+      "senderId": "u13",
+      "content": "Do that. And keep the Sales travel claims moving; people are spending their own money and waiting on us.",
+      "timestamp": 1790506852956,
+      "reactions": {
+        "👍": [
+          "u10",
+          "u7"
+        ]
+      },
+      "delivery": "read"
+    },
+    {
+      "id": "r1-u9-7200",
+      "clientId": "seed-r1-u9-7200",
+      "roomId": "r1",
+      "senderId": "u9",
+      "content": "**Machine decision is due Friday.**\n\nTwo quotes on the table for the Unit 3 extrusion line. Battenfeld is ₹2.1 crore with a 22-week lead time; the Chinese line is ₹1.35 crore at 14 weeks.\n\nThis is not only a price question. Say what you actually think.",
+      "timestamp": 1790139652956,
+      "reactions": {},
+      "delivery": "read",
+      "pinnedBy": "u9",
+      "pinnedAt": 1790139652956
+    },
+    {
+      "id": "r1-u6-7080",
+      "clientId": "seed-r1-u6-7080",
+      "roomId": "r1",
+      "senderId": "u6",
+      "content": "Battenfeld, and it is not close. We run these lines for fifteen years. The spares position alone is worth the difference.",
+      "timestamp": 1790146852956,
+      "reactions": {
+        "👍": [
+          "u2",
+          "u5"
+        ]
+      },
+      "delivery": "read"
+    },
+    {
+      "id": "r1-u5-7020",
+      "clientId": "seed-r1-u5-7020",
+      "roomId": "r1",
+      "senderId": "u5",
+      "content": "Agreed on quality. But 22 weeks means we cannot take Unit 3 volume before Q1, and Sales are already quoting on it.",
+      "timestamp": 1790150452956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "r1-u1-6960",
+      "clientId": "seed-r1-u1-6960",
+      "roomId": "r1",
+      "senderId": "u1",
+      "content": "I am quoting Q1 delivery, not Q4. Nobody has been promised anything on Unit 3 capacity.",
+      "timestamp": 1790154052956,
+      "reactions": {},
+      "delivery": "read",
+      "threadRootId": "r1-u5-7020"
+    },
+    {
+      "id": "r1-u13-6900",
+      "clientId": "seed-r1-u13-6900",
+      "roomId": "r1",
+      "senderId": "u13",
+      "content": "The capital difference is ₹75 lakh. Over fifteen years that is not the deciding number — downtime is. What does an unplanned week cost us on a line like this?",
+      "timestamp": 1790157652956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "r1-u6-6840",
+      "clientId": "seed-r1-u6-6840",
+      "roomId": "r1",
+      "senderId": "u6",
+      "content": "Roughly ₹18 lakh in lost output, before any penalty on a late dispatch. Two bad weeks and the price gap is gone.",
+      "timestamp": 1790161252956,
+      "reactions": {
+        "💯": [
+          "u9",
+          "u13"
+        ]
+      },
+      "delivery": "read",
+      "threadRootId": "r1-u13-6900"
+    },
+    {
+      "id": "r1-u2-6720",
+      "clientId": "seed-r1-u2-6720",
+      "roomId": "r1",
+      "senderId": "u2",
+      "content": "One more thing in Battenfeld's favour: the die tooling is compatible with what we already run on Line 2. The other one is not.",
+      "timestamp": 1790168452956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "r1-u9-6600",
+      "clientId": "seed-r1-u9-6600",
+      "roomId": "r1",
+      "senderId": "u9",
+      "content": "That settles it for me. I'll put Battenfeld to the board on Friday with the downtime numbers attached.",
+      "timestamp": 1790175652956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "r1-u4-2400",
+      "clientId": "seed-r1-u4-2400",
+      "roomId": "r1",
+      "senderId": "u4",
+      "content": "Civil works schedule needs the machine footprint before it can be finalised. Whoever wins, I need drawings.",
+      "timestamp": 1790427652956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "r1-u3-2340",
+      "clientId": "seed-r1-u3-2340",
+      "roomId": "r1",
+      "senderId": "u3",
+      "content": "Power is the other one. The Battenfeld line needs a 400 kVA connection; our current sanction is 315.",
+      "timestamp": 1790431252956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "r1-u9-2280",
+      "clientId": "seed-r1-u9-2280",
+      "roomId": "r1",
+      "senderId": "u9",
+      "content": "Noted. Enhancement application takes about eight weeks, so it starts alongside the order, not after it.",
+      "timestamp": 1790434852956,
+      "reactions": {},
+      "delivery": "read",
+      "threadRootId": "r1-u3-2340"
+    },
+    {
+      "id": "r1-u13-120",
+      "clientId": "seed-r1-u13-120",
+      "roomId": "r1",
+      "senderId": "u13",
+      "content": "Board pack is drafted. Sending it round tomorrow for comments before Friday.",
+      "timestamp": 1790564452956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "r3-u1-3000",
+      "clientId": "seed-r3-u1-3000",
+      "roomId": "r3",
+      "senderId": "u1",
+      "content": "**Bharat Metro — 12,000 m of 110mm HDPE duct.**\n\nDispatch window is the 27th to the 29th. They have a site shutdown on the 30th, so late is the same as not at all.",
+      "timestamp": 1790391652956,
+      "reactions": {},
+      "delivery": "read",
+      "pinnedBy": "u1",
+      "pinnedAt": 1790391652956
+    },
+    {
+      "id": "r3-u3-2400",
+      "clientId": "seed-r3-u3-2400",
+      "roomId": "r3",
+      "senderId": "u3",
+      "content": "Production is on schedule. 8,400 m done, the balance runs after the Line 2 changeover.",
+      "timestamp": 1790427652956,
+      "reactions": {
+        "👍": [
+          "u1"
+        ]
+      },
+      "delivery": "read"
+    },
+    {
+      "id": "r3-u4-900",
+      "clientId": "seed-r3-u4-900",
+      "roomId": "r3",
+      "senderId": "u4",
+      "content": "Packing list is ready. Waiting on the quality clearance certificate before I can raise the ASN.",
+      "timestamp": 1790517652956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "p-atlas-u13-2880",
+      "clientId": "seed-p-atlas-u13-2880",
+      "roomId": "p-atlas",
+      "senderId": "u13",
+      "content": "**Cutover: the 27th, 01:00–04:00 IST.**\n\nPurchase, stores and dispatch move to PACT. Everything else stays where it is for now.\n\nIf we are not through validation by 03:00 we roll back and try again the following week. That decision is mine and I will make it on the night.",
+      "timestamp": 1790398852956,
+      "reactions": {},
+      "delivery": "read",
+      "pinnedBy": "u13",
+      "pinnedAt": 1790398852956
+    },
+    {
+      "id": "p-atlas-u3-2400",
+      "clientId": "seed-p-atlas-u3-2400",
+      "roomId": "p-atlas",
+      "senderId": "u3",
+      "content": "Dry run finished. 41,000 stock rows migrated, 12 rejected — all of them legacy SKUs with no unit of measure.",
+      "timestamp": 1790427652956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "p-atlas-u13-2340",
+      "clientId": "seed-p-atlas-u13-2340",
+      "roomId": "p-atlas",
+      "senderId": "u13",
+      "content": "Twelve is fine. Fix them by hand before the real run rather than writing a rule for a case that will never recur.",
+      "timestamp": 1790431252956,
+      "reactions": {},
+      "delivery": "read",
+      "threadRootId": "p-atlas-u3-2400"
+    },
+    {
+      "id": "p-atlas-u14-1200",
+      "clientId": "seed-p-atlas-u14-1200",
+      "roomId": "p-atlas",
+      "senderId": "u14",
+      "content": "Question on the finance side: do open reimbursement claims move with the cutover, or do they stay in the current system until they settle?",
+      "timestamp": 1790499652956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "p-atlas-u13-1140",
+      "clientId": "seed-p-atlas-u13-1140",
+      "roomId": "p-atlas",
+      "senderId": "u13",
+      "content": "They stay. Anything mid-approval finishes where it started — moving a claim halfway through its chain is how you lose one.",
+      "timestamp": 1790503252956,
+      "reactions": {
+        "👍": [
+          "u14",
+          "u10"
+        ]
+      },
+      "delivery": "read",
+      "threadRootId": "p-atlas-u14-1200"
+    },
+    {
+      "id": "p-atlas-u3-300",
+      "clientId": "seed-p-atlas-u3-300",
+      "roomId": "p-atlas",
+      "senderId": "u3",
+      "content": "Rollback has been rehearsed twice now. Restore takes 40 minutes, which fits inside the window.",
+      "timestamp": 1790553652956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "s-watercooler-u12-240",
+      "clientId": "seed-s-watercooler-u12-240",
+      "roomId": "s-watercooler",
+      "senderId": "u12",
+      "content": "Canteen has samosas again. This is not a drill.",
+      "timestamp": 1790557252956,
+      "reactions": {
+        "🎉": [
+          "u1",
+          "u4",
+          "u11"
+        ]
+      },
+      "delivery": "read"
+    },
+    {
+      "id": "s-watercooler-u4-235",
+      "clientId": "seed-s-watercooler-u4-235",
+      "roomId": "s-watercooler",
+      "senderId": "u4",
+      "content": "On my way down.",
+      "timestamp": 1790557552956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "s-watercooler-u11-120",
+      "clientId": "seed-s-watercooler-u11-120",
+      "roomId": "s-watercooler",
+      "senderId": "u11",
+      "content": "Whoever left a die spanner in the meeting room — it is with security.",
+      "timestamp": 1790564452956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "gd1-u1-1800",
+      "clientId": "seed-gd1-u1-1800",
+      "roomId": "gd1",
+      "senderId": "u1",
+      "content": "Pulling you both in before we take the Suzlon rate structure to Deepak. I would rather we disagree here than in front of him.",
+      "timestamp": 1790463652956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "gd1-u2-1740",
+      "clientId": "seed-gd1-u2-1740",
+      "roomId": "gd1",
+      "senderId": "u2",
+      "content": "My position has not changed: fixed conversion, indexed material. Anything else and we are speculating on resin prices for three years.",
+      "timestamp": 1790467252956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "gd1-u4-1680",
+      "clientId": "seed-gd1-u4-1680",
+      "roomId": "gd1",
+      "senderId": "u4",
+      "content": "Agreed. And whatever we land on, I need it in writing before it goes in the quotation — I am not paraphrasing a pricing structure into a customer document.",
+      "timestamp": 1790470852956,
+      "reactions": {
+        "👍": [
+          "u1",
+          "u2"
+        ]
+      },
+      "delivery": "read"
+    },
+    {
+      "id": "d1-u2-400",
+      "clientId": "seed-d1-u2-400",
+      "roomId": "d1",
+      "senderId": "u2",
+      "content": "Die re-run numbers are in. 4.06mm, holding across the whole lot.",
+      "timestamp": 1790547652956,
+      "reactions": {
+        "🔥": [
+          "u1"
+        ]
+      },
+      "delivery": "read"
+    },
+    {
+      "id": "d1-u1-380",
+      "clientId": "seed-d1-u1-380",
+      "roomId": "d1",
+      "senderId": "u1",
+      "content": "That is the saving then. I'll get it in front of Deepak this week.",
+      "timestamp": 1790548852956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "d2-u4-1500",
+      "clientId": "seed-d2-u4-1500",
+      "roomId": "d2",
+      "senderId": "u4",
+      "content": "Catalogue proof is with you. I need comments by Thursday to hold the print date.",
+      "timestamp": 1790481652956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "d3-u3-800",
+      "clientId": "seed-d3-u3-800",
+      "roomId": "d3",
+      "senderId": "u3",
+      "content": "Installation sheet drafted — one page, photographs only. Have a look before it goes to print.",
+      "timestamp": 1790523652956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "d4-u7-120",
+      "clientId": "seed-d4-u7-120",
+      "roomId": "d4",
+      "senderId": "u7",
+      "content": "Rohan, your Pune travel claim is in my queue. Attach the hotel bill and I can clear it today — right now there is only the rail ticket.",
+      "timestamp": 1790564452956,
+      "reactions": {
+        "👍": [
+          "u1"
+        ]
+      },
+      "delivery": "read"
+    },
+    {
+      "id": "d4-u1-110",
+      "clientId": "seed-d4-u1-110",
+      "roomId": "d4",
+      "senderId": "u1",
+      "content": "Sending it across now.",
+      "timestamp": 1790565052956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "d6-u10-2880",
+      "clientId": "seed-d6-u10-2880",
+      "roomId": "d6",
+      "senderId": "u10",
+      "content": "Once HR clears your claims I'll pick them up in Friday's run. One transfer, one UTR, however many claims are cleared by then.",
+      "timestamp": 1790398852956,
+      "reactions": {},
+      "delivery": "read"
+    },
+    {
+      "id": "d5-u6-90",
+      "clientId": "seed-d5-u6-90",
+      "roomId": "d5",
+      "senderId": "u6",
+      "content": "Line 2 changeover is confirmed for Wednesday. Nothing you have quoted is affected.",
+      "timestamp": 1790566252956,
+      "reactions": {},
+      "delivery": "read"
+    }
+  ]
+}

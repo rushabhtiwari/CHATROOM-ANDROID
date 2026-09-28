@@ -1,0 +1,44 @@
+{
+  "opTypes": [
+    "message.send",
+    "message.edit",
+    "message.delete",
+    "message.reaction",
+    "message.pin",
+    "meeting.add",
+    "room.create",
+    "room.update",
+    "room.members",
+    "room.admin",
+    "room.mute_user",
+    "room.invite",
+    "room.join",
+    "read.mark",
+    "notification.read",
+    "saved.set",
+    "thread.follow",
+    "room.notify"
+  ],
+  "privateOpTypes": [
+    "saved.set",
+    "thread.follow",
+    "room.notify"
+  ],
+  "roomScopedOpTypes": [
+    "message.send",
+    "message.edit",
+    "message.delete",
+    "message.reaction",
+    "message.pin",
+    "meeting.add",
+    "room.update",
+    "room.members",
+    "room.admin",
+    "room.mute_user",
+    "room.invite",
+    "room.join",
+    "read.mark",
+    "notification.read",
+    "room.notify"
+  ]
+}

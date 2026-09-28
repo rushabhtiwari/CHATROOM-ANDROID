@@ -19,6 +19,16 @@ SNAPSHOT_FILE = DATA_DIR / "state.json"
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
+# The chat server. The seed and protocol are generated from the console's
+# TypeScript by tools/export-chat-seed.mjs; the log itself is runtime data.
+CHAT_SEED_FILE = BASE_DIR / "chat_seed.json"
+CHAT_PROTOCOL_FILE = BASE_DIR / "chat_protocol.json"
+CHAT_DB_FILE = DATA_DIR / "chat.db"
+CHAT_UPLOAD_DIR = UPLOAD_DIR / "chat"
+CHAT_UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+# Matches the console's own ceiling on a single attachment.
+MAX_CHAT_ATTACHMENT_BYTES = 15_000_000
+
 PORT = int(os.getenv("RTS_PORT", "3001"))
 
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "").strip()
