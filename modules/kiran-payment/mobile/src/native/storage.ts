@@ -1,24 +1,28 @@
 /**
- * Durable storage for the chat snapshot.
+ * Durable storage for everything the app keeps in `localStorage`.
  *
  * The chat store reads `window.localStorage` directly (chat-store.tsx, where
  * it parses the saved snapshot) and `writeSnapshot` writes to it. There is no
  * injection point, and adding one would mean editing the console — so this
  * replaces the object itself, before anything reads it.
  *
- * Why replace it at all: on iOS, WKWebView's localStorage lives in a cache
- * the system may clear when the device is short of space. A user losing every
- * conversation because they installed a large app is not a tradeoff worth
- * making. `@capacitor/preferences` is backed by UserDefaults, which is
- * included in device backups and is not evicted.
+ * Why replace it at all: on iOS, WKWebView's localStorage lives in website
+ * data the system may clear when the device is short of space. A user losing
+ * every conversation because they installed a large app is not a tradeoff
+ * worth making. Each key is instead a file in the app's data directory, which
+ * iOS never evicts and includes in backups.
  *
- * The shape of the problem: localStorage is synchronous and Preferences is
- * not. This resolves it by hydrating every key into memory once at startup —
- * the one place an await is possible — and then serving reads from memory
- * while mirroring writes back to Preferences. Writes are fire-and-forget by
- * necessity; a failure surfaces through `lastError` rather than vanishing.
+ * Files rather than `@capacitor/preferences`: Preferences is UserDefaults,
+ * which Apple intends for small values and loads whole into memory at launch,
+ * while the chat snapshot alone can approach the ~5 MB the store budgets for.
+ *
+ * The shape of the problem: localStorage is synchronous and the file system is
+ * not. This resolves it by reading every key into memory once at startup — the
+ * one place an await is possible — then serving reads from memory while
+ * mirroring writes back to disk. A failed write surfaces through
+ * `storageError` and `onStorageFailure` rather than vanishing.
  */
-import { Preferences } from '@capacitor/preferences';
+import { Directory, Encoding, Filesystem } from '@capacitor/filesystem';
 
 /*
  * Every key is mirrored. An earlier version kept an allow-list of "this app's"
@@ -29,42 +33,38 @@ import { Preferences } from '@capacitor/preferences';
  * alone; there are no other keys to keep out.
  */
 
+const FOLDER = 'kv';
+const EXTENSION = '.txt';
+
+/** Keys are arbitrary strings; file names are not. `:` alone would break some. */
+const pathFor = (key: string) => `${FOLDER}/${encodeURIComponent(key)}${EXTENSION}`;
+const keyFor = (name: string) => decodeURIComponent(name.slice(0, -EXTENSION.length));
+
+type Op = { kind: 'set'; value: string } | { kind: 'remove' };
+type Queue = { busy: boolean; next?: Op };
+
 /** Called with the error on failure, and with null when saving recovers. */
 type FailureListener = (error: unknown) => void;
 const listeners = new Set<FailureListener>();
 
-class PreferencesBackedStorage implements Storage {
+class FileBackedStorage implements Storage {
   private readonly cache = new Map<string, string>();
-  private sequence = 0;
+
+  /**
+   * Per key: whether a write is on disk right now, and the newest operation
+   * waiting behind it. The chat store rewrites its whole snapshot on every
+   * change — drafts included, so on every keystroke — and writing each of
+   * those out would queue megabytes of work that is stale before it starts.
+   * Only the newest waits; the ones in between are dropped unwritten. It also
+   * means an older write can never land after a newer one.
+   */
+  private readonly queues = new Map<string, Queue>();
 
   /**
    * Whether the device copy is currently behind the in-memory one: the error
    * from the most recent write, or null once a write succeeds again.
    */
   lastError: unknown = null;
-
-  /**
-   * Run one write against Preferences and record how it went.
-   *
-   * Only the latest write's outcome counts. Writes are not awaited, so an
-   * older write that fails after a newer one has succeeded must not mark the
-   * store as failing — the device already holds the newer value.
-   */
-  private mirror(write: () => Promise<unknown>) {
-    const mine = ++this.sequence;
-    write().then(
-      () => {
-        if (mine !== this.sequence || this.lastError === null) return;
-        this.lastError = null;
-        for (const listener of listeners) listener(null);
-      },
-      (error) => {
-        if (mine !== this.sequence) return;
-        this.lastError = error;
-        for (const listener of listeners) listener(error);
-      },
-    );
-  }
 
   constructor(entries: Iterable<[string, string]>) {
     for (const [key, value] of entries) this.cache.set(key, value);
@@ -83,22 +83,97 @@ class PreferencesBackedStorage implements Storage {
   }
 
   setItem(key: string, value: string): void {
-    this.cache.set(key, String(value));
-    this.mirror(() => Preferences.set({ key, value: String(value) }));
+    const text = String(value);
+    this.cache.set(key, text);
+    this.schedule(key, { kind: 'set', value: text });
   }
 
   removeItem(key: string): void {
     this.cache.delete(key);
-    this.mirror(() => Preferences.remove({ key }));
+    this.schedule(key, { kind: 'remove' });
   }
 
   clear(): void {
-    this.cache.clear();
-    this.mirror(() => Preferences.clear());
+    for (const key of [...this.cache.keys()]) this.removeItem(key);
+  }
+
+  private schedule(key: string, op: Op) {
+    const queue = this.queues.get(key) ?? { busy: false };
+    this.queues.set(key, queue);
+    if (queue.busy) {
+      queue.next = op;
+      return;
+    }
+    void this.run(key, queue, op);
+  }
+
+  private async run(key: string, queue: Queue, op: Op) {
+    queue.busy = true;
+    for (let current: Op | undefined = op; current;) {
+      try {
+        if (current.kind === 'set') {
+          await Filesystem.writeFile({
+            path: pathFor(key),
+            data: current.value,
+            directory: Directory.Data,
+            encoding: Encoding.UTF8,
+            recursive: true,
+          });
+        } else {
+          // Already absent is fine: the removal has had its effect.
+          await Filesystem.deleteFile({ path: pathFor(key), directory: Directory.Data }).catch(
+            () => {},
+          );
+        }
+        this.report(null);
+      } catch (error) {
+        this.report(error);
+      }
+      current = queue.next;
+      queue.next = undefined;
+    }
+    queue.busy = false;
+  }
+
+  /** Record how the latest write went, and announce a change of state. */
+  private report(error: unknown) {
+    if (error === null) {
+      if (this.lastError === null) return;
+      this.lastError = null;
+      for (const listener of listeners) listener(null);
+      return;
+    }
+    this.lastError = error;
+    for (const listener of listeners) listener(error);
   }
 }
 
-let installed: PreferencesBackedStorage | null = null;
+let installed: FileBackedStorage | null = null;
+
+async function readAll(): Promise<Array<[string, string]>> {
+  let names: string[];
+  try {
+    const { files } = await Filesystem.readdir({ path: FOLDER, directory: Directory.Data });
+    names = files.map((file) => file.name).filter((name) => name.endsWith(EXTENSION));
+  } catch {
+    return []; // First launch: nothing saved yet.
+  }
+  const entries = await Promise.all(
+    names.map(async (name): Promise<[string, string] | null> => {
+      try {
+        const { data } = await Filesystem.readFile({
+          path: `${FOLDER}/${name}`,
+          directory: Directory.Data,
+          encoding: Encoding.UTF8,
+        });
+        return [keyFor(name), String(data)];
+      } catch {
+        return null; // One unreadable file must not cost every other key.
+      }
+    }),
+  );
+  return entries.filter((entry): entry is [string, string] => entry !== null);
+}
 
 /**
  * Swap `window.localStorage` for the durable implementation.
@@ -112,16 +187,7 @@ let installed: PreferencesBackedStorage | null = null;
  */
 export async function installDurableStorage(isNative: boolean): Promise<void> {
   if (!isNative || installed) return;
-
-  const { keys } = await Preferences.keys();
-  const entries = await Promise.all(
-    keys.map(async (key): Promise<[string, string]> => {
-      const { value } = await Preferences.get({ key });
-      return [key, value ?? ''];
-    }),
-  );
-
-  installed = new PreferencesBackedStorage(entries);
+  installed = new FileBackedStorage(await readAll());
   Object.defineProperty(window, 'localStorage', {
     value: installed,
     configurable: true,

@@ -63,9 +63,13 @@ VITE_API_ORIGIN=http://127.0.0.1:3001 npm run build --workspace mobile
 `src/native/` holds every Capacitor adapter, and each one is a no-op on the web
 so screens never have to guard a call:
 
-- `storage.ts` — replaces `window.localStorage` with a Preferences-backed store
-  before React mounts. WKWebView's localStorage can be evicted when the device
-  is low on space; conversations should not be.
+- `storage.ts` — replaces `window.localStorage` before React mounts with a
+  store kept as files in the app's data directory. WKWebView's localStorage
+  can be evicted when the device is low on space; conversations, profile
+  photos and settings should not be. Saves to the same key are coalesced, so a
+  keystroke-by-keystroke snapshot does not queue megabytes of stale writes.
+- `attachment-store.ts` — the same, for photo attachments, which the console
+  keeps in IndexedDB. `vite.config.ts` points the chat store's import here.
 - `network.ts` — binds the chat store's `online` flag to the radio, so the
   outbox and retry queue are real rather than simulated.
 - `camera.ts` — returns a `File`, so `sendAttachment` never learns a camera was

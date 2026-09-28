@@ -1,34 +1,57 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 /**
- * Capacitor Preferences, in memory. On a device this is UserDefaults: durable,
- * backed up, never evicted — which is the whole reason the shim exists.
+ * The app's data directory, in memory. On a device: never evicted, backed up,
+ * and — unlike UserDefaults — meant for values of any size.
  */
-const prefs = new Map<string, string>();
+const files = new Map<string, string>();
 let failWrites = false;
+let writes: Array<{ path: string; data: string }> = [];
+/** When set, writes wait here until released — to observe what is in flight. */
+let gate: Promise<void> | null = null;
 
-vi.mock('@capacitor/preferences', () => ({
-  Preferences: {
-    keys: async () => ({ keys: [...prefs.keys()] }),
-    get: async ({ key }: { key: string }) => ({ value: prefs.get(key) ?? null }),
-    set: async ({ key, value }: { key: string; value: string }) => {
+vi.mock('@capacitor/filesystem', () => ({
+  Directory: { Data: 'DATA' },
+  Encoding: { UTF8: 'utf8' },
+  Filesystem: {
+    writeFile: async ({ path, data }: { path: string; data: string }) => {
+      writes.push({ path, data });
+      if (gate) await gate;
       if (failWrites) throw new Error('disk full');
-      prefs.set(key, value);
+      files.set(path, data);
+      return { uri: path };
     },
-    remove: async ({ key }: { key: string }) => void prefs.delete(key),
-    clear: async () => prefs.clear(),
+    readFile: async ({ path }: { path: string }) => {
+      if (!files.has(path)) throw new Error('File does not exist');
+      return { data: files.get(path)! };
+    },
+    deleteFile: async ({ path }: { path: string }) => {
+      if (!files.delete(path)) throw new Error('File does not exist');
+    },
+    readdir: async ({ path }: { path: string }) => {
+      const prefix = `${path}/`;
+      const names = [...files.keys()].filter((name) => name.startsWith(prefix));
+      if (names.length === 0) throw new Error('Directory does not exist');
+      return { files: names.map((name) => ({ name: name.slice(prefix.length), type: 'file' })) };
+    },
   },
 }));
 
-/** Let fire-and-forget mirror writes settle. */
-const settle = () => new Promise((resolve) => setTimeout(resolve, 0));
+/** Let queued writes settle. */
+const settle = async () => {
+  for (let i = 0; i < 5; i++) await new Promise((resolve) => setTimeout(resolve, 0));
+};
+
+const saved = (key: string) => files.get(`kv/${encodeURIComponent(key)}.txt`);
 
 describe('installDurableStorage', () => {
   let original: PropertyDescriptor | undefined;
 
   beforeEach(() => {
-    prefs.clear();
+    files.clear();
+    writes = [];
     failWrites = false;
+    gate = null;
     original = Object.getOwnPropertyDescriptor(window, 'localStorage');
     vi.resetModules();
   });
@@ -44,7 +67,7 @@ describe('installDurableStorage', () => {
   }
 
   it('restores what was saved last session before anything reads it', async () => {
-    prefs.set('kiranos-chat-v1', '{"version":3}');
+    files.set(`kv/${encodeURIComponent('kiranos-chat-v1')}.txt`, '{"version":3}');
     await install();
     // The chat store reads this synchronously on its first render.
     expect(window.localStorage.getItem('kiranos-chat-v1')).toBe('{"version":3}');
@@ -52,9 +75,6 @@ describe('installDurableStorage', () => {
 
   it("mirrors every key the app writes — the web view is the app's alone", async () => {
     await install();
-    // Real keys from the console's code. A prefix allow-list missed all but
-    // the first: profile photos, wallpapers, the language choice, and the
-    // underscore-named workspace keys.
     const keys = [
       'kiranos-chat-v1',
       'nexus-profile-photo:u1',
@@ -65,15 +85,13 @@ describe('installDurableStorage', () => {
     ];
     for (const key of keys) window.localStorage.setItem(key, `value of ${key}`);
     await settle();
-    for (const key of keys) expect(prefs.get(key)).toBe(`value of ${key}`);
+    for (const key of keys) expect(saved(key)).toBe(`value of ${key}`);
   });
 
   it('survives a restart: written, then read back by a fresh install', async () => {
     await install();
     window.localStorage.setItem('nexus-profile-photo:u1', 'data:image/png;base64,AAAA');
     await settle();
-
-    // A new process: the in-memory cache is gone, only Preferences remains.
     vi.resetModules();
     await install();
     expect(window.localStorage.getItem('nexus-profile-photo:u1')).toBe(
@@ -81,13 +99,53 @@ describe('installDurableStorage', () => {
     );
   });
 
-  it('mirrors removals', async () => {
-    prefs.set('nexus-locale', 'hi');
+  it('holds a value far larger than a settings store is meant for', async () => {
     await install();
+    window.localStorage.setItem('kiranos-chat-v1', 'x'.repeat(5_000_000));
+    await settle();
+    vi.resetModules();
+    await install();
+    expect(window.localStorage.getItem('kiranos-chat-v1')?.length).toBe(5_000_000);
+  });
+
+  it('writes a burst of saves as the first and the latest, never out of order', async () => {
+    await install();
+    // The chat store saves its whole snapshot on every change — drafts
+    // included, so every keystroke. While one write is on disk, only the
+    // newest value waits behind it; the ones in between are never written.
+    let release!: () => void;
+    gate = new Promise((resolve) => (release = resolve));
+    for (let i = 1; i <= 50; i++) window.localStorage.setItem('kiranos-chat-v1', `v${i}`);
+    await settle();
+    expect(writes.map((w) => w.data)).toEqual(['v1']);
+
+    gate = null;
+    release();
+    await settle();
+    expect(writes.map((w) => w.data)).toEqual(['v1', 'v50']);
+    expect(saved('kiranos-chat-v1')).toBe('v50');
+  });
+
+  it('mirrors removals, including one queued behind a write', async () => {
+    files.set(`kv/${encodeURIComponent('nexus-locale')}.txt`, 'hi');
+    await install();
+    window.localStorage.setItem('nexus-locale', 'en');
     window.localStorage.removeItem('nexus-locale');
     await settle();
-    expect(prefs.has('nexus-locale')).toBe(false);
+    expect(saved('nexus-locale')).toBeUndefined();
     expect(window.localStorage.getItem('nexus-locale')).toBeNull();
+  });
+
+  it('clears everything it holds', async () => {
+    await install();
+    window.localStorage.setItem('a', '1');
+    window.localStorage.setItem('b', '2');
+    await settle();
+    window.localStorage.clear();
+    await settle();
+    expect(window.localStorage.length).toBe(0);
+    expect(saved('a')).toBeUndefined();
+    expect(saved('b')).toBeUndefined();
   });
 
   it('behaves like Storage for the code that reads it', async () => {
@@ -99,7 +157,6 @@ describe('installDurableStorage', () => {
     expect([storage.key(0), storage.key(1)].sort()).toEqual(['a', 'b']);
     expect(storage.key(5)).toBeNull();
     expect(storage.getItem('missing')).toBeNull();
-    // Storage stores strings, whatever it is given.
     storage.setItem('n', 42 as unknown as string);
     expect(storage.getItem('n')).toBe('42');
   });
@@ -110,7 +167,6 @@ describe('installDurableStorage', () => {
     window.localStorage.setItem('kiranos-chat-v1', 'x');
     await settle();
     expect(module.storageError()).toBeInstanceOf(Error);
-    // The in-memory copy still serves this session.
     expect(window.localStorage.getItem('kiranos-chat-v1')).toBe('x');
   });
 
@@ -123,8 +179,10 @@ describe('installDurableStorage', () => {
 
 describe('storage health', () => {
   beforeEach(() => {
-    prefs.clear();
+    files.clear();
+    writes = [];
     failWrites = false;
+    gate = null;
     vi.resetModules();
   });
 
@@ -166,14 +224,15 @@ describe('storage health', () => {
     const heard: unknown[] = [];
     module.onStorageFailure((error) => heard.push(error));
 
-    window.localStorage.setItem('a', '1'); // healthy: nothing to announce
+    window.localStorage.setItem('a', '1');
     await settle();
     failWrites = true;
     window.localStorage.setItem('a', '2');
     await settle();
     failWrites = false;
     window.localStorage.setItem('a', '3');
-    window.localStorage.setItem('a', '4'); // still healthy: announced once
+    await settle();
+    window.localStorage.setItem('a', '4');
     await settle();
 
     expect(heard.map((e) => (e === null ? 'recovered' : 'failed'))).toEqual([
