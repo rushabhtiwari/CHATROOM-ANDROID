@@ -30,7 +30,7 @@ export function AgentSheet({
   /** Hand a reply to the room's composer to edit before posting it. */
   onSendToComposer: (text: string) => void;
 }) {
-  const { aiConversation, askAgent, aiBudget } = useChat();
+  const { aiConversation, askAgent, aiBudget, summarizeRoom } = useChat();
   const exchanges = aiConversation(roomId);
   const [prompt, setPrompt] = useState('');
   const [busy, setBusy] = useState(false);
@@ -96,10 +96,23 @@ export function AgentSheet({
         <div ref={scroller} onScroll={onScroll} className="scroll-y min-h-[160px] flex-1">
           <div ref={content} className="flex flex-col gap-4 px-3 py-3">
             {exchanges.length === 0 ? (
-              <Empty
-                title="Ask about this conversation"
-                detail="Summaries, decisions, who said what. Answers stay private until you share them."
-              />
+              <div>
+                <Empty
+                  title="Ask about this conversation"
+                  detail="Summaries, decisions, who said what. Answers stay private until you share them."
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    tap();
+                    void summarizeRoom(roomId);
+                  }}
+                  disabled={remaining === 0}
+                  className="mx-auto -mt-8 flex h-10 items-center gap-2 rounded-full bg-ai/10 px-4 text-[14px] font-medium text-ai disabled:opacity-40"
+                >
+                  <Sparkles className="h-4 w-4" /> Summarize this chat
+                </button>
+              </div>
             ) : (
               exchanges.map((ai) => (
                 <AgentMessage

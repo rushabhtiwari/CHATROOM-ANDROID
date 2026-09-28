@@ -55,3 +55,30 @@ export function shortDate(iso: string, now = Date.now()): string {
     ...(sameYear ? {} : { year: 'numeric' }),
   });
 }
+
+/** "Today 14:30", "Tomorrow 09:00", "Mon 18 Aug, 09:00" — for times still to come. */
+export function upcomingTime(timestamp: number, now = Date.now()): string {
+  const date = new Date(timestamp);
+  const time = date.toLocaleTimeString('en-IN', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  });
+  const startOfToday = new Date(now).setHours(0, 0, 0, 0);
+  if (timestamp < startOfToday + DAY) return `Today ${time}`;
+  if (timestamp < startOfToday + 2 * DAY) return `Tomorrow ${time}`;
+  const day = date.toLocaleDateString('en-IN', {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+  });
+  return `${day}, ${time}`;
+}
+
+/** "820 KB", "2.4 MB". */
+export function formatBytes(bytes: number): string {
+  if (!Number.isFinite(bytes) || bytes <= 0) return '';
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}

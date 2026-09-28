@@ -211,6 +211,8 @@ interface ChatContextValue {
   setRoomTopic: (roomId: RoomId, topic: string) => void;
   setRoomDescription: (roomId: RoomId, description: string) => void;
   updateGroupPhoto: (roomId: RoomId, photo: Room["photo"] | null) => boolean;
+  /** Sets or removes the viewer's own profile photo, for everyone to see. */
+  updateProfilePhoto: (photo: User["photo"] | null) => void;
   addMembers: (roomId: RoomId, userIds: UserId[]) => void;
   removeMember: (roomId: RoomId, userId: UserId) => void;
   toggleAdmin: (roomId: RoomId, userId: UserId) => void;
@@ -377,7 +379,14 @@ export function ChatProvider({ children, log: providedLog }: { children: ReactNo
   const [online, setOnlineState] = useState(true);
   const [pendingJump, setPendingJump] = useState<MessageId | null>(null);
   /** How many messages of history are materialised for the active room. */
-  const [windowSize, setWindowSize] = useState(PAGE_SIZE);
+  // How much of a room's history is materialised, and for which room. Keyed
+  // by room so that opening another room starts from one page without an
+  // effect to reset it — an effect that also used to undo a jump into an
+  // older part of another room, which widens the window as it switches.
+  const [historyWindow, setHistoryWindow] = useState<{ roomId: RoomId | null; size: number }>({
+    roomId: null,
+    size: PAGE_SIZE,
+  });
   const [aiBudget, setAiBudget] = useState<AiBudget>({
     used: 0,
     limit: AI_TOKEN_BUDGET,
@@ -1385,6 +1394,7 @@ export function ChatProvider({ children, log: providedLog }: { children: ReactNo
     [messages, activeRoomId],
   );
 
+  const windowSize = historyWindow.roomId === activeRoomId ? historyWindow.size : PAGE_SIZE;
   const channelMessages = useMemo(
     () => roomLog.slice(Math.max(0, roomLog.length - windowSize)),
     [roomLog, windowSize],
@@ -1393,14 +1403,12 @@ export function ChatProvider({ children, log: providedLog }: { children: ReactNo
   const hasMoreHistory = roomLog.length > channelMessages.length;
 
   const loadOlder = useCallback(() => {
-    setWindowSize((size) => size + PAGE_SIZE);
-  }, []);
-
-  // Reset the window when the conversation changes, so switching rooms doesn't
-  // inherit a huge materialised window from the previous one.
-  useEffect(() => {
-    setWindowSize(PAGE_SIZE);
+    setHistoryWindow((current) => ({
+      roomId: activeRoomId,
+      size: (current.roomId === activeRoomId ? current.size : PAGE_SIZE) + PAGE_SIZE,
+    }));
   }, [activeRoomId]);
+
 
   /** Exposed for tests and for a future server-backed history endpoint. */
   const historyPage = useCallback(
@@ -1420,6 +1428,9 @@ export function ChatProvider({ children, log: providedLog }: { children: ReactNo
   const setActiveRoom = useCallback(
     (id: RoomId) => {
       setActiveRoomId(id);
+      // Opening a room shows its latest page, not however far back it was
+      // scrolled last time.
+      setHistoryWindow({ roomId: null, size: PAGE_SIZE });
       markRoomRead(id);
     },
     [markRoomRead],
@@ -1427,19 +1438,20 @@ export function ChatProvider({ children, log: providedLog }: { children: ReactNo
 
   const jumpToMessage = useCallback(
     (roomId: RoomId, messageId: MessageId) => {
-      const index = messages
+      // The target room's history, which is not necessarily the open room's.
+      const history = messages
         .filter((m) => m.roomId === roomId && !m.threadRootId && !m.scheduledFor)
-        .sort(compareMessages)
-        .findIndex((m) => m.id === messageId);
+        .sort(compareMessages);
+      const index = history.findIndex((m) => m.id === messageId);
       setActiveRoomId(roomId);
       // Widen the window far enough back that the target is materialised.
       if (index !== -1) {
-        const fromEnd = roomLog.length - index;
-        setWindowSize(Math.max(PAGE_SIZE, fromEnd + 10));
+        const fromEnd = history.length - index;
+        setHistoryWindow({ roomId, size: Math.max(PAGE_SIZE, fromEnd + 10) });
       }
       setPendingJump(messageId);
     },
-    [messages, roomLog.length],
+    [messages],
   );
 
   const clearJump = useCallback(() => setPendingJump(null), []);
@@ -1671,6 +1683,13 @@ export function ChatProvider({ children, log: providedLog }: { children: ReactNo
       return true;
     },
     [rooms, currentUserId, dispatch],
+  );
+
+  const updateProfilePhoto = useCallback(
+    (photo: User["photo"] | null) => {
+      dispatch({ type: "profile.update", patch: { photo: photo ?? null } });
+    },
+    [dispatch],
   );
 
   const addMembers = useCallback(
@@ -2552,6 +2571,7 @@ export function ChatProvider({ children, log: providedLog }: { children: ReactNo
     setRoomTopic,
     setRoomDescription,
     updateGroupPhoto,
+    updateProfilePhoto,
     addMembers,
     removeMember,
     toggleAdmin,

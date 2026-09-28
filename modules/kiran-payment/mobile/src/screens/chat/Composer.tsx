@@ -2,6 +2,8 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import {
   CalendarClock,
   Camera,
+  Clock,
+  FileText,
   Image as ImageIcon,
   Paperclip,
   Send,
@@ -17,6 +19,23 @@ import { pickPhoto } from '~/native/camera';
 import { isNative } from '~/native/platform';
 import { selection, tap } from '~/native/haptics';
 import { previewText } from '~/lib/text';
+import { Sheet, SheetButton } from '~/components/Sheet';
+import { upcomingTime } from '~/lib/format';
+
+/** `datetime-local` wants local time without a zone: "2026-09-28T14:30". */
+function toLocalInput(timestamp: number): string {
+  const date = new Date(timestamp);
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+
+/** Tomorrow at 9, the time most people mean by "later". */
+function defaultSendAt(now = Date.now()): number {
+  const date = new Date(now);
+  date.setDate(date.getDate() + 1);
+  date.setHours(9, 0, 0, 0);
+  return date.getTime();
+}
 
 /**
  * The composer.
@@ -58,6 +77,11 @@ export function Composer({
     users,
     userGroups,
     plainText,
+    storageReady,
+    getDraft,
+    saveDraft,
+    clearDraft,
+    scheduleMessage,
   } = useChat();
 
   const [text, setText] = useState('');
@@ -67,6 +91,8 @@ export function Composer({
     null,
   );
   const fileInput = useRef<HTMLInputElement>(null);
+  const docInput = useRef<HTMLInputElement>(null);
+  const [scheduling, setScheduling] = useState<string | null>(null);
   const textarea = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -75,6 +101,27 @@ export function Composer({
     requestAnimationFrame(() => textarea.current?.focus());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [seed?.nonce]);
+
+  // Drafts: whatever you were typing is still there when you come back, per
+  // conversation and per thread. Loaded once the saved state is read — before
+  // that, there is nothing to load — and saved a moment after typing stops.
+  const scope = `${roomId}:${threadRootId ?? ''}`;
+  const loadedFor = useRef<string | null>(null);
+  useEffect(() => {
+    if (!storageReady || loadedFor.current === scope) return;
+    loadedFor.current = scope;
+    const draft = getDraft(roomId, threadRootId);
+    if (draft?.text && !seed) setText(draft.text);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [storageReady, scope]);
+  useEffect(() => {
+    if (loadedFor.current !== scope) return;
+    const timer = setTimeout(
+      () => saveDraft(roomId, { text, replyToId: replyTo?.id ?? null, threadRootId }, threadRootId),
+      400,
+    );
+    return () => clearTimeout(timer);
+  }, [text, scope, roomId, threadRootId, replyTo, saveDraft]);
 
   const permission = canSend(activeRoom, currentUserId);
   const agentPrompt = text.trim().startsWith('@agent');
@@ -161,6 +208,7 @@ export function Composer({
       }
       selection();
       setText('');
+      clearDraft(roomId, threadRootId);
       setMentions(null);
       onClearReply();
     } finally {
@@ -278,12 +326,38 @@ export function Composer({
             type="button"
             onClick={() => {
               setAttachOpen(false);
+              docInput.current?.click();
+            }}
+            className="flex min-h-touch flex-1 items-center justify-center gap-2 rounded-lg bg-slate-100 text-[14px] font-medium text-ink active:bg-slate-200"
+          >
+            <FileText className="h-4 w-4" /> File
+          </button>
+        </div>
+      )}
+      {attachOpen && (
+        <div className="flex gap-2 border-b border-line px-3 py-2">
+          <button
+            type="button"
+            onClick={() => {
+              setAttachOpen(false);
               navigate(`/chats/${roomId}/schedule`);
             }}
             className="flex min-h-touch flex-1 items-center justify-center gap-2 rounded-lg bg-slate-100 text-[14px] font-medium text-ink active:bg-slate-200"
           >
-            <CalendarClock className="h-4 w-4" /> Meet
+            <CalendarClock className="h-4 w-4" /> Meeting
           </button>
+          {!threadRootId && (
+            <button
+              type="button"
+              onClick={() => {
+                setAttachOpen(false);
+                setScheduling(toLocalInput(defaultSendAt()));
+              }}
+              className="flex min-h-touch flex-1 items-center justify-center gap-2 rounded-lg bg-slate-100 text-[14px] font-medium text-ink active:bg-slate-200"
+            >
+              <Clock className="h-4 w-4" /> Send later
+            </button>
+          )}
         </div>
       )}
 
@@ -331,6 +405,63 @@ export function Composer({
           {agentPrompt ? <Sparkles className="h-5 w-5" /> : <Send className="h-[18px] w-[18px]" />}
         </button>
       </div>
+
+      <input
+        ref={docInput}
+        type="file"
+        hidden
+        onChange={async (event) => {
+          const file = event.target.files?.[0];
+          if (file) {
+            await sendAttachment(roomId, file, undefined, {
+              replyToId: (replyTo?.id as MessageId) ?? null,
+              threadRootId,
+            });
+            onClearReply();
+          }
+          event.target.value = '';
+        }}
+      />
+
+      {scheduling !== null && (
+        <Sheet onClose={() => setScheduling(null)} title="Send later">
+          <div className="space-y-3 px-4 pb-3 pt-2">
+            <textarea
+              value={text}
+              onChange={(event) => setText(event.target.value)}
+              placeholder="Message"
+              aria-label="Scheduled message"
+              rows={3}
+              className="w-full resize-none rounded-xl border border-line bg-slate-50 px-3 py-2.5 text-[16px] text-ink outline-none focus:border-brand"
+            />
+            <input
+              type="datetime-local"
+              value={scheduling}
+              min={toLocalInput(Date.now())}
+              onChange={(event) => setScheduling(event.target.value)}
+              aria-label="Send at"
+              className="w-full rounded-xl border border-line bg-slate-50 px-3 py-2.5 text-[16px] text-ink outline-none focus:border-brand"
+            />
+          </div>
+          <SheetButton
+            tone="brand"
+            disabled={!text.trim() || !scheduling || new Date(scheduling).getTime() <= Date.now()}
+            onClick={() => {
+              const sendAt = new Date(scheduling!).getTime();
+              scheduleMessage(roomId, text.trim(), sendAt);
+              setText('');
+              clearDraft(roomId, threadRootId);
+              setScheduling(null);
+              selection();
+            }}
+          >
+            {scheduling && new Date(scheduling).getTime() > Date.now()
+              ? `Schedule for ${upcomingTime(new Date(scheduling).getTime())}`
+              : 'Pick a time in the future'}
+          </SheetButton>
+          <SheetButton onClick={() => setScheduling(null)}>Cancel</SheetButton>
+        </Sheet>
+      )}
 
       <input
         ref={fileInput}

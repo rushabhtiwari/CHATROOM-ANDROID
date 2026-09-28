@@ -6,6 +6,7 @@ import type { SharedMessage } from '@/lib/chat-types';
 import { cn } from '@/lib/utils';
 import { MessageBubble } from '~/screens/chat/MessageBubble';
 import { Composer } from '~/screens/chat/Composer';
+import { MessageActionsSheet } from '~/screens/chat/MessageActions';
 import { Empty, Screen } from '~/components/Screen';
 import { tap } from '~/native/haptics';
 import { useStickToBottom } from '~/lib/useStickToBottom';
@@ -137,84 +138,13 @@ export function ThreadScreen() {
       />
 
       {reacting && (
-        <ReactionSheet message={reacting} onClose={() => setReacting(null)} onReply={setReplyTo} />
+        <MessageActionsSheet
+          message={reacting}
+          onClose={() => setReacting(null)}
+          onReply={setReplyTo}
+          inThread
+        />
       )}
-    </div>
-  );
-}
-
-const QUICK_REACTIONS = ['👍', '✅', '🙏', '👀', '🎉', '❤️'];
-
-/** The long-press sheet, shared by the conversation and the thread. */
-export function ReactionSheet({
-  message,
-  onClose,
-  onReply,
-}: {
-  message: SharedMessage;
-  onClose: () => void;
-  onReply: (message: SharedMessage) => void;
-}) {
-  const { toggleReaction, togglePin, isSaved, toggleSave } = useChat();
-  const saved = isSaved(message.id);
-
-  return (
-    <div
-      className="absolute inset-0 z-30 flex items-end bg-ink/30"
-      onClick={onClose}
-      role="presentation"
-    >
-      <div
-        className="w-full animate-sheet-up rounded-t-2xl bg-surface pb-safe-bottom"
-        onClick={(event) => event.stopPropagation()}
-      >
-        <div className="flex justify-around px-4 py-4">
-          {QUICK_REACTIONS.map((emoji) => (
-            <button
-              key={emoji}
-              type="button"
-              onClick={() => {
-                tap();
-                toggleReaction(message.id, emoji);
-                onClose();
-              }}
-              className="flex h-12 w-12 items-center justify-center rounded-full text-2xl active:bg-slate-100"
-            >
-              {emoji}
-            </button>
-          ))}
-        </div>
-        <button
-          type="button"
-          onClick={() => {
-            onReply(message);
-            onClose();
-          }}
-          className="min-h-touch w-full border-t border-line text-[15px] font-medium text-brand active:bg-slate-100"
-        >
-          Reply
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            togglePin(message.id);
-            onClose();
-          }}
-          className="min-h-touch w-full border-t border-line text-[15px] font-medium text-ink active:bg-slate-100"
-        >
-          {message.pinnedBy ? 'Unpin' : 'Pin to conversation'}
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            toggleSave(message.id);
-            onClose();
-          }}
-          className="min-h-touch w-full border-t border-line text-[15px] font-medium text-ink active:bg-slate-100"
-        >
-          {saved ? 'Remove from saved' : 'Save'}
-        </button>
-      </div>
     </div>
   );
 }

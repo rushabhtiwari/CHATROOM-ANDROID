@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useChat } from "@/lib/chat-store";
-import { isMediaAttachment } from "@/lib/attachments";
+import { sharedContentOf } from "@/lib/shared-content";
 import { isSafeHref } from "@/lib/link-preview";
 import type { RoomId, SharedMessage } from "@/lib/chat-types";
 import { MediaAttachment } from "./MediaAttachment";
@@ -30,21 +30,12 @@ export function SharedContentDialog({
   const [forwarding, setForwarding] = useState<SharedMessage | null>(null);
   const targetRoomId = roomId === undefined ? activeRoom.id : roomId;
   const targetRoom = rooms.find((room) => room.id === targetRoomId);
-  const roomMessages = useMemo(
+  const { media, docs, links } = useMemo(
     () =>
-      targetRoomId
-        ? messages.filter((message) => message.roomId === targetRoomId && !message.deletedAt)
-        : [],
+      sharedContentOf(
+        targetRoomId ? messages.filter((message) => message.roomId === targetRoomId) : [],
+      ),
     [messages, targetRoomId],
-  );
-  const media = roomMessages.filter(
-    (message) => message.attachment && isMediaAttachment(message.attachment),
-  );
-  const docs = roomMessages.filter(
-    (message) => message.attachment && !isMediaAttachment(message.attachment),
-  );
-  const links = roomMessages.flatMap((message) =>
-    (message.linkPreviews ?? []).map((preview) => ({ message, preview })),
   );
 
   return (

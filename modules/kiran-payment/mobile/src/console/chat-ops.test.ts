@@ -311,6 +311,30 @@ describe('per-person state', () => {
   });
 });
 
+describe('profile.update', () => {
+  const photo = { dataUrl: 'data:image/webp;base64,AAAA', zoom: 1.2, x: 40, y: 60 };
+  const person = (ws: Workspace, id: string) => ws.users.find((u) => u.id === id)!;
+
+  it("sets the author's own photo, and nobody else's", () => {
+    const ws = applyOp(seed(), entry(ALICE, { type: 'profile.update', patch: { photo } }));
+    expect(person(ws, ALICE).photo).toEqual(photo);
+    expect(person(ws, BOB).photo).toBeUndefined();
+  });
+
+  it('removes it with null', () => {
+    const ws = foldOps(seed(), [
+      entry(ALICE, { type: 'profile.update', patch: { photo } }),
+      entry(ALICE, { type: 'profile.update', patch: { photo: null } }),
+    ]);
+    expect(person(ws, ALICE)).not.toHaveProperty('photo');
+  });
+
+  it('leaves the workspace alone when the patch says nothing', () => {
+    const before = seed();
+    expect(applyOp(before, entry(ALICE, { type: 'profile.update', patch: {} }))).toBe(before);
+  });
+});
+
 describe('convergence', () => {
   it('gives every client the same workspace from the same log', () => {
     const log: OpEntry[] = [

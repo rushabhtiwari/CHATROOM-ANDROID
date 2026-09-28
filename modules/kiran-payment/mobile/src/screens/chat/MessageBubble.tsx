@@ -1,4 +1,18 @@
-import { AlertCircle, Check, CheckCheck, Clock, MessagesSquare, Pin, Reply } from 'lucide-react';
+import { useState } from 'react';
+import { createPortal } from 'react-dom';
+import { useNavigate } from 'react-router-dom';
+import {
+  AlertCircle,
+  Check,
+  CheckCheck,
+  Clock,
+  FileText,
+  Forward,
+  MessagesSquare,
+  Pin,
+  Reply,
+  UserRound,
+} from 'lucide-react';
 import { useChat } from '@/lib/chat-store';
 import type { SharedMessage } from '@/lib/chat-types';
 import { cn } from '@/lib/utils';
@@ -7,6 +21,10 @@ import { ClaimCard } from '@/components/chat/ClaimCard';
 import { relativeTime } from '~/lib/format';
 import { tap, warn } from '~/native/haptics';
 import { previewText } from '~/lib/text';
+import { formatBytes } from '~/lib/format';
+import { isSafeHref } from '@/lib/link-preview';
+import { PersonAvatar } from '~/components/Avatar';
+import { PhotoViewer } from '~/screens/chat/SharedMediaScreen';
 
 /** The delivery tick, which on a phone is the only send feedback there is. */
 function DeliveryMark({ message }: { message: SharedMessage }) {
@@ -37,11 +55,14 @@ function DeliveryMark({ message }: { message: SharedMessage }) {
     );
   }
 
-  if (message.delivery === 'sending') return <Clock className="h-3 w-3 opacity-70" />;
-  if (message.delivery === 'sent') return <Check className="h-3.5 w-3.5 opacity-70" />;
+  if (message.delivery === 'sending')
+    return <Clock className="h-3 w-3 opacity-70" aria-label="Sending" />;
+  if (message.delivery === 'sent')
+    return <Check className="h-3.5 w-3.5 opacity-70" aria-label="Sent" />;
   return (
     <CheckCheck
       className={cn('h-3.5 w-3.5', message.delivery === 'read' ? 'text-white' : 'opacity-70')}
+      aria-label={message.delivery === 'read' ? 'Read' : 'Delivered'}
     />
   );
 }
@@ -54,6 +75,10 @@ export function MessageBubble({
   onOpenThread,
   /** Inside a thread the replies are the whole screen, so no thread footer. */
   inThread = false,
+  /** Flash it: it is the message someone just jumped to. */
+  highlighted = false,
+  /** Groups show who is talking with a face as well as a name. */
+  showAvatar = false,
 }: {
   message: SharedMessage;
   showSender: boolean;
@@ -61,7 +86,11 @@ export function MessageBubble({
   onReact: (message: SharedMessage) => void;
   onOpenThread?: (message: SharedMessage) => void;
   inThread?: boolean;
+  highlighted?: boolean;
+  showAvatar?: boolean;
 }) {
+  const navigate = useNavigate();
+  const [viewing, setViewing] = useState(false);
   const {
     currentUserId,
     userById,
@@ -71,6 +100,8 @@ export function MessageBubble({
     plainText,
     toggleReaction,
     threadCount,
+    rooms,
+    roomTitle,
   } = useChat();
 
   const mine = message.senderId === currentUserId;
@@ -94,20 +125,62 @@ export function MessageBubble({
     }, 450);
   };
   const endPress = () => clearTimeout(pressTimer);
+  const openProfile = (userId: string) => {
+    tap();
+    navigate(`/people/${userId}`);
+  };
+
+  const forwardedRoom = message.forwardedFrom
+    ? rooms.find((room) => room.id === message.forwardedFrom!.roomId)
+    : undefined;
+  const sharedProfile = message.sharedProfileUserId
+    ? userById(message.sharedProfileUserId)
+    : undefined;
+  const previews = (message.linkPreviews ?? []).filter((preview) => isSafeHref(preview.url));
+  const isImage = message.attachment?.type.startsWith('image/');
 
   return (
-    <div className={cn('flex px-3 py-0.5', mine ? 'justify-end' : 'justify-start')}>
+    <div
+      data-message-id={message.id}
+      className={cn(
+        'flex gap-1.5 px-3 py-0.5 transition-colors duration-700',
+        mine ? 'justify-end' : 'justify-start',
+        highlighted && 'bg-accent',
+      )}
+    >
+      {!mine && showAvatar && (
+        <div className="w-7 shrink-0 self-end">
+          {showSender && (
+            <button
+              type="button"
+              onClick={() => openProfile(sender.id)}
+              aria-label={`Profile of ${sender.name}`}
+            >
+              <PersonAvatar user={sender} size={28} />
+            </button>
+          )}
+        </div>
+      )}
       <div className={cn('max-w-[78%]', mine && 'items-end')}>
         {showSender && !mine && (
-          <p className="mb-0.5 pl-2 text-[12px] font-semibold" style={{ color: sender.color }}>
+          <button
+            type="button"
+            onClick={() => openProfile(sender.id)}
+            className="mb-0.5 pl-2 text-left text-[12px] font-semibold"
+            style={{ color: sender.color }}
+          >
             {sender.name}
-          </p>
+          </button>
         )}
 
         <div
           onTouchStart={startPress}
           onTouchEnd={endPress}
           onTouchMove={endPress}
+          onContextMenu={(event) => {
+            event.preventDefault();
+            onReact(message);
+          }}
           onDoubleClick={() => onReply(message)}
           className={cn(
             'relative rounded-2xl px-3 py-2 text-[15px] leading-snug',
@@ -119,6 +192,19 @@ export function MessageBubble({
         >
           {message.pinnedBy && (
             <Pin className="absolute -top-1 right-2 h-3 w-3 rotate-45 text-strand-amber" />
+          )}
+
+          {message.forwardedFrom && (
+            <p
+              className={cn(
+                'mb-1 flex items-center gap-1 text-[11px] italic',
+                mine ? 'text-white/80' : 'text-slate-500',
+              )}
+            >
+              <Forward className="h-3 w-3" />
+              Forwarded from {userById(message.forwardedFrom.senderId).name}
+              {forwardedRoom ? ` · ${roomTitle(forwardedRoom)}` : ''}
+            </p>
           )}
 
           {repliedTo && (
@@ -139,22 +225,39 @@ export function MessageBubble({
 
           {message.attachment && (
             <div className="mb-1.5 overflow-hidden rounded-lg">
-              {message.attachment.type.startsWith('image/') ? (
-                <img
-                  src={message.attachment.dataUrl}
-                  alt={message.attachment.name}
-                  className="max-h-72 w-full object-cover"
-                  loading="lazy"
-                />
+              {isImage ? (
+                <button
+                  type="button"
+                  onClick={() => message.attachment!.dataUrl && setViewing(true)}
+                  className="block w-full"
+                  aria-label={`View ${message.attachment.name}`}
+                >
+                  <img
+                    src={message.attachment.dataUrl}
+                    alt={message.attachment.name}
+                    className="max-h-72 w-full object-cover"
+                    loading="lazy"
+                  />
+                </button>
               ) : (
-                <div
+                <a
+                  href={message.attachment.dataUrl || undefined}
+                  download={message.attachment.name}
+                  target="_blank"
+                  rel="noreferrer"
                   className={cn(
                     'flex items-center gap-2 rounded-lg px-2 py-2 text-[13px]',
                     mine ? 'bg-white/15' : 'bg-slate-100',
                   )}
                 >
-                  <span className="truncate">{message.attachment.name}</span>
-                </div>
+                  <FileText className="h-5 w-5 shrink-0 opacity-80" />
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate font-medium">{message.attachment.name}</span>
+                    <span className="block text-[11px] opacity-70">
+                      {formatBytes(message.attachment.size)}
+                    </span>
+                  </span>
+                </a>
               )}
             </div>
           )}
@@ -166,6 +269,26 @@ export function MessageBubble({
             <div className="mb-1.5">
               <ClaimCard claimId={message.claimId} mine={mine} />
             </div>
+          )}
+
+          {sharedProfile && !message.deletedAt && (
+            <button
+              type="button"
+              onClick={() => openProfile(sharedProfile.id)}
+              className={cn(
+                'mb-1.5 flex w-full items-center gap-2.5 rounded-lg px-2 py-2 text-left',
+                mine ? 'bg-white/15' : 'bg-slate-100',
+              )}
+            >
+              <PersonAvatar user={sharedProfile} size={36} />
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-[14px] font-semibold">
+                  {sharedProfile.name}
+                </span>
+                <span className="block truncate text-[12px] opacity-75">{sharedProfile.role}</span>
+              </span>
+              <UserRound className="h-4 w-4 shrink-0 opacity-70" />
+            </button>
           )}
 
           {message.deletedAt ? (
@@ -182,6 +305,42 @@ export function MessageBubble({
               />
             )
           )}
+
+          {!message.deletedAt &&
+            previews.map((preview) => (
+              <a
+                key={preview.url}
+                href={preview.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(
+                  'mt-1.5 block overflow-hidden rounded-lg border-l-2',
+                  mine ? 'border-white/60 bg-white/15' : 'border-brand bg-slate-100',
+                )}
+              >
+                {preview.image && (
+                  <img
+                    src={preview.image}
+                    alt=""
+                    className="max-h-36 w-full object-cover"
+                    loading="lazy"
+                  />
+                )}
+                <span className="block px-2 py-1.5">
+                  {preview.siteName && (
+                    <span className="block text-[11px] opacity-70">{preview.siteName}</span>
+                  )}
+                  <span className="block text-[13px] font-semibold leading-snug">
+                    {preview.title}
+                  </span>
+                  {preview.description && (
+                    <span className="line-clamp-2 block text-[12px] opacity-80">
+                      {preview.description}
+                    </span>
+                  )}
+                </span>
+              </a>
+            ))}
 
           <span
             className={cn(
@@ -236,6 +395,12 @@ export function MessageBubble({
           </button>
         )}
       </div>
+      {viewing &&
+        message.attachment &&
+        createPortal(
+          <PhotoViewer message={message} onClose={() => setViewing(false)} />,
+          document.body,
+        )}
     </div>
   );
 }

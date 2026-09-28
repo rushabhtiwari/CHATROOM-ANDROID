@@ -1,6 +1,8 @@
-import { Check, Wifi, WifiOff } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Archive, Bookmark, Check, ChevronRight, Wifi, WifiOff } from 'lucide-react';
 import { useChat } from '@/lib/chat-store';
 import { Row, Screen, Section } from '~/components/Screen';
+import { PersonAvatar } from '~/components/Avatar';
 import { isNative, platform } from '~/native/platform';
 import { useDeviceStorageFailing } from '~/lib/useDeviceStorage';
 
@@ -13,31 +15,49 @@ import { useDeviceStorageFailing } from '~/lib/useDeviceStorage';
  * says so rather than being dressed up as a profile.
  */
 export function MeScreen() {
-  const { users, currentUser, setCurrentUserId, online, storageStatus } = useChat();
+  const navigate = useNavigate();
+  const {
+    users,
+    currentUser,
+    setCurrentUserId,
+    online,
+    storageStatus,
+    savedMessages,
+    archivedRooms,
+  } = useChat();
   const deviceFailing = useDeviceStorageFailing();
 
   return (
     <Screen title="Me">
       <Section>
-        <Row>
-          <div
-            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-[17px] font-semibold text-white"
-            style={{ backgroundColor: currentUser.color }}
-            aria-hidden
-          >
-            {currentUser.name
-              .split(' ')
-              .slice(0, 2)
-              .map((word) => word[0])
-              .join('')}
-          </div>
-          <div className="min-w-0">
+        <Row onClick={() => navigate(`/people/${currentUser.id}`)}>
+          <PersonAvatar user={currentUser} size={52} />
+          <div className="min-w-0 flex-1">
             <p className="truncate text-[16px] font-semibold text-ink">{currentUser.name}</p>
             <p className="truncate text-[13px] text-slate-500">
               {currentUser.role}
               {currentUser.department ? ` · ${currentUser.department}` : ''}
             </p>
+            <p className="text-[13px] font-medium text-brand">
+              {currentUser.photo ? 'View profile' : 'Add a profile photo'}
+            </p>
           </div>
+          <ChevronRight className="h-4 w-4 text-slate-400" />
+        </Row>
+      </Section>
+
+      <Section>
+        <Row onClick={() => navigate('/saved')}>
+          <Bookmark className="h-5 w-5 text-brand" />
+          <span className="flex-1 text-[15px] text-ink">Saved messages</span>
+          <span className="text-[14px] text-slate-500">{savedMessages().length}</span>
+          <ChevronRight className="h-4 w-4 text-slate-400" />
+        </Row>
+        <Row onClick={() => navigate('/chats/archived')}>
+          <Archive className="h-5 w-5 text-brand" />
+          <span className="flex-1 text-[15px] text-ink">Archived chats</span>
+          <span className="text-[14px] text-slate-500">{archivedRooms.length}</span>
+          <ChevronRight className="h-4 w-4 text-slate-400" />
         </Row>
       </Section>
 
@@ -74,11 +94,7 @@ export function MeScreen() {
       <Section title="Signed in as">
         {users.map((user) => (
           <Row key={user.id} onClick={() => setCurrentUserId(user.id)}>
-            <span
-              className="h-8 w-8 shrink-0 rounded-full"
-              style={{ backgroundColor: user.color }}
-              aria-hidden
-            />
+            <PersonAvatar user={user} size={32} />
             <div className="min-w-0 flex-1">
               <p className="truncate text-[15px] text-ink">{user.name}</p>
               <p className="truncate text-[12px] text-slate-500">{user.role}</p>

@@ -30,6 +30,15 @@ export interface User {
   color: string;
   /** IANA zone, used to render "their local time" and to format timestamps. */
   timeZone: string;
+  /** Profile picture the person chose, cropped the way they framed it. */
+  photo?:
+    | {
+        dataUrl: string;
+        zoom: number;
+        x: number;
+        y: number;
+      }
+    | undefined;
 }
 
 /** A mentionable set of users, e.g. `@engineering`. */

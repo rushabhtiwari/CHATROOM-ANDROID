@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import type { User } from "@/lib/chat-types";
 import { useChat } from "@/lib/chat-store";
+import { sharedContentOf, sharedItemCount } from "@/lib/shared-content";
 import {
   Dialog,
   DialogContent,
@@ -53,13 +54,11 @@ export function UserProfileDialog({
           room.participantIds.includes(currentUserId) &&
           room.participantIds.includes(user.id),
       );
-  const sharedItemCount = messages
-    .filter((message) => message.roomId === directRoom?.id && !message.deletedAt)
-    .reduce(
-      (count, message) =>
-        count + (message.attachment ? 1 : 0) + (message.linkPreviews?.length ?? 0),
-      0,
-    );
+  const sharedItems = sharedItemCount(
+    sharedContentOf(
+      directRoom ? messages.filter((message) => message.roomId === directRoom.id) : [],
+    ),
+  );
   const closeAnd = (action: () => void) => {
     action();
     onOpenChange(false);
@@ -169,7 +168,7 @@ export function UserProfileDialog({
               <span className="min-w-0 flex-1">
                 <span className="block text-sm font-semibold">Media, links and docs</span>
                 <span className="block text-[12px] text-muted-foreground">
-                  {sharedItemCount} shared {sharedItemCount === 1 ? "item" : "items"}
+                  {sharedItems} shared {sharedItems === 1 ? "item" : "items"}
                 </span>
               </span>
               <ChevronRight className="h-4 w-4 text-muted-foreground" />

@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
+import { useChat } from "./chat-store";
 
 export interface ProfilePhoto {
   dataUrl: string;
@@ -7,63 +8,24 @@ export interface ProfilePhoto {
   y: number;
 }
 
-const PREFIX = "nexus-profile-photo";
-const CHANGE_EVENT = "nexus-profile-photo-change";
-
-function photoKey(userId: string) {
-  return `${PREFIX}:${userId}`;
-}
-
-function readPhoto(key: string): ProfilePhoto | null {
-  try {
-    const raw = window.localStorage.getItem(key);
-    if (!raw) return null;
-    const value = JSON.parse(raw) as Partial<ProfilePhoto>;
-    if (typeof value.dataUrl !== "string") return null;
-    return {
-      dataUrl: value.dataUrl,
-      zoom: typeof value.zoom === "number" ? value.zoom : 1,
-      x: typeof value.x === "number" ? value.x : 50,
-      y: typeof value.y === "number" ? value.y : 50,
-    };
-  } catch {
-    return null;
-  }
-}
-
+/**
+ * A person's profile photo, from the shared workspace.
+ *
+ * It used to live in this browser's storage, so nobody else ever saw it. Now
+ * setting it is a `profile.update` op: every device in the workspace gets it.
+ */
 export function useUserProfilePhoto(userId: string) {
-  const key = photoKey(userId);
-  const [photo, setPhotoState] = useState<ProfilePhoto | null>(null);
-
-  useEffect(() => {
-    setPhotoState(readPhoto(key));
-    const sync = (event: Event) => {
-      if (event instanceof StorageEvent && event.key !== key) return;
-      if (event instanceof CustomEvent && event.detail !== key) return;
-      setPhotoState(readPhoto(key));
-    };
-    window.addEventListener("storage", sync);
-    window.addEventListener(CHANGE_EVENT, sync);
-    return () => {
-      window.removeEventListener("storage", sync);
-      window.removeEventListener(CHANGE_EVENT, sync);
-    };
-  }, [key]);
+  const { userById, updateProfilePhoto } = useChat();
+  const photo: ProfilePhoto | null = userById(userId).photo ?? null;
 
   const setOwnPhoto = useCallback(
     (actorUserId: string, value: ProfilePhoto | null) => {
+      // Only your own: the op always applies to whoever sends it.
       if (actorUserId !== userId) return false;
-      try {
-        if (value) window.localStorage.setItem(key, JSON.stringify(value));
-        else window.localStorage.removeItem(key);
-        setPhotoState(value);
-        window.dispatchEvent(new CustomEvent(CHANGE_EVENT, { detail: key }));
-        return true;
-      } catch {
-        return false;
-      }
+      updateProfilePhoto(value);
+      return true;
     },
-    [key, userId],
+    [userId, updateProfilePhoto],
   );
 
   return { photo, setOwnPhoto };

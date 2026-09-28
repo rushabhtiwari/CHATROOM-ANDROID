@@ -80,6 +80,13 @@ def test_private_ops_reach_only_their_author(tmp_path):
     assert [e["opId"] for e in log.read(0, BOB)] == ["op-2"]
 
 
+def test_a_profile_change_needs_no_room_and_everyone_sees_it(tmp_path):
+    log = new_log(tmp_path)
+    photo = {"dataUrl": "data:image/webp;base64,AAAA", "zoom": 1, "x": 50, "y": 50}
+    log.append("op-1", ALICE, {"type": "profile.update", "patch": {"photo": photo}})
+    assert [e["opId"] for e in log.read(0, BOB)] == ["op-1"]
+
+
 @pytest.mark.parametrize(
     "actor, op, status",
     [

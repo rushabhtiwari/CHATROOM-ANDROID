@@ -28,7 +28,9 @@ export function TabBar() {
 
   // A conversation takes the whole screen: the composer sits where the tab bar
   // would be, and a tab bar above the keyboard is nobody's idea of a chat app.
-  const hidden = /^\/chats\/[^/]+/.test(pathname);
+  // The same goes for the screens a conversation leads to: profiles, saved
+  // messages, a new chat.
+  const hidden = /^\/(chats\/[^/]+|people\/|saved)/.test(pathname);
   if (hidden) return null;
 
   return (

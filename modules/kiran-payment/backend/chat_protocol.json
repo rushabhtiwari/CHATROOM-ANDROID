@@ -15,6 +15,7 @@
     "room.join",
     "read.mark",
     "notification.read",
+    "profile.update",
     "saved.set",
     "thread.follow",
     "room.notify"

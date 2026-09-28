@@ -6,6 +6,18 @@ import { ChatListScreen } from '~/screens/chat/ChatListScreen';
 import { ConversationScreen } from '~/screens/chat/ConversationScreen';
 import { ThreadScreen } from '~/screens/chat/ThreadScreen';
 import { MeetingFlowScreen } from '~/screens/chat/MeetingFlowScreen';
+import { ProfileScreen } from '~/screens/chat/ProfileScreen';
+import { RoomInfoScreen } from '~/screens/chat/RoomInfoScreen';
+import { SharedMediaScreen } from '~/screens/chat/SharedMediaScreen';
+import { NewChatScreen, NewGroupScreen } from '~/screens/chat/NewChatScreen';
+import {
+  ActivityScreen,
+  ArchivedScreen,
+  PinnedScreen,
+  SavedScreen,
+  ScheduledScreen,
+  SearchScreen,
+} from '~/screens/chat/ListScreens';
 import { OrdersScreen } from '~/screens/orders/OrdersScreen';
 import { OrderDetailScreen } from '~/screens/orders/OrderDetailScreen';
 import { DispatchesScreen } from '~/screens/orders/DispatchesScreen';
@@ -68,6 +80,17 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Navigate to="/chats" replace />} />
         <Route path="/chats" element={<ChatListScreen />} />
+        <Route path="/chats/new" element={<NewChatScreen />} />
+        <Route path="/chats/new-group" element={<NewGroupScreen />} />
+        <Route path="/chats/search" element={<SearchScreen />} />
+        <Route path="/chats/archived" element={<ArchivedScreen />} />
+        <Route path="/chats/:roomId/info" element={<RoomInfoScreen />} />
+        <Route path="/chats/:roomId/media" element={<SharedMediaScreen />} />
+        <Route path="/chats/:roomId/pinned" element={<PinnedScreen />} />
+        <Route path="/chats/:roomId/scheduled" element={<ScheduledScreen />} />
+        <Route path="/chats/:roomId/activity" element={<ActivityScreen />} />
+        <Route path="/people/:userId" element={<ProfileScreen />} />
+        <Route path="/saved" element={<SavedScreen />} />
         <Route path="/chats/:roomId" element={<ConversationScreen />} />
         <Route path="/chats/:roomId/schedule" element={<MeetingFlowScreen />} />
         <Route path="/chats/:roomId/thread/:rootId" element={<ThreadScreen />} />

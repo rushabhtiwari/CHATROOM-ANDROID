@@ -72,6 +72,7 @@ export const SHARED_OP_TYPES = [
   "room.join",
   "read.mark",
   "notification.read",
+  "profile.update",
 ] as const;
 
 /**
@@ -90,7 +91,11 @@ export type OpType = (typeof OP_TYPES)[number];
  * about one.
  */
 export const ROOM_SCOPED_OP_TYPES: readonly OpType[] = OP_TYPES.filter(
-  (type) => type !== "room.create" && type !== "saved.set" && type !== "thread.follow",
+  (type) =>
+    type !== "room.create" &&
+    type !== "saved.set" &&
+    type !== "thread.follow" &&
+    type !== "profile.update",
 );
 
 /* -------------------------------------------------------------------------- */
@@ -131,6 +136,11 @@ export type RoomPatch = Partial<
   photo?: Room["photo"] | null;
 };
 
+export type ProfilePatch = {
+  /** null removes the photo. */
+  photo?: User["photo"] | null;
+};
+
 export type ChatOp =
   | {
       type: "message.send";
@@ -167,6 +177,8 @@ export type ChatOp =
       ids?: string[];
       scope?: "mentions" | "activity";
     }
+  /** Changes the author's own profile; nobody can edit someone else's. */
+  | { type: "profile.update"; patch: ProfilePatch }
   | { type: "saved.set"; messageId: MessageId; on: boolean }
   | { type: "thread.follow"; rootId: MessageId; on: boolean }
   | { type: "room.notify"; roomId: RoomId; level: NotificationLevel };
@@ -764,6 +776,19 @@ export function applyOp(ws: Workspace, entry: OpEntry): Workspace {
         return { ...notification, readBy: [...notification.readBy, actor] };
       });
       return changed ? { ...ws, notifications } : ws;
+    }
+
+    case "profile.update": {
+      const { photo } = op.patch;
+      if (photo === undefined) return ws;
+      let changed = false;
+      const users = ws.users.map((user) => {
+        if (user.id !== actor) return user;
+        changed = true;
+        const { photo: _previous, ...rest } = user;
+        return photo ? { ...rest, photo } : rest;
+      });
+      return changed ? { ...ws, users } : ws;
     }
 
     case "saved.set": {
