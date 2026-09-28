@@ -9,16 +9,25 @@ finance sit alongside two modules that were previously separate products: the
 ## Run it
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\start.ps1
+powershell -ExecutionPolicy Bypass -File .\start.ps1              # the console
+powershell -ExecutionPolicy Bypass -File .\start.ps1 -App mobile  # the phone app
+powershell -ExecutionPolicy Bypass -File .\start.ps1 -App both
 ```
 
 That brings up the Python API on `:3001` and the console on
-<http://localhost:5173>. Leave the window open; Ctrl+C stops both.
+<http://localhost:5173>, the phone app on <http://localhost:5174>, or both.
+Leave the window open; Ctrl+C stops everything it started.
+
+With the phone app running, the script prints an address such as
+`http://192.168.0.10:5174`. Open it in Safari on an iPhone on the same Wi-Fi to
+use the app on a real phone without a Mac. The native build (camera, push,
+storage that survives iOS clearing web data) needs Xcode — see
+[`mobile/README.md`](mobile/README.md).
 
 ## What is where
 
 ```
-master-frontend/varun/     The console. Everything the client sees.
+master-frontend/vd/        The console. Everything the client sees.
   src/components/shell/      Sidebar, top bar, command palette
   src/components/common/     DataGrid, StatusPill, PageHeader, Timeline …
   src/components/chat/       The conversation workspace
@@ -36,9 +45,9 @@ backend/                   FastAPI on :3001
   app/routers/meet.py        Google Meet links and Calendar events
   app/routers/calendar.py    The console's own calendar
 
-frontend/                  Superseded. The original standalone reimbursement app,
-chatroom/                  Superseded. The original standalone chat app,
-                           both kept for reference. Neither is built or served.
+mobile/                    The phone app: chat and order tracking, Capacitor +
+                           Vite, sharing the console's domain layer. Its own
+                           README covers building it for iOS.
 demo-receipts/             Three sample bills to drop into a conversation.
 ```
 
