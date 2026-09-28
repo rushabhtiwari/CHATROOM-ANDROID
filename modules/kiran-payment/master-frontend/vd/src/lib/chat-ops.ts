@@ -264,6 +264,8 @@ function withMessage(
 
 function addSystemMessage(ws: Workspace, entry: OpEntry, roomId: RoomId, content: string) {
   const id = `sys-${entry.opId}`;
+  // Idempotent, like notifications: a replayed op never doubles its message.
+  if (ws.messages.some((message) => message.id === id)) return { ws, messageId: id };
   const message: SharedMessage = {
     id,
     clientId: id,

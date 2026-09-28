@@ -75,13 +75,17 @@ import {
 } from "./mentions";
 import { derivePreviews } from "./link-preview";
 import { formatDateTime } from "./time";
-import { backoffDelay, createLocalTransport, newId, TransportError } from "./transport";
+import { backoffDelay, newId, TransportError } from "./transport";
+import {
+  applyOp,
+  foldOps,
+  type ChatOp,
+  type Notice,
+  type OpEntry,
+  type Workspace,
+} from "./chat-ops";
+import { createLocalLog, type OpLog } from "./chat-log";
 import { inviteIsUsable } from "./invite-rules";
-
-/** Per-room, not global: a busy room must never evict a quiet room's history. */
-const MAX_NOTIFICATIONS_PER_ROOM = 50;
-/** How much of a message body a notification quotes. */
-const NOTIFICATION_SNIPPET = 90;
 
 const AI_TOKEN_BUDGET = 60_000;
 const AI_BUDGET_WINDOW = 24 * 60 * 60 * 1000;
@@ -97,51 +101,6 @@ export interface StorageStatus {
   reason?: StorageFailure;
   /** Approximate snapshot size, so the banner can show how close to full it is. */
   bytes: number;
-}
-
-/**
- * Narrows a requested audience to the members who have actually asked to hear
- * about this, returning null when nobody is left.
- *
- * Personal mentions deliberately survive `groupMuted`: that flag silences the
- * room's chatter, not somebody calling your name.
- */
-function deliverableAudience(
-  room: Room,
-  kind: NotificationKind,
-  requested: "all" | UserId[],
-): "all" | UserId[] | null {
-  if (kind === "room" && room.groupMuted) return null;
-
-  const muted = room.notificationsMutedBy ?? [];
-  const levels = room.notificationLevels ?? {};
-  const blocked = (id: UserId) => {
-    if (muted.includes(id)) return true;
-    const level = levels[id];
-    if (level === "none") return true;
-    return level === "mentions" && kind !== "mention";
-  };
-
-  const requestedIds = requested === "all" ? room.participantIds : requested;
-  const allowed = requestedIds.filter((id) => room.participantIds.includes(id) && !blocked(id));
-  if (allowed.length === 0) return null;
-  // Keep "all" as "all" so a member who joins later still sees room history.
-  if (requested === "all" && allowed.length === room.participantIds.length) return "all";
-  return allowed;
-}
-
-function snippetOf(text: string): string {
-  const flat = text.replace(/\s+/g, " ").trim();
-  return flat.length > NOTIFICATION_SNIPPET ? `${flat.slice(0, NOTIFICATION_SNIPPET - 1)}…` : flat;
-}
-
-export interface NotifyOptions {
-  kind?: NotificationKind;
-  actorId?: UserId;
-  audience?: "all" | UserId[];
-  messageId?: MessageId;
-  /** Stable id for events that can be replayed, e.g. the meeting reminder. */
-  id?: string;
 }
 
 export interface AiBudget {
@@ -320,20 +279,97 @@ interface ChatContextValue {
 
 const ChatContext = createContext<ChatContextValue | null>(null);
 
-export function ChatProvider({ children }: { children: ReactNode }) {
-  const [users, setUsers] = useState<User[]>(SEED_USERS);
-  const [userGroups] = useState<UserGroup[]>(SEED_GROUPS);
-  const [rooms, setRooms] = useState<Room[]>(SEED_ROOMS);
-  const [messages, setMessages] = useState<SharedMessage[]>(SEED_MESSAGES);
-  const [meetings, setMeetings] = useState<ScheduledMeeting[]>([]);
+/** One of this device's ops that the log has not yet confirmed. */
+interface PendingOp {
+  entry: OpEntry;
+  /** `acked`: the log accepted it; its echo has not arrived yet. */
+  status: "sending" | "acked" | "failed";
+  attempts: number;
+  failureReason?: string;
+}
+
+const SEED_WORKSPACE: Workspace = {
+  users: SEED_USERS,
+  groups: SEED_GROUPS,
+  rooms: SEED_ROOMS,
+  messages: SEED_MESSAGES,
+  meetings: [],
+  notifications: [],
+  readState: {},
+  saved: {},
+  followedThreads: {},
+};
+
+/**
+ * A saved snapshot as the store runs now: the confirmed workspace, the
+ * outbox, and the scheduled messages.
+ *
+ * Snapshots written before the operation log kept all three in `messages`:
+ * scheduled messages carried `scheduledFor`, and a send still in flight or
+ * failed carried its delivery state. Those are separated out here — scheduled
+ * into their own list, unsent into outbox entries — so a device upgrading
+ * keeps both.
+ */
+function fromSnapshot(snapshot: PersistedState) {
+  const scheduled = [...(snapshot.scheduled ?? [])];
+  const outbox = [...(snapshot.outbox ?? [])];
+  const messages: SharedMessage[] = [];
+  for (const message of snapshot.messages) {
+    if (message.scheduledFor) {
+      scheduled.push(message);
+    } else if (
+      !snapshot.outbox &&
+      !message.system &&
+      (message.delivery === "sending" || message.delivery === "failed")
+    ) {
+      const {
+        roomId,
+        senderId,
+        timestamp,
+        delivery: _delivery,
+        attempts: _attempts,
+        failureReason: _reason,
+        ...draft
+      } = message;
+      outbox.push({
+        opId: message.clientId,
+        actor: senderId,
+        ts: timestamp,
+        op: { type: "message.send", roomId, message: draft },
+      });
+    } else {
+      messages.push(message);
+    }
+  }
+  const workspace: Workspace = {
+    ...SEED_WORKSPACE,
+    rooms: snapshot.rooms,
+    messages,
+    meetings: snapshot.meetings,
+    notifications: snapshot.notifications,
+    readState: snapshot.readState,
+    saved: snapshot.saved,
+    followedThreads: snapshot.followedThreads,
+  };
+  return { workspace, outbox, scheduled };
+}
+
+export function ChatProvider({ children, log: providedLog }: { children: ReactNode; log?: OpLog }) {
+  /**
+   * The workspace as the log has confirmed it. Every change reaches it the
+   * same way: an entry from the log, folded with `applyOp`.
+   */
+  const [confirmed, setConfirmed] = useState<Workspace>(SEED_WORKSPACE);
+  /** This device's ops the log has not confirmed yet, in the order they were made. */
+  const [pending, setPending] = useState<PendingOp[]>([]);
+  /** Messages waiting for their send time. Device-only until then. */
+  const [scheduled, setScheduled] = useState<SharedMessage[]>([]);
+  /** Object URLs for attachments whose bytes are on this device; null when they are gone. */
+  const [attachmentUrls, setAttachmentUrls] = useState<Record<string, string | null>>({});
   const [aiMessages, setAiMessages] = useState<PrivateAIMessage[]>(SEED_AI);
   const [currentUserId, setCurrentUserIdState] = useState<UserId>("u1");
   const [activeRoomId, setActiveRoomId] = useState<RoomId>("r1");
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [readState, setReadState] = useState<ReadState>({});
   const [drafts, setDrafts] = useState<Record<string, Draft>>({});
-  const [saved, setSaved] = useState<Record<UserId, MessageId[]>>({});
-  const [followedThreads, setFollowedThreads] = useState<Record<UserId, MessageId[]>>({});
   const [storageReady, setStorageReady] = useState(false);
   const [storageStatus, setStorageStatus] = useState<StorageStatus>({ saved: true, bytes: 0 });
   const [storageWarningDismissed, setStorageWarningDismissed] = useState(false);
@@ -347,6 +383,80 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     resetAt: Date.now() + AI_BUDGET_WINDOW,
   });
 
+  const [log] = useState<OpLog>(() => providedLog ?? createLocalLog());
+  /** The seq of the last confirmed entry; anything at or below it is a repeat. */
+  const headRef = useRef(0);
+
+  /**
+   * What everyone sees: the confirmed workspace with this device's pending
+   * ops folded on top. A change therefore appears the moment it is made, and
+   * settles into place — same content, the server's timestamp — when the log
+   * confirms it.
+   */
+  const visible = useMemo(
+    () => foldOps(confirmed, pending.map((item) => item.entry)),
+    [confirmed, pending],
+  );
+
+  const userGroups = visible.groups;
+  // Presence stand-in: the viewer is online. A real client would take this
+  // from the connection.
+  const users = useMemo(
+    () =>
+      visible.users.map((user) =>
+        user.id === currentUserId && !user.online ? { ...user, online: true } : user,
+      ),
+    [visible.users, currentUserId],
+  );
+  const rooms = visible.rooms;
+  const meetings = visible.meetings;
+  const notifications = visible.notifications;
+  const readState = visible.readState;
+  const saved = visible.saved;
+  const followedThreads = visible.followedThreads;
+
+  /**
+   * A message's delivery state is a fact about this device's outbox, not
+   * about the workspace: confirmed means delivered, and anything still
+   * pending shows how its send is going.
+   */
+  const pendingSends = useMemo(() => {
+    const byMessage = new Map<MessageId, PendingOp>();
+    for (const item of pending) {
+      if (item.entry.op.type === "message.send") byMessage.set(item.entry.op.message.id, item);
+    }
+    return byMessage;
+  }, [pending]);
+
+  const messages = useMemo(
+    () =>
+      visible.messages.map((message) => {
+        let next = message;
+        const send = pendingSends.get(message.id);
+        if (send) {
+          next = {
+            ...next,
+            delivery:
+              send.status === "failed" ? "failed" : send.status === "acked" ? "sent" : "sending",
+            attempts: send.attempts,
+            ...(send.failureReason ? { failureReason: send.failureReason } : {}),
+          };
+        }
+        const blobId = next.attachment?.blobId;
+        if (blobId && next.attachment && blobId in attachmentUrls) {
+          const url = attachmentUrls[blobId];
+          next = {
+            ...next,
+            attachment: url
+              ? { ...next.attachment, dataUrl: url }
+              : { ...next.attachment, dataUrl: "", unavailable: true },
+          };
+        }
+        return next;
+      }),
+    [visible.messages, pendingSends, attachmentUrls],
+  );
+
   /**
    * Render-time mirrors of state that stable callbacks need to read. Assigning
    * during render (rather than in an effect) keeps them correct for callbacks
@@ -354,33 +464,121 @@ export function ChatProvider({ children }: { children: ReactNode }) {
    */
   const roomsRef = useRef(rooms);
   roomsRef.current = rooms;
+  const messagesRef = useRef(messages);
+  messagesRef.current = messages;
+  const readStateRef = useRef(readState);
+  readStateRef.current = readState;
+  const notificationsRef = useRef(notifications);
+  notificationsRef.current = notifications;
+  const pendingRef = useRef(pending);
+  pendingRef.current = pending;
   const currentUserIdRef = useRef(currentUserId);
   currentUserIdRef.current = currentUserId;
 
-  const transport = useRef(createLocalTransport());
-  /** Timers for in-flight retries, cleared on unmount so tests don't leak. */
-  const retryTimers = useRef(new Map<MessageId, ReturnType<typeof setTimeout>>());
+  /** Timers for in-flight retries, by opId, cleared on unmount so tests don't leak. */
+  const retryTimers = useRef(new Map<string, ReturnType<typeof setTimeout>>());
+
+  /* ---------------------------------------------------------------------- */
+  /* The log                                                                */
+  /* ---------------------------------------------------------------------- */
+
+  /**
+   * Send one entry to the log, retrying with backoff while that could help.
+   * Its confirmation arrives separately, as an entry from `subscribe`.
+   */
+  const deliver = useCallback(
+    async (entry: OpEntry, attempt: number) => {
+      setPending((current) =>
+        current.map((item) =>
+          item.entry.opId === entry.opId ? { ...item, status: "sending", attempts: attempt } : item,
+        ),
+      );
+      try {
+        await log.append(entry);
+        setPending((current) =>
+          current.map((item) =>
+            item.entry.opId === entry.opId && item.status !== "failed"
+              ? { ...item, status: "acked", failureReason: undefined }
+              : item,
+          ),
+        );
+      } catch (error) {
+        const retriable = error instanceof TransportError ? error.retriable : true;
+        const reason = error instanceof Error ? error.message : "Send failed";
+        setPending((current) =>
+          current.map((item) =>
+            item.entry.opId === entry.opId
+              ? { ...item, status: "failed", failureReason: reason }
+              : item,
+          ),
+        );
+        if (retriable && attempt < MAX_RETRY_ATTEMPTS && log.isOnline()) {
+          const timer = setTimeout(() => {
+            retryTimers.current.delete(entry.opId);
+            void deliver(entry, attempt + 1);
+          }, backoffDelay(attempt));
+          retryTimers.current.set(entry.opId, timer);
+        }
+      }
+    },
+    [log],
+  );
+
+  /**
+   * Make a change: queue it, show it, and send it to the log.
+   *
+   * `opId` is the idempotency key. A retry reuses it, so the log cannot store
+   * the change twice; ops several clients race to make — a meeting's starting
+   * notice — share one, so exactly one lands.
+   */
+  const dispatch = useCallback(
+    (op: ChatOp, opId: string = newId("op")) => {
+      if (pendingRef.current.some((item) => item.entry.opId === opId)) return;
+      const entry: OpEntry = { opId, actor: currentUserIdRef.current, ts: Date.now(), op };
+      pendingRef.current = [...pendingRef.current, { entry, status: "sending", attempts: 1 }];
+      setPending((current) =>
+        current.some((item) => item.entry.opId === opId)
+          ? current
+          : [...current, { entry, status: "sending", attempts: 1 }],
+      );
+      void deliver(entry, 1);
+    },
+    [deliver],
+  );
+
+  /**
+   * Follow the log as the current person. It replaces the workspace when it
+   * has one of its own (the server's), then delivers each entry after that.
+   * Switching person resubscribes: private entries are theirs alone.
+   */
+  useEffect(() => {
+    if (!storageReady) return;
+    return log.subscribe(currentUserId, {
+      onReset: (workspace, head, opIds) => {
+        headRef.current = head;
+        setConfirmed(workspace);
+        setPending((current) => current.filter((item) => !opIds.has(item.entry.opId)));
+      },
+      onEntry: (entry) => {
+        if (entry.seq !== undefined) {
+          if (entry.seq <= headRef.current) return;
+          headRef.current = entry.seq;
+        }
+        setConfirmed((workspace) => applyOp(workspace, entry));
+        setPending((current) => current.filter((item) => item.entry.opId !== entry.opId));
+      },
+      onStatus: (connected) => {
+        if (log.shared) setOnlineState(connected);
+      },
+    });
+  }, [storageReady, currentUserId, log]);
 
   /* ---------------------------------------------------------------------- */
   /* Persistence                                                            */
   /* ---------------------------------------------------------------------- */
 
   useEffect(() => {
-    const apply = (snapshot: PersistedState, recover = false) => {
-      setRooms(snapshot.rooms);
-      setMessages(
-        recover
-          ? snapshot.messages.map((message) =>
-              // A send that was in flight when the tab closed has an unknown
-              // outcome. Park it in the outbox as failed rather than claiming
-              // it was delivered.
-              message.delivery === "sending" && !message.scheduledFor
-                ? { ...message, delivery: "failed", failureReason: "Interrupted before delivery" }
-                : message,
-            )
-          : snapshot.messages,
-      );
-      setMeetings(snapshot.meetings);
+    const restoreLocal = (snapshot: PersistedState, recover: boolean) => {
       setAiMessages(
         snapshot.aiMessages.map((message) =>
           recover && (message.pending || message.streaming)
@@ -396,41 +594,55 @@ export function ChatProvider({ children }: { children: ReactNode }) {
       );
       setCurrentUserIdState(snapshot.currentUserId);
       setActiveRoomId(snapshot.activeRoomId);
-      setNotifications(snapshot.notifications);
-      setReadState(snapshot.readState);
       setDrafts(snapshot.drafts);
-      setSaved(snapshot.saved);
-      setFollowedThreads(snapshot.followedThreads);
     };
 
     const snapshot = parseSavedState(window.localStorage.getItem(STORAGE_KEY));
-    if (snapshot) apply(snapshot, true);
+    if (snapshot) {
+      const { workspace, outbox, scheduled: waiting } = fromSnapshot(snapshot);
+      setConfirmed(workspace);
+      setScheduled(waiting);
+      restoreLocal(snapshot, true);
+      // What was unsent when the app closed goes out again. Each keeps its
+      // opId, so an op that did land before the app closed is not stored twice.
+      const resumed = outbox.map((entry) => ({ entry, status: "sending" as const, attempts: 1 }));
+      pendingRef.current = resumed;
+      setPending(resumed);
+      for (const entry of outbox) void deliver(entry, 1);
+    }
     setStorageReady(true);
 
+    // Another tab of this browser saved: take its workspace and its view of
+    // this device, but not its outbox — that tab is sending those itself.
     const syncTabs = (event: StorageEvent) => {
       if (event.key !== STORAGE_KEY) return;
       const next = parseSavedState(event.newValue);
-      if (next) apply(next);
+      if (!next) return;
+      setConfirmed(fromSnapshot(next).workspace);
+      restoreLocal(next, false);
     };
     window.addEventListener("storage", syncTabs);
     return () => window.removeEventListener("storage", syncTabs);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     if (!storageReady) return;
     const result = writeSnapshot({
       version: SCHEMA_VERSION,
-      rooms,
-      messages,
-      meetings,
+      rooms: confirmed.rooms,
+      messages: confirmed.messages,
+      meetings: confirmed.meetings,
       aiMessages,
       currentUserId,
       activeRoomId,
-      notifications,
-      readState,
+      notifications: confirmed.notifications,
+      readState: confirmed.readState,
       drafts,
-      saved,
-      followedThreads,
+      saved: confirmed.saved,
+      followedThreads: confirmed.followedThreads,
+      outbox: pending.map((item) => item.entry),
+      scheduled,
     });
     setStorageStatus((current) => {
       const next: StorageStatus = {
@@ -452,20 +664,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     // A write that starts succeeding again clears a dismissal, so a second
     // overflow later is surfaced rather than silently suppressed.
     if (result.ok) setStorageWarningDismissed(false);
-  }, [
-    storageReady,
-    rooms,
-    messages,
-    meetings,
-    aiMessages,
-    currentUserId,
-    activeRoomId,
-    notifications,
-    readState,
-    drafts,
-    saved,
-    followedThreads,
-  ]);
+  }, [storageReady, confirmed, pending, scheduled, aiMessages, currentUserId, activeRoomId, drafts]);
 
   useEffect(() => {
     const timers = retryTimers.current;
@@ -480,43 +679,33 @@ export function ChatProvider({ children }: { children: ReactNode }) {
   /* ---------------------------------------------------------------------- */
 
   /**
-   * A restored snapshot carries `blobId` but no URL — the bytes deliberately
-   * never went through localStorage. Mint object URLs for whatever is on
-   * screen. A blob that has gone missing (cleared site data, a different
-   * device) is flagged rather than left as a broken image.
+   * A message whose attachment bytes live on this device carries `blobId`
+   * but no usable URL — the bytes deliberately never travel in the log. Mint
+   * object URLs for them. A blob that has gone missing (cleared site data, a
+   * different device) is flagged rather than left as a broken image.
    */
   useEffect(() => {
     if (!storageReady) return;
-    const pending = messages.filter(
-      (message) =>
-        message.attachment?.blobId &&
-        !message.attachment.dataUrl &&
-        !message.attachment.unavailable,
-    );
-    if (pending.length === 0) return;
+    const missing = [
+      ...new Set(
+        visible.messages
+          .map((message) => message.attachment?.blobId)
+          .filter((blobId): blobId is string => Boolean(blobId) && !(blobId! in attachmentUrls)),
+      ),
+    ];
+    if (missing.length === 0) return;
 
     let cancelled = false;
     void (async () => {
-      const resolved = new Map<MessageId, string | null>();
-      for (const message of pending) {
-        resolved.set(message.id, await attachmentUrl(message.attachment!.blobId!));
-      }
+      const resolved: Record<string, string | null> = {};
+      for (const blobId of missing) resolved[blobId] = await attachmentUrl(blobId);
       if (cancelled) return;
-      setMessages((current) =>
-        current.map((message) => {
-          if (!resolved.has(message.id) || !message.attachment) return message;
-          const url = resolved.get(message.id);
-          return url
-            ? { ...message, attachment: { ...message.attachment, dataUrl: url } }
-            : { ...message, attachment: { ...message.attachment, unavailable: true } };
-        }),
-      );
+      setAttachmentUrls((current) => ({ ...current, ...resolved }));
     })();
-
     return () => {
       cancelled = true;
     };
-  }, [storageReady, messages]);
+  }, [storageReady, visible.messages, attachmentUrls]);
 
   /**
    * Blobs outlive their message when a send is discarded or a message deleted.
@@ -525,7 +714,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!storageReady) return;
     const timer = setTimeout(() => {
-      void collectOrphanBlobs(referencedBlobIds(messages));
+      void collectOrphanBlobs(referencedBlobIds(messagesRef.current));
     }, 5_000);
     return () => clearTimeout(timer);
     // Deliberately keyed on boot only: a sweep on every message change would
@@ -546,46 +735,6 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     (text: string) => toPlainText(text, users, userGroups),
     [users, userGroups],
   );
-
-  /**
-   * Records a room-scoped notification for everyone in `options.audience`
-   * (the whole room by default), after mute state has had its say.
-   *
-   * Reading rooms through a ref keeps this callback stable: it is called from
-   * a dozen room mutations, several of which run in the same tick that changed
-   * `rooms`, and a stale closure there would notify the wrong membership.
-   */
-  const notify = useCallback((roomId: RoomId, text: string, options: NotifyOptions = {}) => {
-    const room = roomsRef.current.find((candidate) => candidate.id === roomId);
-    if (!room) return;
-    const kind = options.kind ?? "room";
-    const audience = deliverableAudience(room, kind, options.audience ?? "all");
-    if (!audience) return;
-
-    const notification: Notification = {
-      id: options.id ?? newId("n"),
-      roomId,
-      kind,
-      text,
-      timestamp: Date.now(),
-      audience,
-      readBy: [],
-      ...(options.actorId ? { actorId: options.actorId } : {}),
-      ...(options.messageId ? { messageId: options.messageId } : {}),
-    };
-
-    setNotifications((current) => {
-      if (current.some((existing) => existing.id === notification.id)) return current;
-      const perRoom = new Map<RoomId, number>();
-      const kept: Notification[] = [];
-      for (const item of [notification, ...current]) {
-        const count = (perRoom.get(item.roomId) ?? 0) + 1;
-        perRoom.set(item.roomId, count);
-        if (count <= MAX_NOTIFICATIONS_PER_ROOM) kept.push(item);
-      }
-      return kept;
-    });
-  }, []);
 
   const visibleRooms = useMemo(
     () => rooms.filter((room) => room.participantIds.includes(currentUserId) && !room.archived),
@@ -647,34 +796,25 @@ export function ChatProvider({ children }: { children: ReactNode }) {
   /* Read state                                                             */
   /* ---------------------------------------------------------------------- */
 
+  /**
+   * Move the viewer's read marker to the newest message in the room. Called
+   * often — on opening a room, on every new message — so it only makes an op
+   * when the marker would actually move; the pending op itself counts, since
+   * the visible read state already includes it.
+   */
   const markRoomRead = useCallback(
     (roomId: RoomId) => {
-      setMessages((current) => {
-        const roomMessages = current
-          .filter((message) => message.roomId === roomId && !message.scheduledFor)
-          .sort(compareMessages);
-        const newest = roomMessages[roomMessages.length - 1];
-        setReadState((state) => {
-          const room = state[roomId] ?? {};
-          const existing = room[currentUserId];
-          const nextTimestamp = newest?.timestamp ?? existing?.lastReadTimestamp ?? 0;
-          if (existing && existing.lastReadTimestamp >= nextTimestamp) return state;
-          return {
-            ...state,
-            [roomId]: {
-              ...room,
-              [currentUserId]: {
-                lastReadTimestamp: nextTimestamp,
-                lastReadMessageId: newest?.id ?? existing?.lastReadMessageId ?? null,
-                updatedAt: Date.now(),
-              },
-            },
-          };
-        });
-        return current;
-      });
+      const me = currentUserIdRef.current;
+      const newest = messagesRef.current
+        .filter((message) => message.roomId === roomId)
+        .sort(compareMessages)
+        .at(-1);
+      if (!newest) return;
+      const marker = readStateRef.current[roomId]?.[me];
+      if (marker && marker.lastReadTimestamp >= newest.timestamp) return;
+      dispatch({ type: "read.mark", roomId, timestamp: newest.timestamp, messageId: newest.id });
     },
-    [currentUserId],
+    [dispatch],
   );
 
   const unreadFor = useCallback(
@@ -721,60 +861,6 @@ export function ChatProvider({ children }: { children: ReactNode }) {
   /* Sending                                                                */
   /* ---------------------------------------------------------------------- */
 
-  const dispatchSend = useCallback(async (message: SharedMessage) => {
-    const attempt = (message.attempts ?? 0) + 1;
-    setMessages((current) =>
-      current.map((m) =>
-        m.id === message.id ? { ...m, delivery: "sending", attempts: attempt } : m,
-      ),
-    );
-
-    try {
-      const ack = await transport.current.send({
-        clientId: message.clientId,
-        roomId: message.roomId,
-        senderId: message.senderId,
-      });
-      setMessages((current) =>
-        current.map((m) =>
-          m.id === message.id
-            ? {
-                ...m,
-                delivery: "sent",
-                // The server's receive time is the ordering authority.
-                timestamp: ack.duplicate ? m.timestamp : ack.timestamp,
-                ...(m.failureReason !== undefined ? { failureReason: undefined } : {}),
-              }
-            : m,
-        ),
-      );
-      // A short hop to "delivered" stands in for the server's fan-out ack.
-      setTimeout(() => {
-        setMessages((current) =>
-          current.map((m) =>
-            m.id === message.id && m.delivery === "sent" ? { ...m, delivery: "delivered" } : m,
-          ),
-        );
-      }, 260);
-    } catch (error) {
-      const retriable = error instanceof TransportError ? error.retriable : true;
-      const reason = error instanceof Error ? error.message : "Send failed";
-      setMessages((current) =>
-        current.map((m) =>
-          m.id === message.id ? { ...m, delivery: "failed", failureReason: reason } : m,
-        ),
-      );
-
-      if (retriable && attempt < MAX_RETRY_ATTEMPTS && transport.current.isOnline()) {
-        const timer = setTimeout(() => {
-          retryTimers.current.delete(message.id);
-          void dispatchSend({ ...message, attempts: attempt });
-        }, backoffDelay(attempt));
-        retryTimers.current.set(message.id, timer);
-      }
-    }
-  }, []);
-
   const buildMessage = useCallback(
     (roomId: RoomId, content: string, extras: Partial<SharedMessage> = {}): SharedMessage => {
       const previews: LinkPreview[] = derivePreviews(content);
@@ -796,9 +882,8 @@ export function ChatProvider({ children }: { children: ReactNode }) {
   );
 
   /**
-   * Works out who a message addresses. Personal mentions and room-wide
-   * broadcasts are kept apart because they have different audiences: a
-   * mention is only ever for the person named, a broadcast is for the room.
+   * Works out who a message addresses, once, as it is sent — so the renderer
+   * never has to re-parse the body against a directory that may have changed.
    */
   const mentionAudienceOf = useCallback(
     (message: SharedMessage): MentionAudience => {
@@ -815,44 +900,35 @@ export function ChatProvider({ children }: { children: ReactNode }) {
   );
 
   /**
-   * Fans a sent message out into notifications: one personal "For you" item
-   * per named user, and at most one room-wide item for a broadcast.
+   * Send a built message as a `message.send` op. Its `clientId` is the op's
+   * id, so a retry — or a device resuming its outbox — cannot post it twice.
    */
-  const announceMessage = useCallback(
-    (message: SharedMessage, audience: MentionAudience) => {
-      const room = roomsRef.current.find((candidate) => candidate.id === message.roomId);
-      if (!room) return;
-      const actor = userById(message.senderId).name;
-      const snippet = snippetOf(toPlainText(message.content, users, userGroups));
-
-      for (const userId of audience.personal) {
-        notify(message.roomId, `${actor} mentioned you: “${snippet}”`, {
-          kind: "mention",
-          actorId: message.senderId,
-          audience: [userId],
-          messageId: message.id,
-        });
-      }
-
-      if (!audience.broadcast) return;
-      // `@here` narrows to whoever is online — that is the whole point of it
-      // existing next to `@channel`.
-      const reach: "all" | UserId[] =
-        audience.broadcast === "here"
-          ? room.participantIds.filter((id) => users.find((user) => user.id === id)?.online)
-          : "all";
-      notify(
-        message.roomId,
-        `${actor} messaged @${audience.broadcast === "here" ? "here" : "everyone"}: “${snippet}”`,
+  const postMessage = useCallback(
+    (
+      message: SharedMessage,
+      options: { announce?: boolean; notices?: Notice[] } = {},
+    ) => {
+      const {
+        roomId,
+        senderId: _senderId,
+        timestamp: _timestamp,
+        delivery: _delivery,
+        attempts: _attempts,
+        failureReason: _reason,
+        ...draft
+      } = message;
+      dispatch(
         {
-          kind: "room",
-          actorId: message.senderId,
-          audience: reach,
-          messageId: message.id,
+          type: "message.send",
+          roomId,
+          message: draft,
+          ...(options.announce ? { announce: true } : {}),
+          ...(options.notices?.length ? { notices: options.notices } : {}),
         },
+        message.clientId,
       );
     },
-    [users, userGroups, userById, notify],
+    [dispatch],
   );
 
   const sendMessage = useCallback<ChatContextValue["sendMessage"]>(
@@ -867,17 +943,12 @@ export function ChatProvider({ children }: { children: ReactNode }) {
           : {}),
         ...(options?.claimId ? { claimId: options.claimId } : {}),
       });
-      // Resolved once, here, so the renderer never has to re-parse the body
-      // against a directory that may have changed since the message was sent.
       const audience = mentionAudienceOf(draft);
       const message: SharedMessage =
         audience.personal.length > 0 ? { ...draft, mentionIds: audience.personal } : draft;
-
-      setMessages((current) => [...current, message]);
-      void dispatchSend(message);
-      announceMessage(message, audience);
+      postMessage(message, { announce: true });
     },
-    [buildMessage, dispatchSend, mentionAudienceOf, announceMessage],
+    [buildMessage, mentionAudienceOf, postMessage],
   );
 
   const sendAttachment = useCallback<ChatContextValue["sendAttachment"]>(
@@ -891,7 +962,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
       let attachment: SharedMessage["attachment"];
 
       if (file.size <= INLINE_ATTACHMENT_LIMIT) {
-        // Small enough that base64 in the snapshot costs less than a second
+        // Small enough that base64 in the message costs less than a second
         // store, and it survives even where IndexedDB is blocked.
         const dataUrl = await new Promise<string>((resolve) => {
           const reader = new FileReader();
@@ -918,7 +989,10 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         }
         const url = URL.createObjectURL(file);
         rememberAttachmentUrl(blobId, url);
-        attachment = { ...meta, dataUrl: url, blobId };
+        setAttachmentUrls((current) => ({ ...current, [blobId]: url }));
+        // The object URL is meaningful on this page only, so it stays out of
+        // the log: the message carries the blob id and each device resolves it.
+        attachment = { ...meta, dataUrl: "", blobId };
       }
 
       const draft = buildMessage(roomId, caption.trim(), {
@@ -929,54 +1003,59 @@ export function ChatProvider({ children }: { children: ReactNode }) {
       const audience = mentionAudienceOf(draft);
       const message: SharedMessage =
         audience.personal.length > 0 ? { ...draft, mentionIds: audience.personal } : draft;
-
-      setMessages((current) => [...current, message]);
-      void dispatchSend(message);
-      announceMessage(message, audience);
+      postMessage(message, { announce: true });
     },
-    [buildMessage, dispatchSend, mentionAudienceOf, announceMessage],
+    [buildMessage, mentionAudienceOf, postMessage],
   );
+
+  const pendingSendOf = (messageId: MessageId) =>
+    pendingRef.current.find(
+      (item) => item.entry.op.type === "message.send" && item.entry.op.message.id === messageId,
+    );
+
+  const clearRetry = (opId: string) => {
+    const timer = retryTimers.current.get(opId);
+    if (timer) {
+      clearTimeout(timer);
+      retryTimers.current.delete(opId);
+    }
+  };
 
   const retryMessage = useCallback(
     (id: MessageId) => {
-      const message = messages.find((m) => m.id === id);
-      if (!message) return;
-      const timer = retryTimers.current.get(id);
-      if (timer) {
-        clearTimeout(timer);
-        retryTimers.current.delete(id);
-      }
-      // Same clientId: the transport's ledger guarantees this cannot duplicate.
-      void dispatchSend({ ...message, attempts: 0 });
+      const item = pendingSendOf(id);
+      if (!item) return;
+      clearRetry(item.entry.opId);
+      // Same opId: the log's idempotency guarantees this cannot duplicate.
+      void deliver(item.entry, 1);
     },
-    [messages, dispatchSend],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [deliver],
   );
 
   const discardMessage = useCallback((id: MessageId) => {
-    const timer = retryTimers.current.get(id);
-    if (timer) {
-      clearTimeout(timer);
-      retryTimers.current.delete(id);
-    }
-    setMessages((current) => current.filter((message) => message.id !== id));
+    const item = pendingSendOf(id);
+    if (!item) return;
+    clearRetry(item.entry.opId);
+    setPending((current) => current.filter((candidate) => candidate !== item));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /** Anything still unsent goes back out when connectivity returns. */
   const setOnline = useCallback(
     (next: boolean) => {
-      transport.current.setOnline(next);
+      log.setOnline(next);
       setOnlineState(next);
       if (!next) return;
-      setMessages((current) => {
-        for (const message of current) {
-          if (message.delivery === "failed" && message.senderId === currentUserId) {
-            void dispatchSend({ ...message, attempts: 0 });
-          }
+      for (const item of pendingRef.current) {
+        if (item.status === "failed") {
+          clearRetry(item.entry.opId);
+          void deliver(item.entry, 1);
         }
-        return current;
-      });
+      }
     },
-    [currentUserId, dispatchSend],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [log, deliver],
   );
 
   /* ---------------------------------------------------------------------- */
@@ -986,23 +1065,18 @@ export function ChatProvider({ children }: { children: ReactNode }) {
   const editMessage = useCallback(
     (id: MessageId, content: string) => {
       const text = content.trim();
-      setMessages((current) =>
-        current.map((message) => {
-          if (message.id !== id) return message;
-          if (message.senderId !== currentUserId) return message;
-          if (isTombstoned(message)) return message;
-          const previews = derivePreviews(text);
-          return {
-            ...message,
-            content: text,
-            editedAt: Date.now(),
-            mentions: parseMentions(text, userGroups),
-            ...(previews.length ? { linkPreviews: previews } : { linkPreviews: [] }),
-          };
-        }),
-      );
+      const target = messagesRef.current.find((message) => message.id === id);
+      if (!target || target.senderId !== currentUserId || isTombstoned(target)) return;
+      dispatch({
+        type: "message.edit",
+        roomId: target.roomId,
+        messageId: id,
+        content: text,
+        mentions: parseMentions(text, userGroups),
+        linkPreviews: derivePreviews(text),
+      });
     },
-    [currentUserId, userGroups],
+    [currentUserId, userGroups, dispatch],
   );
 
   /**
@@ -1011,75 +1085,47 @@ export function ChatProvider({ children }: { children: ReactNode }) {
    */
   const deleteMessage = useCallback(
     (id: MessageId) => {
-      setMessages((current) =>
-        current.map((message) => {
-          if (message.id !== id) return message;
-          const room = rooms.find((r) => r.id === message.roomId);
-          const allowed =
-            message.senderId === currentUserId || (room ? isAdmin(room, currentUserId) : false);
-          if (!allowed) return message;
-          return {
-            ...message,
-            content: "",
-            deletedAt: Date.now(),
-            deletedBy: currentUserId,
-            reactions: {},
-            linkPreviews: [],
-            ...(message.attachment !== undefined ? { attachment: undefined } : {}),
-          };
-        }),
-      );
+      const target = messagesRef.current.find((message) => message.id === id);
+      if (!target) return;
+      const room = rooms.find((r) => r.id === target.roomId);
+      const allowed =
+        target.senderId === currentUserId || (room ? isAdmin(room, currentUserId) : false);
+      if (!allowed) return;
+      dispatch({ type: "message.delete", roomId: target.roomId, messageId: id });
       toast.success("Message deleted");
     },
-    [currentUserId, rooms, isAdmin],
+    [currentUserId, rooms, isAdmin, dispatch],
   );
 
   const toggleReaction = useCallback(
     (id: MessageId, emoji: string) => {
-      setMessages((current) =>
-        current.map((message) => {
-          if (message.id !== id || isTombstoned(message)) return message;
-          const reactions = { ...(message.reactions ?? {}) };
-          const list = reactions[emoji] ?? [];
-          const next = list.includes(currentUserId)
-            ? list.filter((userId) => userId !== currentUserId)
-            : [...list, currentUserId];
-          if (next.length === 0) delete reactions[emoji];
-          else reactions[emoji] = next;
-          return { ...message, reactions };
-        }),
-      );
+      const target = messagesRef.current.find((message) => message.id === id);
+      if (!target || isTombstoned(target)) return;
+      // Sent as an intent, on or off, so a retried op cannot flip it back.
+      const on = !(target.reactions?.[emoji] ?? []).includes(currentUserId);
+      dispatch({ type: "message.reaction", roomId: target.roomId, messageId: id, emoji, on });
     },
-    [currentUserId],
+    [currentUserId, dispatch],
   );
 
   const togglePin = useCallback(
     (id: MessageId) => {
-      setMessages((current) =>
-        current.map((message) => {
-          if (message.id !== id) return message;
-          if (message.pinnedBy) {
-            toast.success("Unpinned");
-            return { ...message, pinnedBy: undefined, pinnedAt: undefined };
-          }
-          toast.success("Pinned to this conversation");
-          return { ...message, pinnedBy: currentUserId, pinnedAt: Date.now() };
-        }),
-      );
+      const target = messagesRef.current.find((message) => message.id === id);
+      if (!target) return;
+      const on = !target.pinnedBy;
+      dispatch({ type: "message.pin", roomId: target.roomId, messageId: id, on });
+      toast.success(on ? "Pinned to this conversation" : "Unpinned");
     },
-    [currentUserId],
+    [dispatch],
   );
 
   const toggleSave = useCallback(
     (id: MessageId) => {
-      setSaved((current) => {
-        const list = current[currentUserId] ?? [];
-        const next = list.includes(id) ? list.filter((item) => item !== id) : [id, ...list];
-        toast.success(list.includes(id) ? "Removed from saved" : "Saved for later");
-        return { ...current, [currentUserId]: next };
-      });
+      const on = !(saved[currentUserId] ?? []).includes(id);
+      dispatch({ type: "saved.set", messageId: id, on });
+      toast.success(on ? "Saved for later" : "Removed from saved");
     },
-    [currentUserId],
+    [saved, currentUserId, dispatch],
   );
 
   const isSaved = useCallback(
@@ -1108,28 +1154,28 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     (id: MessageId, targetRoomIds: RoomId[]) => {
       const source = messages.find((message) => message.id === id);
       if (!source || targetRoomIds.length === 0) return;
-      const created = targetRoomIds.map((roomId) =>
-        buildMessage(roomId, source.content, {
-          forwardedFrom: {
-            roomId: source.roomId,
-            messageId: source.id,
-            senderId: source.senderId,
-          },
-          ...(source.attachment ? { attachment: source.attachment } : {}),
-          ...(source.sharedProfileUserId
-            ? { sharedProfileUserId: source.sharedProfileUserId }
-            : {}),
-        }),
-      );
-      setMessages((current) => [...current, ...created]);
-      for (const message of created) void dispatchSend(message);
+      for (const roomId of targetRoomIds) {
+        postMessage(
+          buildMessage(roomId, source.content, {
+            forwardedFrom: {
+              roomId: source.roomId,
+              messageId: source.id,
+              senderId: source.senderId,
+            },
+            ...(source.attachment ? { attachment: source.attachment } : {}),
+            ...(source.sharedProfileUserId
+              ? { sharedProfileUserId: source.sharedProfileUserId }
+              : {}),
+          }),
+        );
+      }
       toast.success(
         targetRoomIds.length === 1
           ? "Forwarded"
           : `Forwarded to ${targetRoomIds.length} conversations`,
       );
     },
-    [messages, buildMessage, dispatchSend],
+    [messages, buildMessage, postMessage],
   );
 
   const permalinkFor = useCallback((message: SharedMessage) => {
@@ -1146,7 +1192,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
       const text = content.trim();
       if (!text) return;
       const message = buildMessage(roomId, text, { scheduledFor: sendAt, delivery: "sending" });
-      setMessages((current) => [...current, message]);
+      setScheduled((current) => [...current, message]);
       toast.success("Message scheduled");
     },
     [buildMessage],
@@ -1154,48 +1200,42 @@ export function ChatProvider({ children }: { children: ReactNode }) {
 
   const scheduledMessages = useCallback(
     (roomId?: RoomId) =>
-      messages
+      scheduled
         .filter(
           (message) =>
-            message.scheduledFor &&
-            message.senderId === currentUserId &&
-            (!roomId || message.roomId === roomId),
+            message.senderId === currentUserId && (!roomId || message.roomId === roomId),
         )
         .sort((a, b) => (a.scheduledFor ?? 0) - (b.scheduledFor ?? 0)),
-    [messages, currentUserId],
+    [scheduled, currentUserId],
   );
 
   const cancelScheduled = useCallback((id: MessageId) => {
-    setMessages((current) => current.filter((message) => message.id !== id));
+    setScheduled((current) => current.filter((message) => message.id !== id));
     toast.success("Scheduled message cancelled");
   }, []);
 
+  const scheduledRef = useRef(scheduled);
+  scheduledRef.current = scheduled;
+
   const releaseScheduled = useCallback(
     (id: MessageId) => {
-      setMessages((current) => {
-        const target = current.find((message) => message.id === id);
-        if (!target) return current;
-        const released: SharedMessage = {
-          ...target,
-          scheduledFor: undefined,
-          timestamp: Date.now(),
-          delivery: "sending",
-        };
-        void dispatchSend(released);
-        notify(
-          released.roomId,
-          `A scheduled message from ${userById(released.senderId).name} was posted`,
-          {
-            id: `scheduled-${released.id}`,
-            kind: "agent",
-            actorId: released.senderId,
-            messageId: released.id,
-          },
-        );
-        return current.map((message) => (message.id === id ? released : message));
-      });
+      const target = scheduledRef.current.find((message) => message.id === id);
+      if (!target) return;
+      setScheduled((current) => current.filter((message) => message.id !== id));
+      postMessage(
+        { ...target, scheduledFor: undefined, timestamp: Date.now(), delivery: "sending" },
+        {
+          notices: [
+            {
+              id: `scheduled-${target.id}`,
+              kind: "agent",
+              text: `A scheduled message from ${userById(target.senderId).name} was posted`,
+            },
+          ],
+        },
+      );
     },
-    [dispatchSend, notify, userById],
+    [postMessage, userById],
   );
 
   const sendScheduledNow = useCallback(
@@ -1208,45 +1248,32 @@ export function ChatProvider({ children }: { children: ReactNode }) {
 
   const announceMeeting = useCallback(
     (meeting: ScheduledMeeting) => {
-      const now = Date.now();
-      const messageId = `meeting-${meeting.id}-starting`;
-      const clientId = `meeting-${meeting.id}-starting-client`;
       const recipients = [...new Set([meeting.organizerId, ...meeting.attendeeIds])];
-
       const reminder: SharedMessage = {
-        id: messageId,
-        clientId,
+        id: `meeting-${meeting.id}-starting`,
+        // Every open client runs this ticker. They all post under this one
+        // id, so the log keeps exactly one reminder however many race.
+        clientId: `meeting-${meeting.id}-starting`,
         roomId: meeting.roomId,
         senderId: meeting.organizerId,
         content: `**${meeting.title}** is starting now. [Join the meeting](${meeting.meetingUri})`,
-        timestamp: now,
+        timestamp: Date.now(),
         reactions: {},
-        delivery: "delivered",
+        delivery: "sending",
         sharedFromAi: true,
         meetingId: meeting.id,
         meetingNotice: "starting",
       };
-
-      // Stable ids make the local worker safe across effect restarts, tab sync,
-      // and a reload that happened just as the reminder was being persisted —
-      // for the message and for the notification alike.
-      setMessages((current) =>
-        current.some((message) => message.id === messageId) ? current : [...current, reminder],
-      );
-      notify(meeting.roomId, `${meeting.title} is starting now — join the meeting`, {
-        id: `meeting-${meeting.id}`,
-        kind: "agent",
-        actorId: meeting.organizerId,
-        audience: recipients,
-        messageId,
+      postMessage(reminder, {
+        notices: [
+          {
+            id: `meeting-${meeting.id}`,
+            kind: "agent",
+            audience: recipients,
+            text: `${meeting.title} is starting now — join the meeting`,
+          },
+        ],
       });
-      setMeetings((current) =>
-        current.map((candidate) =>
-          candidate.id === meeting.id && !candidate.reminderSentAt
-            ? { ...candidate, reminderSentAt: now }
-            : candidate,
-        ),
-      );
 
       if (recipients.includes(currentUserIdRef.current)) {
         toast.info(`${meeting.title} is starting now`, {
@@ -1258,14 +1285,14 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         });
       }
     },
-    [notify],
+    [postMessage],
   );
 
   // Due-message/meeting ticker. A server would run this as a durable queue worker.
   useEffect(() => {
     const releaseDue = () => {
       const now = Date.now();
-      const due = messages.filter((message) => message.scheduledFor && message.scheduledFor <= now);
+      const due = scheduled.filter((message) => message.scheduledFor && message.scheduledFor <= now);
       for (const message of due) releaseScheduled(message.id);
       const dueMeetings = meetings.filter(
         (meeting) => !meeting.reminderSentAt && meeting.startAt <= now && meeting.endAt > now,
@@ -1275,7 +1302,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     releaseDue();
     const interval = setInterval(releaseDue, 5_000);
     return () => clearInterval(interval);
-  }, [messages, meetings, releaseScheduled, announceMeeting]);
+  }, [scheduled, meetings, releaseScheduled, announceMeeting]);
 
   /* ---------------------------------------------------------------------- */
   /* Threads                                                                */
@@ -1314,17 +1341,11 @@ export function ChatProvider({ children }: { children: ReactNode }) {
 
   const toggleFollowThread = useCallback(
     (rootId: MessageId) => {
-      setFollowedThreads((current) => {
-        const list = current[currentUserId] ?? [];
-        const following = list.includes(rootId);
-        toast.success(following ? "Unfollowed thread" : "Following thread");
-        return {
-          ...current,
-          [currentUserId]: following ? list.filter((id) => id !== rootId) : [rootId, ...list],
-        };
-      });
+      const following = (followedThreads[currentUserId] ?? []).includes(rootId);
+      dispatch({ type: "thread.follow", rootId, on: !following });
+      toast.success(following ? "Unfollowed thread" : "Following thread");
     },
-    [currentUserId],
+    [followedThreads, currentUserId, dispatch],
   );
 
   /* ---------------------------------------------------------------------- */
@@ -1489,20 +1510,6 @@ export function ChatProvider({ children }: { children: ReactNode }) {
   /* Room management                                                        */
   /* ---------------------------------------------------------------------- */
 
-  const systemMessage = useCallback((roomId: RoomId, content: string): SharedMessage => {
-    const id = newId("m");
-    return {
-      id,
-      clientId: newId("c"),
-      roomId,
-      senderId: "system",
-      content,
-      timestamp: Date.now(),
-      system: true,
-      delivery: "delivered",
-    };
-  }, []);
-
   const openDirect = useCallback(
     (otherUserId: UserId) => {
       const existing = rooms.find(
@@ -1517,9 +1524,10 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         return existing.id;
       }
       const id = `d-${newId()}`;
-      setRooms((current) => [
-        ...current,
-        {
+      dispatch({
+        type: "room.create",
+        roomId: id,
+        room: {
           id,
           type: "direct",
           createdAt: Date.now(),
@@ -1527,54 +1535,46 @@ export function ChatProvider({ children }: { children: ReactNode }) {
           participantIds: [currentUserId, otherUserId],
           mutedUserIds: [],
         },
-      ]);
+      });
       setActiveRoom(id);
       return id;
     },
-    [rooms, currentUserId, setActiveRoom],
+    [rooms, currentUserId, setActiveRoom, dispatch],
   );
 
   const createGroup = useCallback<ChatContextValue["createGroup"]>(
     ({ name, description, participantIds }) => {
       const id = `g-${newId()}`;
       const members = Array.from(new Set([currentUserId, ...participantIds]));
-      const room: Room = {
-        id,
-        type: "group",
-        name,
-        description,
-        createdBy: currentUserId,
-        createdAt: Date.now(),
-        adminIds: [currentUserId],
-        participantIds: members,
-        groupMuted: false,
-        mutedUserIds: [],
-        invite: {
-          code: newId().toUpperCase().slice(0, 6),
-          createdAt: Date.now(),
-          expiresAt: Date.now() + 7 * 86400000,
-          maxUses: 50,
-          uses: 0,
-        },
-        color: "#7dd3fc",
-      };
-      setRooms((current) => [...current, room]);
-      setMessages((current) => [
-        ...current,
-        systemMessage(
+      dispatch({
+        type: "room.create",
+        roomId: id,
+        room: {
           id,
-          `${userById(currentUserId).name} created “${name}” with ${members.length} members.`,
-        ),
-      ]);
-      setActiveRoom(id);
-      notify(id, `${userById(currentUserId).name} created “${name}”`, {
-        kind: "system",
-        actorId: currentUserId,
+          type: "group",
+          name,
+          description,
+          createdBy: currentUserId,
+          createdAt: Date.now(),
+          adminIds: [currentUserId],
+          participantIds: members,
+          groupMuted: false,
+          mutedUserIds: [],
+          invite: {
+            code: newId().toUpperCase().slice(0, 6),
+            createdAt: Date.now(),
+            expiresAt: Date.now() + 7 * 86400000,
+            maxUses: 50,
+            uses: 0,
+          },
+          color: "#7dd3fc",
+        },
       });
+      setActiveRoom(id);
       toast.success(`Group “${name}” created`);
       return id;
     },
-    [currentUserId, userById, setActiveRoom, notify, systemMessage],
+    [currentUserId, setActiveRoom, dispatch],
   );
 
   const createGroupDm = useCallback(
@@ -1591,9 +1591,10 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         return existing.id;
       }
       const id = `gd-${newId()}`;
-      setRooms((current) => [
-        ...current,
-        {
+      dispatch({
+        type: "room.create",
+        roomId: id,
+        room: {
           id,
           type: "groupdm",
           createdAt: Date.now(),
@@ -1603,62 +1604,37 @@ export function ChatProvider({ children }: { children: ReactNode }) {
           mutedUserIds: [],
           color: "#f59e0b",
         },
-      ]);
+      });
       setActiveRoom(id);
       toast.success(`Group message with ${members.length - 1} people`);
       return id;
     },
-    [rooms, currentUserId, setActiveRoom],
+    [rooms, currentUserId, setActiveRoom, dispatch],
   );
-
-  const patchRoom = useCallback((roomId: RoomId, patch: Partial<Room>) => {
-    setRooms((current) =>
-      current.map((room) => (room.id === roomId ? { ...room, ...patch } : room)),
-    );
-  }, []);
 
   const renameRoom = useCallback(
     (roomId: RoomId, name: string) => {
       const trimmed = name.trim();
       if (!trimmed) return;
-      patchRoom(roomId, { name: trimmed });
-      const update = systemMessage(
-        roomId,
-        `${userById(currentUserId).name} renamed the conversation to “${trimmed}”.`,
-      );
-      setMessages((current) => [...current, update]);
-      notify(roomId, `${userById(currentUserId).name} renamed the group to “${trimmed}”`, {
-        kind: "system",
-        actorId: currentUserId,
-        messageId: update.id,
-      });
+      dispatch({ type: "room.update", roomId, patch: { name: trimmed } });
       toast.success("Conversation renamed");
     },
-    [patchRoom, systemMessage, userById, currentUserId, notify],
+    [dispatch],
   );
 
   const setRoomTopic = useCallback(
     (roomId: RoomId, topic: string) => {
-      patchRoom(roomId, { topic: topic.trim() });
-      setMessages((current) => [
-        ...current,
-        systemMessage(
-          roomId,
-          topic.trim()
-            ? `${userById(currentUserId).name} set the topic to “${topic.trim()}”.`
-            : `${userById(currentUserId).name} cleared the topic.`,
-        ),
-      ]);
+      dispatch({ type: "room.update", roomId, patch: { topic: topic.trim() } });
     },
-    [patchRoom, systemMessage, userById, currentUserId],
+    [dispatch],
   );
 
   const setRoomDescription = useCallback(
     (roomId: RoomId, description: string) => {
-      patchRoom(roomId, { description: description.trim() });
+      dispatch({ type: "room.update", roomId, patch: { description: description.trim() } });
       toast.success("Description updated");
     },
-    [patchRoom],
+    [dispatch],
   );
 
   const updateGroupPhoto = useCallback(
@@ -1668,79 +1644,28 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         toast.error("Only group members can change the group photo.");
         return false;
       }
-
-      patchRoom(roomId, { photo: photo ?? undefined });
-      const actor = userById(currentUserId).name;
-      const action = photo ? "changed" : "removed";
-      const update = systemMessage(roomId, `${actor} ${action} the group photo.`);
-      setMessages((current) => [...current, update]);
-
-      notify(roomId, `${actor} ${action} the group photo`, {
-        kind: "system",
-        actorId: currentUserId,
-        messageId: update.id,
-      });
+      dispatch({ type: "room.update", roomId, patch: { photo: photo ?? null } });
       toast.success(photo ? "Group photo updated" : "Group photo removed");
       return true;
     },
-    [rooms, currentUserId, patchRoom, userById, systemMessage, notify],
+    [rooms, currentUserId, dispatch],
   );
 
   const addMembers = useCallback(
     (roomId: RoomId, userIds: UserId[]) => {
       if (userIds.length === 0) return;
-      setRooms((current) =>
-        current.map((room) =>
-          room.id === roomId
-            ? {
-                ...room,
-                participantIds: Array.from(new Set([...room.participantIds, ...userIds])),
-              }
-            : room,
-        ),
-      );
-      const names = userIds.map((id) => userById(id).name).join(", ");
-      const update = systemMessage(roomId, `${userById(currentUserId).name} added ${names}.`);
-      setMessages((current) => [...current, update]);
-      // Fired after the membership change so the new members are in the room's
-      // audience and see the event that added them.
-      notify(roomId, `${userById(currentUserId).name} added ${names}`, {
-        kind: "system",
-        actorId: currentUserId,
-        messageId: update.id,
-      });
+      dispatch({ type: "room.members", roomId, add: userIds });
       toast.success(userIds.length === 1 ? "Member added" : `${userIds.length} members added`);
     },
-    [systemMessage, userById, currentUserId, notify],
+    [dispatch],
   );
 
   const removeMember = useCallback(
     (roomId: RoomId, userId: UserId) => {
-      setRooms((current) =>
-        current.map((room) =>
-          room.id === roomId
-            ? {
-                ...room,
-                participantIds: room.participantIds.filter((id) => id !== userId),
-                adminIds: room.adminIds.filter((id) => id !== userId),
-                mutedUserIds: room.mutedUserIds.filter((id) => id !== userId),
-              }
-            : room,
-        ),
-      );
-      const update = systemMessage(
-        roomId,
-        `${userById(userId).name} was removed from the conversation.`,
-      );
-      setMessages((current) => [...current, update]);
-      notify(
-        roomId,
-        `${userById(currentUserId).name} removed ${userById(userId).name} from the group`,
-        { kind: "system", actorId: currentUserId, messageId: update.id },
-      );
+      dispatch({ type: "room.members", roomId, remove: [userId] });
       toast.success("Member removed");
     },
-    [systemMessage, userById, notify, currentUserId],
+    [dispatch],
   );
 
   const toggleAdmin = useCallback(
@@ -1753,28 +1678,10 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         toast.error("A conversation needs at least one admin.");
         return;
       }
-      setRooms((current) =>
-        current.map((candidate) =>
-          candidate.id === roomId
-            ? {
-                ...candidate,
-                adminIds: isCurrentlyAdmin
-                  ? candidate.adminIds.filter((id) => id !== userId)
-                  : [...candidate.adminIds, userId],
-              }
-            : candidate,
-        ),
-      );
-      notify(
-        roomId,
-        isCurrentlyAdmin
-          ? `${userById(currentUserId).name} removed ${userById(userId).name} as an admin`
-          : `${userById(currentUserId).name} made ${userById(userId).name} an admin`,
-        { kind: "system", actorId: currentUserId },
-      );
+      dispatch({ type: "room.admin", roomId, userId, on: !isCurrentlyAdmin });
       toast.success(isCurrentlyAdmin ? "Admin removed" : "Admin added");
     },
-    [notify, userById, currentUserId],
+    [dispatch],
   );
 
   const leaveRoom = useCallback(
@@ -1789,44 +1696,19 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         toast.error("Promote another admin before leaving.");
         return;
       }
-      setRooms((current) =>
-        current.map((r) =>
-          r.id === roomId
-            ? {
-                ...r,
-                participantIds: r.participantIds.filter((id) => id !== currentUserId),
-                adminIds: r.adminIds.filter((id) => id !== currentUserId),
-              }
-            : r,
-        ),
-      );
-      const update = systemMessage(
-        roomId,
-        `${userById(currentUserId).name} left the conversation.`,
-      );
-      setMessages((current) => [...current, update]);
-      notify(roomId, `${userById(currentUserId).name} left the group`, {
-        kind: "system",
-        actorId: currentUserId,
-        // The leaver is no longer a participant, so name the audience explicitly.
-        audience: room.participantIds.filter((id) => id !== currentUserId),
-        messageId: update.id,
-      });
+      dispatch({ type: "room.members", roomId, remove: [currentUserId] });
       const fallback = rooms.find(
         (r) => r.id !== roomId && r.participantIds.includes(currentUserId) && !r.archived,
       );
       if (fallback) setActiveRoomId(fallback.id);
       toast.success("You left the conversation");
     },
-    [rooms, currentUserId, systemMessage, userById, notify],
+    [rooms, currentUserId, dispatch],
   );
 
   const setArchived = useCallback(
     (roomId: RoomId, archived: boolean) => {
-      patchRoom(
-        roomId,
-        archived ? { archived: true, archivedAt: Date.now() } : { archived: false },
-      );
+      dispatch({ type: "room.update", roomId, patch: { archived } });
       if (archived) {
         const fallback = rooms.find(
           (r) => r.id !== roomId && r.participantIds.includes(currentUserId) && !r.archived,
@@ -1835,7 +1717,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
       }
       toast.success(archived ? "Conversation archived" : "Conversation restored");
     },
-    [patchRoom, rooms, currentUserId],
+    [rooms, currentUserId, dispatch],
   );
 
   const toggleGroupMute = useCallback(
@@ -1843,25 +1725,12 @@ export function ChatProvider({ children }: { children: ReactNode }) {
       const room = roomsRef.current.find((candidate) => candidate.id === roomId);
       if (!room) return;
       const groupMuted = !room.groupMuted;
-      setRooms((current) =>
-        current.map((candidate) =>
-          candidate.id === roomId ? { ...candidate, groupMuted } : candidate,
-        ),
-      );
-      // Recorded as `system`, not `room`: a mute change is exactly the event
-      // that must still reach everyone once the room has been muted.
-      notify(
-        roomId,
-        groupMuted
-          ? `${userById(currentUserId).name} muted messaging for everyone`
-          : `${userById(currentUserId).name} re-enabled messaging for everyone`,
-        { kind: "system", actorId: currentUserId },
-      );
+      dispatch({ type: "room.update", roomId, patch: { groupMuted } });
       toast[groupMuted ? "warning" : "success"](
         groupMuted ? "Group messaging muted by admin" : "Group messaging enabled",
       );
     },
-    [notify, userById, currentUserId],
+    [dispatch],
   );
 
   const toggleUserMute = useCallback(
@@ -1869,28 +1738,12 @@ export function ChatProvider({ children }: { children: ReactNode }) {
       const room = roomsRef.current.find((candidate) => candidate.id === roomId);
       if (!room) return;
       const muted = room.mutedUserIds.includes(userId);
-      setRooms((current) =>
-        current.map((candidate) =>
-          candidate.id === roomId
-            ? {
-                ...candidate,
-                mutedUserIds: muted
-                  ? candidate.mutedUserIds.filter((id) => id !== userId)
-                  : [...candidate.mutedUserIds, userId],
-              }
-            : candidate,
-        ),
-      );
-      notify(
-        roomId,
-        `${userById(currentUserId).name} ${muted ? "unmuted" : "muted"} ${userById(userId).name}`,
-        { kind: "system", actorId: currentUserId },
-      );
+      dispatch({ type: "room.mute_user", roomId, userId, on: !muted });
       toast[muted ? "success" : "warning"](
         `${userById(userId).name} ${muted ? "unmuted" : "muted"}`,
       );
     },
-    [userById, notify, currentUserId],
+    [userById, dispatch],
   );
 
   const notificationLevel = useCallback(
@@ -1901,16 +1754,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
 
   const setNotificationLevel = useCallback(
     (roomId: RoomId, level: NotificationLevel) => {
-      setRooms((current) =>
-        current.map((room) =>
-          room.id === roomId
-            ? {
-                ...room,
-                notificationLevels: { ...(room.notificationLevels ?? {}), [currentUserId]: level },
-              }
-            : room,
-        ),
-      );
+      dispatch({ type: "room.notify", roomId, level });
       toast.success(
         level === "all"
           ? "Notifying for all messages"
@@ -1919,7 +1763,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
             : "Notifications off for this conversation",
       );
     },
-    [currentUserId],
+    [dispatch],
   );
 
   const toggleRoomNotifications = useCallback(
@@ -1941,7 +1785,9 @@ export function ChatProvider({ children }: { children: ReactNode }) {
 
   const createInvite = useCallback<ChatContextValue["createInvite"]>(
     (roomId, { expiresInMs, maxUses }) => {
-      patchRoom(roomId, {
+      dispatch({
+        type: "room.invite",
+        roomId,
         invite: {
           // 10 chars from a CSPRNG, not 6 from Math.random: a 6-char code over
           // 36 symbols is ~2 billion, which is brute-forceable without a
@@ -1953,25 +1799,17 @@ export function ChatProvider({ children }: { children: ReactNode }) {
           uses: 0,
         },
       });
-      notify(roomId, `${userById(currentUserId).name} generated a new invite link`, {
-        kind: "system",
-        actorId: currentUserId,
-      });
       toast.success("New invite link generated");
     },
-    [patchRoom, notify, userById, currentUserId],
+    [dispatch],
   );
 
   const revokeInvite = useCallback(
     (roomId: RoomId) => {
-      patchRoom(roomId, { invite: null });
-      notify(roomId, `${userById(currentUserId).name} revoked the invite link`, {
-        kind: "system",
-        actorId: currentUserId,
-      });
+      dispatch({ type: "room.invite", roomId, invite: null });
       toast.warning("Invite link revoked");
     },
-    [patchRoom, notify, userById, currentUserId],
+    [dispatch],
   );
 
   const roomByCode = useCallback(
@@ -1989,36 +1827,15 @@ export function ChatProvider({ children }: { children: ReactNode }) {
       if (status === "exhausted")
         return { room: null, error: "This invite link has reached its usage limit." };
 
-      const alreadyIn = room.participantIds.includes(currentUserId);
-      setRooms((current) =>
-        current.map((r) => {
-          if (r.id !== room.id) return r;
-          return {
-            ...r,
-            participantIds: alreadyIn ? r.participantIds : [...r.participantIds, currentUserId],
-            invite: r.invite && !alreadyIn ? { ...r.invite, uses: r.invite.uses + 1 } : r.invite,
-          };
-        }),
-      );
-      if (!alreadyIn) {
-        const update = systemMessage(
-          room.id,
-          `${userById(currentUserId).name} joined via invite link.`,
-        );
-        setMessages((current) => [...current, update]);
-        notify(room.id, `${userById(currentUserId).name} joined via invite link`, {
-          kind: "system",
-          actorId: currentUserId,
-          // `roomsRef` still holds the pre-join membership in this tick, so the
-          // joiner has to be named explicitly to see their own arrival.
-          audience: [...room.participantIds, currentUserId],
-          messageId: update.id,
-        });
+      // Judged again by the log at its own receive time, which is what every
+      // client agrees on; this check only gives immediate feedback.
+      if (!room.participantIds.includes(currentUserId)) {
+        dispatch({ type: "room.join", roomId: room.id, code });
       }
       setActiveRoomId(room.id);
       return { room };
     },
-    [rooms, currentUserId, inviteStatus, systemMessage, userById, notify],
+    [rooms, currentUserId, inviteStatus, dispatch],
   );
 
   /* ---------------------------------------------------------------------- */
@@ -2249,12 +2066,10 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     (aiId: string) => {
       const target = aiMessages.find((message) => message.id === aiId);
       if (!target || target.pending || target.streaming) return;
-      const message = buildMessage(target.roomId, target.response, { sharedFromAi: true });
-      setMessages((current) => [...current, message]);
-      void dispatchSend(message);
+      postMessage(buildMessage(target.roomId, target.response, { sharedFromAi: true }));
       toast.success("AI response shared with the room");
     },
-    [aiMessages, buildMessage, dispatchSend],
+    [aiMessages, buildMessage, postMessage],
   );
 
   /* ---------------------------------------------------------------------- */
@@ -2296,18 +2111,12 @@ export function ChatProvider({ children }: { children: ReactNode }) {
 
   const markNotificationRead = useCallback(
     (id: string) => {
-      setNotifications((current) => {
-        let changed = false;
-        const next = current.map((notification) => {
-          if (notification.id !== id) return notification;
-          if (notification.readBy.includes(currentUserId)) return notification;
-          changed = true;
-          return { ...notification, readBy: [...notification.readBy, currentUserId] };
-        });
-        return changed ? next : current;
-      });
+      const me = currentUserIdRef.current;
+      const target = notificationsRef.current.find((notification) => notification.id === id);
+      if (!target || !notificationTargets(target, me) || notificationIsRead(target, me)) return;
+      dispatch({ type: "notification.read", roomId: target.roomId, ids: [id] });
     },
-    [currentUserId],
+    [dispatch],
   );
 
   /**
@@ -2316,21 +2125,20 @@ export function ChatProvider({ children }: { children: ReactNode }) {
    */
   const markRoomNotificationsRead = useCallback(
     (roomId: RoomId, scope?: "mentions" | "activity") => {
-      setNotifications((current) => {
-        let changed = false;
-        const next = current.map((notification) => {
-          if (notification.roomId !== roomId) return notification;
-          if (scope === "mentions" && notification.kind !== "mention") return notification;
-          if (scope === "activity" && notification.kind === "mention") return notification;
-          if (!notificationTargets(notification, currentUserId)) return notification;
-          if (notification.readBy.includes(currentUserId)) return notification;
-          changed = true;
-          return { ...notification, readBy: [...notification.readBy, currentUserId] };
-        });
-        return changed ? next : current;
-      });
+      const me = currentUserIdRef.current;
+      // Called whenever a panel opens; only an op when something would change.
+      const unread = notificationsRef.current.some(
+        (notification) =>
+          notification.roomId === roomId &&
+          !(scope === "mentions" && notification.kind !== "mention") &&
+          !(scope === "activity" && notification.kind === "mention") &&
+          notificationTargets(notification, me) &&
+          !notificationIsRead(notification, me),
+      );
+      if (!unread) return;
+      dispatch({ type: "notification.read", roomId, ...(scope ? { scope } : {}) });
     },
-    [currentUserId],
+    [dispatch],
   );
 
   /**
@@ -2439,13 +2247,11 @@ export function ChatProvider({ children }: { children: ReactNode }) {
       return 0;
     }
     const ids = new Set(targets.map((message) => message.id));
-    setMessages((current) =>
-      current.map((message) =>
-        ids.has(message.id) && message.attachment
-          ? { ...message, attachment: { ...message.attachment, dataUrl: "", unavailable: true } }
-          : message,
-      ),
-    );
+    setAttachmentUrls((current) => {
+      const next = { ...current };
+      for (const message of targets) next[message.attachment!.blobId!] = null;
+      return next;
+    });
     const keep = referencedBlobIds(messages.filter((message) => !ids.has(message.id)));
     await collectOrphanBlobs(keep);
     toast.success(`Cleared ${targets.length} stored attachment${targets.length === 1 ? "" : "s"}.`);
@@ -2614,9 +2420,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         createdAt: Date.now(),
       };
 
-      setMeetings((current) =>
-        current.some((candidate) => candidate.id === meeting.id) ? current : [...current, meeting],
-      );
+      dispatch({ type: "meeting.add", roomId: meeting.roomId, meeting }, `meeting-${meeting.id}-add`);
 
       const calendarLink = meeting.calendarEventUrl
         ? ` [Open in Google Calendar](${meeting.calendarEventUrl})`
@@ -2632,21 +2436,16 @@ export function ChatProvider({ children }: { children: ReactNode }) {
           meetingNotice: "scheduled",
         },
       );
-      setMessages((current) =>
-        current.some((message) => message.id === notice.id) ? current : [...current, notice],
-      );
-      void dispatchSend(notice);
-      notify(
-        meeting.roomId,
-        `${userById(currentUserId).name} scheduled “${meeting.title}” for ${formatDateTime(meeting.startAt, { timeZone: meeting.timeZone })}`,
-        {
-          id: `meeting-${meeting.id}-scheduled-note`,
-          kind: "agent",
-          actorId: currentUserId,
-          audience: [...new Set([currentUserId, ...attendeeIds])],
-          messageId: notice.id,
-        },
-      );
+      postMessage(notice, {
+        notices: [
+          {
+            id: `meeting-${meeting.id}-scheduled-note`,
+            kind: "agent",
+            audience: [...new Set([currentUserId, ...attendeeIds])],
+            text: `${userById(currentUserId).name} scheduled “${meeting.title}” for ${formatDateTime(meeting.startAt, { timeZone: meeting.timeZone })}`,
+          },
+        ],
+      });
 
       toast.success("Meeting scheduled and Calendar invitations sent");
       if (meeting.demo) {
@@ -2654,7 +2453,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
       }
       return meeting;
     },
-    [rooms, currentUserId, users, userById, buildMessage, dispatchSend, notify],
+    [rooms, currentUserId, users, userById, buildMessage, postMessage, dispatch],
   );
 
   const dismissStorageWarning = useCallback(() => setStorageWarningDismissed(true), []);
@@ -2779,14 +2578,6 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     searchMessages,
     plainText,
   };
-
-  // Presence heartbeat stand-in: keeps the seeded directory honest about the
-  // viewer being online. A real client would drive this from the socket.
-  useEffect(() => {
-    setUsers((current) =>
-      current.map((user) => (user.id === currentUserId ? { ...user, online: true } : user)),
-    );
-  }, [currentUserId]);
 
   return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;
 }

@@ -19,6 +19,7 @@ import type {
   SharedMessage,
   UserId,
 } from "./chat-types";
+import type { OpEntry } from "./chat-ops";
 
 /**
  * The workspace's namespace in local storage.
@@ -45,6 +46,14 @@ export interface PersistedState {
   drafts: Record<string, Draft>;
   saved: Record<UserId, MessageId[]>;
   followedThreads: Record<UserId, MessageId[]>;
+  /**
+   * This device's changes the log has not confirmed, in order. Resent on the
+   * next start with their original opIds, so none is stored twice. Absent in
+   * snapshots written before the operation log.
+   */
+  outbox?: OpEntry[];
+  /** Messages waiting for their send time; device-only until then. */
+  scheduled?: SharedMessage[];
 }
 
 interface LegacyV1 {
