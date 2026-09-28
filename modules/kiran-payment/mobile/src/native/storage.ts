@@ -20,10 +20,14 @@
  */
 import { Preferences } from '@capacitor/preferences';
 
-/** Only this app's keys are mirrored. Nothing else belongs in UserDefaults. */
-const PREFIXES = ['kiranos-', 'kiran-', 'chat-'];
-
-const mirrored = (key: string) => PREFIXES.some((prefix) => key.startsWith(prefix));
+/*
+ * Every key is mirrored. An earlier version kept an allow-list of "this app's"
+ * prefixes, which missed most of what the console actually writes — profile
+ * photos (`nexus-profile-photo:*`), chat wallpapers, the language choice
+ * (`nexus-locale`) and the underscore-named `kiran_*` keys — and so would have
+ * let iOS evict them. In a Capacitor app the web view belongs to this app
+ * alone; there are no other keys to keep out.
+ */
 
 class PreferencesBackedStorage implements Storage {
   private readonly cache = new Map<string, string>();
@@ -49,7 +53,6 @@ class PreferencesBackedStorage implements Storage {
 
   setItem(key: string, value: string): void {
     this.cache.set(key, String(value));
-    if (!mirrored(key)) return;
     void Preferences.set({ key, value: String(value) }).catch((error) => {
       this.lastError = error;
     });
@@ -57,7 +60,6 @@ class PreferencesBackedStorage implements Storage {
 
   removeItem(key: string): void {
     this.cache.delete(key);
-    if (!mirrored(key)) return;
     void Preferences.remove({ key }).catch((error) => {
       this.lastError = error;
     });

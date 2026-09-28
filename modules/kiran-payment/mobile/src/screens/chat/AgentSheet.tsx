@@ -36,7 +36,7 @@ export function AgentSheet({
   const [busy, setBusy] = useState(false);
   const scroller = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
-  const { onScroll } = useStickToBottom(scroller, content, roomId);
+  const { onScroll } = useStickToBottom({ scroller, content, resetKey: roomId });
 
   // Escape closes it on a hardware keyboard, which iPads have.
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Bell, BellOff, ChevronLeft } from 'lucide-react';
 import { useChat } from '@/lib/chat-store';
@@ -9,6 +9,7 @@ import { Composer } from '~/screens/chat/Composer';
 import { Empty, Screen } from '~/components/Screen';
 import { tap } from '~/native/haptics';
 import { useStickToBottom } from '~/lib/useStickToBottom';
+import { useRouteRoom } from '~/lib/useRouteRoom';
 
 /**
  * A thread, as a pushed screen.
@@ -21,25 +22,16 @@ import { useStickToBottom } from '~/lib/useStickToBottom';
 export function ThreadScreen() {
   const { roomId, rootId } = useParams<{ roomId: string; rootId: string }>();
   const navigate = useNavigate();
-  const {
-    activeRoom,
-    setActiveRoom,
-    messageById,
-    threadReplies,
-    threadParticipants,
-    isFollowingThread,
-    toggleFollowThread,
-  } = useChat();
+  const { messageById, threadReplies, threadParticipants, isFollowingThread, toggleFollowThread } =
+    useChat();
 
   const [replyTo, setReplyTo] = useState<SharedMessage | null>(null);
   const [reacting, setReacting] = useState<SharedMessage | null>(null);
   const scroller = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
-  const { onScroll } = useStickToBottom(scroller, content, rootId);
+  const { onScroll } = useStickToBottom({ scroller, content, resetKey: rootId });
 
-  useEffect(() => {
-    if (roomId && roomId !== activeRoom?.id) setActiveRoom(roomId);
-  }, [roomId, activeRoom?.id, setActiveRoom]);
+  useRouteRoom(roomId);
 
   const root = rootId ? messageById(rootId) : undefined;
   const replies = rootId ? threadReplies(rootId) : [];

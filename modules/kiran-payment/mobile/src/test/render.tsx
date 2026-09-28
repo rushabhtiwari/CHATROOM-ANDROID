@@ -5,6 +5,7 @@ import { vi } from 'vitest';
 import { ChatProvider } from '@/lib/chat-store';
 import { I18nProvider } from '@/lib/i18n';
 import { RtsProvider } from '@/modules/rts/store';
+import App from '~/App';
 import state from './fixtures/state.json';
 
 /**
@@ -71,9 +72,15 @@ export function renderAt(
   );
 }
 
-/** Render the whole app at `route` — tab bar, routing and all. */
+/**
+ * Render the whole app at `route` — tab bar, routing and all.
+ *
+ * `App` is imported statically above, not here. Importing it inside the call
+ * put the cost of compiling the whole app (the console's source included)
+ * inside the first timed test of every file, which passed on an idle machine
+ * and timed out on a busy one.
+ */
 export async function renderApp(route: string) {
-  const { default: App } = await import('~/App');
   fakeServer();
   return render(
     <MemoryRouter initialEntries={[route]}>

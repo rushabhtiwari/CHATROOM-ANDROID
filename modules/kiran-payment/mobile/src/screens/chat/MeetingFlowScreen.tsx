@@ -6,6 +6,7 @@ import type { UserId } from '@/lib/chat-types';
 import { cn } from '@/lib/utils';
 import { Empty, Screen } from '~/components/Screen';
 import { selection, tap, warn } from '~/native/haptics';
+import { useRouteRoom } from '~/lib/useRouteRoom';
 
 /**
  * Scheduling, as a sequence of single questions.
@@ -45,7 +46,10 @@ const labelFor = (hour: number, minute: number) =>
 export function MeetingFlowScreen() {
   const { roomId } = useParams<{ roomId: string }>();
   const navigate = useNavigate();
-  const { activeRoom, userById, currentUserId, roomTitle, scheduleMeeting } = useChat();
+  const { activeRoom, rooms, userById, currentUserId, roomTitle, scheduleMeeting } = useChat();
+  // The attendee list is the room's members, so it has to be the URL's room —
+  // not whichever room happened to be active when this screen was opened.
+  const ready = useRouteRoom(roomId);
 
   const [step, setStep] = useState<Step>('who');
   const [attendeeIds, setAttendeeIds] = useState<UserId[]>([]);
@@ -62,13 +66,14 @@ export function MeetingFlowScreen() {
     [activeRoom, currentUserId],
   );
 
-  if (!roomId || !activeRoom) {
+  if (!roomId || !rooms.some((room) => room.id === roomId)) {
     return (
       <Screen back title="Schedule">
         <Empty title="Conversation not found" />
       </Screen>
     );
   }
+  if (!ready) return <div className="h-full bg-canvas" aria-busy="true" />;
 
   const startAt = (() => {
     const at = new Date(day);

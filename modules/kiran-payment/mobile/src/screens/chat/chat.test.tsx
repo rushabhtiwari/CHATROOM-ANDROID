@@ -11,10 +11,13 @@ const composer = () => screen.getByRole('textbox', { name: 'Message' }) as HTMLT
 describe('chat list', () => {
   it('lists the seeded conversations, newest first', async () => {
     await renderApp('/chats');
-    const rows = await screen.findAllByRole('button', { name: /./ });
-    const titles = rows.map((row) => row.textContent ?? '');
-    expect(titles.some((t) => t.includes('Plant Expansion — Unit 3'))).toBe(true);
-    expect(titles.some((t) => t.includes('Watercooler'))).toBe(true);
+    // People & HR's last message is the seed's most recent; Engineering's is
+    // hours older. Text queries, not role queries: computing accessible names
+    // for every row in the list is slow enough in jsdom to time a test out.
+    const recent = await screen.findByText('People & HR');
+    const older = screen.getByText('Engineering');
+    expect(recent.compareDocumentPosition(older) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(screen.getByText('Watercooler')).toBeInTheDocument();
   });
 
   it('narrows the list as you search', async () => {
@@ -211,5 +214,128 @@ describe('scheduling a meeting', () => {
     fireEvent.click(editTitle!);
     expect(screen.getByRole('heading', { name: 'What is it about?' })).toBeInTheDocument();
     expect(screen.getByRole('textbox', { name: 'Meeting title' })).toHaveValue('First title');
+  });
+});
+
+describe('opening the app at a conversation (a tapped notification)', () => {
+  /**
+   * The real sequence: the app was last used in one room, so the saved
+   * workspace names that room as active; then it is cold-started at another,
+   * which is what tapping a notification does.
+   */
+  async function lastUsedIn(room: string) {
+    const first = await renderApp(`/chats/${room}`);
+    await waitFor(() =>
+      expect(JSON.parse(localStorage.getItem('kiranos-chat-v1') ?? '{}').activeRoomId).toBe(room),
+    );
+    first.unmount();
+  }
+
+  it('shows the conversation in the URL, not the one open last time', async () => {
+    await lastUsedIn('r1');
+    await renderApp('/chats/s-watercooler');
+    expect(await screen.findByRole('heading', { name: 'Watercooler' })).toBeInTheDocument();
+    expect(screen.queryByText(/Board pack is drafted/)).not.toBeInTheDocument();
+  });
+
+  it('schedules with the members of the conversation in the URL', async () => {
+    await lastUsedIn('r1');
+    await renderApp('/chats/s-watercooler/schedule');
+    expect(await screen.findByText('Watercooler')).toBeInTheDocument();
+  });
+
+  it('opens a thread against the conversation in the URL', async () => {
+    await lastUsedIn('s-watercooler');
+    await renderApp('/chats/r1');
+    const [chip] = await screen.findAllByRole('button', { name: /1 reply/ });
+    fireEvent.click(chip!);
+    expect(await screen.findByRole('heading', { name: 'Thread' })).toBeInTheDocument();
+    expect(screen.queryByText('Thread not found')).not.toBeInTheDocument();
+  });
+});
+
+describe('older history', () => {
+  /** A saved workspace in which Watercooler has 120 more messages than it seeds with. */
+  async function longHistory() {
+    const first = await renderApp('/chats/s-watercooler');
+    await waitFor(() => expect(localStorage.getItem('kiranos-chat-v1')).not.toBeNull());
+    first.unmount();
+    const snap = JSON.parse(localStorage.getItem('kiranos-chat-v1')!);
+    const template = snap.messages.find(
+      (m: { roomId: string; system?: boolean }) => m.roomId === 's-watercooler' && !m.system,
+    );
+    // Older than every seeded message, so the seed's own messages never
+    // interleave with these. The seed is timestamped relative to the current
+    // day; anchoring to "now" instead made the counts depend on the time of day.
+    const oldest = Math.min(...snap.messages.map((m: { timestamp: number }) => m.timestamp));
+    const base = oldest - 200 * 60_000;
+    for (let i = 0; i < 120; i++) {
+      snap.messages.push({
+        ...template,
+        id: `hist-${i}`,
+        clientId: `hc-${i}`,
+        content: `History ${i}`,
+        timestamp: base + i * 60_000,
+        reactions: undefined,
+        replyToId: null,
+        threadRootId: null,
+        pinnedBy: undefined,
+      });
+    }
+    localStorage.setItem('kiranos-chat-v1', JSON.stringify(snap));
+  }
+
+  const scroller = () => document.querySelector('.scroll-y') as HTMLElement;
+  const loaded = () => screen.queryAllByText(/^History \d+$/).length;
+
+  it('opens on one page, not the whole history', async () => {
+    await longHistory();
+    await renderApp('/chats/s-watercooler');
+    await screen.findByText('History 119');
+    expect(screen.queryByText('History 0')).not.toBeInTheDocument();
+  });
+
+  /**
+   * jsdom has no layout: scrollHeight is always 0 and scrollTop does not stick,
+   * so "where is the reader" cannot be observed. Give the scroller a simple
+   * model instead — every loaded message is 60px tall, the frame 600px — which
+   * is enough to check both the paging and the restore arithmetic.
+   */
+  function giveGeometry(node: HTMLElement) {
+    let top = 0;
+    Object.defineProperty(node, 'scrollHeight', { configurable: true, get: () => loaded() * 60 });
+    Object.defineProperty(node, 'clientHeight', { configurable: true, get: () => 600 });
+    Object.defineProperty(node, 'scrollTop', {
+      configurable: true,
+      get: () => top,
+      set: (value: number) => (top = Math.max(0, Math.min(value, loaded() * 60 - 600))),
+    });
+  }
+
+  it('loads one page per trip to the top, and keeps the reader in place', async () => {
+    await longHistory();
+    await renderApp('/chats/s-watercooler');
+    await screen.findByText('History 119');
+    const node = scroller();
+    giveGeometry(node);
+    const before = loaded();
+
+    node.scrollTop = 0;
+    // Momentum scrolling delivers a burst of events at the top, and they can
+    // all arrive before React commits the first page — so they are dispatched
+    // inside one batch here, where no render can land between them. Only the
+    // first may ask for a page; the rest used to ask again, and again, until
+    // the whole history had loaded.
+    act(() => {
+      node.dispatchEvent(new Event('scroll'));
+      node.dispatchEvent(new Event('scroll'));
+      node.dispatchEvent(new Event('scroll'));
+    });
+
+    await waitFor(() => expect(loaded()).toBeGreaterThan(before));
+    expect(loaded()).toBe(before + 40);
+    // The reader was at the top of the old page; that message is now 40
+    // messages (2400px) down, and so is the reader.
+    expect(node.scrollTop).toBe(40 * 60);
   });
 });

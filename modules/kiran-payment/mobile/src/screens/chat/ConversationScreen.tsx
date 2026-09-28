@@ -12,6 +12,7 @@ import { Empty, Screen } from '~/components/Screen';
 import { tap } from '~/native/haptics';
 import { previewText } from '~/lib/text';
 import { useStickToBottom } from '~/lib/useStickToBottom';
+import { useRouteRoom } from '~/lib/useRouteRoom';
 
 export function ConversationScreen() {
   const { roomId } = useParams<{ roomId: string }>();
@@ -19,7 +20,6 @@ export function ConversationScreen() {
   const {
     rooms,
     activeRoom,
-    setActiveRoom,
     roomTitle,
     channelMessages,
     hasMoreHistory,
@@ -39,15 +39,18 @@ export function ConversationScreen() {
   const scroller = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
 
-  const { onScroll } = useStickToBottom(scroller, content, roomId, (node) => {
-    if (node.scrollTop < 60 && hasMoreHistory) loadOlder();
-  });
+  const ready = useRouteRoom(roomId);
 
-  // The route is the authority for which room is open, so a tapped
-  // notification or a back gesture cannot leave the store pointing elsewhere.
-  useEffect(() => {
-    if (roomId && roomId !== activeRoom?.id) setActiveRoom(roomId);
-  }, [roomId, activeRoom?.id, setActiveRoom]);
+  // Keyed on readiness too: if the first render was the placeholder below, the
+  // list's elements did not exist when the hook first ran.
+  const { onScroll } = useStickToBottom({
+    scroller,
+    content,
+    resetKey: ready ? roomId : undefined,
+    firstItemKey: channelMessages[0]?.id,
+    hasOlder: hasMoreHistory,
+    loadOlder,
+  });
 
   useEffect(() => {
     if (roomId) markRoomRead(roomId);
@@ -62,6 +65,11 @@ export function ConversationScreen() {
       </Screen>
     );
   }
+
+  // For a frame or two after a cold start the store still points at the room
+  // from last session. Its messages are not this room's; show nothing rather
+  // than the wrong conversation under this one's URL.
+  if (!ready) return <div className="h-full bg-canvas" aria-busy="true" />;
 
   const pinned = pinnedMessages(roomId)[0];
   const room = activeRoom;

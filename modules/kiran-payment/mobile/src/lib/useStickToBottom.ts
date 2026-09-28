@@ -2,6 +2,8 @@ import { useCallback, useLayoutEffect, useRef, type RefObject } from 'react';
 
 /** How close to the bottom still counts as "at the bottom", in pixels. */
 const THRESHOLD = 80;
+/** How close to the top asks for older history, in pixels. */
+const TOP_THRESHOLD = 60;
 
 /**
  * Keep a message list pinned to its newest entry — while the reader is there.
@@ -16,19 +18,42 @@ const THRESHOLD = 80;
  * up into history is reading; yanking them back down on every resize would be
  * worse than leaving the newest message one screen away.
  *
+ * It also owns loading older history, because doing that without it moves the
+ * reader. Older messages are inserted *above* what they are reading, so with
+ * the scroll offset unchanged the view lands on the new page — 40 messages
+ * back — and, still being at the top, immediately asks for another page, and
+ * another. Desktop Chrome hides this with CSS scroll anchoring; iOS Safari has
+ * none. So before asking for a page this records the reader's distance from
+ * the *bottom*, which a prepend does not change, and puts it back in a layout
+ * effect once the first item has changed — before the browser paints.
+ *
  * `scroller` is the overflow container; `content` is the element inside it
  * whose height changes. `resetKey` identifies what is being shown — a room, a
  * thread — and a new value starts at the bottom again: the screen component
  * survives navigating between rooms, and "the reader scrolled up" in one room
- * says nothing about the next. Returns the scroll handler that tracks position.
+ * says nothing about the next. `firstItemKey` identifies the oldest item shown,
+ * which changes exactly when older history arrives. `loadOlder` is called when
+ * the reader reaches the top and `hasOlder` is true.
  */
-export function useStickToBottom(
-  scroller: RefObject<HTMLElement | null>,
-  content: RefObject<HTMLElement | null>,
-  resetKey: string | undefined,
-  onScrollExtra?: (node: HTMLElement) => void,
-) {
+export function useStickToBottom({
+  scroller,
+  content,
+  resetKey,
+  firstItemKey,
+  hasOlder = false,
+  loadOlder,
+}: {
+  scroller: RefObject<HTMLElement | null>;
+  content: RefObject<HTMLElement | null>;
+  resetKey: string | undefined;
+  firstItemKey?: string;
+  hasOlder?: boolean;
+  loadOlder?: () => void;
+}) {
   const pinned = useRef(true);
+  // Distance from the bottom when older history was requested; null when no
+  // request is outstanding. Doubles as the guard against asking twice.
+  const held = useRef<number | null>(null);
   // The geometry the last scroll event was judged against. See onScroll.
   const measured = useRef({ scrollHeight: 0, clientHeight: 0 });
 
@@ -45,8 +70,18 @@ export function useStickToBottom(
 
   useLayoutEffect(() => {
     pinned.current = true;
+    held.current = null;
     toBottom();
   }, [resetKey, toBottom]);
+
+  // Older history has been prepended: restore the reader's place before paint.
+  useLayoutEffect(() => {
+    const node = scroller.current;
+    if (!node || held.current === null) return;
+    node.scrollTop = node.scrollHeight - held.current;
+    held.current = null;
+    remember(node);
+  }, [firstItemKey, scroller]);
 
   // Re-attached per `resetKey` as well: if the first render for a key was an
   // empty or not-found state, the elements did not exist when this last ran.
@@ -86,8 +121,12 @@ export function useStickToBottom(
     } else {
       pinned.current = node.scrollHeight - node.scrollTop - node.clientHeight < THRESHOLD;
     }
-    onScrollExtra?.(node);
-  }, [scroller, onScrollExtra]);
+
+    if (node.scrollTop < TOP_THRESHOLD && hasOlder && loadOlder && held.current === null) {
+      held.current = node.scrollHeight - node.scrollTop;
+      loadOlder();
+    }
+  }, [scroller, hasOlder, loadOlder]);
 
   return { onScroll, isPinned: () => pinned.current };
 }
