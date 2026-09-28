@@ -49,6 +49,17 @@
 	<!-- Permission prompts. iOS shows these strings verbatim, and rejects a
 	     build that uses the capability without one, so they say what the app
 	     actually does with the access rather than restating the permission. -->
+	<!-- The backend runs on a PC on the office network over plain http while
+	     this is a pilot. Without these, iOS refuses every request to it. -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Connect to the KiranOS server on your office network.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Take a photo to send in a conversation or to attach a receipt to a claim.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
