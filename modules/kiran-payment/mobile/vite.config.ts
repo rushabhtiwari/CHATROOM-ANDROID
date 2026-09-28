@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite';
+import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 
@@ -12,8 +12,34 @@ const PORT = Number(process.env.MOBILE_PORT ?? 5174);
 // server's file allowlist and the aliases both have to name that real path.
 const OS_SRC = path.resolve(__dirname, '../master-frontend/vd/src');
 
+/**
+ * Give the chat store the device's attachment store.
+ *
+ * The console's chat store imports `./attachment-store`, which keeps photos in
+ * IndexedDB — storage iOS may clear under space pressure. This redirects that
+ * one import, from that one importer, to `src/native/attachment-store.ts`: the
+ * same exports, backed by the app's data directory on a device and delegating
+ * to the console's own module in a browser. The console's source is not
+ * edited. Every other importer of the original — including the replacement
+ * itself — still gets the original, so there is no loop.
+ */
+function deviceAttachmentStore(): Plugin {
+  const chatStore = path.resolve(OS_SRC, 'lib/chat-store.tsx');
+  const replacement = path.resolve(__dirname, 'src/native/attachment-store.ts');
+  const same = (a: string, b: string) =>
+    path.normalize(a).toLowerCase() === path.normalize(b).toLowerCase();
+  return {
+    name: 'device-attachment-store',
+    enforce: 'pre',
+    resolveId(source, importer) {
+      if (source !== './attachment-store' || !importer) return null;
+      return same(importer.split('?')[0]!, chatStore) ? replacement : null;
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [react()],
+  plugins: [deviceAttachmentStore(), react()],
   resolve: {
     alias: {
       // `@` means the console, here and inside the console itself. The console
