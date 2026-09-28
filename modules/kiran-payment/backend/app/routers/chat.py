@@ -67,6 +67,10 @@ def resolve_actor(claimed: str) -> str:
 # to the queues of the person who made them.
 _subscribers: dict[asyncio.Queue, str] = {}
 
+# How long a quiet stream waits before sending a heartbeat. The client treats
+# roughly two missed heartbeats as a dead connection (chat-server-log.ts).
+HEARTBEAT_SECONDS = 20.0
+
 
 def _publish(entry: dict) -> None:
     for queue, user in list(_subscribers.items()):
@@ -101,10 +105,16 @@ async def _frames(since: int, user: str, queue: asyncio.Queue):
         yield f"event: ready\ndata: {json.dumps({'head': last})}\n\n"
         while True:
             try:
-                entry = await asyncio.wait_for(queue.get(), timeout=20.0)
+                entry = await asyncio.wait_for(queue.get(), timeout=HEARTBEAT_SECONDS)
             except asyncio.TimeoutError:
-                # Keeps proxies from closing an idle connection.
-                yield ": keep-alive\n\n"
+                # A real event, not an SSE comment: EventSource hides comments
+                # from the page, and the client needs to *see* that the stream
+                # is alive. A connection can die without anyone saying so — a
+                # proxy that keeps the browser's side open after the server is
+                # gone, a phone changing networks — and silence past a few
+                # heartbeats is how the client finds out. It also keeps idle
+                # proxies from closing the connection.
+                yield "event: ping\ndata: {}\n\n"
                 continue
             if entry["seq"] <= last:
                 continue

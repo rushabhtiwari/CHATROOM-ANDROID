@@ -3,6 +3,7 @@ import { render } from '@testing-library/react';
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { vi } from 'vitest';
 import { ChatProvider } from '@/lib/chat-store';
+import { createLocalLog } from '@/lib/chat-log';
 import { I18nProvider } from '@/lib/i18n';
 import { RtsProvider } from '@/modules/rts/store';
 import App from '~/App';
@@ -38,6 +39,12 @@ export function fakeServer() {
   return { requests };
 }
 
+/**
+ * The chat on a log that stays in the test: no server, and no simulated
+ * failures, so a test's outcome never depends on a 4% coin toss.
+ */
+const testLog = () => createLocalLog({ failureRate: 0, latency: 10 });
+
 /** The current path, rendered where a test can read it. */
 function Location() {
   const location = useLocation();
@@ -58,7 +65,7 @@ export function renderAt(
   return render(
     <MemoryRouter initialEntries={[route]}>
       <I18nProvider>
-        <ChatProvider>
+        <ChatProvider log={testLog()}>
           <RtsProvider>
             <Routes>
               <Route path={path} element={element} />
@@ -85,7 +92,7 @@ export async function renderApp(route: string) {
   return render(
     <MemoryRouter initialEntries={[route]}>
       <I18nProvider>
-        <ChatProvider>
+        <ChatProvider log={testLog()}>
           <RtsProvider>
             <App />
             <Location />

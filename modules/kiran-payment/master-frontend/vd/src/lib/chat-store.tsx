@@ -84,7 +84,8 @@ import {
   type OpEntry,
   type Workspace,
 } from "./chat-ops";
-import { createLocalLog, type OpLog } from "./chat-log";
+import type { OpLog } from "./chat-log";
+import { createServerLog } from "./chat-server-log";
 import { inviteIsUsable } from "./invite-rules";
 
 const AI_TOKEN_BUDGET = 60_000;
@@ -383,7 +384,13 @@ export function ChatProvider({ children, log: providedLog }: { children: ReactNo
     resetAt: Date.now() + AI_BUDGET_WINDOW,
   });
 
-  const [log] = useState<OpLog>(() => providedLog ?? createLocalLog());
+  /**
+   * The chat server's log unless told otherwise. Where the server cannot be
+   * reached, changes queue in the outbox and the app says it is offline —
+   * as a chat app should — rather than pretending they were delivered.
+   * Tests pass a local log.
+   */
+  const [log] = useState<OpLog>(() => providedLog ?? createServerLog());
   /** The seq of the last confirmed entry; anything at or below it is a repeat. */
   const headRef = useRef(0);
 
@@ -568,10 +575,25 @@ export function ChatProvider({ children, log: providedLog }: { children: ReactNo
         setPending((current) => current.filter((item) => item.entry.opId !== entry.opId));
       },
       onStatus: (connected) => {
-        if (log.shared) setOnlineState(connected);
+        if (!log.shared) return;
+        setOnlineState(connected);
+        // Back in touch with the server: anything that failed while it was
+        // out of reach goes again, under its original opId.
+        if (connected) {
+          for (const item of pendingRef.current) {
+            if (item.status === "failed") {
+              const timer = retryTimers.current.get(item.entry.opId);
+              if (timer) {
+                clearTimeout(timer);
+                retryTimers.current.delete(item.entry.opId);
+              }
+              void deliver(item.entry, 1);
+            }
+          }
+        }
       },
     });
-  }, [storageReady, currentUserId, log]);
+  }, [storageReady, currentUserId, log, deliver]);
 
   /* ---------------------------------------------------------------------- */
   /* Persistence                                                            */

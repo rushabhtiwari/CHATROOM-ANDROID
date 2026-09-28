@@ -271,3 +271,26 @@ def test_stream_sends_the_backlog_then_live_ops_once_each(tmp_path):
     ]
     assert labels.count(("op", "op-early")) == 1
     assert ("op", "op-private") not in labels
+
+
+def test_an_idle_stream_sends_a_heartbeat_the_client_can_see(tmp_path, monkeypatch):
+    """A keep-alive comment is invisible to EventSource; a client watching for
+    a dead connection needs an event it can actually observe."""
+    monkeypatch.setattr(chat, "HEARTBEAT_SECONDS", 0.05)
+
+    async def scenario():
+        chat.use_log(new_log(tmp_path))
+        queue: asyncio.Queue = asyncio.Queue()
+        chat._subscribers[queue] = BOB
+        frames = chat._frames(0, BOB, queue)
+        ready = _parse(await frames.__anext__())
+        idle = _parse(await asyncio.wait_for(frames.__anext__(), 1))
+        await frames.aclose()
+        return ready, idle
+
+    try:
+        ready, idle = asyncio.run(scenario())
+    finally:
+        chat.use_log(None)
+    assert ready[0] == "ready"
+    assert idle[0] == "ping"
