@@ -19,6 +19,20 @@ const config: CapacitorConfig = {
     contentInset: 'never',
     backgroundColor: '#F7F7F9',
   },
+  android: {
+    backgroundColor: '#F7F7F9',
+    // The theme opts out of Android 15's enforced edge-to-edge, so the web
+    // view already sits between the system bars and shrinks above the
+    // keyboard. 'auto' only steps in if that opt-out is ever removed.
+    adjustMarginsForEdgeToEdge: 'auto',
+  },
+  server: {
+    // Serve the bundle from http://localhost rather than https://localhost.
+    // The pilot backend is plain http on the office network, and an https
+    // page may not call it (mixed content). http://localhost is also an
+    // origin the backend's CORS rule already allows.
+    androidScheme: 'http',
+  },
   plugins: {
     SplashScreen: {
       // Hidden from the app once the first screen paints, rather than on a

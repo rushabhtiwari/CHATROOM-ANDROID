@@ -15,7 +15,16 @@
  * would only arrive twice.
  */
 import { PushNotifications, type Token } from '@capacitor/push-notifications';
-import { isNative } from './platform';
+import { isAndroid, isNative } from './platform';
+
+/**
+ * Android delivers pushes through Firebase Cloud Messaging, which needs the
+ * project's `google-services.json` compiled into the app. Without it the
+ * plugin's `register()` throws on the native side and takes the whole app
+ * down with it, so an Android build registers only when it was built with
+ * that file — the build sets this flag when it finds one.
+ */
+const pushAvailable = !isAndroid || import.meta.env.VITE_ANDROID_PUSH === 'true';
 
 /** Where a notification says the user should end up. */
 export type Destination =
@@ -53,7 +62,7 @@ export interface PushHandlers {
  * re-asked, because iOS only ever shows the prompt once.
  */
 export async function initPush({ onToken, onTap }: PushHandlers): Promise<boolean> {
-  if (!isNative) return false;
+  if (!isNative || !pushAvailable) return false;
 
   const existing = await PushNotifications.checkPermissions();
   const granted =

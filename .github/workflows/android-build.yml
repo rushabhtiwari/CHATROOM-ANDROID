@@ -1,0 +1,149 @@
+name: Android app
+
+# Builds the KiranOS Android app (.apk) from the same web app and Capacitor
+# plugins as the iOS build. It runs on Linux, needs no Android Studio, and
+# publishes the APK as the `android-latest` release so a phone can download it
+# straight from GitHub:
+#
+#   https://github.com/<owner>/<repo>/releases/download/android-latest/KiranOS.apk
+#
+# The APK is signed with the committed test key (android/app/kiranos-test.p12),
+# so each new build installs over the previous one without uninstalling.
+
+on:
+  push:
+    branches: [master, main, 'feat/android-app']
+    paths:
+      - 'modules/kiran-payment/mobile/**'
+      - 'modules/kiran-payment/master-frontend/vd/**'
+      - 'modules/kiran-payment/package.json'
+      - 'modules/kiran-payment/package-lock.json'
+      - '.github/workflows/android-build.yml'
+  pull_request:
+    paths:
+      - 'modules/kiran-payment/mobile/**'
+      - 'modules/kiran-payment/master-frontend/vd/**'
+      - '.github/workflows/android-build.yml'
+  workflow_dispatch:
+    inputs:
+      api_origin:
+        description: 'Server the Android build talks to, e.g. http://192.168.0.203:3001'
+        required: false
+
+defaults:
+  run:
+    working-directory: modules/kiran-payment
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: modules/kiran-payment/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck --workspace mobile
+
+      - name: Formatting
+        run: npm run format:check --workspace mobile
+
+      - name: Tests
+        run: npm run test --workspace mobile
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: modules/kiran-payment/package-lock.json
+
+      # Capacitor 7's Android project needs JDK 21.
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Push notifications on Android go through Firebase, which needs the
+      # project's google-services.json. Store it (the file's whole contents) as
+      # the GOOGLE_SERVICES_JSON repository secret to enable them. Without it
+      # the app builds and runs normally and simply does not register for push.
+      - name: Firebase config (optional)
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: |
+          if [ -n "$GOOGLE_SERVICES_JSON" ]; then
+            printf '%s' "$GOOGLE_SERVICES_JSON" > mobile/android/app/google-services.json
+            echo "VITE_ANDROID_PUSH=true" >> "$GITHUB_ENV"
+            echo "Firebase config found: push notifications enabled."
+          else
+            echo "No GOOGLE_SERVICES_JSON secret: building without push notifications."
+          fi
+
+      # The server the app talks to is baked in at build time: the manual
+      # run's input, else the repository variable API_ORIGIN, else none (the
+      # app then fails the way an unreachable backend does).
+      - name: Build the web app
+        run: npm run build --workspace mobile
+        env:
+          VITE_API_ORIGIN: ${{ inputs.api_origin || vars.API_ORIGIN || '' }}
+
+      # Copies the built web app into the native project and wires in the
+      # installed plugins.
+      - name: Sync Capacitor
+        run: npx cap sync android
+        working-directory: modules/kiran-payment/mobile
+
+      - name: Build the APK
+        working-directory: modules/kiran-payment/mobile/android
+        env:
+          KIRANOS_VERSION_CODE: ${{ github.run_number }}
+          KIRANOS_VERSION_NAME: 0.1.${{ github.run_number }}
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon --stacktrace
+          cp app/build/outputs/apk/debug/app-debug.apk "$GITHUB_WORKSPACE/KiranOS.apk"
+
+      - name: Upload the APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: KiranOS-android-apk
+          path: KiranOS.apk
+          retention-days: 30
+
+      # A fixed download link for phones. Pull requests only get the artifact.
+      - name: Publish as the android-latest release
+        if: github.event_name != 'pull_request'
+        working-directory: .
+        env:
+          GH_TOKEN: ${{ github.token }}
+          API_ORIGIN: ${{ inputs.api_origin || vars.API_ORIGIN || '(none)' }}
+        run: |
+          gh release delete android-latest --yes --cleanup-tag || true
+          gh release create android-latest KiranOS.apk \
+            --target "$GITHUB_SHA" \
+            --title "KiranOS for Android — build ${{ github.run_number }}" \
+            --notes "Built from ${GITHUB_SHA::7} on ${GITHUB_REF_NAME}. Server: ${API_ORIGIN}.
+
+          Open this page on your Android phone, tap **KiranOS.apk**, then open the download and allow installing from this source when asked."

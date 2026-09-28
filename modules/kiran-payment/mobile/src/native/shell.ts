@@ -7,10 +7,20 @@
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { Keyboard, KeyboardResize } from '@capacitor/keyboard';
 import { SplashScreen } from '@capacitor/splash-screen';
-import { isNative, isIOS } from './platform';
+import { isNative, isIOS, isAndroid } from './platform';
 
 export async function initShell(): Promise<void> {
   if (!isNative) return;
+
+  if (isAndroid) {
+    // Android's status bar plugin starts out drawn over the web view in black.
+    // The screens pad for the bar only through safe-area insets, which the
+    // Android web view does not report for it, so the bar sits above the web
+    // view instead, in the app's own canvas colour. Set here rather than in
+    // the shared plugin config, which iOS reads too.
+    await StatusBar.setOverlaysWebView({ overlay: false });
+    await StatusBar.setBackgroundColor({ color: '#F7F7F9' });
+  }
 
   // Dark glyphs on the app's light surfaces.
   await StatusBar.setStyle({ style: Style.Light });

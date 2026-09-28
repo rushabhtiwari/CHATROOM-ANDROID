@@ -12,3 +12,6 @@ ios/App/build/
 DerivedData/
 *.xcuserstate
 xcuserdata/
+
+# Firebase config for Android push: a repository secret, never committed.
+android/app/google-services.json

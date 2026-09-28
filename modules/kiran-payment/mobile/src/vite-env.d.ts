@@ -10,6 +10,12 @@ interface ImportMetaEnv {
    * absolute origin the phone can reach.
    */
   readonly VITE_API_ORIGIN?: string;
+  /**
+   * 'true' when the Android build includes a Firebase `google-services.json`.
+   * Android push registration crashes without one, so it is skipped unless
+   * this is set. iOS ignores it.
+   */
+  readonly VITE_ANDROID_PUSH?: string;
 }
 
 interface ImportMeta {

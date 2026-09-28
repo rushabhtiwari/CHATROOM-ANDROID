@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "KiranOS iOS app: conversations and order tracking.",
+  "description": "KiranOS iOS and Android app: conversations and order tracking.",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -14,6 +14,10 @@
     "ios:add": "cap add ios",
     "ios:open": "cap open ios",
     "ios:run": "cap run ios",
+    "sync:android": "npm run build && cap sync android",
+    "android:add": "cap add android",
+    "android:open": "cap open android",
+    "android:run": "cap run android",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx}\"",
     "check": "tsc --noEmit && prettier --check \"src/**/*.{ts,tsx}\" && vitest run && vite build"
@@ -51,6 +55,7 @@
     "tailwind-merge": "^2.6.0"
   },
   "devDependencies": {
+    "@capacitor/android": "^7.6.9",
     "@capacitor/cli": "^7.4.3",
     "@capacitor/ios": "^7.4.3",
     "@testing-library/jest-dom": "^6.6.3",

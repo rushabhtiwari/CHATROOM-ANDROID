@@ -1,4 +1,4 @@
-# KiranOS for iOS
+# KiranOS for iOS and Android
 
 The conversation workspace and order tracking, on a phone. Capacitor around a
 Vite/React app that shares its domain layer with the console in
@@ -107,6 +107,53 @@ npm run ios:open --workspace mobile
 
 Push notifications additionally need an Apple Developer account, an APNs key
 and the Push Notifications capability enabled on the App ID.
+
+## Building for Android
+
+The same web app and the same Capacitor plugins, in the `android/` project. The
+screens, the chat store and every feature are shared with the iOS build; only
+the native shell differs.
+
+The APK is built in CI — `.github/workflows/android-build.yml` runs on Linux
+and needs no Android Studio. Every push to `main` that touches the app
+publishes the APK as the `android-latest` release, so a phone can download it
+directly from:
+
+```
+https://github.com/<owner>/<repo>/releases/download/android-latest/KiranOS.apk
+```
+
+The server address is baked in the same way as for iOS: the manual run's
+`api_origin` input, else the `API_ORIGIN` repository variable. To point the app
+at another server, run the workflow from the Actions tab with that address.
+
+Locally, with Android Studio (JDK 21, Android SDK 35) installed:
+
+```bash
+npm run sync:android --workspace mobile   # build + cap sync android
+npm run android:open --workspace mobile
+```
+
+Where Android differs from iOS:
+
+- **Keyboard.** The theme opts out of Android 15's enforced edge-to-edge
+  layout and the activity uses `adjustResize`, so the web view shrinks above
+  the keyboard and the composer stays pinned — what iOS gets from the Keyboard
+  plugin's native resize mode.
+- **Status bar.** Drawn above the web view in the canvas colour (`shell.ts`),
+  not over it, because the Android web view does not report a safe-area inset
+  for it.
+- **Plain http.** `server.androidScheme` is `http`, so the app's origin is
+  `http://localhost` (already allowed by the backend's CORS rule) and it may
+  call an http server; the manifest allows cleartext, like the iOS ATS
+  exception.
+- **Push notifications** go through Firebase. Without the project's
+  `google-services.json`, registering crashes the app, so `push.ts` skips it
+  unless the build was made with one: store the file's contents as the
+  `GOOGLE_SERVICES_JSON` repository secret and CI enables push.
+- **Signing.** Test builds are signed with `android/app/kiranos-test.p12`
+  (password `android`), committed so every build installs over the last. It
+  is a test key; sign anything distributed beyond testing with a private one.
 
 ## What this does not do yet
 

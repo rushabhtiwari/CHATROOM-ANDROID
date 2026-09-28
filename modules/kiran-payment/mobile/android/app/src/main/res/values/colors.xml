@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The app's canvas, as in capacitor.config.ts and the web theme. -->
+    <color name="kiranos_canvas">#F7F7F9</color>
+    <!-- The launch screen, as in the iOS splash image. -->
+    <color name="kiranos_splash">#FFFFFF</color>
+</resources>

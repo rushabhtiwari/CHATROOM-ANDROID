@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The pilot backend is plain http on a PC on the office network, and its
+     address is only known at build time (VITE_API_ORIGIN), so cleartext is
+     allowed generally rather than for one host. This mirrors the iOS build's
+     NSAllowsArbitraryLoads; tighten it once the server has a TLS address. -->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>
