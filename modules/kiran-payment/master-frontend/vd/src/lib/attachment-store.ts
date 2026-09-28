@@ -32,6 +32,18 @@ export const MAX_ATTACHMENT_BYTES = 15_000_000;
 
 let dbPromise: Promise<IDBDatabase | null> | null = null;
 
+/**
+ * Blobs written since this page loaded. The orphan sweep never deletes these.
+ *
+ * The chat store sweeps five seconds after boot, judging "in use" against the
+ * messages as they stood at boot, so a photo sent in those five seconds was
+ * deleted while its message still referenced it — a broken image after the
+ * next reload. A blob written this session cannot be an orphan left from an
+ * earlier one, which is all the sweep exists to remove; this also closes the
+ * gap where a blob is written just before its message is committed.
+ */
+const writtenThisSession = new Set<string>();
+
 function openDb(): Promise<IDBDatabase | null> {
   if (dbPromise) return dbPromise;
   dbPromise = new Promise<IDBDatabase | null>((resolve) => {
@@ -122,7 +134,10 @@ export async function putAttachmentBlob(id: string, blob: Blob): Promise<boolean
       return;
     }
     transaction.objectStore(STORE).put(record, id);
-    transaction.oncomplete = () => resolve(true);
+    transaction.oncomplete = () => {
+      writtenThisSession.add(id);
+      resolve(true);
+    };
     // QuotaExceededError surfaces on the transaction, not on the put request.
     transaction.onerror = () => resolve(false);
     transaction.onabort = () => resolve(false);
@@ -207,7 +222,7 @@ export async function attachmentStoreSize(): Promise<number> {
  * snapshot that failed to save after the blob was already written.
  */
 export async function collectOrphanBlobs(liveIds: Iterable<string>): Promise<number> {
-  const live = new Set(liveIds);
+  const live = new Set([...liveIds, ...writtenThisSession]);
   const stored = await listAttachmentBlobIds();
   const orphans = stored.filter((id) => !live.has(id));
   for (const id of orphans) await deleteAttachmentBlob(id);
