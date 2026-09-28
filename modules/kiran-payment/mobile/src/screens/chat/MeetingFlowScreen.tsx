@@ -40,6 +40,27 @@ const SLOTS = Array.from({ length: 20 }, (_, index) => {
   return { hour: Math.floor(minutes / 60), minute: minutes % 60 };
 });
 
+type Slot = (typeof SLOTS)[number];
+
+/** When a slot on a given day begins, as a timestamp. */
+function startOf(day: Date, slot: Slot): number {
+  const at = new Date(day);
+  at.setHours(slot.hour, slot.minute, 0, 0);
+  return at.getTime();
+}
+
+/**
+ * The first slot still ahead of now: later today if one is left, otherwise
+ * tomorrow's first. A fixed default (it used to be 10:00 today) is in the past
+ * for most of every working day, and the store rightly refuses a past start —
+ * so the default itself would fail.
+ */
+function firstOpenSlot(now = Date.now()): { day: Date; slot: Slot } {
+  const [today, tomorrow] = upcomingDays(new Date(now));
+  const later = SLOTS.find((slot) => startOf(today!, slot) > now);
+  return later ? { day: today!, slot: later } : { day: tomorrow!, slot: SLOTS[0]! };
+}
+
 const labelFor = (hour: number, minute: number) =>
   `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
 
@@ -54,8 +75,10 @@ export function MeetingFlowScreen() {
   const [step, setStep] = useState<Step>('who');
   const [attendeeIds, setAttendeeIds] = useState<UserId[]>([]);
   const [title, setTitle] = useState('');
-  const [day, setDay] = useState<Date>(() => upcomingDays()[0]!);
-  const [slot, setSlot] = useState(SLOTS[2]!);
+  const [opening] = useState(() => firstOpenSlot());
+  const [day, setDay] = useState<Date>(opening.day);
+  const [slot, setSlot] = useState<Slot>(opening.slot);
+  const [passed, setPassed] = useState(false);
   const [duration, setDuration] = useState<number>(30);
   const [notes, setNotes] = useState('');
   const [busy, setBusy] = useState(false);
@@ -75,11 +98,7 @@ export function MeetingFlowScreen() {
   }
   if (!ready) return <div className="h-full bg-canvas" aria-busy="true" />;
 
-  const startAt = (() => {
-    const at = new Date(day);
-    at.setHours(slot.hour, slot.minute, 0, 0);
-    return at.getTime();
-  })();
+  const startAt = startOf(day, slot);
 
   const index = STEPS.indexOf(step);
   const goBack = () => (index === 0 ? navigate(`/chats/${roomId}`) : setStep(STEPS[index - 1]!));
@@ -92,6 +111,14 @@ export function MeetingFlowScreen() {
     step === 'who' ? attendeeIds.length > 0 : step === 'what' ? title.trim().length > 0 : true;
 
   const confirm = async () => {
+    // The review can sit open long enough for the chosen time to go by. Send
+    // the person back to pick another rather than letting the request fail.
+    if (startAt <= Date.now()) {
+      warn();
+      setPassed(true);
+      setStep('when');
+      return;
+    }
     setBusy(true);
     setFailed(false);
     try {
@@ -105,9 +132,9 @@ export function MeetingFlowScreen() {
         timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       });
 
-      // A null result is a real outcome, not an exception: without Google
-      // credentials the backend cannot create a Meet link. The console says so
-      // rather than pretending, and so does this.
+      // A null result is a real outcome, not an exception. The store has
+      // already said why, in a toast — a member without a calendar address,
+      // the service unreachable — so this does not guess at a reason.
       if (!meeting) {
         warn();
         setFailed(true);
@@ -226,6 +253,14 @@ export function MeetingFlowScreen() {
 
       {step === 'when' && (
         <>
+          {passed && (
+            <p
+              role="alert"
+              className="mx-4 mt-1 rounded-lg bg-strand-amber/10 px-3 py-2 text-[13px] text-strand-amber"
+            >
+              That time has already passed. Pick another.
+            </p>
+          )}
           <div className="no-scrollbar flex gap-2 overflow-x-auto px-4 py-2">
             {upcomingDays().map((candidate) => {
               const picked = candidate.toDateString() === day.toDateString();
@@ -233,9 +268,14 @@ export function MeetingFlowScreen() {
                 <button
                   key={candidate.toISOString()}
                   type="button"
+                  aria-pressed={picked}
                   onClick={() => {
                     tap();
                     setDay(candidate);
+                    if (startOf(candidate, slot) <= Date.now()) {
+                      const open = SLOTS.find((option) => startOf(candidate, option) > Date.now());
+                      if (open) setSlot(open);
+                    }
                   }}
                   className={cn(
                     'flex min-h-[58px] w-[58px] shrink-0 flex-col items-center justify-center rounded-lg border',
@@ -255,19 +295,26 @@ export function MeetingFlowScreen() {
           <div className="grid grid-cols-4 gap-2 px-4 pb-4 pt-1">
             {SLOTS.map((candidate) => {
               const picked = candidate.hour === slot.hour && candidate.minute === slot.minute;
+              // Only ever true today. Shown but unavailable, so the grid keeps
+              // its shape and it is obvious why 09:00 cannot be chosen at 15:10.
+              const gone = startOf(day, candidate) <= Date.now();
               return (
                 <button
                   key={labelFor(candidate.hour, candidate.minute)}
                   type="button"
+                  aria-pressed={picked}
+                  disabled={gone}
                   onClick={() => {
                     tap();
                     setSlot(candidate);
+                    setPassed(false);
                   }}
                   className={cn(
                     'min-h-touch rounded-lg border text-[14px] font-medium',
                     picked
                       ? 'border-brand bg-accent text-brand'
                       : 'border-line bg-surface text-slate-600',
+                    gone && 'border-transparent bg-slate-100 text-slate-300',
                   )}
                 >
                   {labelFor(candidate.hour, candidate.minute)}
@@ -342,8 +389,7 @@ export function MeetingFlowScreen() {
 
           {failed && (
             <p className="mt-3 rounded-lg bg-strand-amber/10 px-3 py-2 text-[13px] leading-snug text-strand-amber">
-              The meeting could not be created. Without Google credentials the backend cannot make a
-              Meet link — the meeting still reaches the console's own calendar.
+              The meeting was not created. The message at the top of the screen says why.
             </p>
           )}
         </div>

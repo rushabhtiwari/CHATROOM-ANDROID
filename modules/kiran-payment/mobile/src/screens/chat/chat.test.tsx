@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { act, fireEvent, screen, waitFor, within } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { useChat } from '@/lib/chat-store';
 import { renderApp, renderAt } from '~/test/render';
 import { MessageBubble } from '~/screens/chat/MessageBubble';
@@ -337,5 +337,66 @@ describe('older history', () => {
     // The reader was at the top of the old page; that message is now 40
     // messages (2400px) down, and so is the reader.
     expect(node.scrollTop).toBe(40 * 60);
+  });
+});
+
+describe('scheduling never offers the past', () => {
+  // Only Date is faked: the chat store's timers must keep running.
+  const at = (iso: string) => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(new Date(iso));
+  };
+  afterEach(() => vi.useRealTimers());
+
+  async function toWhenStep() {
+    await renderApp('/chats/r1/schedule');
+    fireEvent.click(screen.getByRole('button', { name: /Rajat Khanna/ }));
+    fireEvent.click(screen.getByRole('button', { name: 'Continue' }));
+    fireEvent.change(screen.getByRole('textbox', { name: 'Meeting title' }), {
+      target: { value: 'Review' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Continue' }));
+  }
+
+  it("disables today's slots that have already passed", async () => {
+    at('2026-09-28T15:10:00');
+    await toWhenStep();
+    expect(screen.getByRole('button', { name: '09:00' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: '15:00' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: '15:30' })).toBeEnabled();
+  });
+
+  it('starts on the next slot still ahead, not a fixed 10:00', async () => {
+    at('2026-09-28T15:10:00');
+    await toWhenStep();
+    expect(screen.getByRole('button', { name: '15:30' })).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  it('starts on tomorrow when today has no slots left', async () => {
+    at('2026-09-28T19:00:00');
+    await toWhenStep();
+    expect(screen.getByRole('button', { name: '09:00' })).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByRole('button', { name: '09:00' })).toBeEnabled();
+  });
+
+  it('opens every slot again on a later day', async () => {
+    at('2026-09-28T15:10:00');
+    await toWhenStep();
+    const tomorrow = screen.getAllByRole('button', { name: /^\w{3} 29$/ })[0]!;
+    fireEvent.click(tomorrow);
+    expect(screen.getByRole('button', { name: '09:00' })).toBeEnabled();
+  });
+
+  it('refuses to create a meeting whose time passed while the screen sat open', async () => {
+    at('2026-09-28T15:10:00');
+    await toWhenStep();
+    fireEvent.click(screen.getByRole('button', { name: 'Continue' })); // 15:30
+    fireEvent.click(screen.getByRole('button', { name: 'Continue' })); // duration
+    fireEvent.click(screen.getByRole('button', { name: 'Continue' })); // notes
+
+    vi.setSystemTime(new Date('2026-09-28T15:45:00'));
+    fireEvent.click(screen.getByRole('button', { name: /Create and send/ }));
+    expect(await screen.findByText(/has already passed/)).toBeInTheDocument();
+    expect(location()).toBe('/chats/r1/schedule');
   });
 });
