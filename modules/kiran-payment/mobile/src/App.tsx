@@ -29,6 +29,7 @@ import { watchConnectivity } from '~/native/network';
 import { initPush, type Destination } from '~/native/push';
 import { hideSplash } from '~/native/shell';
 import { useBackButtonNavigation } from '~/native/back-button';
+import { STANDALONE } from '~/local/config';
 
 /**
  * Bind the chat store's `online` flag to the device.
@@ -40,6 +41,8 @@ import { useBackButtonNavigation } from '~/native/back-button';
 function useDeviceConnectivity() {
   const { setOnline } = useChat();
   useEffect(() => {
+    // A standalone build keeps chat on the device: losing signal changes nothing.
+    if (STANDALONE) return;
     let dispose: (() => void) | undefined;
     void watchConnectivity(setOnline).then((off) => {
       dispose = off;

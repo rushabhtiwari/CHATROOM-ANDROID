@@ -29,12 +29,27 @@ android {
             keyAlias 'kiranos'
             keyPassword 'android'
         }
+        // A private key that never enters the repo: point KIRANOS_RELEASE_STORE
+        // at a .p12 and set KIRANOS_RELEASE_PASSWORD when building a release.
+        // Without them a release build is left unsigned.
+        release {
+            if (System.getenv('KIRANOS_RELEASE_STORE')) {
+                storeFile file(System.getenv('KIRANOS_RELEASE_STORE'))
+                storeType 'pkcs12'
+                storePassword System.getenv('KIRANOS_RELEASE_PASSWORD')
+                keyAlias System.getenv('KIRANOS_RELEASE_ALIAS') ?: 'kiranos-release'
+                keyPassword System.getenv('KIRANOS_RELEASE_PASSWORD')
+            }
+        }
     }
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
         }
         release {
+            if (System.getenv('KIRANOS_RELEASE_STORE')) {
+                signingConfig signingConfigs.release
+            }
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

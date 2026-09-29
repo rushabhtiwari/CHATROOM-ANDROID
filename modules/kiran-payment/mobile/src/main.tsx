@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { ChatProvider } from '@/lib/chat-store';
+import { createLocalLog } from '@/lib/chat-log';
 import { I18nProvider } from '@/lib/i18n';
 import { RtsProvider } from '@/modules/rts/store';
 import { Toaster } from '@/components/ui/sonner';
@@ -11,6 +12,7 @@ import { initShell } from '~/native/shell';
 import { isNative } from '~/native/platform';
 import { API_ORIGIN } from '~/api/origin';
 import { installServerOrigin } from '~/api/install';
+import { STANDALONE } from '~/local/config';
 import '~/index.css';
 
 /**
@@ -25,15 +27,25 @@ import '~/index.css';
 async function bootstrap() {
   // Before anything can make a request: RtsProvider fetches on mount and opens
   // its event stream, and those must already be pointed at the real server.
-  installServerOrigin(API_ORIGIN);
+  if (!STANDALONE) installServerOrigin(API_ORIGIN);
   await installDurableStorage(isNative);
+  // A standalone build answers those requests itself (src/local). Imported
+  // only now, after the storage swap, so its stores load what was saved.
+  if (STANDALONE) {
+    const { startLocalServer } = await import('~/local');
+    startLocalServer();
+  }
   await initShell();
+
+  // Chat with no server keeps its log on the device, as the console does
+  // offline — without the simulated latency and failures.
+  const chatLog = STANDALONE ? createLocalLog({ failureRate: 0, latency: 0 }) : undefined;
 
   ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
       <BrowserRouter>
         <I18nProvider>
-          <ChatProvider>
+          <ChatProvider log={chatLog}>
             {/* The claim cards posted into conversations read from this. */}
             <RtsProvider>
               <App />

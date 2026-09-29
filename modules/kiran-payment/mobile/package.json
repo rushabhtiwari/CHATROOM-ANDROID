@@ -20,7 +20,8 @@
     "android:run": "cap run android",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx}\"",
-    "check": "tsc --noEmit && prettier --check \"src/**/*.{ts,tsx}\" && vitest run && vite build"
+    "check": "tsc --noEmit && prettier --check \"src/**/*.{ts,tsx}\" && vitest run && vite build",
+    "build:standalone": "node scripts/build-standalone.mjs"
   },
   "dependencies": {
     "@capacitor/app": "^7.0.1",
