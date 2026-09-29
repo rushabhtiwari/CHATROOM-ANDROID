@@ -27,8 +27,11 @@ export function DispatchesScreen() {
     return byStage;
   }, [dispatches]);
 
+  // A closed dispatch has its POD/GRN back: it is done, not in flight.
+  const inFlight = (dispatches ?? []).filter((item) => item.stage !== 'Closed').length;
+
   return (
-    <Screen title="Dispatches" subtitle={dispatches ? `${dispatches.length} in flight` : undefined}>
+    <Screen title="Dispatches" subtitle={dispatches ? `${inFlight} in flight` : undefined}>
       <div className="no-scrollbar flex gap-2 overflow-x-auto border-b border-line bg-surface px-4 py-2">
         {(['all', ...DISPATCH_STAGES] as const).map((key) => (
           <button

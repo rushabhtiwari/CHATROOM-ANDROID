@@ -100,12 +100,8 @@ export function MessageActionsSheet({
       <RoomPickerSheet
         title="Forward to"
         action="Forward"
-        onPick={(roomIds) => {
-          forwardMessage(message.id, roomIds);
-          toast.success(
-            roomIds.length === 1 ? 'Forwarded' : `Forwarded to ${roomIds.length} chats`,
-          );
-        }}
+        // The store confirms with its own "Forwarded" toast.
+        onPick={(roomIds) => forwardMessage(message.id, roomIds)}
         onClose={onClose}
       />
     );
@@ -189,7 +185,9 @@ export function MessageActionsSheet({
           icon={<MessagesSquare className="h-5 w-5" />}
           onClick={() => {
             onClose();
-            navigate(`/chats/${message.roomId}/thread/${message.id}`);
+            navigate(`/chats/${message.roomId}/thread/${message.id}`, {
+              state: { fromConversation: true },
+            });
           }}
         >
           Reply in thread

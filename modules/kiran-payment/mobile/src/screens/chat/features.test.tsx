@@ -151,6 +151,31 @@ describe('group info', () => {
     expect(await screen.findByRole('button', { name: /Unit 3 Build/ })).toBeInTheDocument();
   });
 
+  it('removes a member only after you confirm', async () => {
+    await renderApp('/chats/r1/info');
+    fireEvent.click(await screen.findByRole('button', { name: /Rajat Khanna/ }));
+    fireEvent.click(
+      within(dialog('Rajat Khanna')).getByRole('button', { name: 'Remove from group' }),
+    );
+    // The question comes first; Rajat is still a member.
+    const confirm = dialog('Remove Rajat Khanna?');
+    expect(screen.getByRole('button', { name: /Rajat Khanna/ })).toBeInTheDocument();
+    fireEvent.click(within(confirm).getByRole('button', { name: 'Remove from group' }));
+    await waitFor(() =>
+      expect(screen.queryByRole('button', { name: /Rajat Khanna/ })).not.toBeInTheDocument(),
+    );
+  });
+
+  it('revokes the invite link only after you confirm', async () => {
+    await renderApp('/chats/r2/info');
+    fireEvent.click(await screen.findByRole('button', { name: 'Revoke link' }));
+    expect(screen.getByText('SLS900')).toBeInTheDocument();
+    fireEvent.click(
+      within(dialog('Revoke this invite link?')).getByRole('button', { name: 'Revoke link' }),
+    );
+    await waitFor(() => expect(screen.queryByText('SLS900')).not.toBeInTheDocument());
+  });
+
   it("a direct chat's info is the other person's profile", async () => {
     await renderApp('/chats/d1/info');
     await waitFor(() => expect(location()).toBe('/people/u2'));
@@ -181,6 +206,26 @@ describe('starting conversations', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Create' }));
     expect(await screen.findByRole('heading', { name: 'Launch crew' })).toBeInTheDocument();
     expect(location()).toMatch(/^\/chats\/.+/);
+  });
+
+  it("tells the group's only admin to promote someone before leaving, and stays put", async () => {
+    await renderApp('/chats/new');
+    fireEvent.click(await screen.findByText('New group'));
+    fireEvent.click(screen.getByRole('button', { name: /Ananya Iyer/ }));
+    fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+    fireEvent.change(screen.getByRole('textbox', { name: 'Group name' }), {
+      target: { value: 'Solo admin' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Create' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Conversation info' }));
+    const info = location();
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Leave group' }));
+    expect(dialog('Make someone else an admin first')).toBeInTheDocument();
+    fireEvent.click(
+      within(dialog('Make someone else an admin first')).getByRole('button', { name: 'OK' }),
+    );
+    expect(location()).toBe(info);
   });
 });
 
@@ -219,5 +264,20 @@ describe('scheduling', () => {
     fireEvent.click(within(dialog('Send later')).getByRole('button', { name: /Schedule for/ }));
     expect(await screen.findByText('1 scheduled message')).toBeInTheDocument();
     expect(composer().value).toBe('');
+  });
+});
+
+describe('instant meeting links', () => {
+  it('are not offered in a group, where the store can only refuse them', async () => {
+    await renderApp('/chats/r1');
+    fireEvent.click(await screen.findByRole('button', { name: 'Attach' }));
+    expect(screen.getByRole('button', { name: 'Schedule' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Meet now' })).not.toBeInTheDocument();
+  });
+
+  it('are offered in a one-to-one chat', async () => {
+    await renderApp('/chats/d1');
+    fireEvent.click(await screen.findByRole('button', { name: 'Attach' }));
+    expect(screen.getByRole('button', { name: 'Meet now' })).toBeInTheDocument();
   });
 });

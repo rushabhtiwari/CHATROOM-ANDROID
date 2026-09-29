@@ -1,10 +1,11 @@
 import { useMemo, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Check, Video } from 'lucide-react';
 import { useChat } from '@/lib/chat-store';
 import type { UserId } from '@/lib/chat-types';
 import { cn } from '@/lib/utils';
 import { Empty, Screen } from '~/components/Screen';
+import { useCloseOnBack } from '~/native/back-button';
 import { selection, tap, warn } from '~/native/haptics';
 import { useRouteRoom } from '~/lib/useRouteRoom';
 
@@ -67,6 +68,7 @@ const labelFor = (hour: number, minute: number) =>
 export function MeetingFlowScreen() {
   const { roomId } = useParams<{ roomId: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const { activeRoom, rooms, userById, currentUserId, roomTitle, scheduleMeeting } = useChat();
   // The attendee list is the room's members, so it has to be the URL's room —
   // not whichever room happened to be active when this screen was opened.
@@ -89,6 +91,11 @@ export function MeetingFlowScreen() {
     [activeRoom, currentUserId],
   );
 
+  const index = STEPS.indexOf(step);
+  // Android's back button steps back through the questions, like the arrow
+  // does, rather than dropping every answer; on the first it leaves as usual.
+  useCloseOnBack(() => setStep(STEPS[index - 1]!), index > 0);
+
   if (!roomId || !rooms.some((room) => room.id === roomId)) {
     return (
       <Screen back title="Schedule">
@@ -100,8 +107,14 @@ export function MeetingFlowScreen() {
 
   const startAt = startOf(day, slot);
 
-  const index = STEPS.indexOf(step);
-  const goBack = () => (index === 0 ? navigate(`/chats/${roomId}`) : setStep(STEPS[index - 1]!));
+  // Leaving — done, or backed out of — returns to the conversation and takes
+  // the flow out of history, so back from there does not reopen it. Opened
+  // any other way, the conversation replaces the flow instead.
+  const leave = () =>
+    (location.state as { fromConversation?: boolean } | null)?.fromConversation
+      ? navigate(-1)
+      : navigate(`/chats/${roomId}`, { replace: true });
+  const goBack = () => (index === 0 ? leave() : setStep(STEPS[index - 1]!));
   const advance = () => {
     selection();
     setStep(STEPS[index + 1]!);
@@ -140,7 +153,7 @@ export function MeetingFlowScreen() {
         setFailed(true);
         return;
       }
-      navigate(`/chats/${roomId}`);
+      leave();
     } catch {
       warn();
       setFailed(true);

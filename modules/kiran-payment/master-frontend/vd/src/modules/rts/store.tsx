@@ -8,8 +8,9 @@
 // Navigation is not defined here: KiranOS owns the rail, and these screens are
 // mounted into it like any other module.
  
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
+import { toast } from 'sonner';
 import type {
   Category,
   Employee,
@@ -117,13 +118,15 @@ const PLACEHOLDER_EMPLOYEE: Employee = {
 export function RtsProvider({ children }: { children: ReactNode }): JSX.Element {
   const [snapshot, setSnapshot] = useState<AppSnapshot | null>(null);
   const [connected, setConnected] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const errorTimer = useRef<number | null>(null);
 
+  /*
+   * Errors go to the app's toaster, like every other message. They used to sit
+   * in a box pinned to the bottom of the window and styled with colour tokens
+   * no Tailwind config defines, so it drew as bare text over the page — on the
+   * phone, over the tab bar. One id, so a burst of failures is one toast.
+   */
   const notifyError = useCallback((message: string) => {
-    setError(message);
-    if (errorTimer.current) window.clearTimeout(errorTimer.current);
-    errorTimer.current = window.setTimeout(() => setError(null), 6000);
+    toast.error(message, { id: 'rts-error' });
   }, []);
 
   /** Wraps an action so a server refusal surfaces instead of failing silently. */
@@ -167,7 +170,6 @@ export function RtsProvider({ children }: { children: ReactNode }): JSX.Element 
     return () => {
       alive = false;
       unsubscribe();
-      if (errorTimer.current) window.clearTimeout(errorTimer.current);
     };
   }, [notifyError]);
 
@@ -334,18 +336,7 @@ export function RtsProvider({ children }: { children: ReactNode }): JSX.Element 
   );
 
   return (
-    <AppContext.Provider value={value}>
-      {children}
-      {error && (
-        <div
-          role="status"
-          aria-live="polite"
-          className="fixed bottom-6 left-1/2 z-[100] w-[min(30rem,calc(100vw-2rem))] -translate-x-1/2 border border-st-red-line bg-st-red-bg px-4 py-3 shadow-lg"
-        >
-          <p className="text-body-s font-semibold text-st-red-ink">{error}</p>
-        </div>
-      )}
-    </AppContext.Provider>
+    <AppContext.Provider value={value}>{children}</AppContext.Provider>
   );
 }
 

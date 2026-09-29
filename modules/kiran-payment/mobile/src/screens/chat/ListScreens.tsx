@@ -59,7 +59,7 @@ export function ScheduledScreen() {
       {queued.length === 0 ? (
         <Empty
           title="Nothing scheduled"
-          detail="In a conversation, tap + and choose Schedule to send something later."
+          detail="In a conversation, tap the paperclip and choose Send later."
         />
       ) : (
         <ul className="divide-y divide-line border-y border-line bg-surface">

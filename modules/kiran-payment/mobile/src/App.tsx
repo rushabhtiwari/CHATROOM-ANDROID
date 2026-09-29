@@ -24,9 +24,11 @@ import { DispatchesScreen } from '~/screens/orders/DispatchesScreen';
 import { DispatchDetailScreen } from '~/screens/orders/DispatchDetailScreen';
 import { MeScreen } from '~/screens/MeScreen';
 import { CalendarScreen } from '~/screens/CalendarScreen';
+import { ClaimScreen } from '~/screens/ClaimScreen';
 import { watchConnectivity } from '~/native/network';
 import { initPush, type Destination } from '~/native/push';
 import { hideSplash } from '~/native/shell';
+import { useBackButtonNavigation } from '~/native/back-button';
 
 /**
  * Bind the chat store's `online` flag to the device.
@@ -71,6 +73,7 @@ function usePushRouting() {
 export default function App() {
   useDeviceConnectivity();
   usePushRouting();
+  useBackButtonNavigation(useNavigate());
 
   useEffect(() => {
     hideSplash();
@@ -100,6 +103,8 @@ export default function App() {
         <Route path="/dispatches" element={<DispatchesScreen />} />
         <Route path="/dispatches/:dispatchId" element={<DispatchDetailScreen />} />
         <Route path="/calendar" element={<CalendarScreen />} />
+        {/* Where a claim card's "Open claim" goes; the card is the console's. */}
+        <Route path="/reimbursements/:claimId" element={<ClaimScreen />} />
         <Route path="/me" element={<MeScreen />} />
         <Route path="*" element={<Navigate to="/chats" replace />} />
       </Routes>

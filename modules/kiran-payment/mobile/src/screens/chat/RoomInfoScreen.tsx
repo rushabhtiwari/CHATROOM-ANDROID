@@ -155,7 +155,9 @@ export function RoomInfoScreen() {
   const [inviteOpen, setInviteOpen] = useState(false);
   const [expiry, setExpiry] = useState<number | null>(7 * 86_400_000);
   const [maxUses, setMaxUses] = useState<number | null>(50);
-  const [confirm, setConfirm] = useState<'leave' | null>(null);
+  // Everything here that cannot be undone with one tap asks first.
+  const [confirm, setConfirm] = useState<'leave' | 'revoke' | null>(null);
+  const [removing, setRemoving] = useState<UserId | null>(null);
 
   const shared = useMemo(
     () => sharedContentOf(messages.filter((message) => message.roomId === roomId)),
@@ -176,6 +178,13 @@ export function RoomInfoScreen() {
   }
 
   const admin = isAdmin(room, currentUserId);
+  // The store will not let the last admin leave a group that still has other
+  // members. Knowing that here keeps the person on this screen, where "Make
+  // admin" is, instead of dropping them on the chat list with a toast.
+  const lastAdmin =
+    room.adminIds.length === 1 &&
+    room.adminIds[0] === currentUserId &&
+    room.participantIds.length > 1;
   const member_ = room.participantIds.includes(currentUserId);
   const isGroup = room.type === 'group';
   const level = notificationLevel(room.id);
@@ -370,7 +379,7 @@ export function RoomInfoScreen() {
                 <Copy className="h-4 w-4 text-slate-400" />
               </Row>
               {admin && (
-                <Row onClick={() => revokeInvite(room.id)} className="text-destructive">
+                <Row onClick={() => setConfirm('revoke')} className="text-destructive">
                   <span className="flex-1 text-[15px]">Revoke link</span>
                 </Row>
               )}
@@ -551,8 +560,8 @@ export function RoomInfoScreen() {
               <SheetButton
                 tone="danger"
                 onClick={() => {
-                  removeMember(room.id, selected.id);
                   setMember(null);
+                  setRemoving(selected.id);
                 }}
               >
                 Remove from group
@@ -608,7 +617,19 @@ export function RoomInfoScreen() {
         </Sheet>
       )}
 
-      {confirm === 'leave' && (
+      {confirm === 'leave' && lastAdmin && (
+        <Sheet onClose={() => setConfirm(null)} title="Make someone else an admin first">
+          <p className="px-6 pb-3 text-center text-[13px] text-slate-500">
+            You are the only admin of {roomTitle(room)}. Tap a member and choose Make admin, then
+            you can leave.
+          </p>
+          <SheetButton onClick={() => setConfirm(null)}>
+            <span className="block text-center">OK</span>
+          </SheetButton>
+        </Sheet>
+      )}
+
+      {confirm === 'leave' && !lastAdmin && (
         <ConfirmSheet
           title={`Leave ${roomTitle(room)}?`}
           detail="You will stop getting its messages. Someone will have to add you back."
@@ -618,6 +639,26 @@ export function RoomInfoScreen() {
             navigate('/chats', { replace: true });
           }}
           onClose={() => setConfirm(null)}
+        />
+      )}
+
+      {confirm === 'revoke' && (
+        <ConfirmSheet
+          title="Revoke this invite link?"
+          detail="Anyone who has it can no longer join with it. You can generate a new one."
+          confirm="Revoke link"
+          onConfirm={() => revokeInvite(room.id)}
+          onClose={() => setConfirm(null)}
+        />
+      )}
+
+      {removing && (
+        <ConfirmSheet
+          title={`Remove ${userById(removing).name}?`}
+          detail={`They will stop getting messages from ${roomTitle(room)}. You can add them back later.`}
+          confirm="Remove from group"
+          onConfirm={() => removeMember(room.id, removing)}
+          onClose={() => setRemoving(null)}
         />
       )}
     </Screen>

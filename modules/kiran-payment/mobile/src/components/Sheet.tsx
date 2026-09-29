@@ -1,12 +1,13 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { useCloseOnBack } from '~/native/back-button';
 import { tap } from '~/native/haptics';
 
 /**
  * A bottom sheet: the phone's menu and its small form.
  *
  * Tapping the dimmed backdrop closes it, as it does everywhere on iOS; taps
- * inside do not fall through.
+ * inside do not fall through. Android's back button closes it too.
  */
 export function Sheet({
   onClose,
@@ -19,6 +20,7 @@ export function Sheet({
   children: React.ReactNode;
   label?: string;
 }) {
+  useCloseOnBack(onClose);
   return (
     <div
       className="absolute inset-0 z-40 flex items-end bg-ink/30"

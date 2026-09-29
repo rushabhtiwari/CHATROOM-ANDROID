@@ -2502,9 +2502,13 @@ export function ChatProvider({ children, log: providedLog }: { children: ReactNo
         ],
       });
 
-      toast.success("Meeting scheduled and Calendar invitations sent");
       if (meeting.demo) {
-        toast.info("Google Calendar isn't configured, so this is a demo event.");
+        // Nothing reached Google, so nobody was invited: say only what happened.
+        toast.info(
+          "Meeting scheduled as a demo event. Google Calendar isn't configured, so no invitations were sent.",
+        );
+      } else {
+        toast.success("Meeting scheduled and Calendar invitations sent");
       }
       return meeting;
     },

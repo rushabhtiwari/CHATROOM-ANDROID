@@ -12,6 +12,7 @@ import {
   MessagesSquare,
   Pin,
   Reply,
+  Sparkles,
   UserRound,
 } from 'lucide-react';
 import { useChat } from '@/lib/chat-store';
@@ -205,6 +206,19 @@ export function MessageBubble({
               <Forward className="h-3 w-3" />
               Forwarded from {userById(message.forwardedFrom.senderId).name}
               {forwardedRoom ? ` · ${roomTitle(forwardedRoom)}` : ''}
+            </p>
+          )}
+
+          {/* The console marks these too: the words are the assistant's, not the sender's. */}
+          {message.sharedFromAi && (
+            <p
+              className={cn(
+                'mb-1 flex items-center gap-1 text-[11px] font-semibold',
+                mine ? 'text-white/80' : 'text-ai',
+              )}
+            >
+              <Sparkles className="h-3 w-3" />
+              Shared from AI Agent
             </p>
           )}
 

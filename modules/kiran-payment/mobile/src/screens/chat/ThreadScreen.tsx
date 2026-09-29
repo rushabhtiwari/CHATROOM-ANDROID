@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Bell, BellOff, ChevronLeft } from 'lucide-react';
 import { useChat } from '@/lib/chat-store';
 import type { SharedMessage } from '@/lib/chat-types';
@@ -23,6 +23,7 @@ import { useRouteRoom } from '~/lib/useRouteRoom';
 export function ThreadScreen() {
   const { roomId, rootId } = useParams<{ roomId: string; rootId: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const { messageById, threadReplies, threadParticipants, isFollowingThread, toggleFollowThread } =
     useChat();
 
@@ -59,7 +60,15 @@ export function ThreadScreen() {
             type="button"
             onClick={() => {
               tap();
-              navigate(`/chats/${roomId}`);
+              // Opened from its conversation: step back to it, so Android's
+              // back button does not bring the thread up again afterwards.
+              // Opened from anywhere else — Saved, search — the conversation
+              // takes the thread's place in history instead of piling on it.
+              if ((location.state as { fromConversation?: boolean } | null)?.fromConversation) {
+                navigate(-1);
+              } else {
+                navigate(`/chats/${roomId}`, { replace: true });
+              }
             }}
             aria-label="Back to conversation"
             className="-ml-1 flex h-11 w-11 items-center justify-center rounded-lg text-brand active:bg-slate-100"

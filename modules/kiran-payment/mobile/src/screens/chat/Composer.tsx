@@ -21,6 +21,7 @@ import { pickPhoto } from '~/native/camera';
 import { isNative } from '~/native/platform';
 import { selection, tap } from '~/native/haptics';
 import { previewText } from '~/lib/text';
+import { decodeMentions, encodeMentions, mentionLabel, type MentionMap } from '~/lib/mention-text';
 import { Sheet, SheetButton } from '~/components/Sheet';
 import { ClaimComposer } from '@/components/chat/ClaimComposer';
 import { upcomingTime } from '~/lib/format';
@@ -99,10 +100,12 @@ export function Composer({
   const [scheduling, setScheduling] = useState<string | null>(null);
   const [claiming, setClaiming] = useState(false);
   const textarea = useRef<HTMLTextAreaElement>(null);
+  // The box shows "@Imran Shaikh"; this remembers that it stands for `<@u5>`.
+  const picked = useRef<MentionMap>(new Map());
 
   useEffect(() => {
     if (!seed) return;
-    setText(seed.text);
+    setText(decodeMentions(seed.text, users, userGroups, picked.current));
     requestAnimationFrame(() => textarea.current?.focus());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [seed?.nonce]);
@@ -116,13 +119,23 @@ export function Composer({
     if (!storageReady || loadedFor.current === scope) return;
     loadedFor.current = scope;
     const draft = getDraft(roomId, threadRootId);
-    if (draft?.text && !seed) setText(draft.text);
+    if (draft?.text && !seed)
+      setText(decodeMentions(draft.text, users, userGroups, picked.current));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [storageReady, scope]);
   useEffect(() => {
     if (loadedFor.current !== scope) return;
     const timer = setTimeout(
-      () => saveDraft(roomId, { text, replyToId: replyTo?.id ?? null, threadRootId }, threadRootId),
+      () =>
+        saveDraft(
+          roomId,
+          {
+            text: encodeMentions(text, picked.current),
+            replyToId: replyTo?.id ?? null,
+            threadRootId,
+          },
+          threadRootId,
+        ),
       400,
     );
     return () => clearTimeout(timer);
@@ -180,14 +193,16 @@ export function Composer({
     if (!mentions) return;
     const node = textarea.current;
     const caret = node?.selectionStart ?? text.length;
-    const next = `${text.slice(0, mentions.start)}${candidate.token} ${text.slice(caret)}`;
+    const label = mentionLabel(candidate);
+    if (label !== candidate.token) picked.current.set(label, candidate.token);
+    const next = `${text.slice(0, mentions.start)}${label} ${text.slice(caret)}`;
     setText(next);
     setMentions(null);
     selection();
 
-    // Put the caret after the inserted token rather than at the end, so a
+    // Put the caret after the inserted name rather than at the end, so a
     // mention typed mid-sentence does not send the writer back to the tail.
-    const position = mentions.start + candidate.token.length + 1;
+    const position = mentions.start + label.length + 1;
     requestAnimationFrame(() => {
       node?.focus();
       node?.setSelectionRange(position, position);
@@ -206,7 +221,7 @@ export function Composer({
         onAskAgent?.();
         await askAgent(roomId, body.replace(/^@agent\s*/, ''));
       } else {
-        sendMessage(roomId, body, {
+        sendMessage(roomId, encodeMentions(body, picked.current), {
           replyToId: (replyTo?.id as MessageId) ?? null,
           threadRootId,
         });
@@ -256,9 +271,10 @@ export function Composer({
                 role="option"
                 aria-selected={false}
                 // Taking focus would blur the textarea, and the blur handler
-                // clears this list — the click would land on nothing.
+                // clears this list — the click would land on nothing. A tap
+                // moves focus on its emulated mousedown, so this covers touch
+                // too; React's touch listeners are passive and cannot cancel.
                 onMouseDown={(event) => event.preventDefault()}
-                onTouchStart={(event) => event.preventDefault()}
                 onClick={() => applyMention(candidate)}
                 className="flex min-h-touch w-full items-center gap-2.5 px-3 py-2 text-left active:bg-slate-100"
               >
@@ -324,20 +340,26 @@ export function Composer({
                 docInput.current?.click();
               },
             },
-            {
-              label: 'Meet now',
-              icon: Video,
-              run: async () => {
-                setAttachOpen(false);
-                await createMeeting(roomId);
-              },
-            },
+            // Instant links are for one-to-one chats; in a group the store
+            // only refuses. The console offers it on the same terms.
+            ...(activeRoom.type === 'direct' && !threadRootId
+              ? [
+                  {
+                    label: 'Meet now',
+                    icon: Video,
+                    run: async () => {
+                      setAttachOpen(false);
+                      await createMeeting(roomId);
+                    },
+                  },
+                ]
+              : []),
             {
               label: 'Schedule',
               icon: CalendarClock,
               run: () => {
                 setAttachOpen(false);
-                navigate(`/chats/${roomId}/schedule`);
+                navigate(`/chats/${roomId}/schedule`, { state: { fromConversation: true } });
               },
             },
             ...(threadRootId
@@ -486,7 +508,7 @@ export function Composer({
             disabled={!text.trim() || !scheduling || new Date(scheduling).getTime() <= Date.now()}
             onClick={() => {
               const sendAt = new Date(scheduling!).getTime();
-              scheduleMessage(roomId, text.trim(), sendAt);
+              scheduleMessage(roomId, encodeMentions(text.trim(), picked.current), sendAt);
               setText('');
               clearDraft(roomId, threadRootId);
               setScheduling(null);

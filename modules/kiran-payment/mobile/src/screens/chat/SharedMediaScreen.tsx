@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ExternalLink, FileText, Forward, Link2, MessageSquare, X } from 'lucide-react';
 import { toServerUrl } from '~/api/origin';
-import { toast } from 'sonner';
 import { useChat } from '@/lib/chat-store';
 import type { SharedMessage } from '@/lib/chat-types';
 import { sharedContentOf } from '@/lib/shared-content';
@@ -12,6 +11,7 @@ import { Empty, Screen } from '~/components/Screen';
 import { RoomPickerSheet } from '~/components/Pickers';
 import { useOpenMessage } from '~/components/MessageList';
 import { formatBytes, relativeTime } from '~/lib/format';
+import { useCloseOnBack } from '~/native/back-button';
 import { selection } from '~/native/haptics';
 
 type Tab = 'media' | 'docs' | 'links';
@@ -22,6 +22,7 @@ export function PhotoViewer({ message, onClose }: { message: SharedMessage; onCl
   const open = useOpenMessage();
   const [forwarding, setForwarding] = useState(false);
   const attachment = message.attachment!;
+  useCloseOnBack(onClose);
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-black" role="dialog" aria-label="Photo">
@@ -69,10 +70,8 @@ export function PhotoViewer({ message, onClose }: { message: SharedMessage; onCl
         <RoomPickerSheet
           title="Forward photo"
           action="Forward"
-          onPick={(roomIds) => {
-            forwardMessage(message.id, roomIds);
-            toast.success('Forwarded');
-          }}
+          // The store confirms with its own "Forwarded" toast.
+          onPick={(roomIds) => forwardMessage(message.id, roomIds)}
           onClose={() => setForwarding(false)}
         />
       )}

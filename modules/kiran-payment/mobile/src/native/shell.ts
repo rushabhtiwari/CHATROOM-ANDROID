@@ -1,12 +1,14 @@
 /**
  * The native chrome around the web view.
  *
- * Status bar, keyboard behaviour and the splash screen. All of it is a no-op
- * on the web; none of it is worth a conditional at the call site.
+ * Status bar, keyboard behaviour, the splash screen and Android's back button.
+ * All of it is a no-op on the web; none of it is worth a conditional at the
+ * call site.
  */
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { Keyboard, KeyboardResize } from '@capacitor/keyboard';
 import { SplashScreen } from '@capacitor/splash-screen';
+import { initBackButton } from './back-button';
 import { isNative, isIOS, isAndroid } from './platform';
 
 export async function initShell(): Promise<void> {
@@ -20,6 +22,7 @@ export async function initShell(): Promise<void> {
     // the shared plugin config, which iOS reads too.
     await StatusBar.setOverlaysWebView({ overlay: false });
     await StatusBar.setBackgroundColor({ color: '#F7F7F9' });
+    initBackButton();
   }
 
   // Dark glyphs on the app's light surfaces.

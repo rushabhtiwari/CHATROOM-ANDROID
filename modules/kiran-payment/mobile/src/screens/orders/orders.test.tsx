@@ -64,9 +64,11 @@ describe('orders', () => {
 });
 
 describe('dispatches', () => {
-  it('lists every dispatch and counts them', async () => {
+  it('lists every dispatch, and counts the ones not yet closed as in flight', async () => {
     await renderApp('/dispatches');
-    expect(await screen.findByText(`${mockDispatches.length} in flight`)).toBeInTheDocument();
+    const open = mockDispatches.filter((d) => d.stage !== 'Closed');
+    expect(open.length).toBeLessThan(mockDispatches.length); // the mock has a closed one
+    expect(await screen.findByText(`${open.length} in flight`)).toBeInTheDocument();
     for (const dispatch of mockDispatches) {
       expect(screen.getByText(new RegExp(dispatch.dispatchNumber))).toBeInTheDocument();
     }

@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { useChat } from '@/lib/chat-store';
 import { renderApp, renderAt } from '~/test/render';
 import { MessageBubble } from '~/screens/chat/MessageBubble';
+import { handleBack } from '~/native/back-button';
 
 const location = () => screen.getByTestId('location').textContent;
 const composer = () => screen.getByRole('textbox', { name: 'Message' }) as HTMLTextAreaElement;
@@ -70,7 +71,7 @@ describe('conversation', () => {
     expect(screen.getByRole('button', { name: 'Send' })).toBeDisabled();
   });
 
-  it('offers mentions from the room and inserts the token', async () => {
+  it('offers mentions from the room, shows the name, and sends the token', async () => {
     await renderApp('/chats/r1');
     const box = composer();
     fireEvent.change(box, { target: { value: '@raj', selectionStart: 4 } });
@@ -81,8 +82,16 @@ describe('conversation', () => {
     const option = within(list).getByRole('option', { name: /Rajat Khanna/ });
     fireEvent.click(option);
 
-    expect(composer().value).toMatch(/^<@[\w-]+> $/);
+    // The writer reads a name, never the stored `<@u…>` encoding.
+    expect(composer().value).toBe('@Rajat Khanna ');
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+
+    fireEvent.change(composer(), { target: { value: '@Rajat Khanna can you check?' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Send' }));
+    // Sent as the token, so it renders as a mention of its own — typed text
+    // would sit inside the paragraph instead.
+    const sent = await screen.findByText(/can you check\?/);
+    expect(within(sent).getByText('@Rajat Khanna').tagName).toBe('SPAN');
   });
 
   it('only offers people who are in the room', async () => {
@@ -161,6 +170,31 @@ describe('claim card in a message', () => {
   });
 });
 
+describe('a reply shared from the assistant', () => {
+  /** A seeded message, marked the way "Share to Chat" marks one. */
+  function SharedFromAi() {
+    const { channelMessages, setActiveRoom } = useChat();
+    useEffect(() => {
+      setActiveRoom('r1');
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+    const base = channelMessages[channelMessages.length - 1];
+    return base ? (
+      <MessageBubble
+        message={{ ...base, sharedFromAi: true }}
+        showSender
+        onReply={() => {}}
+        onReact={() => {}}
+      />
+    ) : null;
+  }
+
+  it("says the words are the assistant's, as the console does", async () => {
+    renderAt(<SharedFromAi />, { route: '/' });
+    expect(await screen.findByText('Shared from AI Agent')).toBeInTheDocument();
+  });
+});
+
 describe('scheduling a meeting', () => {
   it('will not continue until someone is picked', async () => {
     await renderApp('/chats/r1/schedule');
@@ -199,6 +233,26 @@ describe('scheduling a meeting', () => {
     expect(screen.getByText('Battenfeld decision')).toBeInTheDocument();
     expect(screen.getByText('45 min')).toBeInTheDocument();
     expect(screen.getByText('Rajat Khanna')).toBeInTheDocument();
+  });
+
+  it("steps back a question on Android's back button, keeping the answers", async () => {
+    await renderApp('/chats/r1/schedule');
+    fireEvent.click(screen.getByRole('button', { name: /Rajat Khanna/ }));
+    fireEvent.click(screen.getByRole('button', { name: 'Continue' }));
+    expect(screen.getByRole('heading', { name: 'What is it about?' })).toBeInTheDocument();
+
+    act(() => {
+      expect(handleBack(true)).toBe('closed');
+    });
+    expect(screen.getByRole('heading', { name: 'Who should be there?' })).toBeInTheDocument();
+    expect(screen.getByText('1 selected')).toBeInTheDocument();
+    expect(location()).toBe('/chats/r1/schedule');
+  });
+
+  it('backs out of the first question to the conversation', async () => {
+    await renderApp('/chats/r1/schedule');
+    fireEvent.click(screen.getByRole('button', { name: 'Back' }));
+    expect(location()).toBe('/chats/r1');
   });
 
   it('lets any answer be edited from the review', async () => {

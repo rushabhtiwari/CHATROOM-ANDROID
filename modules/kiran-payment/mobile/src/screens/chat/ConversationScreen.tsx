@@ -246,7 +246,11 @@ export function ConversationScreen() {
                     highlighted={highlighted === message.id}
                     onReply={setReplyTo}
                     onReact={setActing}
-                    onOpenThread={(target) => navigate(`/chats/${roomId}/thread/${target.id}`)}
+                    onOpenThread={(target) =>
+                      navigate(`/chats/${roomId}/thread/${target.id}`, {
+                        state: { fromConversation: true },
+                      })
+                    }
                   />
                 );
               })

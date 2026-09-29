@@ -5,6 +5,7 @@ import { AgentMessage } from '@/components/chat/AgentMessage';
 import { cn } from '@/lib/utils';
 import { Empty } from '~/components/Screen';
 import { useStickToBottom } from '~/lib/useStickToBottom';
+import { useCloseOnBack } from '~/native/back-button';
 import { selection, tap } from '~/native/haptics';
 
 /**
@@ -44,6 +45,8 @@ export function AgentSheet({
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [onClose]);
+  // And Android's back button, which every Android user reaches for first.
+  useCloseOnBack(onClose);
 
   const ask = async () => {
     const question = prompt.trim();
