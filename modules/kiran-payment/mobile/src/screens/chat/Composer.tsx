@@ -17,7 +17,7 @@ import { useChat } from '@/lib/chat-store';
 import type { MessageId, SharedMessage } from '@/lib/chat-types';
 import { activeMentionQuery, mentionCandidates, type MentionCandidate } from '@/lib/mentions';
 import { cn } from '@/lib/utils';
-import { pickPhoto } from '~/native/camera';
+import { pickPhoto, takeReceiptPhoto } from '~/native/camera';
 import { isNative } from '~/native/platform';
 import { selection, tap } from '~/native/haptics';
 import { previewText } from '~/lib/text';
@@ -464,13 +464,15 @@ export function Composer({
       />
 
       {claiming && (
-        // The console's claim form, unchanged: photograph or pick the receipt,
-        // let the assistant read it, correct the fields, file. The claim is
-        // created by the finance API and posted here as a live card.
+        // The console's claim form: photograph the receipt (read as soon as it
+        // is taken) or pick one, let the assistant read it, correct the
+        // fields, file. The claim is created by the finance API and posted
+        // here as a live card.
         <Sheet onClose={() => setClaiming(false)} label="Reimbursement claim">
           <div className="p-3">
             <ClaimComposer
               onClose={() => setClaiming(false)}
+              onTakePhoto={takeReceiptPhoto}
               onFiled={(claimId, reviewerName) => {
                 setClaiming(false);
                 sendMessage(roomId, `Filed a reimbursement claim for ${reviewerName} to review.`, {

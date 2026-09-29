@@ -73,9 +73,39 @@ so screens never have to guard a call:
 - `network.ts` — binds the chat store's `online` flag to the radio, so the
   outbox and retry queue are real rather than simulated.
 - `camera.ts` — returns a `File`, so `sendAttachment` never learns a camera was
-  involved.
+  involved, and the claim form reads a receipt the moment it is photographed.
 - `push.ts` — APNs registration and notification routing.
 - `haptics.ts`, `shell.ts` — feedback, status bar, keyboard, splash.
+
+## Calls
+
+One-to-one voice and video calls, as a phone's own calls work. In `src/calls/`:
+
+- `engine.ts` — one phone's side of a call: ringing, answering, WebRTC,
+  mute, camera, finding the way back after a network drop. The audio and
+  video go straight between the two phones; the server only introduces them
+  (`backend/app/routers/calls.py`) and keeps both people's call lists.
+- `CallProvider.tsx` — listens for calls to whoever is signed in, on every
+  screen, and plays the ringtone and the ringback.
+- `CallScreen.tsx` and `screens/CallsScreen.tsx` — the call itself, and the
+  Calls tab with its missed-call badge.
+
+On Android, `CallsPlugin.java` picks the earpiece or the loudspeaker, turns
+the screen off against your ear, and rings from the notification shade while
+the app is in the background. It also starts `CallService`: without it,
+Android silences the microphone of an app that leaves the screen mid-call.
+
+What calls need, and what they do not do yet:
+
+- Both phones must reach the server; the call itself then goes phone to
+  phone. On one office network that just works. Across networks that block
+  direct connections, add a TURN server to `CALL_ICE_SERVERS` on the server.
+- A standalone build has no server, so it has no calls, and shows neither the
+  buttons nor the Calls tab.
+- A phone rings while the app is open or in the background. Once Android has
+  stopped the app, the call is recorded as missed: ringing a stopped app needs
+  push notifications (the `GOOGLE_SERVICES_JSON` secret).
+- One to one only: a group conversation offers no call.
 
 ## Tests
 

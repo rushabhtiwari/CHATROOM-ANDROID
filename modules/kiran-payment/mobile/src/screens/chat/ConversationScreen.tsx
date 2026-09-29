@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { AtSign, CalendarClock, ChevronLeft, Pin, Sparkles } from 'lucide-react';
+import { AtSign, CalendarClock, ChevronLeft, Phone, Pin, Sparkles, Video } from 'lucide-react';
 import { useChat } from '@/lib/chat-store';
 import type { SharedMessage } from '@/lib/chat-types';
 import { MessageBubble } from '~/screens/chat/MessageBubble';
@@ -13,6 +13,7 @@ import { tap } from '~/native/haptics';
 import { previewText } from '~/lib/text';
 import { useStickToBottom } from '~/lib/useStickToBottom';
 import { useRouteRoom } from '~/lib/useRouteRoom';
+import { useCalls } from '~/calls/CallProvider';
 
 /**
  * Scroll to the message the store was asked to jump to, and flash it.
@@ -68,6 +69,7 @@ export function ConversationScreen() {
     markRoomNotificationsRead,
   } = useChat();
 
+  const calls = useCalls();
   const [replyTo, setReplyTo] = useState<SharedMessage | null>(null);
   const [acting, setActing] = useState<SharedMessage | null>(null);
   const [agentOpen, setAgentOpen] = useState(false);
@@ -122,6 +124,11 @@ export function ConversationScreen() {
   const scheduled = scheduledMessages(roomId);
   const mentionId = firstUnreadMentionId(roomId);
   const isGroupish = room.type !== 'direct';
+  // Calls are one to one, so only a direct conversation offers them.
+  const callPeer =
+    calls.enabled && room.type === 'direct'
+      ? room.participantIds.find((id) => id !== currentUserId)
+      : undefined;
   const openInfo = (event: React.MouseEvent) => {
     event.stopPropagation();
     tap();
@@ -166,6 +173,32 @@ export function ConversationScreen() {
               {subtitle && <p className="truncate text-[12px] text-slate-500">{subtitle}</p>}
             </div>
           </div>
+          {callPeer && (
+            <>
+              <button
+                type="button"
+                onClick={() => {
+                  tap();
+                  calls.start(callPeer, 'video', roomId);
+                }}
+                aria-label="Video call"
+                className="flex h-11 w-10 items-center justify-center rounded-lg text-brand active:bg-slate-100"
+              >
+                <Video className="h-5 w-5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  tap();
+                  calls.start(callPeer, 'audio', roomId);
+                }}
+                aria-label="Voice call"
+                className="flex h-11 w-10 items-center justify-center rounded-lg text-brand active:bg-slate-100"
+              >
+                <Phone className="h-5 w-5" />
+              </button>
+            </>
+          )}
           <button
             type="button"
             onClick={() => {

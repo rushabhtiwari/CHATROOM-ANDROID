@@ -30,6 +30,7 @@ Copy `.env.example` to `.env`.
 | `RTS_EXTRACTION_MODEL` | `claude-haiku-4-5` | Model used to read receipts. Handles images and PDFs natively. |
 | `RTS_PORT` | `3001` | The port Vite proxies to. |
 | `RTS_ENFORCE_BUDGET` | `false` | When true, Accounts approval is refused if the department has no headroom. Off by default so a long demo cannot dead-end; the shortfall is reported either way. |
+| `CALL_ICE_SERVERS` | Google's public STUN server | How two phones on a call find a way to each other: a JSON list of WebRTC ICE servers. Enough as it is on one office network; add a TURN server for calls between networks that block direct connections. |
 
 The key is read server-side only and never reaches the browser bundle.
 
@@ -80,6 +81,9 @@ the top of that file.
 | `POST` | `/api/employees/{id}/verify-bank` | Mark a bank record verified. |
 | `GET` | `/api/receipt-context/{utr}` | Everything the standalone receipt page needs. |
 | `POST` | `/api/demo/reset` | Restore the seed so the demo can be run again. |
+| `GET` | `/api/calls/events` | SSE stream of call signals for one person's phone (`user`, `device`). |
+| `POST` | `/api/calls/signal` | Relay one call signal — invitation, answer, network candidates, hang-up. The audio and video never pass through the server. |
+| `GET` | `/api/calls/history` | One person's calls, newest first (`user`). |
 
 ## Resetting
 

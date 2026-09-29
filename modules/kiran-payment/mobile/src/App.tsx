@@ -25,6 +25,8 @@ import { DispatchDetailScreen } from '~/screens/orders/DispatchDetailScreen';
 import { MeScreen } from '~/screens/MeScreen';
 import { CalendarScreen } from '~/screens/CalendarScreen';
 import { ClaimScreen } from '~/screens/ClaimScreen';
+import { CallsScreen } from '~/screens/CallsScreen';
+import { CallScreen } from '~/calls/CallScreen';
 import { watchConnectivity } from '~/native/network';
 import { initPush, type Destination } from '~/native/push';
 import { hideSplash } from '~/native/shell';
@@ -101,6 +103,7 @@ export default function App() {
         <Route path="/chats/:roomId" element={<ConversationScreen />} />
         <Route path="/chats/:roomId/schedule" element={<MeetingFlowScreen />} />
         <Route path="/chats/:roomId/thread/:rootId" element={<ThreadScreen />} />
+        <Route path="/calls" element={<CallsScreen />} />
         <Route path="/orders" element={<OrdersScreen />} />
         <Route path="/orders/:orderId" element={<OrderDetailScreen />} />
         <Route path="/dispatches" element={<DispatchesScreen />} />
@@ -112,6 +115,8 @@ export default function App() {
         <Route path="*" element={<Navigate to="/chats" replace />} />
       </Routes>
       <TabBar />
+      {/* Over everything else: a call carries on whichever screen is open. */}
+      <CallScreen />
     </div>
   );
 }

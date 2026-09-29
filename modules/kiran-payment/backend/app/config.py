@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 from pathlib import Path
 
@@ -28,6 +29,34 @@ CHAT_UPLOAD_DIR = UPLOAD_DIR / "chat"
 CHAT_UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 # Matches the console's own ceiling on a single attachment.
 MAX_CHAT_ATTACHMENT_BYTES = 15_000_000
+
+# Calls. The two phones on a call send each other audio and video directly;
+# the server only introduces them (routers/calls.py) and keeps the call list.
+CALLS_FILE = DATA_DIR / "calls.json"
+
+
+def _ice_servers(raw: str) -> list[dict]:
+    """The servers that help a phone find a network path to the other one.
+
+    A JSON list of WebRTC RTCIceServer entries. Google's public STUN server is
+    enough on one office network. Calls between networks that block direct
+    connections also need a TURN server, e.g.
+    CALL_ICE_SERVERS=[{"urls":"turn:turn.example.com:3478","username":"u","credential":"p"}]
+    """
+    default = [{"urls": "stun:stun.l.google.com:19302"}]
+    if not raw.strip():
+        return default
+    try:
+        servers = json.loads(raw)
+    except ValueError:
+        servers = None
+    if not isinstance(servers, list):
+        print("CALL_ICE_SERVERS is not a JSON list; using the default STUN server.")
+        return default
+    return servers
+
+
+CALL_ICE_SERVERS = _ice_servers(os.getenv("CALL_ICE_SERVERS", ""))
 
 PORT = int(os.getenv("RTS_PORT", "3001"))
 

@@ -20,6 +20,7 @@
 import React, { useMemo, useRef, useState } from 'react';
 import {
   AlertTriangle,
+  Camera,
   Check,
   FileText,
   Loader2,
@@ -43,13 +44,26 @@ type Phase = 'pick' | 'reading' | 'confirm' | 'filing';
 
 const MAX_FILES = 5;
 
+/**
+ * The model found no receipt at all — a photo of something else, or one too
+ * blurred to read: no amount, and no confidence in anything it returned.
+ */
+const foundNothing = (reading: Extraction) =>
+  !(Number(reading.amount) > 0) && !(Number(reading.overallConfidence) > 0);
+
 export interface ClaimComposerProps {
   onClose: () => void;
   /** Called with the new claim's id once the server has created it. */
   onFiled: (claimId: string, reviewerName: string) => void;
+  /**
+   * Photograph the receipt; resolves to null when the person backs out. Given
+   * by the phone app, which has a camera — the photo is read the moment it is
+   * taken. Without it the form offers files only, as the console always has.
+   */
+  onTakePhoto?: () => Promise<File | null>;
 }
 
-export const ClaimComposer: React.FC<ClaimComposerProps> = ({ onClose, onFiled }) => {
+export const ClaimComposer: React.FC<ClaimComposerProps> = ({ onClose, onFiled, onTakePhoto }) => {
   const { activeRoom, currentUser, currentUserId, userById } = useChat();
   const { currentEmployee, employees, createRequest } = useRts();
 
@@ -87,20 +101,22 @@ export const ClaimComposer: React.FC<ClaimComposerProps> = ({ onClose, onFiled }
     setError(null);
   };
 
-  const read = async () => {
-    if (files.length === 0) return;
+  const read = async (receipts: File[] = files) => {
+    if (receipts.length === 0) return;
     setPhase('reading');
     setError(null);
     try {
-      const result = await extractReceipts(files);
+      const result = await extractReceipts(receipts);
       setUploaded(result.receipts);
       setExtraction(result.extraction);
-      setTitle(result.extraction.title ?? '');
-      setCategory((result.extraction.category as Category) ?? 'OTHER');
+      // Nothing found means no receipt; anything else it offers is a guess.
+      const found = !foundNothing(result.extraction);
+      setTitle(found ? (result.extraction.title ?? '') : '');
+      setCategory(found ? ((result.extraction.category as Category) ?? 'OTHER') : 'OTHER');
       setAmount(
-        Number.isFinite(result.extraction.amount) ? String(result.extraction.amount) : '',
+        found && Number.isFinite(result.extraction.amount) ? String(result.extraction.amount) : '',
       );
-      setJustification(result.extraction.justification ?? '');
+      setJustification(found ? (result.extraction.justification ?? '') : '');
       setPhase('confirm');
     } catch (cause) {
       // Reading is an accelerator, never a gate: if it fails, the claim can
@@ -112,6 +128,25 @@ export const ClaimComposer: React.FC<ClaimComposerProps> = ({ onClose, onFiled }
       );
       setPhase('confirm');
     }
+  };
+
+  /** A photo taken now is the receipt in hand: read it straight away. */
+  const takePhoto = async () => {
+    if (!onTakePhoto) return;
+    const photo = await onTakePhoto().catch(() => null);
+    if (!photo) return;
+    const receipts = [...files, photo].slice(0, MAX_FILES);
+    setFiles(receipts);
+    await read(receipts);
+  };
+
+  /** The photo showed no receipt, or too blurred a one: replace it. */
+  const retake = async () => {
+    if (!onTakePhoto) return;
+    const photo = await onTakePhoto().catch(() => null);
+    if (!photo) return;
+    setFiles([photo]);
+    await read([photo]);
   };
 
   const file = async () => {
@@ -147,8 +182,13 @@ export const ClaimComposer: React.FC<ClaimComposerProps> = ({ onClose, onFiled }
 
   /* ------------------------------- rendering ------------------------------ */
 
+  // Not a receipt, or not a legible one: there is then no reading to agree or
+  // disagree with.
+  const nothingRead = extraction !== null && foundNothing(extraction);
+
   const changedFromReading =
     extraction !== null &&
+    !nothingRead &&
     (Number(amount) !== extraction.amount ||
       title.trim() !== (extraction.title ?? '').trim() ||
       category !== extraction.category);
@@ -176,6 +216,15 @@ export const ClaimComposer: React.FC<ClaimComposerProps> = ({ onClose, onFiled }
       {/* ------------------------------ pick ------------------------------ */}
       {phase === 'pick' && (
         <div className="p-3">
+          {onTakePhoto && files.length < MAX_FILES && (
+            <button
+              type="button"
+              onClick={takePhoto}
+              className="mb-2 flex w-full items-center justify-center gap-2 rounded-md bg-kiran px-3 py-2.5 text-[13px] font-semibold text-white shadow-xs transition-colors hover:bg-kiran-600"
+            >
+              <Camera className="h-4 w-4" /> Take a photo of the receipt
+            </button>
+          )}
           <div
             onDragOver={(event) => {
               event.preventDefault();
@@ -256,7 +305,7 @@ export const ClaimComposer: React.FC<ClaimComposerProps> = ({ onClose, onFiled }
             </button>
             <button
               type="button"
-              onClick={read}
+              onClick={() => read()}
               disabled={files.length === 0}
               className="inline-flex items-center gap-1.5 rounded-md bg-kiran px-3 py-1.5 text-[12px] font-semibold text-white shadow-xs transition-colors hover:bg-kiran-600 disabled:opacity-40"
             >
@@ -282,12 +331,32 @@ export const ClaimComposer: React.FC<ClaimComposerProps> = ({ onClose, onFiled }
       {/* ------------------------ confirm and file ------------------------ */}
       {(phase === 'confirm' || phase === 'filing') && (
         <div className="space-y-2.5 p-3">
-          {extraction && (
+          {extraction && !nothingRead && (
             <div className="flex items-start gap-2 rounded-md border border-ai/20 bg-ai-tint px-2.5 py-2">
               <Sparkles className="mt-px h-3 w-3 shrink-0 text-ai" />
               <p className="text-[12px] leading-relaxed text-ai">
                 This is what the receipt says. Correct anything that is wrong — your version is
                 what gets filed.
+              </p>
+            </div>
+          )}
+
+          {nothingRead && (
+            <div className="flex items-start gap-2 rounded-md bg-strand-amber/10 px-2.5 py-2">
+              <AlertTriangle className="mt-px h-3 w-3 shrink-0 text-strand-amber" />
+              <p className="text-[12px] leading-relaxed text-strand-amber">
+                No receipt could be read{extraction?.notes ? `: ${extraction.notes}` : '.'}{' '}
+                {onTakePhoto ? (
+                  <button
+                    type="button"
+                    onClick={retake}
+                    className="font-semibold underline underline-offset-2"
+                  >
+                    Take another photo
+                  </button>
+                ) : (
+                  'Enter the details yourself.'
+                )}
               </p>
             </div>
           )}

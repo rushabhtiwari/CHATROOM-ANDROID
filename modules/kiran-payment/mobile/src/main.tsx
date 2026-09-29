@@ -7,6 +7,7 @@ import { I18nProvider } from '@/lib/i18n';
 import { RtsProvider } from '@/modules/rts/store';
 import { Toaster } from '@/components/ui/sonner';
 import App from '~/App';
+import { CallProvider } from '~/calls/CallProvider';
 import { installDurableStorage } from '~/native/storage';
 import { initShell } from '~/native/shell';
 import { isNative } from '~/native/platform';
@@ -48,8 +49,11 @@ async function bootstrap() {
           <ChatProvider log={chatLog}>
             {/* The claim cards posted into conversations read from this. */}
             <RtsProvider>
-              <App />
-              <Toaster position="top-center" closeButton />
+              {/* Listens for calls to whoever is signed in, on every screen. */}
+              <CallProvider>
+                <App />
+                <Toaster position="top-center" closeButton />
+              </CallProvider>
             </RtsProvider>
           </ChatProvider>
         </I18nProvider>

@@ -62,6 +62,8 @@
 	<string>Connect to the KiranOS server on your office network.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Take a photo to send in a conversation or to attach a receipt to a claim.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Talk on voice and video calls with your colleagues.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Attach a photo from your library to a conversation or a claim.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>

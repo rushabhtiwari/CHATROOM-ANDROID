@@ -19,7 +19,7 @@ from fastapi.staticfiles import StaticFiles
 
 from . import events
 from .config import UPLOAD_DIR
-from .routers import agent, calendar, chat, meet, notifications, payouts, receipts, requests, state
+from .routers import agent, calendar, calls, chat, meet, notifications, payouts, receipts, requests, state
 
 
 @asynccontextmanager
@@ -57,6 +57,7 @@ app.include_router(agent.router, prefix="/api")
 app.include_router(meet.router, prefix="/api")
 app.include_router(calendar.router, prefix="/api")
 app.include_router(chat.router, prefix="/api")
+app.include_router(calls.router, prefix="/api")
 
 # Uploaded receipts, so thumbnails and the lightbox show the real document.
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")

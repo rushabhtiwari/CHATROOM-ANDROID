@@ -1,11 +1,14 @@
 import { NavLink, useLocation } from 'react-router-dom';
-import { CalendarDays, MessageSquare, Package, Truck, User } from 'lucide-react';
+import { CalendarDays, MessageSquare, Package, Phone, Truck, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useChat } from '@/lib/chat-store';
 import { tap } from '~/native/haptics';
+import { useCalls } from '~/calls/CallProvider';
 
 const TABS = [
   { to: '/chats', label: 'Chats', Icon: MessageSquare },
+  // Only where calls can be made: a standalone build has no server to ring through.
+  { to: '/calls', label: 'Calls', Icon: Phone },
   { to: '/calendar', label: 'Calendar', Icon: CalendarDays },
   { to: '/orders', label: 'Orders', Icon: Package },
   { to: '/dispatches', label: 'Dispatches', Icon: Truck },
@@ -25,6 +28,7 @@ function useTotalUnread(): number {
 
 export function TabBar() {
   const unread = useTotalUnread();
+  const { enabled: callsEnabled, missed } = useCalls();
   const { pathname } = useLocation();
 
   // A conversation takes the whole screen: the composer sits where the tab bar
@@ -40,7 +44,7 @@ export function TabBar() {
       aria-label="Sections"
     >
       <ul className="flex h-tabbar items-stretch">
-        {TABS.map(({ to, label, Icon }) => (
+        {TABS.filter(({ to }) => callsEnabled || to !== '/calls').map(({ to, label, Icon }) => (
           <li key={to} className="flex-1">
             <NavLink
               to={to}
@@ -60,6 +64,14 @@ export function TabBar() {
                     aria-label={`${unread} unread`}
                   >
                     {unread > 99 ? '99+' : unread}
+                  </span>
+                )}
+                {to === '/calls' && missed > 0 && (
+                  <span
+                    className="absolute -right-2.5 -top-1.5 min-w-[17px] rounded-full bg-destructive px-1 text-center text-[10px] font-semibold leading-[17px] text-white"
+                    aria-label={`${missed} missed`}
+                  >
+                    {missed > 99 ? '99+' : missed}
                   </span>
                 )}
               </span>

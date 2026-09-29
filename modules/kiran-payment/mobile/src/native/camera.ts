@@ -1,5 +1,5 @@
 /**
- * Photos, for chat attachments.
+ * Photos, for chat attachments and claim receipts.
  *
  * The chat store's `sendAttachment` takes a `File`, which is what an <input>
  * hands it on the web. The native pickers return a URI or a base64 payload
@@ -43,4 +43,24 @@ export async function pickPhoto(source: 'camera' | 'library'): Promise<File | nu
     // are not distinguishable from here.
     return null;
   }
+}
+
+/**
+ * Photograph a receipt for a claim.
+ *
+ * On a phone, the camera itself. In a browser, the file picker, asking for
+ * the rear camera — which a phone's browser opens directly. Null when the
+ * person backs out.
+ */
+export async function takeReceiptPhoto(): Promise<File | null> {
+  if (isNative) return pickPhoto('camera');
+  return new Promise((resolve) => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.setAttribute('capture', 'environment');
+    input.addEventListener('change', () => resolve(input.files?.[0] ?? null), { once: true });
+    input.addEventListener('cancel', () => resolve(null), { once: true });
+    input.click();
+  });
 }

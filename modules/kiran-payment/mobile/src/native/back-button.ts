@@ -46,7 +46,7 @@ export function useCloseOnBack(onClose: () => void, enabled = true): void {
 
 const HOME = '/chats';
 /** The bottom tabs other than Chats. */
-const OTHER_TABS = new Set(['/calendar', '/orders', '/dispatches', '/me']);
+const OTHER_TABS = new Set(['/calls', '/calendar', '/orders', '/dispatches', '/me']);
 
 type Navigate = (to: string, options: { replace: boolean }) => void;
 let navigateTo: Navigate | null = null;

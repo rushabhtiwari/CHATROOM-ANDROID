@@ -39,6 +39,13 @@
 
         </activity>
 
+        <!-- Keeps a call's microphone and camera working when the app leaves
+             the screen (CallService.java). -->
+        <service
+            android:name=".CallService"
+            android:exported="false"
+            android:foregroundServiceType="microphone|camera" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
@@ -65,4 +72,19 @@
     <!-- Remote notifications for mentions and dispatch updates (Android 13+
          asks for this at runtime). -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Voice and video calls. The microphone (and the camera, above) are
+         asked for the first time a call needs them; the web view's WebRTC
+         also needs to change the audio mode. -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-feature android:name="android.hardware.microphone" android:required="false" />
+    <!-- Staying on a call with the app in the background (CallService). -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CAMERA" />
+    <!-- The screen going dark against your ear during a voice call. -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- An incoming call shown over the lock screen. -->
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
 </manifest>
