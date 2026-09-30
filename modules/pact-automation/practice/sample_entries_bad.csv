@@ -1,6 +1,0 @@
-customer_name,phone,email,city,credit_limit,active,notes
-Nair Electricals,9800012345,nair@example.in,Kolkata,45000,true,City is not in the practice form's list
-,9811122233,blank@example.in,Pune,30000,true,No customer name at all
-Sharma Traders,98200-11223,accounts@sharmatraders.in,Mumbai,50000,true,Fine row - should pass pre-flight
-Sharma Traders,9820011224,dup@sharmatraders.in,Pune,10000,false,Duplicate customer name
-Bad Numbers Ltd,98abc00123,not-an-email,Delhi,twenty thousand,true,Bad phone email and credit limit

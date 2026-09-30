@@ -1,3 +1,0 @@
-doc_date,vendor_name,narration,mode_of_transport,transporter,delivery_terms,payment_terms,supplier_validity,po_validity,party_ref_no,party_ref_date,packing_instruction,shipping_instructions,line_items
-04/09/2026,REPLACE-WITH-EXACT-VENDOR-NAME-1,Monthly cable order,By Road,Local Transport Co,Ex-works,30 days,30/09/2026,30/09/2026,REF-0001,04/09/2026,Wooden crates,Deliver to Gate 2,REPLACE-PRODUCT-CODE-1|10|250; REPLACE-PRODUCT-CODE-2|4|1200
-04/09/2026,REPLACE-WITH-EXACT-VENDOR-NAME-2,Urgent spares,By Air,Blue Dart,FOB,15 days,20/09/2026,20/09/2026,REF-0002,04/09/2026,Bubble wrap,Call before delivery,REPLACE-PRODUCT-CODE-3|25|85

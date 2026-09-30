@@ -1,5 +1,0 @@
-customer_name,phone,email,city,credit_limit,active,notes
-Sharma Traders,9820011223,accounts@sharmatraders.in,Mumbai,50000,true,Net 30 terms
-Kiran Cables Pvt Ltd,9876543210,billing@kirancables.com,Pune,125000,true,Priority account
-Al Noor Electricals,+971501234567,info@alnoor.ae,Dubai,80000,true,Export customer - USD invoices
-Deshmukh Hardware,9123456780,,Pune,20000,false,Inactive since 2025
